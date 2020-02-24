@@ -13,7 +13,7 @@ import { Header, Left, Body, Right, Footer, FooterTab, Button, Icon } from 'nati
 import { ifIphoneX } from 'react-native-iphone-x-helper'
 import {LinearGradient} from 'expo-linear-gradient';
 
-export default function reportScreen() {
+export default function instructionsScreen() {
   
   return (
 
@@ -24,9 +24,39 @@ export default function reportScreen() {
 <ScrollView
     
     contentContainerStyle={styles.contentContainer}>
-<Text>
-  with reem
-</Text>
+
+      <View style={styles.view}>
+        <View style={styles.articleView}>
+          <Text style={styles.articleTitle}>تحرير الأنماط</Text>
+          <Text style={styles.articleDescription}>
+            لتحرير الأنماط يجب عليك:
+            قول "تحرير الأنماط الحياتية"
+            ثم اختيار نوع النمط
+            ومن ثم تحديد الاجهزه
+        </Text>
+          <Text style={styles.articleFoot}>
+            اذا كان النمط صباحي / مسائي يجب عليك تحديد الوقت
+            اذا كان خروج/عودة يجب عليك حفظ موقع المنزل
+        </Text>
+        </View>
+        <View style={styles.articleView}>
+          <Text style={styles.articleTitle}>عرض التقارير </Text>
+          <Text style={styles.articleDescription}>
+            لعرض الاجهزه المتصله يجب عليك:
+            قول "التقرير"
+            يمكنك ايضاً عرضها عن طريق النقر على خانه "التقارير"
+        </Text>
+        </View>
+        <View style={styles.articleView}>
+          <Text style={styles.articleTitle}>عرض الاجهزه المتصله </Text>
+          <Text style={styles.articleDescription}>
+            لعرض  الاجهزه المتصله يجب عليك:
+            قول "الاجهزه المتصله"
+            يمكنك ايضاً عرضها عن طريق النقر على خانه " الاجهزه المتصله "
+        </Text>
+        </View>
+      </View>
+   
 
   </ScrollView>
   </ImageBackground>
@@ -34,8 +64,8 @@ export default function reportScreen() {
   );
 }
 
-reportScreen.navigationOptions = {
-  title: 'التقارير',
+instructionsScreen.navigationOptions = {
+  title: 'التعليمات',
   headarStyle:{
     backgroundColor: 'transport',
   }

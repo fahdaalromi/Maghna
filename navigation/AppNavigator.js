@@ -7,7 +7,7 @@ import MainTabNavigator from './MainTabNavigator';
 export default createAppContainer(
   createSwitchNavigator({
     
-    screen: SignIn,
+   // screen: SignIn,
     Main: MainTabNavigator,
   })
 );
