@@ -24,6 +24,9 @@ export default function RoutineScreen() {
 
    <ImageBackground source={require('../assets/images/halfBlue.png') } style={{ height:"100%", width: "100%" ,justifyContent: 'center',alignItems: 'center'}}>
 
+   <Root >
+
+  
    <View style={styles.smallContainer}>
    <View style={{flexDirection: 'row'}} > 
    <Feather name="sunrise" style={styles.icons} size={24} color="#CDCCCE" />
@@ -31,8 +34,8 @@ export default function RoutineScreen() {
      روتين الصباح
    </Text>
    </View>
-   <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]}  >
-     <Text style={styles.signUpText}             onPress={() =>
+
+   <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() =>
               Popup.show({
                 type: 'Success',
                 title: 'Upload complete',
@@ -41,14 +44,15 @@ export default function RoutineScreen() {
                 buttontext: 'Ok',
                 callback: () => Popup.hide()
               })
-            }>  تحرير </Text>
+            } >
+     <Text style={styles.signUpText}>  تحرير </Text>
    </TouchableHighlight>
-
+   
       
  
 
    </View>
-
+   
 
 <View style={styles.smallContainer}>
 
@@ -77,9 +81,8 @@ export default function RoutineScreen() {
 </Text>
 </View>
 </View>
-
+</Root>
    </ImageBackground>
-
 
       </View>
       
