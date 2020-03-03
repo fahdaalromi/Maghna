@@ -32,10 +32,7 @@ export default function RoutineScreen() {
    </Text>
    </View>
    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]}  >
-     <Text style={styles.signUpText}>  تحرير </Text>
-   </TouchableHighlight>
-   <TouchableOpacity
-            onPress={() =>
+     <Text style={styles.signUpText}             onPress={() =>
               Popup.show({
                 type: 'Success',
                 title: 'Upload complete',
@@ -44,10 +41,9 @@ export default function RoutineScreen() {
                 buttontext: 'Ok',
                 callback: () => Popup.hide()
               })
-            }
-        >
-            <Text>Open Popup</Text>
-        </TouchableOpacity>
+            }>  تحرير </Text>
+   </TouchableHighlight>
+
       
  
 
