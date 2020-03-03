@@ -64,6 +64,8 @@ export default function instructionsScreen() {
   );
 }
 
+
+
 instructionsScreen.navigationOptions = {
   title: 'التعليمات',
   headarStyle:{
