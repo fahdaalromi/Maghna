@@ -24,7 +24,7 @@ export default function RoutineScreen() {
 
    <ImageBackground source={require('../assets/images/halfBlue.png') } style={{ height:"100%", width: "100%" ,justifyContent: 'center',alignItems: 'center'}}>
 
-   <Root >
+   <Root>
 
   
    <View style={styles.smallContainer}>
@@ -37,11 +37,11 @@ export default function RoutineScreen() {
 
    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() =>
               Popup.show({
-                type: 'Success',
-                title: 'Upload complete',
+                type: 'الوضع الصباحي',
+                title: 'select',
                 button: false,
-                textBody: 'Congrats! Your upload successfully done',
-                buttontext: 'Ok',
+                textBody: 'timer',
+                buttontext: 'حفظ',
                 callback: () => Popup.hide()
               })
             } >
