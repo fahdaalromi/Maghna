@@ -13,9 +13,7 @@ import { ScrollView,
  Platform,
 } from 'react-native';
 import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons} from "@expo/vector-icons";
-import { Root, Popup } from 'popup-ui';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { Root, Popup } from 'popup-ui'
 
 
 export default function RoutineScreen() {
@@ -36,7 +34,20 @@ export default function RoutineScreen() {
    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]}  >
      <Text style={styles.signUpText}>  تحرير </Text>
    </TouchableHighlight>
-
+   <TouchableOpacity
+            onPress={() =>
+              Popup.show({
+                type: 'Success',
+                title: 'Upload complete',
+                button: false,
+                textBody: 'Congrats! Your upload successfully done',
+                buttontext: 'Ok',
+                callback: () => Popup.hide()
+              })
+            }
+        >
+            <Text>Open Popup</Text>
+        </TouchableOpacity>
       
  
 
