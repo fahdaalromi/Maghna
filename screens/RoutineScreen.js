@@ -35,13 +35,14 @@ export default function RoutineScreen() {
    </Text>
    </View>
 
-   <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() =>
+   <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} 
+   onPress={() =>
               Popup.show({
-                type: 'الوضع الصباحي',
-                title: 'select',
+                type: 'Success', 
+                title: 'Upload complete',
                 button: false,
-                textBody: 'timer',
-                buttontext: 'حفظ',
+                textBody: 'Congrats! Your upload successfully done', 
+                buttontext: ' ',
                 callback: () => Popup.hide()
               })
             } >
