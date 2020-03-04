@@ -14,6 +14,7 @@ import { Header, Left, Body, Right, Footer, FooterTab, Button, Icon } from 'nati
 import { ifIphoneX } from 'react-native-iphone-x-helper'
 import {LinearGradient} from 'expo-linear-gradient';
 import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
+import Home from './Home';
 
 export default function reportScreen() {
   
@@ -47,10 +48,9 @@ reportScreen.navigationOptions = ({navigation})=> ({
 
   ),
   headerLeft:()=>(
-    <TouchableOpacity onPress={()=>{navigation.navigate('Home')}} style={{marginRight:15}}>
+    <TouchableOpacity onPress={()=>{navigation.navigate('')}} style={{marginLeft:15}}>
       <SimpleLineIcons name="logout" size={24} color="#CDCCCE" />
     </TouchableOpacity>
-
   ),
     
 });
