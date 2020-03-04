@@ -8,12 +8,14 @@ import {
   View,
   ImageBackground,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 import { Header, Left, Body, Right, Footer, FooterTab, Button, Icon } from 'native-base';
 import { ifIphoneX } from 'react-native-iphone-x-helper'
 import {LinearGradient} from 'expo-linear-gradient';
+import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons} from "@expo/vector-icons";
 
-export default function reportScreen() {
+export default function reportScreen({}) {
   
   return (
 
@@ -34,13 +36,19 @@ export default function reportScreen() {
   );
 }
 
-reportScreen.navigationOptions = {
-  title: 'التقارير',
-  headarStyle:{
-    backgroundColor: 'transport',
-  }
+reportScreen.navigationOptions = ({navigation})=> ({
+
+  headerTint:'#F7FAFF',
+  headerTitle: 'التقارير',
+  headerRight:()=>(
+    <TouchableOpacity onPress={()=>{navigation.navigate('Home')}} style={{marginRight:15}}>
+      <AntDesign name="right" size={24} color="#CDCCCE" />
+    </TouchableOpacity>
+
+  ),
+
     
-};
+});
 
 
 
