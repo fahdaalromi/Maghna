@@ -31,6 +31,8 @@ export default class WelcomeScreen extends Component {
     navigation.navigate(route);
   }
 
+
+
   render() {
     return (
 
