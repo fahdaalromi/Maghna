@@ -1,6 +1,7 @@
 import React from 'react';
-import { ScrollView, StyleSheet,Text } from 'react-native';
+import { ScrollView, StyleSheet,Text ,TouchableOpacity} from 'react-native';
 import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
+import { withNavigation } from 'react-navigation';
 
 export default function HomeScreen() {
   return (
@@ -18,7 +19,7 @@ HomeScreen.navigationOptions = ({navigation})=> ({
   headerTint:'#F7FAFF',
   headerTitle: 'الصفحة الرئيسية',
   headerRight:()=>(
-    <TouchableOpacity onPress={()=>{navigation.navigate('Home')}} style={{marginRight:15}}>
+    <TouchableOpacity onPress={()=>{navigation.navigate('HomeScreen')}} style={{marginRight:15}}>
       <AntDesign name="right" size={24} color="#CDCCCE" />
     </TouchableOpacity>
 
@@ -38,3 +39,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
 });
+
+const navigationConnected =withNavigation(HomeScreen)
+export {navigationConnected as HomeScreen}

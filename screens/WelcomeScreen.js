@@ -13,27 +13,13 @@ import {
   Dimensions,
 } from 'react-native';
 import {Input, Button} from 'native-base';
-//import {createAppContainer } from 'react-navigation';
-//import {createStackNavigator } from 'react-navigation-stack';
 import {LinearGradient} from 'expo-linear-gradient';
 import { ifIphoneX } from 'react-native-iphone-x-helper'
-//import SignUP from './SignUp'
-//import SignIn from './SignIn'
-
-
-export default class WelcomeScreen extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  async redirectRoute(route) {
-    const { navigation }  = this.props;
-    navigation.navigate(route);
-  }
 
 
 
-  render() {
+export default function WelcomeScreen () {
+
     return (
 
         <View style={styles.container}>
@@ -44,7 +30,7 @@ export default class WelcomeScreen extends Component {
         <Text style={{ fontSize:25, color: '#ffffff', bottom: 93 }}>مرحبًا بك</Text>
   
   <View style={{ backgroundColor: '#6FA0AF', width: 260, borderRadius: 25, paddingLeft: 45, marginHorizontal: 25, paddingLeft: 2, top: 50,borderWidth: 4, borderColor: '#fff'}}>
-        <Button title= "إنشاء حساب" color= 'white'  > 
+        <Button title= "إنشاء حساب" color= 'white' onPress={() => this.props.navigation.navigate('SignUp')} > 
          
         </Button>
         </View>
@@ -59,16 +45,9 @@ export default class WelcomeScreen extends Component {
       </View>
     );
   }
-}
-
-/*
-const registrationStack = createStackNavigator({
-
-  SignUP: { screen: SignUP },
-  SignIn: { screen: SignIn },
 
 
-});*/
+
 
 
 const styles = StyleSheet.create({

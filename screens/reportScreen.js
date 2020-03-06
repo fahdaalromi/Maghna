@@ -14,7 +14,9 @@ import { Header, Left, Body, Right, Footer, FooterTab, Button, Icon } from 'nati
 import { ifIphoneX } from 'react-native-iphone-x-helper'
 import {LinearGradient} from 'expo-linear-gradient';
 import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
-import Home from './Home';
+import { withNavigation } from 'react-navigation';
+
+
 
 export default function reportScreen() {
   
@@ -131,3 +133,4 @@ const styles = StyleSheet.create({
     height: 30,
   }
 });
+

@@ -11,16 +11,15 @@ import { ScrollView,
  ImageBackground,
  TouchableOpacity,
 } from 'react-native';
+import {withNavigation} from 'react-navigation';
+
+
 
 export default function SignUP() {
-
-
 
   return (
 
 <View>
-
-
 
 <View style={styles.container}>
 
@@ -36,8 +35,6 @@ export default function SignUP() {
 <Text style={styles.perInfo}>──── المعلومات الشخصية ────</Text>
 
 <View style={styles.smallContainer}>
-
-
 
 
 
@@ -92,9 +89,7 @@ underlineColorAndroid='transparent'
 
 );
 }
-profileScreen.navigationOptions = {
-  title: 'الأنماط الشخصية',
-}
+
 
 const styles = StyleSheet.create({
 
@@ -281,3 +276,6 @@ const styles = StyleSheet.create({
   },
 
 });
+
+const navigationConnected =withNavigation(SignUP)
+export {navigationConnected as SignUP}

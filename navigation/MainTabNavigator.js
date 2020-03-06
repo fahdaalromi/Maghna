@@ -10,17 +10,31 @@ import RoutineScreen from '../screens/RoutineScreen';
 import reportScreen from '../screens/reportScreen';
 import profileScreen from '../screens/profileScreen';
 import AddButton from "../components/AddButton";
-import SignIn from "../screens/SignIn";
-
+import SignIn from "../screens/SignInScreen";
+import SignUp from "../screens/SignUpScreen"
+import HomeScreen from "../screens/HomeScreen";
+import instructionsScreen from "../screens/instructionsScreen";
+import welcome from "../screens/WelcomeScreen";
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
   default: {},
 });
 
+const welcomeStack = createStackNavigator(
+  {
+    SignIn: SignInScreen,
+    SignUp: SignUpScreen,
+  },
+  config
+);
+welcomeStack.path = '';
+
+
 const ProfileStack = createStackNavigator(
   {
     profile: profileScreen,
+    Home:HomeScreen,
   },
   config
 );
@@ -39,6 +53,7 @@ ProfileStack.path = '';
 const RoutineStack = createStackNavigator(
   {
     Routine: RoutineScreen,
+    Home:HomeScreen,
   },
   config
 );
@@ -57,6 +72,7 @@ RoutineStack.path = '';
 const supdevicesStack = createStackNavigator(
   {
     supdevices: supdevicesScreen,
+    Home:HomeScreen,
   },
   config
 );
@@ -75,6 +91,8 @@ supdevicesStack.path = '';
 const reportStack = createStackNavigator(
   {
     report: reportScreen,
+    Home:HomeScreen,
+    //instructions:instructionsScreen,
   },
   config
 );
