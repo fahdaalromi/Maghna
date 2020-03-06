@@ -16,7 +16,7 @@ import {LinearGradient} from 'expo-linear-gradient';
 import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
 import { withNavigation } from 'react-navigation';
 
-export default function instructionsScreen({navigation}) {
+export default function instructionsScreen() {
   
   return (
 

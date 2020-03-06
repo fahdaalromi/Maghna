@@ -10,11 +10,11 @@ import RoutineScreen from '../screens/RoutineScreen';
 import reportScreen from '../screens/reportScreen';
 import profileScreen from '../screens/profileScreen';
 import AddButton from "../components/AddButton";
-import SignIn from "../screens/SignInScreen";
-import SignUp from "../screens/SignUpScreen"
+import SignInScreen from "../screens/SignInScreen";
+import SignUpScreen from "../screens/SignUpScreen"
 import HomeScreen from "../screens/HomeScreen";
 import instructionsScreen from "../screens/instructionsScreen";
-import welcome from "../screens/WelcomeScreen";
+import WelcomeScreen from "../screens/WelcomeScreen";
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -23,18 +23,30 @@ const config = Platform.select({
 
 const welcomeStack = createStackNavigator(
   {
+    welcome:WelcomeScreen,
     SignIn: SignInScreen,
-    SignUp: SignUpScreen,
+    SignUp:SignUpScreen,
   },
   config
 );
 welcomeStack.path = '';
+
+const HomeStack = createStackNavigator(
+  {
+   
+    Home:HomeScreen,
+    instructions:instructionsScreen,
+  },
+  config
+);
+HomeStack.path = '';
 
 
 const ProfileStack = createStackNavigator(
   {
     profile: profileScreen,
     Home:HomeScreen,
+    
   },
   config
 );

@@ -19,8 +19,8 @@ HomeScreen.navigationOptions = ({navigation})=> ({
   headerTint:'#F7FAFF',
   headerTitle: 'الصفحة الرئيسية',
   headerRight:()=>(
-    <TouchableOpacity onPress={()=>{navigation.navigate('HomeScreen')}} style={{marginRight:15}}>
-      <AntDesign name="right" size={24} color="#CDCCCE" />
+    <TouchableOpacity onPress={()=>{navigation.navigate('instructions')}} style={{marginRight:15}}>
+      <MaterialCommunityIcons name="settings-outline" size={24} color="#CDCCCE" />
     </TouchableOpacity>
 
   ),
