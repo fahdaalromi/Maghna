@@ -19,6 +19,7 @@ import { ifIphoneX } from 'react-native-iphone-x-helper'
 
 export default class SignIn extends Component {
 
+  
     constructor(props) {
         super(props);
       }

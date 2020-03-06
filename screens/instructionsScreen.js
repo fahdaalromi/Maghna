@@ -12,6 +12,7 @@ import {
 import { Header, Left, Body, Right, Footer, FooterTab, Button, Icon } from 'native-base';
 import { ifIphoneX } from 'react-native-iphone-x-helper'
 import {LinearGradient} from 'expo-linear-gradient';
+import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
 
 export default function instructionsScreen() {
   
@@ -66,13 +67,24 @@ export default function instructionsScreen() {
 
 
 
-instructionsScreen.navigationOptions = {
-  title: 'التعليمات',
-  headarStyle:{
-    backgroundColor: 'transport',
-  }
+
+instructionsScreen.navigationOptions = ({navigation})=> ({
+
+  headerTint:'#F7FAFF',
+  headerTitle: 'التعليمات',
+  headerRight:()=>(
+    <TouchableOpacity onPress={()=>{navigation.navigate('Home')}} style={{marginRight:15}}>
+      <AntDesign name="right" size={24} color="#CDCCCE" />
+    </TouchableOpacity>
+
+  ),
+  headerLeft:()=>(
+    <TouchableOpacity onPress={()=>{navigation.navigate('')}} style={{marginLeft:15}}>
+      <SimpleLineIcons name="logout" size={24} color="#CDCCCE" />
+    </TouchableOpacity>
+  ),
     
-};
+});
 
 
 

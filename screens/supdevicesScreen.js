@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
 
 import { MonoText } from '../components/StyledText';
 
@@ -39,11 +40,25 @@ export default function supdevicesScreen() {
   );
 }
 
-supdevicesScreen.navigationOptions = {
-  title: 'الأجهزة المتصلة',
-};
 
 
+
+supdevicesScreen.navigationOptions = ({navigation})=> ({
+
+  headerTitle:  'الأجهزة المتصلة',
+  headerRight:()=>(
+    <TouchableOpacity onPress={()=>{navigation.navigate('Home')}} style={{marginRight:15}}>
+      <AntDesign name="right" size={24} color="#CDCCCE" />
+    </TouchableOpacity>
+
+  ),
+  headerLeft:()=>(
+    <TouchableOpacity onPress={()=>{navigation.navigate('')}} style={{marginLeft:15}}>
+      <SimpleLineIcons name="logout" size={24} color="#CDCCCE" />
+    </TouchableOpacity>
+  ),
+
+});
 
 
 

@@ -11,6 +11,7 @@ import { ScrollView,
  ImageBackground,
  TouchableOpacity,
 } from 'react-native';
+import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
 
 export default function profileScreen() {
 
@@ -98,9 +99,23 @@ underlineColorAndroid='transparent'
 
 );
 }
-profileScreen.navigationOptions = {
-  title: 'الأنماط الشخصية',
-}
+profileScreen.navigationOptions = ({navigation})=> ({
+
+  headerTint:'#F7FAFF',
+  headerTitle: 'الملف الشخصي',
+  headerRight:()=>(
+    <TouchableOpacity onPress={()=>{navigation.navigate('Home')}} style={{marginRight:15}}>
+      <AntDesign name="right" size={24} color="#CDCCCE" />
+    </TouchableOpacity>
+
+  ),
+  headerLeft:()=>(
+    <TouchableOpacity onPress={()=>{navigation.navigate('')}} style={{marginLeft:15}}>
+      <SimpleLineIcons name="logout" size={24} color="#CDCCCE" />
+    </TouchableOpacity>
+  ),
+    
+});
 
 const styles = StyleSheet.create({
 

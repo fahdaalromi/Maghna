@@ -26,7 +26,7 @@ const ProfileStack = createStackNavigator(
 );
 
 ProfileStack.navigationOptions = {
-  tabBarLabel: 'الملف الشخصي',
+  tabBarLabel: ' الصفحة الشخصية',
   tabBarIcon:
     <FontAwesome5 name="user" size={24} color="#CDCCCE" />
   

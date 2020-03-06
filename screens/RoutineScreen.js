@@ -12,7 +12,7 @@ import { ScrollView,
  ImageBackground,
  Platform,
 } from 'react-native';
-import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons} from "@expo/vector-icons";
+import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
 import { Root, Popup } from 'popup-ui'
 
 
@@ -92,9 +92,24 @@ export default function RoutineScreen() {
   );
 }
 
-RoutineScreen.navigationOptions= {
-  title: 'الأنماط الشخصية',
-};
+RoutineScreen.navigationOptions = ({navigation})=> ({
+
+  headerTitle: 'الأنماط الشخصية',
+  headerRight:()=>(
+    <TouchableOpacity onPress={()=>{navigation.navigate('Home')}} style={{marginRight:15}}>
+      <AntDesign name="right" size={24} color="#CDCCCE" />
+    </TouchableOpacity>
+
+  ),
+  headerLeft:()=>(
+    <TouchableOpacity onPress={()=>{navigation.navigate('')}} style={{marginLeft:15}}>
+      <SimpleLineIcons name="logout" size={24} color="#CDCCCE" />
+    </TouchableOpacity>
+  ),
+
+});
+
+
 
 const styles = StyleSheet.create({
   container: {
