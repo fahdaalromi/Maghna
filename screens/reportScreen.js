@@ -30,7 +30,7 @@ export default function reportScreen() {
     
     contentContainerStyle={styles.contentContainer}>
 <Text>
-  with reem
+  -----------------------------------
 </Text>
 
   </ScrollView>
