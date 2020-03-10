@@ -15,6 +15,7 @@ import SignUpScreen from "../screens/SignUpScreen"
 import HomeScreen from "../screens/HomeScreen";
 import instructionsScreen from "../screens/instructionsScreen";
 import WelcomeScreen from "../screens/WelcomeScreen";
+import locationPage from "../screens/locationPage"
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -46,6 +47,7 @@ const ProfileStack = createStackNavigator(
   {
     profile: profileScreen,
     Home:HomeScreen,
+    location:locationPage
     
   },
   config

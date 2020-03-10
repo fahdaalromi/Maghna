@@ -74,7 +74,7 @@ secureTextEntry={true}
 underlineColorAndroid='transparent'
 />
 </View>
-<TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} >
+<TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} onPress={()=>{navigation.navigate('location')}}  >
         <Text style={styles.addLocationText}> إضافة موقع</Text>
         </TouchableHighlight>
 
