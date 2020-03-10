@@ -94,7 +94,7 @@ underlineColorAndroid='transparent'
        </View>
        <View style={styles.AnalysisButtonContainer}>
        <TouchableHighlight  style={[styles.AnalysisButton]} >
-        <Text > تفعيل </Text>
+        <Text style={styles.subAnalysisText} > تفعيل </Text>
         </TouchableHighlight>
        </View>
 
@@ -236,10 +236,10 @@ const styles = StyleSheet.create({
   AnalysisButtonContainer:{
     height:45,
     width:70,
- borderWidth:1,
+ //borderWidth:1,
  marginRight:150,
  marginBottom:10,
- backgroundColor:'#3E82A7',
+ //backgroundColor:'#3E82A7',
  //backgroundColor: this.sate.active?'#3E82A7':'red',
    //height:45,
    //flexDirection: 'row',
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
   AnalysisButton:{
     height:45,
     width:70,
-   backgroundColor:'#BBCCCF',
+   backgroundColor:'#6FA0AF',
    alignItems:'center',
    justifyContent:'center',
    borderRadius:20,
@@ -302,6 +302,10 @@ const styles = StyleSheet.create({
    marginBottom:-200,
    marginTop:10,
    
+  },
+  subAnalysisText:{
+    color: 'white',
+    //fontSize:15,
   },
 
   inline:{
