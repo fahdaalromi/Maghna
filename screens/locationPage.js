@@ -1,18 +1,12 @@
 import React from 'react';
-import { Text, View, StyleSheet,StatusBar, ScrollView, SafeAreaView,TouchableHighlight, Alert } from 'react-native';
-import { withNavigation } from 'react-navigation';
+import { ScrollView, StyleSheet,Text } from 'react-native';
 import MapView from 'react-native-maps';
-import { Marker } from 'react-native-maps';
+import { withNavigation } from 'react-navigation';
 
+export default function locationPage() {
+  return (
 
-
-export default class locationPage extends React.Component {
-
-
-  render() {
-
-    return (
-
+    <ScrollView style={styles.container}>
       <View style={styles.container}>
         <StatusBar barStyle='dark-content'/>
       <MapView
@@ -22,51 +16,33 @@ export default class locationPage extends React.Component {
           longitude: 46.6753,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
-        }}
-        >
+        }}/>
 
 
-        {this.state.onMap ?
-           (
-        this.state.onMap.map((u, i ) => {
-        return (
-          <Marker
-          coordinate={{longitude: u.long, latitude: u.lat}}
-          title={u.name}
-          onCalloutPress={()=>{Linking.openURL('comgooglemaps://?q='+u.lat+','+u.long+'&center='+u.lat+','+u.long+'&zoom=14&views=traffic');}}
-          />
-        )
-
-
-        }) )
-        :null}
-
-
-      </MapView>
+     
       </View>
-    );
-  }
+     
+    </ScrollView>
+  );
 }
 
+locationPage.navigationOptions= {
+  title: 'الموقع',
+};
+
 const styles = StyleSheet.create({
+    
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#ecf0f1',
+    paddingTop: 15,
+    backgroundColor: '#fff',
   },
-  paragraph: {
-    margin: 24,
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: '#34495e',
-  },
+
   mapStyle: {
     alignSelf: 'stretch',
     flex:1
   },
-});
 
+});
 const navigationConnected =withNavigation(locationPage)
 export {navigationConnected as locationPage}
