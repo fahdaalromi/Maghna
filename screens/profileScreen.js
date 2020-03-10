@@ -74,6 +74,17 @@ secureTextEntry={true}
 underlineColorAndroid='transparent'
 />
 </View>
+<Text style={styles.perInfo}>────── غيرها    ──────</Text> 
+
+<View style={styles.inputContainer}>
+
+<TextInput style={styles.inputs}
+placeholder="الحد الائتماني للفاتورة"
+secureTextEntry={true}
+underlineColorAndroid='transparent'
+/>
+</View>
+
 <TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} onPress={()=>{navigation.navigate('location')}}  >
         <Text style={styles.addLocationText}> إضافة موقع</Text>
         </TouchableHighlight>
@@ -121,7 +132,7 @@ const styles = StyleSheet.create({
 
  
   header:{
-    marginTop:130,
+    marginTop:120,
     color: 'white',
     fontSize:25,
     justifyContent: 'center',
@@ -178,22 +189,22 @@ const styles = StyleSheet.create({
       height:35,
       marginBottom:15,
       bottom: 20,
-      borderColor: '#EAEAEA'
+      borderColor: '#3E82A7'
   },
 
   smallContainer:{
     margin:70,
-    marginTop:-100,
+    marginTop:-160,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
     borderRadius:10,
       width:300,
-      height:550
+      height:650
   },
  
   perInfo:{
-    color: '#9F9F9F',
+    color: '#3E82A7',
     fontSize: 20,
     bottom: 30,
     marginTop: 20,
@@ -204,7 +215,7 @@ const styles = StyleSheet.create({
       //flex:1,
       height:40,
       alignSelf:'flex-end',
-      borderColor: '#EAEAEA',
+      borderColor: '#3E82A7',
       marginRight:20,
      //marginLeft:-50,
  
@@ -256,20 +267,22 @@ const styles = StyleSheet.create({
   },
 
   LocationButtonContainer:{
+  
    height:45,
-   flexDirection: 'row',
+   //flexDirection: 'row',
    justifyContent: 'center',
    alignItems: 'center',
-   marginBottom:10,
+   marginTop:10,
    width:'80%',
    borderRadius:45,
-   borderColor:'#BBCCCF',
+   borderColor:'#6FA0AF',
    borderWidth:1,
   },
  
   AddlocationButton: {
    backgroundColor: "#ffffff",
-   margin:7,
+   marginTop:-20,
+   marginBottom:20,
  
  },
  
@@ -284,7 +297,7 @@ const styles = StyleSheet.create({
   },
 
   AnalysisText:{
-   color: '#BBCCCF',
+   color: '#6FA0AF',
    marginLeft:150,
    marginBottom:-200,
    marginTop:10,
