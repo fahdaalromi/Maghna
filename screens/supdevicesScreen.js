@@ -8,32 +8,25 @@ import {
   Text,
   TouchableOpacity,
   View,
+  StatusBar
 } from 'react-native';
 import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
+
+import MapView from 'react-native-maps';
+import { withNavigation } from 'react-navigation';
 
 import { MonoText } from '../components/StyledText';
 
 export default function supdevicesScreen() {
   return (
+
     <View style={styles.container}>
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}>
-        <View style={styles.welcomeContainer}>
-
-        </View>
-
-        <View style={styles.getStartedContainer}>
-         
-
-          <Text style={styles.getStartedText}>not ready yet</Text>
-
-
-
-
-        </View>
-
-      </ScrollView>
+    
+<Text  style={styles.getStartedText}  >
+  not ready
+</Text>
+     
+   
 
 
     </View>
@@ -67,6 +60,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    //alignItems: 'center',
+    justifyContent: 'center',
+   // height:'100%'
+    
   },
   getStartedText: {
     fontSize: 17,
@@ -75,15 +72,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-  tabBarInfoText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
-  },
+ 
   navigationFilename: {
     marginTop: 5,
   },
- 
+
   
 
 });
