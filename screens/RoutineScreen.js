@@ -22,16 +22,16 @@ export default function RoutineScreen() {
    
       <View style={styles.container}>
 
-   <ImageBackground source={require('../assets/images/halfBlue.png') } style={{ height:"100%", width: "100%" ,justifyContent: 'center',alignItems: 'center'}}>
+   <ImageBackground source={require('../assets/images/halfBlue.png') } style={{ height:"100%", width: "100%" ,justifyContent: 'center',alignItems: 'center', marginTop:20}}>
 
    <Root>
 
   
    <View style={styles.smallContainer}>
-   <View style={{flexDirection: 'row'}} > 
-   <Feather name="sunrise" style={styles.icons} size={24} color="#CDCCCE" />
-   <Text>
-     روتين الصباح
+   <View style={{flexDirection: 'row' }} > 
+   <Feather name="sunrise" style={styles.icons} size={24} color="#2287ac" style={styles.iconsSTY}/>
+   <Text style={styles.routineTitle}>
+    روتين الصباح
    </Text>
    </View>
 
@@ -39,9 +39,9 @@ export default function RoutineScreen() {
    onPress={() =>
               Popup.show({
                 type: 'Success', 
-                title: 'Upload complete',
+                title: 'تحرير النمط ',
                 button: false,
-                textBody: 'Congrats! Your upload successfully done', 
+                textBody: 'will chnage it to a new page ', 
                 buttontext: ' ',
                 callback: () => Popup.hide()
               })
@@ -58,29 +58,68 @@ export default function RoutineScreen() {
 <View style={styles.smallContainer}>
 
   <View style={{flexDirection: 'row'}} >  
-<MaterialCommunityIcons name="exit-run" size={24} color="#CDCCCE" />
-<Text>
+<MaterialCommunityIcons name="exit-run" size={24} color="#2287ac" />
+<Text style={styles.routineTitle} >
   روتين الخروج من المنزل
 </Text>
 </View>
+<TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} 
+   onPress={() =>
+              Popup.show({
+                type: 'Success', 
+                title: 'تحرير النمط ',
+                button: false,
+                textBody: 'will chnage it to a new page ', 
+                buttontext: ' ',
+                callback: () => Popup.hide()
+              })
+            } >
+     <Text style={styles.signUpText}>  تحرير </Text>
+   </TouchableHighlight>
 </View>
 
 <View style={styles.smallContainer}>
 <View style={{flexDirection: 'row'}} > 
-   <AntDesign name="home" size={24} color="#CDCCCE" />
-  <Text>
+   <AntDesign name="home" size={24} color="#2287ac" />
+  <Text style={styles.routineTitle}>
     روتين العودة للمنزل
   </Text>
 </View>
+<TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} 
+   onPress={() =>
+              Popup.show({
+                type: 'Success', 
+                title: 'تحرير النمط ',
+                button: false,
+                textBody: 'will chnage it to a new page ', 
+                buttontext: ' ',
+                callback: () => Popup.hide()
+              })
+            } >
+     <Text style={styles.signUpText}>  تحرير </Text>
+   </TouchableHighlight>
 </View>
 
 <View style={styles.smallContainer}>
 <View style={{flexDirection: 'row'}} > 
-<MaterialCommunityIcons name="weather-night" size={24} color="#CDCCCE" />
-<Text>
+<MaterialCommunityIcons name="weather-night" size={24} color="#2287ac" style={styles.iconsSTY}  />
+<Text style={styles.routineTitle}>
 روتين المساء
 </Text>
 </View>
+<TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} 
+   onPress={() =>
+              Popup.show({
+                type: 'Success', 
+                title: 'تحرير النمط ',
+                button: false,
+                textBody: 'will chnage it to a new page ', 
+                buttontext: ' ',
+                callback: () => Popup.hide()
+              })
+            } >
+     <Text style={styles.signUpText}>  تحرير </Text>
+   </TouchableHighlight>
 </View>
 </Root>
    </ImageBackground>
@@ -126,7 +165,18 @@ const styles = StyleSheet.create({
    height:'100%',
  
   },
-
+  routineTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: '#2287ac',
+    marginLeft:80,
+    
+  },
+  iconsSTY:{
+    marginLeft:-50,
+    
+  },
   inputContainer: {
       backgroundColor: '#FFFFFF',
       borderRadius:30,
@@ -147,7 +197,7 @@ const styles = StyleSheet.create({
     borderRadius:10,
       width:350,
       height:140,
-     // flexDirection: 'row'
+     //flexDirection: 'row'
   },
  
   perInfo:{
@@ -175,12 +225,12 @@ const styles = StyleSheet.create({
  },
 
  buttonContainer: {
-  //height:40,
+ // height:100,
   flexDirection: 'row',
   justifyContent: 'center',
   alignItems: 'center',
- // marginBottom:10,
-  marginTop:20,
+ //marginBottom:10,
+  marginTop:30,
   //width:70,
   
   borderRadius:20,
@@ -254,7 +304,8 @@ const styles = StyleSheet.create({
  
   signUpText: {
     color: '#BBCCCF',
-    fontSize:15,
+    fontSize:17,
+    alignItems: 'center',
   },
 
   AnalysisText:{
