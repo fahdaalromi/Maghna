@@ -13,7 +13,7 @@ import { ScrollView,
 } from 'react-native';
 import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
 
-export default function profileScreen() {
+export default function profileScreen({navigation}) {
 
 
 

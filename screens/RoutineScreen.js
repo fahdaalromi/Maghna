@@ -16,7 +16,7 @@ import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons}
 import { Root, Popup } from 'popup-ui'
 
 
-export default function RoutineScreen() {
+export default function RoutineScreen({navigation}) {
 
   return (
    
@@ -55,28 +55,19 @@ export default function RoutineScreen() {
    </View>
    
 
-<View style={styles.smallContainer}>
-
-  <View style={{flexDirection: 'row'}} >  
+<View style={styles.smallContainer}  >
+  <View style={{flexDirection: 'row'}}  >  
 <MaterialCommunityIcons name="exit-run" size={24} color="#2287ac" />
 <Text style={styles.routineTitle} >
   روتين الخروج من المنزل
 </Text>
 </View>
-<TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} 
-   onPress={() =>
-              Popup.show({
-                type: 'Success', 
-                title: 'تحرير النمط ',
-                button: false,
-                textBody: 'will chnage it to a new page ', 
-                buttontext: ' ',
-                callback: () => Popup.hide()
-              })
-            } >
+<TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={()=>{navigation.navigate('subRoutine')}}>
      <Text style={styles.signUpText}>  تحرير </Text>
    </TouchableHighlight>
 </View>
+
+
 
 <View style={styles.smallContainer}>
 <View style={{flexDirection: 'row'}} > 
