@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
  },
  
  addLocationText:{
-   color: '#BBC3D4',
+   color: '#6FA0AF',
    fontSize:15,
  },
  
