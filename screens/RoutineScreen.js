@@ -29,7 +29,7 @@ export default function RoutineScreen() {
   
    <View style={styles.smallContainer}>
    <View style={{flexDirection: 'row' }} > 
-   <Feather name="sunrise" style={styles.icons} size={24} color="#2287ac" style={styles.iconsSTY}/>
+   <Feather name="sunrise" style={styles.icons} size={24} color="#2287ac" style={styles.iconsSTY} />
    <Text style={styles.routineTitle}>
     روتين الصباح
    </Text>
