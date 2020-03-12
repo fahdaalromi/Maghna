@@ -14,6 +14,8 @@ import SignUpScreen from "../screens/SignUpScreen"
 import HomeScreen from "../screens/HomeScreen";
 import instructionsScreen from "../screens/instructionsScreen";
 import WelcomeScreen from "../screens/WelcomeScreen";
+
+import {LinearGradient} from 'expo-linear-gradient';
 import locationPage from "../screens/locationPage";
 import routineSubPage from "../screens/routineSubPage";
 
@@ -78,8 +80,10 @@ const RoutineStack = createStackNavigator(
 );
 
 RoutineStack.navigationOptions = {
+
   tabBarLabel: 'الأنماط',
   tabBarIcon: ({ focused }) => (
+    
     <AntDesign name="sync" size={24} color="#CDCCCE" />
   ),
 };
@@ -99,7 +103,9 @@ const supdevicesStack = createStackNavigator(
 supdevicesStack.navigationOptions = {
   tabBarLabel: 'الأجهزة المتصلة',
   tabBarIcon: ({ focused }) => (
+    <LinearGradient colors={['#1784ab', '#9dd1d9']} style={{flex: 1}}>
     <AntDesign name="sharealt" size={24} color="#CDCCCE" />
+    </LinearGradient>
   ),
 };
 
@@ -119,6 +125,8 @@ const reportStack = createStackNavigator(
 reportStack.navigationOptions = {
   tabBarLabel: 'التقارير',
   tabBarIcon: ({ focused }) => (
+    
+    
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
   ),
 };
@@ -132,6 +140,8 @@ const tabNavigator = createBottomTabNavigator({
   reportStack,
 
 });
+
+
 
 tabNavigator.path = '';
 
