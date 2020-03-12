@@ -31,9 +31,13 @@ export default function locationPage() {
   );
 }
 
-locationPage.navigationOptions= {
-  title: 'الموقع',
-};
+locationPage.navigationOptions = ({navigation})=> ({
+
+  headerTint:'#F7FAFF',
+  headerTitle: 'routine type',
+
+    
+});
 
 const styles = StyleSheet.create({
     container: {
