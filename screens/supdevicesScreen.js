@@ -9,8 +9,8 @@ import { FontAwesome,FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,Simp
 import { MonoText } from '../components/StyledText';
 import {LinearGradient} from 'expo-linear-gradient';
 
-export default class supdevicesScreen extends Component {
-  render() {
+export default function supdevicesScreen() {
+  
 
 
     return (
@@ -51,7 +51,7 @@ export default class supdevicesScreen extends Component {
     
     </View>
     );
-    }
+    
     
 }
 
