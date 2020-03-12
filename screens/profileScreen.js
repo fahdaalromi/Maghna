@@ -14,7 +14,7 @@ import { ScrollView,
 import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
 import {LinearGradient} from 'expo-linear-gradient';
 
-export default function profileScreen() {
+export default function profileScreen({navigation}) {
 
 
 
@@ -74,7 +74,18 @@ secureTextEntry={true}
 underlineColorAndroid='transparent'
 />
 </View>
-<TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} >
+<Text style={styles.perInfo}>────── غيرها    ──────</Text> 
+
+<View style={styles.inputContainer}>
+
+<TextInput style={styles.inputs}
+placeholder="الحد الائتماني للفاتورة"
+secureTextEntry={true}
+underlineColorAndroid='transparent'
+/>
+</View>
+
+<TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} onPress={()=>{navigation.navigate('location')}}  >
         <Text style={styles.addLocationText}> إضافة موقع</Text>
         </TouchableHighlight>
 
@@ -83,7 +94,7 @@ underlineColorAndroid='transparent'
        </View>
        <View style={styles.AnalysisButtonContainer}>
        <TouchableHighlight  style={[styles.AnalysisButton]} >
-        <Text > تفعيل </Text>
+        <Text style={styles.subAnalysisText} > تفعيل </Text>
         </TouchableHighlight>
        </View>
 
@@ -179,22 +190,22 @@ const styles = StyleSheet.create({
       height:35,
       marginBottom:15,
       bottom: 20,
-      borderColor: '#EAEAEA'
+      borderColor: '#3E82A7'
   },
 
   smallContainer:{
     margin:70,
-    marginTop:-100,
+    marginTop:-160,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
     borderRadius:10,
       width:300,
-      height:550
+      height:650
   },
  
   perInfo:{
-    color: '#9F9F9F',
+    color: '#3E82A7',
     fontSize: 20,
     bottom: 30,
     marginTop: 20,
@@ -205,7 +216,7 @@ const styles = StyleSheet.create({
       //flex:1,
       height:40,
       alignSelf:'flex-end',
-      borderColor: '#EAEAEA',
+      borderColor: '#3E82A7',
       marginRight:20,
      //marginLeft:-50,
  
@@ -226,10 +237,10 @@ const styles = StyleSheet.create({
   AnalysisButtonContainer:{
     height:45,
     width:70,
- borderWidth:1,
+ //borderWidth:1,
  marginRight:150,
  marginBottom:10,
- backgroundColor:'#3E82A7',
+ //backgroundColor:'#3E82A7',
  //backgroundColor: this.sate.active?'#3E82A7':'red',
    //height:45,
    //flexDirection: 'row',
@@ -243,7 +254,7 @@ const styles = StyleSheet.create({
   AnalysisButton:{
     height:45,
     width:70,
-   backgroundColor:'#BBCCCF',
+   backgroundColor:'#6FA0AF',
    alignItems:'center',
    justifyContent:'center',
    borderRadius:20,
@@ -257,25 +268,27 @@ const styles = StyleSheet.create({
   },
 
   LocationButtonContainer:{
+  
    height:45,
-   flexDirection: 'row',
+   //flexDirection: 'row',
    justifyContent: 'center',
    alignItems: 'center',
-   marginBottom:10,
-   width:'80%',
+   marginTop:10,
+   width:'85%',
    borderRadius:45,
-   borderColor:'#BBCCCF',
+   borderColor:'#6FA0AF',
    borderWidth:1,
   },
  
   AddlocationButton: {
    backgroundColor: "#ffffff",
-   margin:7,
+   marginTop:-20,
+   marginBottom:20,
  
  },
  
  addLocationText:{
-   color: '#BBC3D4',
+   color: '#6FA0AF',
    fontSize:15,
  },
  
@@ -285,11 +298,15 @@ const styles = StyleSheet.create({
   },
 
   AnalysisText:{
-   color: '#BBCCCF',
+   color: '#6FA0AF',
    marginLeft:150,
    marginBottom:-200,
    marginTop:10,
    
+  },
+  subAnalysisText:{
+    color: 'white',
+    //fontSize:15,
   },
 
   inline:{

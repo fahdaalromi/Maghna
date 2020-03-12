@@ -113,7 +113,31 @@ const styles = StyleSheet.create({
   navigationFilename: {
     marginTop: 5,
   },
- 
-  
 
+  mapStyle: {
+    alignSelf: 'stretch',
+    height:'100%'
+    //flex:1,
+    //margin : 70,
+  },
+  signupButton: {
+
+    height:40,
+   flexDirection: 'row',
+   justifyContent: 'center',
+   alignItems: 'center',
+   marginBottom:10,
+   width:70,
+   borderRadius:45,
+   borderColor:'#BBCCCF',
+   borderWidth:1,
+   backgroundColor: "#3E82A7",
+   //paddingBottom:10
+   
+    
+  },
+  signUpText: {
+    color: 'white',
+    fontSize:15,
+  },
 });

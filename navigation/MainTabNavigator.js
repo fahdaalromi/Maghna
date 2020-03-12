@@ -1,9 +1,8 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform ,I18nManager} from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { FontAwesome5 ,AntDesign,Feather} from "@expo/vector-icons";
-
 import TabBarIcon from '../components/TabBarIcon';
 import supdevicesScreen from '../screens/supdevicesScreen';
 import RoutineScreen from '../screens/RoutineScreen';
@@ -15,7 +14,12 @@ import SignUpScreen from "../screens/SignUpScreen"
 import HomeScreen from "../screens/HomeScreen";
 import instructionsScreen from "../screens/instructionsScreen";
 import WelcomeScreen from "../screens/WelcomeScreen";
+
 import {LinearGradient} from 'expo-linear-gradient';
+import locationPage from "../screens/locationPage";
+import routineSubPage from "../screens/routineSubPage";
+
+I18nManager.forceRTL(false)
 
 
 const config = Platform.select({
@@ -33,6 +37,8 @@ const welcomeStack = createStackNavigator(
 );
 welcomeStack.path = '';
 
+
+
 const HomeStack = createStackNavigator(
   {
    
@@ -43,11 +49,11 @@ const HomeStack = createStackNavigator(
 );
 HomeStack.path = '';
 
-
 const ProfileStack = createStackNavigator(
   {
     profile: profileScreen,
     Home:HomeScreen,
+    location:locationPage
     
   },
   config
@@ -68,6 +74,7 @@ const RoutineStack = createStackNavigator(
   {
     Routine: RoutineScreen,
     Home:HomeScreen,
+    subRoutine:routineSubPage,
   },
   config
 );
