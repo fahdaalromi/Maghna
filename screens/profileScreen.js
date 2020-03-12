@@ -12,6 +12,7 @@ import { ScrollView,
  TouchableOpacity,
 } from 'react-native';
 import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
+import {LinearGradient} from 'expo-linear-gradient';
 
 export default function profileScreen() {
 
@@ -22,15 +23,14 @@ export default function profileScreen() {
 <View>
 
 
-
 <View style={styles.container}>
 
-<View style={{backgroundColor :"#3E82A7", height:"19%",width:"100%", justifyContent: 'center',
-   alignItems: 'center'}}>
-
-   <Text style={styles.header}> الملف الشخصي </Text>
-
+<View style={{ height:"20%",width:"100%"}}>
+<LinearGradient colors={['#1784ab', '#9dd1d9']} style={{flex: 1}}> 
+   <Text style={styles.header}   > الملف الشخصي </Text>
+</LinearGradient>
    </View>
+
 
 <ImageBackground source={require('../assets/images/halfBlue.png') } style={{ height:"100%",justifyContent: 'center',alignItems: 'center'}}>
 
@@ -121,7 +121,8 @@ const styles = StyleSheet.create({
 
  
   header:{
-    marginTop:130,
+    marginTop:150,
+    marginLeft:130,
     color: 'white',
     fontSize:25,
     justifyContent: 'center',

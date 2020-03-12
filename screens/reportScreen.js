@@ -1,4 +1,4 @@
-import React from 'react';
+import {React,Component }from 'react';
 const { width, height } = Dimensions.get('window');
 import {
   Image,
@@ -23,7 +23,6 @@ export default function reportScreen() {
   return (
 
   <View style={styles.container}>
-  
     <ImageBackground source={require('../assets/images/infobackground.png')} style={styles.bg_container}>
 
 <ScrollView

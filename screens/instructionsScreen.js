@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 const { width, height } = Dimensions.get('window');
 import {
   Image,
