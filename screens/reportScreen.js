@@ -32,7 +32,7 @@ export default class reportScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <ImageBackground source={require('./otherhalf.png')} style={{ width:'100%' , height:'120%', flex: 1, justifyContent: "center", alignItems: "center"}}>
+                <ImageBackground source={require('./otherhalf.png')} style={{ width:'100%' , height:'150%', flex: 1, justifyContent: "center", alignItems: "center"}}>
                     <ScrollView style = {{width: '100%', padding: 20}}>
                         <View style = {{width: '100%', alignItems: 'flex-end'}}>
                             <Text style={styles.routineTitle}> إجمالي الإستهلاك </Text>
@@ -49,7 +49,7 @@ export default class reportScreen extends Component {
                         <View style = {{width: '100%', borderRadius: 10, alignItems: 'center', padding: 15, paddingBottom: 0, backgroundColor: '#ffffff', marginTop: 10, marginBottom: 10}}>
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#2287ac', '#ffffff']} start = {[0, 0]} end = {[0.8, 0]} style = {styles.component_bar} />
+                                    <LinearGradient colors = {['#2287ac', '#ffffff']} start = {[0, 0]} end = {[0.7, 0]} style = {styles.component_bar} />
                                     <Text style = {styles.bar_text}> ٧٠٪ </Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
@@ -58,7 +58,7 @@ export default class reportScreen extends Component {
                             </View>
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#2287ac', '#ffffff']} start = {[0, 0]} end = {[0.4, 0]} style = {styles.component_bar} />
+                                    <LinearGradient colors = {['#2287ac', '#ffffff']} start = {[0, 0]} end = {[0.2, 0]} style = {styles.component_bar} />
                                     <Text style = {styles.bar_text}> ٢٠٪ </Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
@@ -76,7 +76,7 @@ export default class reportScreen extends Component {
                             </View>
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#2287ac', '#ffffff']} start = {[0, 0]} end = {[0.4, 0]} style = {styles.component_bar} />
+                                    <LinearGradient colors = {['#2287ac', '#ffffff']} start = {[0, 0]} end = {[0.05, 0]} style = {styles.component_bar} />
                                     <Text style = {styles.bar_text}> ٥٪ </Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
@@ -85,7 +85,7 @@ export default class reportScreen extends Component {
                             </View>
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#2287ac', '#ffffff']} start = {[0, 0]} end = {[0.4, 0]} style = {styles.component_bar} />
+                                    <LinearGradient colors = {['#2287ac', '#ffffff']} start = {[0, 0]} end = {[0.01, 0]} style = {styles.component_bar} />
                                     <Text style = {styles.bar_text}> ١٪ </Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
@@ -94,8 +94,8 @@ export default class reportScreen extends Component {
                             </View>
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#2287ac', '#ffffff']} start = {[0, 0]} end = {[0.4, 0]} style = {styles.component_bar} />
-                                    <Text style = {styles.bar_text}> ٢٪ </Text>
+                                    <LinearGradient colors = {['#2287ac', '#ffffff']} start = {[0, 0]} end = {[0.3, 0]} style = {styles.component_bar} />
+                                    <Text style = {styles.bar_text}> ٣٠٪ </Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
                                     <Text style = {styles.contentText}> آلة القهوة </Text>
@@ -103,7 +103,7 @@ export default class reportScreen extends Component {
                             </View>
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#2287ac', '#ffffff']} start = {[0, 0]} end = {[0.4, 0]} style = {styles.component_bar} />
+                                    <LinearGradient colors = {['#2287ac', '#ffffff']} start = {[0, 0]} end = {[0.35, 0]} style = {styles.component_bar} />
                                     <Text style = {styles.bar_text}> ٣٥٪ </Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
@@ -164,6 +164,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         color: '#2287ac',
+        marginTop:20,
+        marginBottom:10,
     },
     contentText: {
         fontSize: 20,
@@ -187,12 +189,14 @@ const styles = StyleSheet.create({
     },
     component_view: {
        width: '100%',
-       marginBottom: 10,
+       marginBottom: 7,
+       marginTop: 10,
        flexDirection: 'row',
        justifyContent: 'space-around',
        alignItems: 'center'
     },
     component_bar_view: {
+        marginTop: 6,
         flex: 1, 
         marginRight: 10,
         justifyContent: 'center'
