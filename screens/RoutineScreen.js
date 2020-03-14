@@ -11,115 +11,479 @@ import { ScrollView,
  Alert,
  ImageBackground,
  Platform,
+ Modal
 } from 'react-native';
 import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
 import { Root, Popup } from 'popup-ui'
 
 
-export default function RoutineScreen({navigation}) {
+export default class RoutineScreen extends Component {
 
-  return (
-   
-      <View style={styles.container}>
+    constructor(props) {
+        super(props);
+        this.state = {
+            morning_toggle: false,
+            home_exit_toggle: false,
+            home_toggle: false,
+            evening_toggle: false,
 
-   <ImageBackground source={require('../assets/images/halfBlue.png') } style={{ height:"100%", width: "100%" ,justifyContent: 'center',alignItems: 'center', marginTop:20}}>
+            toggle_button_array: [
+                { image: require('../assets/images/222.png'), clicked: false },
+                { image: require('../assets/images/222.png'), clicked: false },
+                { image: require('../assets/images/222.png'), clicked: false },
+                { image: require('../assets/images/222.png'), clicked: false },
+                { image: require('../assets/images/222.png'), clicked: false },
+                { image: require('../assets/images/222.png'), clicked: false },
+                { image: require('../assets/images/222.png'), clicked: false }
+            ],
 
-   <Root>
+            date_picker_display: false,
+            hours_array: [],
+            minute_array: [],
+        }
+    }
 
-  
-   <View style={styles.smallContainer}>
-   <View style={{flexDirection: 'row' }} > 
-   <Feather name="sunrise" style={styles.icons} size={24} color="#2287ac" style={styles.iconsSTY} />
-   <Text style={styles.routineTitle}>
-    روتين الصباح
-   </Text>
-   </View>
+    UNSAFE_componentWillMount() {
+        var hours_array = [];
+        var minute_array = [];
+        for(i = 0; i < 60; i ++) {
+            if(i < 10) {
+                if( i == 0) {
+                    hours_array.push({value: '0' + i.toString(), clicked: true})
+                    minute_array.push({value: '0' + i.toString(), clicked: true})
+                } else {
+                    hours_array.push({value: '0' + i.toString(), clicked: false})
+                    minute_array.push({value: '0' + i.toString(), clicked: false})
+                }
+                
+            } else {
+                if(i > 23) {
+                    minute_array.push({value: i.toString(), clicked: false})
+                } else {
+                    hours_array.push({value: i.toString(), clicked: false})
+                    minute_array.push({value: i.toString(), clicked: false})
+                }
+            }
+        }
+        this.setState({
+            hours_array: hours_array,
+            minute_array: minute_array
+        })
+    }
 
-   <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} 
-   onPress={() =>
-              Popup.show({
-                type: 'Success', 
-                title: 'تحرير النمط ',
-                button: false,
-                textBody: 'will chnage it to a new page ', 
-                buttontext: ' ',
-                callback: () => Popup.hide()
-              })
-            } >
-     <Text style={styles.signUpText}>  تحرير </Text>
-   </TouchableHighlight>
-   
-      
- 
+    click_togglebutton(index) {
+        var toggle_button_array = this.state.toggle_button_array;
+        toggle_button_array[index].clicked = !toggle_button_array[index].clicked;
+        this.setState({
+            toggle_button_array: toggle_button_array
+        })
+    }
 
-   </View>
-   
+    release_button_action(index) {
+        if(index == 0) {
+            this.setState({
+                morning_toggle: true,
+                home_exit_toggle: false,
+                home_toggle: false,
+                evening_toggle: false,
+            })
+        } else if(index == 1) {
+            this.setState({
+                morning_toggle: false,
+                home_exit_toggle: true,
+                home_toggle: false,
+                evening_toggle: false,
+            })
+        } else if(index == 2) {
+            this.setState({
+                morning_toggle: false,
+                home_exit_toggle: false,
+                home_toggle: true,
+                evening_toggle: false,
+            })
+        } else if(index == 3) {
+            this.setState({
+                morning_toggle: false,
+                home_exit_toggle: false,
+                home_toggle: false,
+                evening_toggle: true,
+            })
+        }
+    }
 
-<View style={styles.smallContainer}  >
-  <View style={{flexDirection: 'row'}}  >  
-<MaterialCommunityIcons name="exit-run" size={24} color="#2287ac" />
-<Text style={styles.routineTitle} >
-  روتين الخروج من المنزل
-</Text>
-</View>
-<TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={()=>{navigation.navigate('subRoutine')}}>
-     <Text style={styles.signUpText}>  تحرير </Text>
-   </TouchableHighlight>
-</View>
+    save_button_action(index) {
+
+
+        var tmp_str = '';
+        if(this.state.morning_toggle) {
+            tmp_str += "First View Data\n"
+        } else if(this.state.home_exit_toggle) {
+            tmp_str += "Second View Data\n"
+        } else if(this.state.home_toggle) {
+            tmp_str += "Third View Data\n"
+        } else if(this.state.home_toggle) {
+            tmp_str += "Forth View Data\n"
+        }
+        for(i = 0; i < this.state.toggle_button_array.length; i ++) {
+            if(this.state.toggle_button_array[i].clicked) {
+                tmp_str += i.toString() + " toggle button is selected\n";
+            } else {
+                tmp_str += i.toString() + " toggle button is unselected\n";
+            }
+        }
+        for(i = 0; i < this.state.hours_array.length; i ++) {
+            if(this.state.hours_array[i].clicked) {
+                tmp_str += "Hour: " + this.state.hours_array[i].value + '\n';
+                break;
+            }
+        }
+        for(i = 0; i < this.state.minute_array.length; i ++) {
+            if(this.state.minute_array[i].clicked) {
+                tmp_str += "Minute: " + this.state.minute_array[i].value;
+                break;
+            }
+        }
+        Alert.alert("تم حفظ النمط ", tmp_str);
 
 
 
-<View style={styles.smallContainer}>
-<View style={{flexDirection: 'row'}} > 
-   <AntDesign name="home" size={24} color="#2287ac" />
-  <Text style={styles.routineTitle}>
-    روتين العودة للمنزل
-  </Text>
-</View>
-<TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} 
-   onPress={() =>
-              Popup.show({
-                type: 'Success', 
-                title: 'تحرير النمط ',
-                button: false,
-                textBody: 'will chnage it to a new page ', 
-                buttontext: ' ',
-                callback: () => Popup.hide()
-              })
-            } >
-     <Text style={styles.signUpText}>  تحرير </Text>
-   </TouchableHighlight>
-</View>
 
-<View style={styles.smallContainer}>
-<View style={{flexDirection: 'row'}} > 
-<MaterialCommunityIcons name="weather-night" size={24} color="#2287ac" style={styles.iconsSTY}  />
-<Text style={styles.routineTitle}>
-روتين المساء
-</Text>
-</View>
-<TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} 
-   onPress={() =>
-              Popup.show({
-                type: 'Success', 
-                title: 'تحرير النمط ',
-                button: false,
-                textBody: 'will chnage it to a new page ', 
-                buttontext: ' ',
-                callback: () => Popup.hide()
-              })
-            } >
-     <Text style={styles.signUpText}>  تحرير </Text>
-   </TouchableHighlight>
-</View>
-</Root>
-   </ImageBackground>
+        if(index == 0) {
+            this.setState({
+                morning_toggle: false,
+            })
+        } else if(index == 1) {
+            this.setState({
+                home_exit_toggle: false,
+            })
+        } else if(index == 2) {
+            this.setState({
+                home_toggle: false,
+            })
+        } else if(index == 3) {
+            this.setState({
+                home_toggle: false,
+            })
+        }
+        var toggle_button_array = this.state.toggle_button_array;
+        for(i = 0; i < toggle_button_array.length; i ++) {
+            toggle_button_array[i].clicked = false;
+        }
+        this.setState({
+            toggle_button_array: toggle_button_array
+        });
 
-      </View>
-      
-  
+        this.init_hourminute_array()
+    }
 
-  );
+    select_hour(index) {
+        var hours_array = this.state.hours_array;
+        for(i = 0; i < hours_array.length; i ++) {
+            if(i == index) {
+                hours_array[i].clicked = true;
+            } else {
+                hours_array[i].clicked = false;
+            }
+        }
+        this.setState({
+            hours_array: hours_array
+        })
+    }
+
+    select_minute(index) {
+        var minute_array = this.state.minute_array;
+        for(i = 0; i < minute_array.length; i ++) {
+            if(i == index) {
+                minute_array[i].clicked = true;
+            } else {
+                minute_array[i].clicked = false;
+            }
+        }
+        this.setState({
+            minute_array: minute_array
+        })
+    }
+
+    init_hourminute_array() {
+        var hours_array = this.state.hours_array;
+        for(i = 0; i < hours_array.length; i ++) {
+            if(i == 0) {
+                hours_array[i].clicked = true;
+            } else {
+                hours_array[i].clicked = false;
+            }
+            
+        }
+        var minute_array = this.state.minute_array;
+        for(i = 0; i < minute_array.length; i ++) {
+            if(i == 0) {
+                minute_array[i].clicked = true;
+            } else {
+                minute_array[i].clicked = false;
+            }
+            
+        }
+        this.setState({
+            hours_array: hours_array,
+            minute_array: minute_array
+        })
+    }
+
+    render() {
+        return (
+        
+            <View style={styles.container}>
+                <Modal animationType="slide"
+                    transparent={true}
+                    visible={this.state.date_picker_display}
+                    backdropColor = {'#999999'}
+                    backdropOpacity = {0.3}
+                    onRequestClose={() => {
+                        Alert.alert('Modal has been closed.');
+                    }}>
+                    <View style = {{flex: 1, }}>
+                        <View style = {{width: '100%', height: '100%', position: 'absolute', left: 0, top: 0, backgroundColor: '#000000', opacity: 0.5, justifyContent: 'center', alignItems: 'center'}}/>
+                        <View style = {{width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center'}}>
+                            <View style = {{width: '70%', height: 300, backgroundColor: '#ffffff', borderRadius: 5}}>
+                                <View style = {{width: '100%', justifyContent: 'center', marginTop: 15, marginBottom: 15}}>
+                                    <Text style = {styles.modalTitle}>{"قم باختيار الوقت المناسب"}</Text>
+                                </View>
+                                <View style = {{width: '100%', flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                                    <View style = {{width: '45%', height: '100%'}}>
+                                        <View style = {{width: '100%', alignItems: 'center'}}>
+                                            <Text style={styles.signUpText}>الساعة</Text>
+                                        </View>
+                                        <ScrollView style = {{width: '100%'}}>
+                                        {
+                                            this.state.hours_array.map((item, index) => 
+                                            <TouchableOpacity key = {index} style = {{width: '100%', height: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: item.clicked ? '#e8e8e8' : null}} onPress = {() => this.select_hour(index)}>
+                                                <Text style={styles.signUpText}>{item.value}</Text>
+                                            </TouchableOpacity>
+                                            )
+                                        }
+                                        </ScrollView>
+                                    </View>
+                                    <View style = {{width: '45%', height: '100%'}}>
+                                        <View style = {{width: '100%', alignItems: 'center'}}>
+                                            <Text style={styles.signUpText}>الدقيقة</Text>
+                                        </View>
+                                        <ScrollView style = {{width: '100%'}}>
+                                        {
+                                            this.state.minute_array.map((item, index) => 
+                                            <TouchableOpacity key = {index} style = {{width: '100%', height: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: item.clicked ? '#e8e8e8' : null}} onPress = {() => this.select_minute(index)}>
+                                                <Text style={styles.signUpText}>{item.value}</Text>
+                                            </TouchableOpacity>
+                                            )
+                                        }
+                                        </ScrollView>
+                                    </View>
+                                </View>
+                                <View style = {{width: '100%', justifyContent: 'space-around', marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
+                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton, {marginTop: 0}]} onPress={() => this.setState({date_picker_display: false})} >
+                                        <Text style={styles.signUpText}> حفظ </Text>
+                                    </TouchableHighlight>
+                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton, {marginTop: 0}]} onPress={() => {this.setState({date_picker_display: false}); this.init_hourminute_array()}} >
+                                        <Text style={styles.signUpText}> إلغاء </Text>
+                                    </TouchableHighlight>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+                <ImageBackground source={require('../assets/images/halfBlue.png') } style={{ height:"100%", width: "100%" ,justifyContent: 'center',alignItems: 'center', marginTop:20, }}>
+                    <ScrollView style = {{width: '100%'}}>
+                        
+                        <View style={styles.smallContainer}>
+                            <View style={{flexDirection: 'row' }} > 
+                                <Feather name="sunrise" style={styles.icons} size={40} color="#2287ac" style={styles.iconsSTY} />
+                                    <Text style={styles.routineTitle}>
+                                    الوضع الصباحي
+                                    </Text>
+                            </View>
+                        {
+                            this.state.morning_toggle &&
+                            <View style = {{width: '100%', marginTop: 15}}>
+                                <ScrollView style = {{width: '100%', height: 80}} horizontal = {true}>
+                                {
+                                    this.state.toggle_button_array.map((item, index) => 
+                                    <TouchableOpacity key = {index} style = {[styles.toggle_button, {marginRight: 5}, item.clicked ? {backgroundColor: '#2287ac'} : {backgroundColor: '#c0c0c0'}]} onPress = {() => this.click_togglebutton(index)}>
+                                        <Image style = {{width: '100%', height: '100%', resizeMode: 'contain'}} source = {item.image}></Image>
+                                    </TouchableOpacity>
+                                    )
+                                }
+                                </ScrollView>
+                                <View style = {{width: '100%', flexDirection: 'row', justifyContent: 'space-around'}}>
+                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.save_button_action(0)} >
+                                        <Text style={styles.signUpText}> حفظ </Text>
+                                    </TouchableHighlight>
+                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.setState({date_picker_display: true})} >
+                                        <Text style={styles.signUpText}> المؤقت </Text>
+                                    </TouchableHighlight>
+                                </View>
+                            </View>
+                        }
+                        {
+                            !this.state.morning_toggle &&
+                            <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} 
+                                onPress={() =>
+                                        // Popup.show({
+                                        // type: 'Success', 
+                                        // title: 'تحرير النمط ',
+                                        // button: false,
+                                        // textBody: 'will chnage it to a new page ', 
+                                        // buttontext: ' ',
+                                        // callback: () => Popup.hide()
+                                        // })
+                                        this.release_button_action(0)
+                                    } 
+                            >
+                                <Text style={styles.signUpText}>  تحرير </Text>
+                            </TouchableHighlight>
+                        }
+                        </View>
+
+                        <View style={styles.smallContainer}  >
+                            <View style={{flexDirection: 'row'}}  >  
+                                <MaterialCommunityIcons name="exit-run" size={40} color="#2287ac" />
+                                <Text style={styles.routineTitle} >
+                            وضع الخروج
+                                </Text>
+                            </View>
+                        {
+                            this.state.home_exit_toggle &&
+                            <View style = {{width: '100%', marginTop: 15}}>
+                                <ScrollView style = {{width: '100%', height: 80}} horizontal = {true}>
+                                {
+                                    this.state.toggle_button_array.map((item, index) => 
+                                    <TouchableOpacity key = {index} style = {[styles.toggle_button, {marginRight: 5}, item.clicked ? {backgroundColor: '#2287ac'} : {backgroundColor: '#c0c0c0'}]} onPress = {() => this.click_togglebutton(index)}>
+                                        <Image style = {{width: '100%', height: '100%', resizeMode: 'contain'}} source = {item.image}></Image>
+                                    </TouchableOpacity>
+                                    )
+                                }
+                                </ScrollView>
+                                <View style = {{width: '100%', flexDirection: 'row', justifyContent: 'space-around'}}>
+                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.save_button_action(1)} >
+                                        <Text style={styles.signUpText}> حفظ </Text>
+                                    </TouchableHighlight>
+                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.setState({date_picker_display: true})} >
+                                        <Text style={styles.signUpText}> المؤقت </Text>
+                                    </TouchableHighlight>
+                                </View>
+                            </View>
+                        }
+                        {
+                            !this.state.home_exit_toggle &&
+                            <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={()=>{this.release_button_action(1)}}>
+                                <Text style={styles.signUpText}>  تحرير </Text>
+                            </TouchableHighlight>
+                        }
+                        </View>
+
+                        <View style={styles.smallContainer}>
+                            <View style={{flexDirection: 'row'}} > 
+                                <AntDesign name="home" size={40} color="#2287ac" />
+                                <Text style={styles.routineTitle}>
+                                وضع العودة 
+                                </Text>
+                            </View>
+                        {
+                            this.state.home_toggle &&
+                            <View style = {{width: '100%', marginTop: 15}}>
+                                <ScrollView style = {{width: '100%', height: 80}} horizontal = {true}>
+                                {
+                                    this.state.toggle_button_array.map((item, index) => 
+                                    <TouchableOpacity key = {index} style = {[styles.toggle_button, {marginRight: 5}, item.clicked ? {backgroundColor: '#2287ac'} : {backgroundColor: '#c0c0c0'}]} onPress = {() => this.click_togglebutton(index)}>
+                                        <Image style = {{width: '100%', height: '100%', resizeMode: 'contain'}} source = {item.image}></Image>
+                                    </TouchableOpacity>
+                                    )
+                                }
+                                </ScrollView>
+                                <View style = {{width: '100%', flexDirection: 'row', justifyContent: 'space-around'}}>
+                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.save_button_action(2)} >
+                                        <Text style={styles.signUpText}> حفظ </Text>
+                                    </TouchableHighlight>
+                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.setState({date_picker_display: true})} >
+                                        <Text style={styles.signUpText}> المؤقت </Text>
+                                    </TouchableHighlight>
+                                </View>
+                            </View>
+                        }
+                        
+                        {
+                            !this.state.home_toggle &&
+                            <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} 
+                            onPress={() =>
+                                    // Popup.show({
+                                    // type: 'Success', 
+                                    // title: 'تحرير النمط ',
+                                    // button: false,
+                                    // textBody: 'will chnage it to a new page ', 
+                                    // buttontext: ' ',
+                                    // callback: () => Popup.hide()
+                                    // })
+                                    this.release_button_action(2)
+                                } >
+                                <Text style={styles.signUpText}>  تحرير </Text>
+                            </TouchableHighlight>
+                        }
+                        </View>
+
+                        <View style={styles.smallContainer}>
+                            <View style={{flexDirection: 'row'}} > 
+                                <MaterialCommunityIcons name="weather-night" size={40} color="#2287ac" style={styles.iconsSTY}  />
+                                <Text style={styles.routineTitle}>
+                                روتين المساء
+                                </Text>
+                            </View>
+                        {
+                            this.state.evening_toggle &&
+                            <View style = {{width: '100%', marginTop: 15}}>
+                                <ScrollView style = {{width: '100%', height: 80}} horizontal = {true}>
+                                {
+                                    this.state.toggle_button_array.map((item, index) => 
+                                    <TouchableOpacity key = {index} style = {[styles.toggle_button, {marginRight: 5}, item.clicked ? {backgroundColor: '#2287ac'} : {backgroundColor: '#c0c0c0'}]} onPress = {() => this.click_togglebutton(index)}>
+                                        <Image style = {{width: '100%', height: '100%', resizeMode: 'contain'}} source = {item.image}></Image>
+                                    </TouchableOpacity>
+                                    )
+                                }
+                                </ScrollView>
+                                <View style = {{width: '100%', flexDirection: 'row', justifyContent: 'space-around'}}>
+                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.save_button_action(3)} >
+                                        <Text style={styles.signUpText}> حفظ </Text>
+                                    </TouchableHighlight>
+                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.setState({date_picker_display: true})} >
+                                        <Text style={styles.signUpText}> المؤقت </Text>
+                                    </TouchableHighlight>
+                                </View>
+                            </View>
+                        }
+                        {
+                            !this.state.evening_toggle &&
+                            <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} 
+                                onPress={() =>
+                                        // Popup.show({
+                                        // type: 'Success', 
+                                        // title: 'تحرير النمط ',
+                                        // button: false,
+                                        // textBody: 'will chnage it to a new page ', 
+                                        // buttontext: ' ',
+                                        // callback: () => Popup.hide()
+                                        // })
+                                        this.release_button_action(3)
+                                    } >
+                                <Text style={styles.signUpText}>  تحرير </Text>
+                            </TouchableHighlight>
+                        }
+                        </View>
+                    </ScrollView>
+                </ImageBackground>
+
+            </View>
+            
+        
+
+        );
+    }
 }
 
 RoutineScreen.navigationOptions = ({navigation})=> ({
@@ -127,7 +491,7 @@ RoutineScreen.navigationOptions = ({navigation})=> ({
   headerTitle: 'الأنماط الشخصية',
   headerRight:()=>(
     <TouchableOpacity onPress={()=>{navigation.navigate('Home')}} style={{marginRight:15}}>
-      <AntDesign name="right" size={24} color="#CDCCCE" />
+      <AntDesign name="right" size={24} color="#CDCCCE"  />
     </TouchableOpacity>
 
   ),
@@ -136,6 +500,14 @@ RoutineScreen.navigationOptions = ({navigation})=> ({
       <SimpleLineIcons name="logout" size={24} color="#CDCCCE" />
     </TouchableOpacity>
   ),
+  headerStyle: {
+    backgroundColor: '#8BC4D0',
+    color:'white'
+    
+ },
+ headerTitleStyle: {
+  color: '#fff'
+}
 
 });
 
@@ -157,11 +529,12 @@ const styles = StyleSheet.create({
  
   },
   routineTitle: {
-    fontSize: 20,
+    fontSize: 23,
     fontWeight: 'bold',
     textAlign: 'center',
     color: '#2287ac',
     marginLeft:80,
+    marginBottom:20,
     
   },
   iconsSTY:{
@@ -186,9 +559,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
     borderRadius:10,
-      width:350,
-      height:140,
+    width:350,
+    // height:140,
      //flexDirection: 'row'
+     padding: 20
   },
  
   perInfo:{
@@ -220,8 +594,8 @@ const styles = StyleSheet.create({
   flexDirection: 'row',
   justifyContent: 'center',
   alignItems: 'center',
- //marginBottom:10,
-  marginTop:30,
+ //marginBottom:30,
+  marginTop:10,
   //width:70,
   
   borderRadius:20,
@@ -314,6 +688,17 @@ const styles = StyleSheet.create({
    //marginRight:50,
    //marginLeft:50,
    
-   
+  },
+  toggle_button: {
+      height: '100%',
+      aspectRatio: 1,
+      borderRadius: 5
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: '#2287ac',
+    
   },
 });

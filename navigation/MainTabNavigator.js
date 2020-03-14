@@ -2,7 +2,7 @@ import React from 'react';
 import { Platform ,I18nManager} from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-import { FontAwesome5 ,AntDesign,Feather} from "@expo/vector-icons";
+import { FontAwesome5,FontAwesome ,AntDesign,Feather} from "@expo/vector-icons";
 import TabBarIcon from '../components/TabBarIcon';
 import supdevicesScreen from '../screens/supdevicesScreen';
 import RoutineScreen from '../screens/RoutineScreen';
@@ -47,6 +47,11 @@ const HomeStack = createStackNavigator(
   },
   config
 );
+
+HomeStack.navigationOptions = {
+  tabBarLabel: 'HOME',
+
+};
 HomeStack.path = '';
 
 const ProfileStack = createStackNavigator(
@@ -65,8 +70,6 @@ ProfileStack.navigationOptions = {
     <FontAwesome5 name="user" size={24} color="#CDCCCE" />
   
 };
-
-
 
 ProfileStack.path = '';
 
@@ -103,9 +106,9 @@ const supdevicesStack = createStackNavigator(
 supdevicesStack.navigationOptions = {
   tabBarLabel: 'الأجهزة المتصلة',
   tabBarIcon: ({ focused }) => (
-    <LinearGradient colors={['#1784ab', '#9dd1d9']} style={{flex: 1}}>
+   // <LinearGradient colors={['#1784ab', '#9dd1d9']} style={{flex: 1}}>
     <AntDesign name="sharealt" size={24} color="#CDCCCE" />
-    </LinearGradient>
+  //  </LinearGradient>
   ),
 };
 
@@ -127,18 +130,31 @@ reportStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     
     
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
+    <FontAwesome name="newspaper-o" size={24} color="#CDCCCE" />
   ),
 };
 
 reportStack.path = '';
 
+
+
+
 const tabNavigator = createBottomTabNavigator({
-  profileScreen,
+  ProfileStack,
   RoutineStack,
+  HomeStack,
   supdevicesStack,
   reportStack,
-
+}, 
+{
+   tabBarOptions: {
+     style: {
+      backgroundColor: '#4b9cb5'
+     },
+     labelStyle: {
+       color: '#ffffff'
+     }
+   }
 });
 
 

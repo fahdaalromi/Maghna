@@ -1,114 +1,97 @@
 import React ,{ Component } from 'react';
 import { ScrollView,
- StyleSheet,
- Text,
- View,
- TextInput,
- Button,
- TouchableHighlight,
- Image,
- Alert,
- ImageBackground,
- TouchableOpacity,
+    StyleSheet,
+    Text,
+    View,
+    TextInput,
+    Button,
+    TouchableHighlight,
+    Image,
+    Alert,
+    ImageBackground,
+    TouchableOpacity,
 } from 'react-native';
 import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
 import {LinearGradient} from 'expo-linear-gradient';
 
-export default function profileScreen({navigation}) {
+export default class profileScreen extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            
+        }
+    }
+
+    render() {
+        return (
+            <View>
+                <View style={styles.container}>
 
 
+                    <ImageBackground source={require('../assets/images/halfBlue.png') } style={{ height:"100%",justifyContent: 'center',alignItems: 'center', marginBottom:400}}>
+                        <View style={styles.smallContainer}>
+                            <Text style={styles.perInfo}>──── المعلومات الشخصية ────</Text>
+                                <View style={styles.inputContainer}>
+                                    <TextInput style={styles.inputs}
+                                        placeholder="أسم المستخدم"
+                                        keyboardType = 'ascii-capable'
+                                        underlineColorAndroid='transparent'
+                                    />
+                                </View>
+                                <View style={styles.inputContainer}>
+                                    <TextInput style={styles.inputs}
+                                        placeholder="البريد الإلكتروني"
+                                        keyboardType="email-address"
+                                        underlineColorAndroid='transparent'
+                                    />
+                                </View>
+                                <Text style={styles.perInfo}>──── تغيير كلمة المرور  ────</Text>
+                                <View style={styles.inputContainer}>
+                                    <TextInput style={styles.inputs}
+                                        placeholder="كلمة المرور"
+                                        secureTextEntry={true}
+                                        underlineColorAndroid='transparent'
+                                    />
+                                </View>
+                                <View style={styles.inputContainer}>
+                                    <TextInput style={styles.inputs}
+                                        placeholder="تأكيد كلمة المرور"
+                                        secureTextEntry={true}
+                                        underlineColorAndroid='transparent'
+                                    />
+                                </View>
+                                <Text style={styles.perInfo}>────── غيرها    ──────</Text> 
+                                <View style={styles.inputContainer}>
+                                    <TextInput style={styles.inputs}
+                                        placeholder="الحد الائتماني للفاتورة"
+                                        secureTextEntry={true}
+                                        underlineColorAndroid='transparent'
+                                    />
+                                </View>
+                                <TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} onPress={()=>{this.props.navigation.navigate('location')}}  >
+                                    <Text style={styles.addLocationText}> إضافة موقع</Text>
+                                </TouchableHighlight>
 
-  return (
+                                <View>
+                                    <Text style={styles.AnalysisText}>  تحليل التحركات </Text>
+                                </View>
+                                <View style={styles.AnalysisButtonContainer}>
+                                    <TouchableHighlight  style={[styles.AnalysisButton]} >
+                                        <Text style={styles.subAnalysisText} > تفعيل </Text>
+                                    </TouchableHighlight>
+                                </View>
 
-<View>
+                                <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} >
+                                    <Text style={styles.signUpText}>  حفظ </Text>
+                                </TouchableHighlight>
 
-
-<View style={styles.container}>
-
-<View style={{ height:"20%",width:"100%"}}>
-<LinearGradient colors={['#1784ab', '#9dd1d9']} style={{flex: 1}}> 
-   <Text style={styles.header}   > الملف الشخصي </Text>
-</LinearGradient>
-   </View>
-
-
-<ImageBackground source={require('../assets/images/halfBlue.png') } style={{ height:"100%",justifyContent: 'center',alignItems: 'center'}}>
-
-<View style={styles.smallContainer}>
-
-
-
-<Text style={styles.perInfo}>──── المعلومات الشخصية ────</Text>
-
-<View style={styles.inputContainer}>
-
-<TextInput style={styles.inputs}
-placeholder="أسم المستخدم"
-keyboardType="acci-capable"
-underlineColorAndroid='transparent'
-/>
-</View>
-<View style={styles.inputContainer}>
-
-<TextInput style={styles.inputs}
-placeholder="البريد الإلكتروني"
-keyboardType="email-address"
-underlineColorAndroid='transparent'
-/>
-</View>
-<Text style={styles.perInfo}>──── تغيير كلمة المرور  ────</Text>
-
-<View style={styles.inputContainer}>
-
-<TextInput style={styles.inputs}
-  placeholder="كلمة المرور"
-  secureTextEntry={true}
-  underlineColorAndroid='transparent'
-  />
-</View>
-<View style={styles.inputContainer}>
-
-<TextInput style={styles.inputs}
-placeholder="تأكيد كلمة المرور"
-secureTextEntry={true}
-underlineColorAndroid='transparent'
-/>
-</View>
-<Text style={styles.perInfo}>────── غيرها    ──────</Text> 
-
-<View style={styles.inputContainer}>
-
-<TextInput style={styles.inputs}
-placeholder="الحد الائتماني للفاتورة"
-secureTextEntry={true}
-underlineColorAndroid='transparent'
-/>
-</View>
-
-<TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} onPress={()=>{navigation.navigate('location')}}  >
-        <Text style={styles.addLocationText}> إضافة موقع</Text>
-        </TouchableHighlight>
-
-        <View>
-       <Text style={styles.AnalysisText}>  تحليل التحركات </Text>
-       </View>
-       <View style={styles.AnalysisButtonContainer}>
-       <TouchableHighlight  style={[styles.AnalysisButton]} >
-        <Text style={styles.subAnalysisText} > تفعيل </Text>
-        </TouchableHighlight>
-       </View>
-
-       <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} >
-     <Text style={styles.signUpText}>  حفظ </Text>
-   </TouchableHighlight>
-
-  </View>
-</ImageBackground>
-  </View>
-
-  </View>
-
-);
+                        </View>
+                    </ImageBackground>
+                </View>
+            </View>
+        );
+    }
 }
 profileScreen.navigationOptions = ({navigation})=> ({
 
@@ -125,6 +108,14 @@ profileScreen.navigationOptions = ({navigation})=> ({
       <SimpleLineIcons name="logout" size={24} color="#CDCCCE" />
     </TouchableOpacity>
   ),
+  headerStyle: {
+    backgroundColor: '#4b9cb5',
+    color:'white'
+    
+ },
+ headerTitleStyle: {
+  color: '#fff'
+}
     
 });
 
@@ -195,7 +186,7 @@ const styles = StyleSheet.create({
 
   smallContainer:{
     margin:70,
-    marginTop:-160,
+    //marginTop:-160,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',

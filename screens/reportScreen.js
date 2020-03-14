@@ -31,7 +31,6 @@ export default class reportScreen extends Component {
     
     render() {
         return (
-
             <View style={styles.container}>
                 <ImageBackground source={require('./otherhalf.png')} style={{ width:'100%' , height:'120%', flex: 1, justifyContent: "center", alignItems: "center"}}>
                     <ScrollView style = {{width: '100%', padding: 20}}>
@@ -42,7 +41,6 @@ export default class reportScreen extends Component {
                             <Text style = {styles.contentText}> إذا كنت تريد تفعيل هذة الخاصية يرجى ملء خانة "الحد الإئتماني للفاتورة" </Text>
                             <TouchableOpacity style = {styles.button_style} onPress = {() => this.open_profile()}>
                                 <Text style = {styles.button_text}> أنقر هنا</Text>
-                                <Text>dispp then app</Text>
                             </TouchableOpacity>
                         </View>
                         <View style = {{width: '100%', alignItems: 'flex-end'}}>

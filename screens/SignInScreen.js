@@ -32,27 +32,27 @@ export default class SignIn extends Component {
   render() {
     return (
         <ScrollView
-          style={styles.container}
-          contentContainerStyle={styles.contentContainer}>
-          <LinearGradient colors={['#1784ab', '#9dd1d9']} style={{flex: 1}}>
-            <View style={styles.view}>
-              <View style={styles.form}>
-                <Image source={require('../assets/images/logo.png')} style={styles.logo} />
-                <TextInput style={styles.input} placeholder="اسم المستخدم" />
-                <TextInput style={styles.input} placeholder="كلمة المرور " />
-                <Button style={styles.button} onPress={() => this.redirectRoute('Home', {name: 'Jane'})}>
-                  <LinearGradient 
-                    colors={['#1784ab', '#9dd1d9']} style={styles.gradient}
-                    start={{ x: 0, y: 1 }}
-                    end={{ x: 1, y: 1 }}
-                  >
-                    <Text style={styles.buttonText}>تسجيل الدخول </Text>
-                  </LinearGradient>
-                </Button>
-                <Text style={styles.note}>هل نسيت كلمة المرور؟</Text>
-              </View>
-            </View>
-          </LinearGradient>
+            style={styles.container}
+            contentContainerStyle={styles.contentContainer}>
+            <LinearGradient colors={['#1784ab', '#9dd1d9']} style={{flex: 1}}>
+                <View style={styles.view}>
+                <View style={styles.form}>
+                    <Image source={require('../assets/images/logo.png')} style={styles.logo} />
+                    <TextInput style={styles.input} placeholder="اسم المستخدم" />
+                    <TextInput style={styles.input} placeholder="كلمة المرور " />
+                    <Button style={styles.button} onPress={() => this.props.navigation.navigate('HomeStack', {name: 'Jane'})}>
+                        <LinearGradient 
+                            colors={['#1784ab', '#9dd1d9']} style={styles.gradient}
+                            start={{ x: 0, y: 1 }}
+                            end={{ x: 1, y: 1 }}
+                        >
+                            <Text style={styles.buttonText}>تسجيل الدخول </Text>
+                        </LinearGradient>
+                    </Button>
+                    <Text style={styles.note}>هل نسيت كلمة المرور؟</Text>
+                </View>
+                </View>
+            </LinearGradient>
         </ScrollView>
       );
 }

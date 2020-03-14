@@ -7,11 +7,11 @@ export default function locationPage() {
   return (
 
     <View style={styles.container}>
-    
+
     <View style={styles.container}>
-     
+
     <MapView
-   
+
       style={styles.mapStyle}
       initialRegion={{
         latitude: 24.7136,
@@ -41,8 +41,14 @@ locationPage.navigationOptions = ({navigation})=> ({
 
   headerTint:'#F7FAFF',
   headerTitle: 'routine type',
-
+  headerStyle: {
+    backgroundColor: '#8BC4D0',
+    color:'white'
     
+ }
+,
+
+
 });
 
 const styles = StyleSheet.create({
@@ -60,7 +66,7 @@ const styles = StyleSheet.create({
      marginTop:10,
      //width:70,
      marginLeft:30,
-     
+
      borderRadius:20,
     },
 
@@ -71,7 +77,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
- 
+
   navigationFilename: {
     marginTop: 5,
   },
@@ -95,8 +101,8 @@ const styles = StyleSheet.create({
    borderWidth:1,
    backgroundColor: "#3E82A7",
    //paddingBottom:10
-   
-    
+
+
   },
   signUpText: {
     color: 'white',
@@ -104,9 +110,9 @@ const styles = StyleSheet.create({
   },
 
   });
-   
-    
-  
+
+
+
 
 const navigationConnected =withNavigation(locationPage)
 export {navigationConnected as locationPage}

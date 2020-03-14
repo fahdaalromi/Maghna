@@ -151,28 +151,26 @@ const styles = StyleSheet.create({
       width:250,
       height:35,
       marginBottom:15,
-      //marginTop:10,
       bottom: 20,
       borderColor: '#EAEAEA'
   },
 
   smallContainer:{
     margin:70,
-    //marginBottom:20,
     marginTop:-100,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
     borderRadius:10,
       width:300,
-      height:400
+      height:550
   },
  
   perInfo:{
     color: '#9F9F9F',
     fontSize: 20,
-    bottom: 150,
-    marginTop: -170,
+    bottom: 30,
+    marginTop: 20,
     marginBottom:20,
   },
 

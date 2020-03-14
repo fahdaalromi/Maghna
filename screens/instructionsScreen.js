@@ -85,6 +85,12 @@ instructionsScreen.navigationOptions = ({navigation})=> ({
       <SimpleLineIcons name="logout" size={24} color="#CDCCCE" />
     </TouchableOpacity>
   ),
+  headerStyle: {
+    backgroundColor: '#8BC4D0',
+    color:'white'
+    
+ }
+,
     
 });
 
