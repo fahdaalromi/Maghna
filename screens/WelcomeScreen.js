@@ -14,8 +14,8 @@ import {
 } from 'react-native';
 import {Input, Button} from 'native-base';
 import {LinearGradient} from 'expo-linear-gradient';
-import { ifIphoneX } from 'react-native-iphone-x-helper'
-
+import { ifIphoneX } from 'react-native-iphone-x-helper';
+//import {LinearGradient} from 'expo-linear-gradient';
 
 
 export default class WelcomeScreen extends Component {
@@ -30,8 +30,9 @@ export default class WelcomeScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
+
                 <Image 
-                    style={{ width: 230, height: 190, bottom: 110 }}
+                    style={{ width: 230, height: 190, bottom: 110 , marginTop:150 }}
                     source={require('../assets/images/white.png')} />
                 <Text style={{ fontSize:25, color: '#ffffff', bottom: 93 }}>مرحبًا بك</Text>
     
@@ -67,7 +68,9 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     button:
-    { alignItems: 'center',
+    { marginTop:60,
+     
+      alignItems: 'center',
     justifyContent: 'center',
      backgroundColor: '#6FA0AF',
      width: 260, 
@@ -83,7 +86,8 @@ const styles = StyleSheet.create({
       fontSize:20,
      },
      button2:
-     { alignItems: 'center',
+     { 
+       alignItems: 'center',
      justifyContent: 'center',
        backgroundColor: 'white',
       width: 260, 

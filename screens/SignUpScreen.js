@@ -14,6 +14,7 @@ import { ScrollView,
 import {withNavigation} from 'react-navigation';
 import WelcomeScreen from './WelcomeScreen';
 import locationPage from './locationPage';
+import {LinearGradient} from 'expo-linear-gradient';
 
 export default function SignUP() {
 
@@ -32,7 +33,7 @@ export default function SignUP() {
 
 <ImageBackground source={require('../assets/images/halfBlue.png') } style={{ height:"100%",justifyContent: 'center',alignItems: 'center'}}>
 
-<Text style={styles.perInfo}>──── المعلومات الشخصية ────</Text>
+<Text style={styles.perInfo}>──  المعلومات الشخصية  ──</Text>
 
 <View style={styles.smallContainer}>
 
@@ -79,8 +80,15 @@ underlineColorAndroid='transparent'
 
 
        <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} >
+       <LinearGradient 
+                            colors={['#1784ab', '#9dd1d9']} style={styles.gradient}
+                            start={{ x: 0, y: 1 }}
+                            end={{ x: 1, y: 1 }}
+                        >
      <Text style={styles.signUpText}>  تسجيل جديد </Text>
+     </LinearGradient>
    </TouchableHighlight>
+
 
   </View>
 </ImageBackground>
@@ -220,6 +228,20 @@ const styles = StyleSheet.create({
    width:250,
    borderRadius:30,
   },
+  gradient: {
+   // flex: 1,
+   // borderRadius: 32,
+   // height: 46,
+    //justifyContent: 'center',
+    marginTop:20,
+    height:45,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom:10,
+    width:255,
+    borderRadius:20,
+  },
 
   AnalysisButtonContainer:{
     height:45,
@@ -250,7 +272,7 @@ const styles = StyleSheet.create({
   },
 
   signupButton: {
-   backgroundColor: "#3E82A7",
+   //backgroundColor: "#3E82A7",
     
   },
 
