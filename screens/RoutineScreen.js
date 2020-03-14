@@ -313,10 +313,10 @@ export default class RoutineScreen extends Component {
                                 }
                                 </ScrollView>
                                 <View style = {{width: '100%', flexDirection: 'row', justifyContent: 'space-around'}}>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.save_button_action(0)} >
+                                    <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.save_button_action(0)} >
                                         <Text style={styles.signUpText}> حفظ </Text>
                                     </TouchableHighlight>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.setState({date_picker_display: true})} >
+                                    <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.setState({date_picker_display: true})} >
                                         <Text style={styles.signUpText}> المؤقت </Text>
                                     </TouchableHighlight>
                                 </View>
@@ -362,10 +362,10 @@ export default class RoutineScreen extends Component {
                                 }
                                 </ScrollView>
                                 <View style = {{width: '100%', flexDirection: 'row', justifyContent: 'space-around'}}>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.save_button_action(1)} >
+                                    <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.save_button_action(1)} >
                                         <Text style={styles.signUpText}> حفظ </Text>
                                     </TouchableHighlight>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.setState({date_picker_display: true})} >
+                                    <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.setState({date_picker_display: true})} >
                                         <Text style={styles.signUpText}> المؤقت </Text>
                                     </TouchableHighlight>
                                 </View>
@@ -399,10 +399,10 @@ export default class RoutineScreen extends Component {
                                 }
                                 </ScrollView>
                                 <View style = {{width: '100%', flexDirection: 'row', justifyContent: 'space-around'}}>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.save_button_action(2)} >
+                                    <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.save_button_action(2)} >
                                         <Text style={styles.signUpText}> حفظ </Text>
                                     </TouchableHighlight>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.setState({date_picker_display: true})} >
+                                    <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.setState({date_picker_display: true})} >
                                         <Text style={styles.signUpText}> المؤقت </Text>
                                     </TouchableHighlight>
                                 </View>
@@ -448,10 +448,10 @@ export default class RoutineScreen extends Component {
                                 }
                                 </ScrollView>
                                 <View style = {{width: '100%', flexDirection: 'row', justifyContent: 'space-around'}}>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.save_button_action(3)} >
+                                    <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.save_button_action(3)} >
                                         <Text style={styles.signUpText}> حفظ </Text>
                                     </TouchableHighlight>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={() => this.setState({date_picker_display: true})} >
+                                    <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.setState({date_picker_display: true})} >
                                         <Text style={styles.signUpText}> المؤقت </Text>
                                     </TouchableHighlight>
                                 </View>
@@ -592,7 +592,7 @@ const styles = StyleSheet.create({
  },
 
  buttonContainer: {
- // height:100,
+  //height:100,
  marginRight:-100,
   flexDirection: 'row',
   justifyContent: 'center',
@@ -633,7 +633,7 @@ const styles = StyleSheet.create({
 
   signupButton: {
 
-    height:40,
+    height:30,
    flexDirection: 'row',
    justifyContent: 'center',
    alignItems: 'center',
@@ -643,6 +643,20 @@ const styles = StyleSheet.create({
    borderColor:'#BBCCCF',
    borderWidth:1,
    
+    
+  },  
+  sTButton: {
+
+    height:30,
+   flexDirection: 'row',
+   justifyContent: 'center',
+   alignItems: 'center',
+   marginBottom:10,
+   width:70,
+   borderRadius:45,
+   borderColor:'#BBCCCF',
+   borderWidth:1,
+   marginTop:10,
     
   },
 
