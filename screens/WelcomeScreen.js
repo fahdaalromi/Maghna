@@ -35,15 +35,19 @@ export default class WelcomeScreen extends Component {
                     source={require('../assets/images/white.png')} />
                 <Text style={{ fontSize:25, color: '#ffffff', bottom: 93 }}>مرحبًا بك</Text>
     
-                <View style={{ backgroundColor: '#6FA0AF', width: 260, borderRadius: 25, paddingLeft: 45, marginHorizontal: 25, paddingLeft: 2, top: 50,borderWidth: 4, borderColor: '#fff'}}>
-                    <Button title= "إنشاء حساب" color= 'white' onPress={() => this.props.navigation.navigate('SignUp')} > 
-                    
+                <View >
+                    <Button title= "إنشاء حساب" color= 'white' style={styles.button}  onPress={() => this.props.navigation.navigate('SignUp')}  > 
+                    <Text style={styles.TextInput}>
+                   إنشاء حساب 
+                    </Text>
                     </Button>
                 </View>
     
-                <View style={{ backgroundColor: '#ffffff', width: 260, borderRadius: 25, marginHorizontal: 25, paddingLeft: 2, top: 70,borderWidth: 4, borderColor: '#fff'}}>
-                    <Button title= "تسجيل دخول" color= '#6FA0AF' onPress={() => this.props.navigation.navigate('SignIn')}>
-                    
+                <View >
+                    <Button title= "تسجيل دخول" color= '#6FA0AF' style={styles.button2} onPress={() => this.props.navigation.navigate('SignIn')} >
+                    <Text style={styles.TextInput2}>
+                      تسجيل الدخول 
+                    </Text>
                     </Button>
                 </View>
         </View>
@@ -62,6 +66,43 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
     },
+    button:
+    { alignItems: 'center',
+    justifyContent: 'center',
+     backgroundColor: '#6FA0AF',
+     width: 260, 
+     margin:10,
+     borderRadius: 25, 
+    marginHorizontal: 25, 
+     paddingLeft: 2, 
+    // top: 70,
+     borderWidth: 4, 
+     borderColor: '#fff'},
+     TextInput:{
+      color: 'white',
+      fontSize:20,
+     },
+     button2:
+     { alignItems: 'center',
+     justifyContent: 'center',
+       backgroundColor: 'white',
+      width: 260, 
+      margin:10,
+      borderRadius: 25, 
+      marginHorizontal: 25, 
+      paddingLeft: 2, 
+      //top: 70,
+      borderWidth: 4, 
+      borderColor: '#fff'},
+      TextInput:{
+       color: 'white',
+       fontSize:20,
+      },
+
+     TextInput2:{
+      color: '#6FA0AF',
+      fontSize:20,
+     }
   });
 
 

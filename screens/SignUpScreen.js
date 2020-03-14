@@ -13,7 +13,7 @@ import { ScrollView,
 } from 'react-native';
 import {withNavigation} from 'react-navigation';
 import WelcomeScreen from './WelcomeScreen';
-
+import locationPage from './locationPage';
 
 export default function SignUP() {
 
@@ -73,7 +73,7 @@ secureTextEntry={true}
 underlineColorAndroid='transparent'
 />
 </View>
-<TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} >
+<TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} onPress={()=>{this.props.navigation.navigate('locationPage')}} >
         <Text style={styles.addLocationText}> إضافة موقع</Text>
         </TouchableHighlight>
 
@@ -255,27 +255,29 @@ const styles = StyleSheet.create({
   },
 
   LocationButtonContainer:{
-   height:45,
-   flexDirection: 'row',
-   justifyContent: 'center',
-   alignItems: 'center',
-   marginBottom:10,
-   width:'80%',
-   borderRadius:45,
-   borderColor:'#BBCCCF',
-   borderWidth:1,
+  
+    height:45,
+    //flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop:10,
+    width:'85%',
+    borderRadius:45,
+    borderColor:'#6FA0AF',
+    borderWidth:1,
+   },
+  
+   AddlocationButton: {
+    backgroundColor: "#ffffff",
+    marginTop:-20,
+    marginBottom:20,
+  
   },
  
-  AddlocationButton: {
-   backgroundColor: "#ffffff",
-   margin:7,
- 
- },
- 
- addLocationText:{
-   color: '#BBC3D4',
-   fontSize:15,
- },
+  addLocationText:{
+    color: '#6FA0AF',
+    fontSize:15,
+  },
  
   signUpText: {
     color: 'white',

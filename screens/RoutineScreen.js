@@ -15,7 +15,7 @@ import { ScrollView,
 } from 'react-native';
 import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
 import { Root, Popup } from 'popup-ui'
-
+import { Ionicons} from '@expo/vector-icons';
 
 export default class RoutineScreen extends Component {
 
@@ -295,7 +295,7 @@ export default class RoutineScreen extends Component {
                         
                         <View style={styles.smallContainer}>
                             <View style={{flexDirection: 'row' }} > 
-                                <Feather name="sunrise" style={styles.icons} size={40} color="#2287ac" style={styles.iconsSTY} />
+                            <Ionicons style={styles.iconsSTY} name="md-sunny" color="#2287ac" size={70} />
                                     <Text style={styles.routineTitle}>
                                     الوضع الصباحي
                                     </Text>
@@ -344,7 +344,7 @@ export default class RoutineScreen extends Component {
 
                         <View style={styles.smallContainer}  >
                             <View style={{flexDirection: 'row'}}  >  
-                                <MaterialCommunityIcons name="exit-run" size={40} color="#2287ac" />
+                            <MaterialCommunityIcons style={styles.iconsSTY} color="#2287ac" name="door-open" size={70} />
                                 <Text style={styles.routineTitle} >
                             وضع الخروج
                                 </Text>
@@ -381,7 +381,7 @@ export default class RoutineScreen extends Component {
 
                         <View style={styles.smallContainer}>
                             <View style={{flexDirection: 'row'}} > 
-                                <AntDesign name="home" size={40} color="#2287ac" />
+                                <AntDesign name="home" size={70} color="#2287ac" />
                                 <Text style={styles.routineTitle}>
                                 وضع العودة 
                                 </Text>
@@ -430,7 +430,7 @@ export default class RoutineScreen extends Component {
 
                         <View style={styles.smallContainer}>
                             <View style={{flexDirection: 'row'}} > 
-                                <MaterialCommunityIcons name="weather-night" size={40} color="#2287ac" style={styles.iconsSTY}  />
+                                <MaterialCommunityIcons name="weather-night" size={70} color="#2287ac" style={styles.iconsSTY}  />
                                 <Text style={styles.routineTitle}>
                                 روتين المساء
                                 </Text>
@@ -538,7 +538,9 @@ const styles = StyleSheet.create({
     
   },
   iconsSTY:{
-    marginLeft:-50,
+    marginLeft:-10,
+    //marginTop:20,
+ 
     
   },
   inputContainer: {
@@ -591,13 +593,13 @@ const styles = StyleSheet.create({
 
  buttonContainer: {
  // height:100,
+ marginRight:-100,
   flexDirection: 'row',
   justifyContent: 'center',
   alignItems: 'center',
  //marginBottom:30,
-  marginTop:10,
+  marginTop:-28,
   //width:70,
-  
   borderRadius:20,
  },
 
