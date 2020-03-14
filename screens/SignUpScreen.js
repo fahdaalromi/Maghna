@@ -12,7 +12,7 @@ import { ScrollView,
  TouchableOpacity,
 } from 'react-native';
 import {withNavigation} from 'react-navigation';
-
+import WelcomeScreen from './WelcomeScreen';
 
 
 export default function SignUP() {
@@ -37,14 +37,15 @@ export default function SignUP() {
 <View style={styles.smallContainer}>
 
 
-
-<View style={styles.inputContainer}>
+<View style={styles.firstContainer}>
+<View style={styles.inputContainer} style={styles.inputContainer} >
 
 <TextInput style={styles.inputs}
 placeholder="أسم المستخدم"
 keyboardType="acci-capable"
 underlineColorAndroid='transparent'
 />
+</View>
 </View>
 <View style={styles.inputContainer}>
 
@@ -78,7 +79,7 @@ underlineColorAndroid='transparent'
 
 
        <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} >
-     <Text style={styles.signUpText}>  حفظ </Text>
+     <Text style={styles.signUpText}>  تسجيل جديد </Text>
    </TouchableHighlight>
 
   </View>
@@ -89,6 +90,28 @@ underlineColorAndroid='transparent'
 
 );
 }
+
+SignUP.navigationOptions = ({navigation})=> ({
+
+  headerTint:'#F7FAFF',
+  headerTitle: 'الملف الشخصي',
+  headerRight:()=>(
+    <TouchableOpacity onPress={()=>{navigation.navigate('WelcomeScreen')}} style={{marginRight:15}}>
+      <AntDesign name="right" size={24} color="#CDCCCE" />
+    </TouchableOpacity>
+
+  ),
+
+  headerStyle: {
+    backgroundColor: '#4b9cb5',
+    color:'white'
+    
+ },
+ headerTitleStyle: {
+  color: '#fff'
+}
+    
+});
 
 
 const styles = StyleSheet.create({
@@ -145,32 +168,33 @@ const styles = StyleSheet.create({
   },
 
   inputContainer: {
-      backgroundColor: '#FFFFFF',
-      borderRadius:30,
-      borderWidth: 1,
-      width:250,
-      height:35,
-      marginBottom:15,
-      bottom: 20,
-      borderColor: '#EAEAEA'
+    backgroundColor: '#FFFFFF',
+    borderRadius:30,
+    borderWidth: 1,
+    width:250,
+    height:35,
+    marginBottom:15,
+    bottom: 20,
+    borderColor: '#3E82A7'
   },
 
   smallContainer:{
     margin:70,
-    marginTop:-100,
+   marginTop:5,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    borderRadius:10,
+    borderRadius:30,
       width:300,
-      height:550
+      height:430
+      
   },
  
   perInfo:{
     color: '#9F9F9F',
     fontSize: 20,
     bottom: 30,
-    marginTop: 20,
+    marginTop: -300,
     marginBottom:20,
   },
 
@@ -183,9 +207,10 @@ const styles = StyleSheet.create({
      //marginLeft:-50,
  
   },
- 
+  firstContainer:{
+  marginTop:40,
+  },
 
- 
   buttonContainer: {
    height:45,
    flexDirection: 'row',
