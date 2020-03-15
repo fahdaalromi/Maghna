@@ -2,7 +2,7 @@ import React from 'react';
 import { Platform ,I18nManager} from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-import { FontAwesome5,FontAwesome ,AntDesign,Feather} from "@expo/vector-icons";
+import { FontAwesome5,FontAwesome ,AntDesign,Feather,MaterialCommunityIcons,Foundation} from "@expo/vector-icons";
 import TabBarIcon from '../components/TabBarIcon';
 import supdevicesScreen from '../screens/supdevicesScreen';
 import RoutineScreen from '../screens/RoutineScreen';
@@ -49,8 +49,9 @@ const HomeStack = createStackNavigator(
 );
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'HOME',
-
+  tabBarLabel: ' الرئيسية',
+  tabBarIcon:
+  <MaterialCommunityIcons name="home-heart" size={43} color="#CDCCCE" />
 };
 HomeStack.path = '';
 
