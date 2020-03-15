@@ -71,7 +71,7 @@ export default class reportScreen extends Component {
                         <View style = {{width: '100%', borderRadius: 10, alignItems: 'center', padding: 15, paddingBottom: 0, backgroundColor: '#ffffff', marginTop: 10, marginBottom: 10}}>
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#2287ac', '#ffffff']} start = {[0, 0]} end = {[0.7, 0]} style = {styles.component_bar} />
+                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0.7, 0]} style = {styles.component_bar} />
                                     <Text style = {styles.bar_text}> ٧٠٪ </Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
@@ -80,7 +80,7 @@ export default class reportScreen extends Component {
                             </View>
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#2287ac', '#ffffff']} start = {[0, 0]} end = {[0.2, 0]} style = {styles.component_bar} />
+                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0.2, 0]} style = {styles.component_bar} />
                                     <Text style = {styles.bar_text}> ٢٠٪ </Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
@@ -89,7 +89,7 @@ export default class reportScreen extends Component {
                             </View>
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#2287ac', '#ffffff']} start = {[0, 0]} end = {[0.1, 0]} style = {styles.component_bar} />
+                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0.1, 0]} style = {styles.component_bar} />
                                     <Text style = {styles.bar_text}> ١٠٪ </Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
@@ -98,7 +98,7 @@ export default class reportScreen extends Component {
                             </View>
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#2287ac', '#ffffff']} start = {[0, 0]} end = {[0.05, 0]} style = {styles.component_bar} />
+                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0.05, 0]} style = {styles.component_bar} />
                                     <Text style = {styles.bar_text}> ٥٪ </Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
@@ -107,7 +107,7 @@ export default class reportScreen extends Component {
                             </View>
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#2287ac', '#ffffff']} start = {[0, 0]} end = {[0.01, 0]} style = {styles.component_bar} />
+                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0.01, 0]} style = {styles.component_bar} />
                                     <Text style = {styles.bar_text}> ١٪ </Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
@@ -116,7 +116,7 @@ export default class reportScreen extends Component {
                             </View>
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#2287ac', '#ffffff']} start = {[0, 0]} end = {[0.3, 0]} style = {styles.component_bar} />
+                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0.3, 0]} style = {styles.component_bar} />
                                     <Text style = {styles.bar_text}> ٣٠٪ </Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
@@ -125,7 +125,7 @@ export default class reportScreen extends Component {
                             </View>
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#2287ac', '#ffffff']} start = {[0, 0]} end = {[0.35, 0]} style = {styles.component_bar} />
+                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0.35, 0]} style = {styles.component_bar} />
                                     <Text style = {styles.bar_text}> ٣٥٪ </Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     contentText: {
         fontSize: 20,
         textAlign: 'center',
-        color: '#2287ac',
+        color: '#8abbc6',
     },
     button_style: {
         width: 200,
@@ -232,11 +232,11 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 10,
         borderWidth: 0.5,
-        borderColor: '#2287ac'
+        borderColor: '#BBCCCF'
     },
     bar_text: {
         fontSize: 14,
         textAlign: 'center',
-        color: '#2287ac',
+        color: '#8abbc6',
     }
 });
