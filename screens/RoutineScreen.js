@@ -36,6 +36,15 @@ export default class RoutineScreen extends Component {
                 { image: require('../assets/images/222.png'), clicked: false },
                 { image: require('../assets/images/222.png'), clicked: false }
             ],
+            devices_array: [
+                { Text: " التكييف", clicked: false },
+                { Text: " آلة القهوة", clicked: false },
+                { Text: " باب المنزل", clicked: false },
+                { Text: " التلفاز", clicked: false },
+                { Text: " البوابة", clicked: false },
+                { Text: " الإضاءة", clicked: false },
+                { Text: " التكييف", clicked: false }
+            ],
 
             date_picker_display: false,
             hours_array: [],
@@ -49,7 +58,7 @@ export default class RoutineScreen extends Component {
         for(i = 0; i < 60; i ++) {
             if(i < 10) {
                 if( i == 0) {
-                    hours_array.push({value: '0' + i.toString(), clicked: true})
+                    //hours_array.push({value: '0' + i.toString(), clicked: true})
                     minute_array.push({value: '0' + i.toString(), clicked: true})
                 } else {
                     hours_array.push({value: '0' + i.toString(), clicked: false})
@@ -66,8 +75,9 @@ export default class RoutineScreen extends Component {
             }
         }
         this.setState({
+            minute_array: minute_array,
             hours_array: hours_array,
-            minute_array: minute_array
+           
         })
     }
 
@@ -115,30 +125,30 @@ export default class RoutineScreen extends Component {
 
         var tmp_str = '';
         if(this.state.morning_toggle) {
-            tmp_str += "First View Data\n"
+            tmp_str += "الوضع الصباحي\n"
         } else if(this.state.home_exit_toggle) {
-            tmp_str += "Second View Data\n"
+            tmp_str += "وضع الخروج\n"
         } else if(this.state.home_toggle) {
-            tmp_str += "Third View Data\n"
+            tmp_str += "وضع العودة\n"
         } else if(this.state.home_toggle) {
-            tmp_str += "Forth View Data\n"
+            tmp_str += "الوضع المسائي\n"
         }
         for(i = 0; i < this.state.toggle_button_array.length; i ++) {
             if(this.state.toggle_button_array[i].clicked) {
-                tmp_str += i.toString() + " toggle button is selected\n";
+                tmp_str += i.toString() + " تمت إضافة الجهاز للنمط\n";
             } else {
-                tmp_str += i.toString() + " toggle button is unselected\n";
+                tmp_str += i.toString() + " لم تتم إضافة الجهاز للنمط\n";
             }
         }
         for(i = 0; i < this.state.hours_array.length; i ++) {
             if(this.state.hours_array[i].clicked) {
-                tmp_str += "Hour: " + this.state.hours_array[i].value + '\n';
+                tmp_str += "الساعة: " + this.state.hours_array[i].value + '\n';
                 break;
             }
         }
         for(i = 0; i < this.state.minute_array.length; i ++) {
             if(this.state.minute_array[i].clicked) {
-                tmp_str += "Minute: " + this.state.minute_array[i].value;
+                tmp_str += "الدقيقة: " + this.state.minute_array[i].value;
                 break;
             }
         }
@@ -292,9 +302,9 @@ export default class RoutineScreen extends Component {
                         </View>
                     </View>
                 </Modal>
-                <ImageBackground source={require('../assets/images/halfBlue.png') } style={{ height:"100%", width: "100%" ,justifyContent: 'center',alignItems: 'center', marginTop:20, }}>
+                <ImageBackground source={require('../assets/images/halfBlue.png') } style={{ height:"100%",justifyContent: 'center',alignItems: 'center', marginTop:20, }}>
                    <Root>
-                    <ScrollView style = {{width: '100%'}}>
+                    <ScrollView style = {{height:"100%", width: '100%'}}>
                         <View style={styles.smallContainer}>
                             <View style={{flexDirection: 'row' }} > 
                             <Ionicons style={styles.iconsSTY} name="md-sunny" color="#2287ac" size={70} />
@@ -629,7 +639,7 @@ export default class RoutineScreen extends Component {
                             <View style={{flexDirection: 'row'}} > 
                                 <MaterialCommunityIcons name="weather-night" size={70} color="#2287ac" style={styles.iconsSTY}  />
                                 <Text style={styles.routineTitle}>
-                                روتين المساء
+                                الوضع المسائي
                                 </Text>
                             </View>
                         {

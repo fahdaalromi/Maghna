@@ -31,7 +31,7 @@ export default class profileScreen extends Component {
 
                     <ImageBackground source={require('../assets/images/halfBlue.png') } style={{ height:"100%",justifyContent: 'center',alignItems: 'center', marginBottom:400}}>
                         <View style={styles.smallContainer}>
-                            <Text style={styles.perInfo}>──── المعلومات الشخصية ────</Text>
+                            <Text style={styles.perInfo}>── المعلومات الشخصية ──</Text>
                                 <View style={styles.inputContainer}>
                                     <TextInput style={styles.inputs}
                                         placeholder="أسم المستخدم"
@@ -46,7 +46,7 @@ export default class profileScreen extends Component {
                                         underlineColorAndroid='transparent'
                                     />
                                 </View>
-                                <Text style={styles.perInfo}>──── تغيير كلمة المرور  ────</Text>
+                                <Text style={styles.perInfo}>── تغيير كلمة المرور  ──</Text>
                                 <View style={styles.inputContainer}>
                                     <TextInput style={styles.inputs}
                                         placeholder="كلمة المرور"
@@ -61,7 +61,7 @@ export default class profileScreen extends Component {
                                         underlineColorAndroid='transparent'
                                     />
                                 </View>
-                                <Text style={styles.perInfo}>────── غيرها    ──────</Text> 
+                                <Text style={styles.perInfo}>──── غيرها    ────</Text> 
                                 <View style={styles.inputContainer}>
                                     <TextInput style={styles.inputs}
                                         placeholder="الحد الائتماني للفاتورة"
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
   perInfo:{
     color: '#3E82A7',
     fontSize: 20,
-    bottom: 30,
+    bottom: 20,
     marginTop: 20,
     marginBottom:20,
   },
