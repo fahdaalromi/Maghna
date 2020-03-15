@@ -82,14 +82,13 @@ supdevicesScreen.navigationOptions = ({navigation})=> ({
 
   headerTitle:  'الأجهزة المتصلة',
   
-  headerRight:()=>(
+ /* headerRight:()=>(
     <TouchableOpacity onPress={()=>{navigation.navigate('Home')}} style={{marginRight:15}}>
       <AntDesign name="right" size={24} color="#CDCCCE" />
     </TouchableOpacity>
   ),
+  */
   headerLeft:()=>(
-
-
 
     <TouchableOpacity onPress={()=>{navigation.navigate('')}} style={{marginLeft:15}}>
       <SimpleLineIcons name="logout" size={24} color="#fff" />
