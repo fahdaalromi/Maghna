@@ -107,7 +107,7 @@ profileScreen.navigationOptions = ({navigation})=> ({
 
   headerLeft:()=>(
     <TouchableOpacity onPress={()=>{navigation.navigate('')}} style={{marginLeft:15}}>
-      <SimpleLineIcons name="logout" size={24} color="#CDCCCE" />
+      <SimpleLineIcons name="logout" size={24} color='white' />
     </TouchableOpacity>
   ),
   headerStyle: {
