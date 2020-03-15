@@ -19,7 +19,7 @@ import {LinearGradient} from 'expo-linear-gradient';
 import locationPage from "../screens/locationPage";
 import routineSubPage from "../screens/routineSubPage";
 
-I18nManager.forceRTL(false)
+I18nManager.forceRTL(true)
 
 
 const config = Platform.select({

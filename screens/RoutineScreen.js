@@ -232,6 +232,9 @@ export default class RoutineScreen extends Component {
         return (
         
             <View style={styles.container}>
+                <ScrollView>
+
+               
                 <Modal animationType="slide"
                     transparent={true}
                     visible={this.state.date_picker_display}
@@ -278,8 +281,8 @@ export default class RoutineScreen extends Component {
                                     </View>
                                 </View>
                                 <View style = {{width: '100%', justifyContent: 'space-around', marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton,styles.timersButton , {marginTop: 0}]} onPress={() => this.setState({date_picker_display: false})} >
-                                        <Text style={styles.signUpText}> حفظ </Text>
+                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton,styles.timersButton , {color: '#8abbc6', marginTop: 0}]} onPress={() => this.setState({date_picker_display: false})} >
+                                        <Text style={styles.signUpText ,{color: '#8abbc6',}}> حفظ </Text>
                                     </TouchableHighlight>
                                     <TouchableHighlight style={[styles.buttonContainer, styles.signupButton, styles.timersButton ,{marginTop: 0}]} onPress={() => {this.setState({date_picker_display: false}); this.init_hourminute_array()}} >
                                         <Text style={styles.signUpText}> إلغاء </Text>
@@ -377,8 +380,8 @@ export default class RoutineScreen extends Component {
                                 }
                                 </ScrollView>
                                 <View style = {{width: '100%', flexDirection: 'row', justifyContent: 'space-around'}}>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.save_button_action(0)} >
-                                        <Text style={styles.signUpText}> حفظ </Text>
+                                    <TouchableHighlight style={[styles.buttonContainer, styles.sTButton,{color: '#8abbc6',}]} onPress={() => this.save_button_action(0)} >
+                                        <Text style={styles.signUpText,{color: '#8abbc6',}}> حفظ </Text>
                                     </TouchableHighlight>
                                     <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.setState({date_picker_display: true})} >
                                         <Text style={styles.signUpText}> المؤقت </Text>
@@ -420,14 +423,79 @@ export default class RoutineScreen extends Component {
                                 {
                                     this.state.toggle_button_array.map((item, index) => 
                                     <TouchableOpacity key = {index} style = {[styles.toggle_button, {marginRight: 5}, item.clicked ? {backgroundColor: '#2287ac'} : {backgroundColor: '#c0c0c0'}]} onPress = {() => this.click_togglebutton(index)}>
-                                        <Image style = {{width: '100%', height: '100%', resizeMode: 'contain'}} source = {item.image}></Image>
+                                        {/* <Image style = {{width: '100%', height: '100%', resizeMode: 'contain'}} source = {item.image}></Image> */}
+                                        {
+                                        (index == 0) &&
+                                        < Entypo
+                                            name="air"
+                                            size={40}
+                                            color=
+                                            {'white'}
+                                        />
+
+                                    }
+                                    {
+                                        (index == 1) &&
+                                        <MaterialCommunityIcons
+                                            name="coffee-outline"
+                                            size={40}
+                                            color=
+                                            {'white'}
+                                        />
+                                    }
+                                    {
+                                        (index == 2) &&
+                                        <MaterialCommunityIcons
+                                        name="door"
+                                        size={40}
+                                        color=
+                                        {'white'}
+                                        />
+                                    }
+                                    {
+                                        (index == 3) &&
+                                        <FontAwesome
+                                            name="tv"
+                                            size={40}
+                                            color=
+                                            {'white'}
+                                            />
+                                    }
+                                    {
+                                        (index == 4) &&
+                                        <MaterialCommunityIcons
+                                        name="garage"
+                                        size={40}
+                                        color=
+                                        {'white'}
+                                        />
+                                    }
+                                    {
+                                        (index == 5) &&
+                                        <MaterialCommunityIcons
+                                            name="lightbulb-on-outline"
+                                            size={40}
+                                            color=
+                                            {'white'}
+                                            />
+                                    }
+                                    {
+                                        (index == 6) &&
+                                        < Entypo
+                                            name="air"
+                                            size={40}
+                                            color=
+                                            {'white'}
+                                        />
+                                    }
+
                                     </TouchableOpacity>
                                     )
                                 }
                                 </ScrollView>
                                 <View style = {{width: '100%', flexDirection: 'row', justifyContent: 'space-around'}}>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.save_button_action(1)} >
-                                        <Text style={styles.signUpText}> حفظ </Text>
+                                    <TouchableHighlight style={[styles.buttonContainer, styles.sTButton,{color: '#8abbc6'}]} onPress={() => this.save_button_action(1)} >
+                                        <Text style={[styles.signUpText,{color: '#8abbc6',}]}> حفظ </Text>
                                     </TouchableHighlight>
                                     <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.setState({date_picker_display: true})} >
                                         <Text style={styles.signUpText}> المؤقت </Text>
@@ -457,14 +525,79 @@ export default class RoutineScreen extends Component {
                                 {
                                     this.state.toggle_button_array.map((item, index) => 
                                     <TouchableOpacity key = {index} style = {[styles.toggle_button, {marginRight: 5}, item.clicked ? {backgroundColor: '#2287ac'} : {backgroundColor: '#c0c0c0'}]} onPress = {() => this.click_togglebutton(index)}>
-                                        <Image style = {{width: '100%', height: '100%', resizeMode: 'contain'}} source = {item.image}></Image>
+                                        {/* <Image style = {{width: '100%', height: '100%', resizeMode: 'contain'}} source = {item.image}></Image> */}
+                                        {
+                                        (index == 0) &&
+                                        < Entypo
+                                            name="air"
+                                            size={40}
+                                            color=
+                                            {'white'}
+                                        />
+
+                                    }
+                                    {
+                                        (index == 1) &&
+                                        <MaterialCommunityIcons
+                                            name="coffee-outline"
+                                            size={40}
+                                            color=
+                                            {'white'}
+                                        />
+                                    }
+                                    {
+                                        (index == 2) &&
+                                        <MaterialCommunityIcons
+                                        name="door"
+                                        size={40}
+                                        color=
+                                        {'white'}
+                                        />
+                                    }
+                                    {
+                                        (index == 3) &&
+                                        <FontAwesome
+                                            name="tv"
+                                            size={40}
+                                            color=
+                                            {'white'}
+                                            />
+                                    }
+                                    {
+                                        (index == 4) &&
+                                        <MaterialCommunityIcons
+                                        name="garage"
+                                        size={40}
+                                        color=
+                                        {'white'}
+                                        />
+                                    }
+                                    {
+                                        (index == 5) &&
+                                        <MaterialCommunityIcons
+                                            name="lightbulb-on-outline"
+                                            size={40}
+                                            color=
+                                            {'white'}
+                                            />
+                                    }
+                                    {
+                                        (index == 6) &&
+                                        < Entypo
+                                            name="air"
+                                            size={40}
+                                            color=
+                                            {'white'}
+                                        />
+                                    }
+
                                     </TouchableOpacity>
                                     )
                                 }
                                 </ScrollView>
                                 <View style = {{width: '100%', flexDirection: 'row', justifyContent: 'space-around'}}>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.save_button_action(2)} >
-                                        <Text style={styles.signUpText}> حفظ </Text>
+                                    <TouchableHighlight style={[styles.buttonContainer, styles.sTButton,{color: '#8abbc6',}]} onPress={() => this.save_button_action(2)} >
+                                        <Text style={styles.signUpText,{color: '#8abbc6',}}> حفظ </Text>
                                     </TouchableHighlight>
                                     <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.setState({date_picker_display: true})} >
                                         <Text style={styles.signUpText}> المؤقت </Text>
@@ -506,14 +639,79 @@ export default class RoutineScreen extends Component {
                                 {
                                     this.state.toggle_button_array.map((item, index) => 
                                     <TouchableOpacity key = {index} style = {[styles.toggle_button, {marginRight: 5}, item.clicked ? {backgroundColor: '#2287ac'} : {backgroundColor: '#c0c0c0'}]} onPress = {() => this.click_togglebutton(index)}>
-                                        <Image style = {{width: '100%', height: '100%', resizeMode: 'contain'}} source = {item.image}></Image>
-                                    </TouchableOpacity>
-                                    )
+                                    {/* <Image style = {{width: '100%', height: '100%', resizeMode: 'contain'}} source = {item.image}></Image> */}
+                                    {
+                                    (index == 0) &&
+                                    < Entypo
+                                        name="air"
+                                        size={40}
+                                        color=
+                                        {'white'}
+                                    />
+
+                                }
+                                {
+                                    (index == 1) &&
+                                    <MaterialCommunityIcons
+                                        name="coffee-outline"
+                                        size={40}
+                                        color=
+                                        {'white'}
+                                    />
+                                }
+                                {
+                                    (index == 2) &&
+                                    <MaterialCommunityIcons
+                                    name="door"
+                                    size={40}
+                                    color=
+                                    {'white'}
+                                    />
+                                }
+                                {
+                                    (index == 3) &&
+                                    <FontAwesome
+                                        name="tv"
+                                        size={40}
+                                        color=
+                                        {'white'}
+                                        />
+                                }
+                                {
+                                    (index == 4) &&
+                                    <MaterialCommunityIcons
+                                    name="garage"
+                                    size={40}
+                                    color=
+                                    {'white'}
+                                    />
+                                }
+                                {
+                                    (index == 5) &&
+                                    <MaterialCommunityIcons
+                                        name="lightbulb-on-outline"
+                                        size={40}
+                                        color=
+                                        {'white'}
+                                        />
+                                }
+                                {
+                                    (index == 6) &&
+                                    < Entypo
+                                        name="air"
+                                        size={40}
+                                        color=
+                                        {'white'}
+                                    />
+                                }
+
+                                </TouchableOpacity>
+                                )
                                 }
                                 </ScrollView>
                                 <View style = {{width: '100%', flexDirection: 'row', justifyContent: 'space-around'}}>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.save_button_action(3)} >
-                                        <Text style={styles.signUpText}> حفظ </Text>
+                                    <TouchableHighlight style={[styles.buttonContainer, styles.sTButton,{color: '#8abbc6',}]} onPress={() => this.save_button_action(3)} >
+                                        <Text style={styles.signUpText,{color: '#8abbc6',}}> حفظ </Text>
                                     </TouchableHighlight>
                                     <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.setState({date_picker_display: true})} >
                                         <Text style={styles.signUpText}> المؤقت </Text>
@@ -542,7 +740,7 @@ export default class RoutineScreen extends Component {
                     </ScrollView>
                     </Root>
                 </ImageBackground>
-
+                </ScrollView>
             </View>
             
         
@@ -718,16 +916,16 @@ const styles = StyleSheet.create({
   },
   sTButton: {
 
-    height:30,
+    height:25,
    flexDirection: 'row',
    justifyContent: 'center',
    alignItems: 'center',
-   marginBottom:10,
+   //marginBottom:10,
    width:70,
    borderRadius:45,
    borderColor:'#BBCCCF',
    borderWidth:1,
-   marginTop:10,
+   marginTop:20,
    marginLeft:-100,
     
   },
