@@ -10,13 +10,15 @@ import { MonoText } from '../components/StyledText';
 import {LinearGradient} from 'expo-linear-gradient';
 import { StackActions } from '@react-navigation/native';
 import { NavigationActions } from 'react-navigation';
+import ProgressCircle from 'react-native-progress-circle'
 
 export default class reportScreen extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            
+            show_shape: false,
+            profile_percent: 60.6,
         }
     }
 
@@ -37,12 +39,32 @@ export default class reportScreen extends Component {
                         <View style = {{width: '100%', alignItems: 'flex-end'}}>
                             <Text style={styles.routineTitle}> إجمالي الإستهلاك </Text>
                         </View>
+                        {
+
+                        !this.state.show_shape &&
                         <View style = {{width: '100%', borderRadius: 10, alignItems: 'center', padding: 15, backgroundColor: '#ffffff', marginTop: 10, marginBottom: 10}}>
                             <Text style = {styles.contentText}> إذا كنت تريد تفعيل هذة الخاصية يرجى ملء خانة "الحد الإئتماني للفاتورة" </Text>
-                            <TouchableOpacity style = {styles.button_style} onPress = {() => this.open_profile()}>
+                            <TouchableOpacity style = {styles.button_style} onPress = {() => this.open_profile(),
+                                                                                    () => this.setState({show_shape: true})}>
                                 <Text style = {styles.button_text}> أنقر هنا</Text>
                             </TouchableOpacity>
                         </View>
+                        }
+                        {
+                            this.state.show_shape &&
+                            <View style = {{width: '100%', borderRadius: 10, alignItems: 'center', padding: 15, backgroundColor: '#ffffff', marginTop: 10, marginBottom: 10}}>
+                             <ProgressCircle
+                                percent={this.state.profile_percent}
+                                 radius={60}
+                                 borderWidth={14}
+                                color="#fae169"
+                                shadowColor="#ffffff"
+                               bgColor="#fff"
+                                                    >
+                                 <Text style={{ fontSize: 16 , color: "#fae169" }}>{this.state.profile_percent}{"%"}</Text>
+                                </ProgressCircle>
+                                 </View>
+                        }
                         <View style = {{width: '100%', alignItems: 'flex-end'}}>
                             <Text style={styles.routineTitle}> تفصيل الإستهلاك </Text>
                         </View>
@@ -127,11 +149,12 @@ reportScreen.navigationOptions = ({navigation})=> ({
 
   headerTitle:  'الأجهزة المتصلة',
   
-  headerRight:()=>(
+ /* headerRight:()=>(
     <TouchableOpacity onPress={()=>{navigation.navigate('Home')}} style={{marginRight:15}}>
       <AntDesign name="right" size={24} color="#CDCCCE" />
     </TouchableOpacity>
-  ),
+  ),*/
+
   headerLeft:()=>(
 
 
