@@ -196,7 +196,8 @@ const styles = StyleSheet.create({
     borderRadius:10,
       width:300,
       height:650,
-      shadowOpacity: 0.1
+      shadowOpacity: 0.1,
+      opacity: 0.9,
   },
  
   perInfo:{

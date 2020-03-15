@@ -838,7 +838,8 @@ const styles = StyleSheet.create({
     // height:140,
      //flexDirection: 'row'
      padding: 20,
-     shadowOpacity: 0.1
+     shadowOpacity: 0.1,
+     opacity: 0.9,
   },
  
   perInfo:{

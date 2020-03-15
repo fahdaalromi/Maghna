@@ -89,7 +89,10 @@ instructionsScreen.navigationOptions = ({navigation})=> ({
     backgroundColor: '#8BC4D0',
     color:'white'
     
- }
+ },
+ headerTitleStyle: {
+  color: '#fff'
+}  
 ,
     
 });
@@ -137,7 +140,7 @@ const styles = StyleSheet.create({
     height: height,
   },
   articleView: {
-
+    shadowOpacity: 0.07,
     width: 0.9 * width,
     height:0.2*height,
     alignSelf: 'center',

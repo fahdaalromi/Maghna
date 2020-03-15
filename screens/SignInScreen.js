@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#fff',
+     shadowOpacity: 0.1
     },
     scrollView: {
       backgroundColor: '#2d8cb1',
@@ -92,16 +93,20 @@ const styles = StyleSheet.create({
       width: 0.6 * width,
       height: 0.3 * height,
       marginTop: 30,
+      marginBottom: 40,
+      
     },
     input: {
       alignSelf: 'center',
+      //marginTop:20,
+      shadowOpacity: 0.1,
       borderColor: '#7db4cb',
       textAlign: 'right',
       borderWidth: 1,
       height: 46,
       width: 250,
       ...ifIphoneX({
-        margin: 0.02 * height,
+        margin: 0.01 * height,
         borderRadius: 20,
       }, {
         margin: 0.02 * height,
@@ -119,7 +124,7 @@ const styles = StyleSheet.create({
     },
     gradient: {
       flex: 1,
-      borderRadius: 32,
+      borderRadius: 23,
       height: 46,
       justifyContent: 'center',
     },

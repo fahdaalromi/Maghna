@@ -39,13 +39,16 @@ export default function locationPage() {
 
 locationPage.navigationOptions = ({navigation})=> ({
 
-  headerTint:'#F7FAFF',
-  headerTitle: 'routine type',
+  //headerTint:'#F7FAFF',
+  headerTitle: 'الموقع',
   headerStyle: {
     backgroundColor: '#8BC4D0',
     color:'white'
     
- }
+ },
+ headerTitleStyle: {
+  color: '#fff'
+}  
 ,
 
 
@@ -63,10 +66,10 @@ const styles = StyleSheet.create({
      justifyContent: 'center',
      alignItems: 'center',
     //marginBottom:10,
-     marginTop:10,
+     marginTop:5,
      //width:70,
      marginLeft:30,
-
+     shadowOpacity: 0.4,
      borderRadius:20,
     },
 
@@ -84,7 +87,7 @@ const styles = StyleSheet.create({
 
   mapStyle: {
     alignSelf: 'stretch',
-    height:'95%',
+    height:'97%',
     //flex:1,
     marginTop : -25,
   },

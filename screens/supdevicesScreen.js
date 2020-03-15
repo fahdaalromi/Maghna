@@ -175,7 +175,8 @@ const styles = StyleSheet.create({
     paddingRight:10, 
     paddingBottom: 15, 
     bottom: -40,
-    shadowOpacity: 0.1
+    shadowOpacity: 0.1,
+    opacity: 0.9,
     
   },
 
