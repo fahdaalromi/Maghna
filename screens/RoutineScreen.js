@@ -13,7 +13,7 @@ import { ScrollView,
  Platform,
  Modal
 } from 'react-native';
-import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
+import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons, Entypo, FontAwesome} from "@expo/vector-icons";
 import { Root, Popup } from 'popup-ui'
 import { Ionicons} from '@expo/vector-icons';
 
@@ -112,7 +112,6 @@ export default class RoutineScreen extends Component {
     }
 
     save_button_action(index) {
-
 
         var tmp_str = '';
         if(this.state.morning_toggle) {
@@ -239,7 +238,7 @@ export default class RoutineScreen extends Component {
                     backdropColor = {'#999999'}
                     backdropOpacity = {0.3}
                     onRequestClose={() => {
-                        Alert.alert('Modal has been closed.');
+                        Alert.alert('تم إغلاق النمط');
                     }}>
                     <View style = {{flex: 1, }}>
                         <View style = {{width: '100%', height: '100%', position: 'absolute', left: 0, top: 0, backgroundColor: '#000000', opacity: 0.5, justifyContent: 'center', alignItems: 'center'}}/>
@@ -279,10 +278,10 @@ export default class RoutineScreen extends Component {
                                     </View>
                                 </View>
                                 <View style = {{width: '100%', justifyContent: 'space-around', marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton, {marginTop: 0}]} onPress={() => this.setState({date_picker_display: false})} >
+                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton,styles.timersButton , {marginTop: 0}]} onPress={() => this.setState({date_picker_display: false})} >
                                         <Text style={styles.signUpText}> حفظ </Text>
                                     </TouchableHighlight>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton, {marginTop: 0}]} onPress={() => {this.setState({date_picker_display: false}); this.init_hourminute_array()}} >
+                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton, styles.timersButton ,{marginTop: 0}]} onPress={() => {this.setState({date_picker_display: false}); this.init_hourminute_array()}} >
                                         <Text style={styles.signUpText}> إلغاء </Text>
                                     </TouchableHighlight>
                                 </View>
@@ -291,8 +290,8 @@ export default class RoutineScreen extends Component {
                     </View>
                 </Modal>
                 <ImageBackground source={require('../assets/images/halfBlue.png') } style={{ height:"100%", width: "100%" ,justifyContent: 'center',alignItems: 'center', marginTop:20, }}>
+                   <Root>
                     <ScrollView style = {{width: '100%'}}>
-                        
                         <View style={styles.smallContainer}>
                             <View style={{flexDirection: 'row' }} > 
                             <Ionicons style={styles.iconsSTY} name="md-sunny" color="#2287ac" size={70} />
@@ -307,8 +306,73 @@ export default class RoutineScreen extends Component {
                                 {
                                     this.state.toggle_button_array.map((item, index) => 
                                     <TouchableOpacity key = {index} style = {[styles.toggle_button, {marginRight: 5}, item.clicked ? {backgroundColor: '#2287ac'} : {backgroundColor: '#c0c0c0'}]} onPress = {() => this.click_togglebutton(index)}>
-                                        <Image style = {{width: '100%', height: '100%', resizeMode: 'contain'}} source = {item.image}></Image>
+                                    {
+                                        (index == 0) &&
+                                        < Entypo
+                                            name="air"
+                                            size={40}
+                                            color=
+                                            {'white'}
+                                        />
+
+                                    }
+                                    {
+                                        (index == 1) &&
+                                        <MaterialCommunityIcons
+                                            name="coffee-outline"
+                                            size={40}
+                                            color=
+                                            {'white'}
+                                        />
+                                    }
+                                    {
+                                        (index == 2) &&
+                                        <MaterialCommunityIcons
+                                        name="door"
+                                        size={40}
+                                        color=
+                                        {'white'}
+                                        />
+                                    }
+                                    {
+                                        (index == 3) &&
+                                        <FontAwesome
+                                            name="tv"
+                                            size={40}
+                                            color=
+                                            {'white'}
+                                            />
+                                    }
+                                    {
+                                        (index == 4) &&
+                                        <MaterialCommunityIcons
+                                        name="garage"
+                                        size={40}
+                                        color=
+                                        {'white'}
+                                        />
+                                    }
+                                    {
+                                        (index == 5) &&
+                                        <MaterialCommunityIcons
+                                            name="lightbulb-on-outline"
+                                            size={40}
+                                            color=
+                                            {'white'}
+                                            />
+                                    }
+                                    {
+                                        (index == 6) &&
+                                        < Entypo
+                                            name="air"
+                                            size={40}
+                                            color=
+                                            {'white'}
+                                        />
+                                    }
+
                                     </TouchableOpacity>
+                                    
                                     )
                                 }
                                 </ScrollView>
@@ -476,6 +540,7 @@ export default class RoutineScreen extends Component {
                         }
                         </View>
                     </ScrollView>
+                    </Root>
                 </ImageBackground>
 
             </View>
@@ -642,9 +707,15 @@ const styles = StyleSheet.create({
    borderRadius:45,
    borderColor:'#BBCCCF',
    borderWidth:1,
+   //marginRight:100,
    
     
   },  
+  timersButton:{
+
+    marginRight:7,
+
+  },
   sTButton: {
 
     height:30,
@@ -657,6 +728,7 @@ const styles = StyleSheet.create({
    borderColor:'#BBCCCF',
    borderWidth:1,
    marginTop:10,
+   marginLeft:-100,
     
   },
 
@@ -708,7 +780,9 @@ const styles = StyleSheet.create({
   toggle_button: {
       height: '100%',
       aspectRatio: 1,
-      borderRadius: 5
+      borderRadius: 5,
+      justifyContent: 'center',
+      alignItems: 'center'
   },
   modalTitle: {
     fontSize: 20,
