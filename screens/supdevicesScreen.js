@@ -84,7 +84,7 @@ supdevicesScreen.navigationOptions = ({navigation})=> ({
   
   headerRight:()=>(
     <TouchableOpacity onPress={()=>{navigation.navigate('Home')}} style={{marginRight:15}}>
-      <AntDesign name="right" size={24} color="#CDCCCE" />
+      <AntDesign name="right" size={24} color="#fff" />
     </TouchableOpacity>
   ),
   headerLeft:()=>(

@@ -23,8 +23,10 @@
     "@react-navigation/native": "^5.0.9",
     "@react-navigation/stack": "^5.1.1",
     "@react-navigation/web": "~1.0.0-alpha.9",
+    "axios": "^0.19.2",
     "expo": "~36.0.0",
     "expo-asset": "~8.0.0",
+    "expo-av": "^8.0.0",
     "expo-constants": "~8.0.0",
     "expo-font": "~8.0.0",
     "expo-linear-gradient": "^8.0.0",
@@ -44,11 +46,21 @@
     "react-navigation": "^4.2.2",
     "react-navigation-stack": "~1.10.3",
     "react-navigation-tabs": "^2.8.2",
-    "undefined": "expo/vector-icons"
+    "undefined": "github:expo/vector-icons"
   },
   "devDependencies": {
     "@babel/core": "^7.8.7",
     "babel-preset-expo": "~8.0.0",
     "jest-expo": "~36.0.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fahdaalromi/Maghna.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fahdaalromi/Maghna/issues"
+  },
+  "homepage": "https://github.com/fahdaalromi/Maghna#readme"
 }

@@ -34,8 +34,8 @@ export default class Login extends Component {
           <View style={styles.view}>
             <View style={styles.form}>
               <Image source={require('../assets/images/logo.png')} style={styles.logo} />
-              <TextInput style={styles.input} placeholder="اسم المستخدم" />
-              <TextInput style={styles.input} placeholder="كلمة المرور " />
+              <TextInput style={styles.input} placeholder="اسم المستخدم   " />
+              <TextInput style={styles.input} placeholder="كلمة المرور    " />
               <Button style={styles.button} onPress={() => this.redirectRoute('Home', {name: 'Jane'})}>
                 <LinearGradient 
                   colors={['#1784ab', '#9dd1d9']} style={styles.gradient}
@@ -72,13 +72,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignSelf: 'center',
     borderRadius: 40,
-    ...ifIphoneX({
-      width: 0.9 * width,
-      height: 0.65 * height,
-    }, {
-      width: 0.8 * width,
-      height: 0.75 * height,
-    }),
+
   },
   logo: {
     alignSelf: 'center',
@@ -127,7 +121,7 @@ const styles = StyleSheet.create({
     marginRight: 38,
     fontSize: 16,
     fontWeight: 'bold',
-    textAlign: 'right',
+    textAlign: 'center',
   },
 });
 
