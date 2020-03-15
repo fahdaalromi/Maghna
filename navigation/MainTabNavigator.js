@@ -51,7 +51,7 @@ const HomeStack = createStackNavigator(
 HomeStack.navigationOptions = {
   tabBarLabel: ' الرئيسية',
   tabBarIcon:
-  <MaterialCommunityIcons name="home-heart" size={43} color="#CDCCCE" />
+  <MaterialCommunityIcons name="home-heart" size={43} color='white' />
 };
 HomeStack.path = '';
 
@@ -67,6 +67,7 @@ const ProfileStack = createStackNavigator(
 
 ProfileStack.navigationOptions = {
   tabBarLabel: ' الصفحة الشخصية',
+  
   tabBarIcon:
     <FontAwesome5 name="user" size={24} color="#CDCCCE" />
   
