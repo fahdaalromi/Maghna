@@ -42,7 +42,7 @@ export default class reportScreen extends Component {
                         {
 
                         !this.state.show_shape &&
-                        <View style = {{width: '100%', borderRadius: 10, alignItems: 'center', padding: 15, backgroundColor: '#ffffff', marginTop: 10, marginBottom: 10}}>
+                        <View style = {{width: '100%', borderRadius: 10, alignItems: 'center', padding: 15, backgroundColor: '#ffffff', marginTop: 10, marginBottom: 10,shadowOpacity: 0.1}}>
                             <Text style = {styles.contentText}> إذا كنت تريد تفعيل هذة الخاصية يرجى ملء خانة "الحد الإئتماني للفاتورة" </Text>
                             <TouchableOpacity style = {styles.button_style} onPress = {() => this.open_profile(),
                                                                                     () => this.setState({show_shape: true})}>
@@ -68,7 +68,7 @@ export default class reportScreen extends Component {
                         <View style = {{width: '100%', alignItems: 'flex-end'}}>
                             <Text style={styles.routineTitle}> تفصيل الإستهلاك </Text>
                         </View>
-                        <View style = {{width: '100%', borderRadius: 10, alignItems: 'center', padding: 15, paddingBottom: 0, backgroundColor: '#ffffff', marginTop: 10, marginBottom: 10}}>
+                        <View style = {{width: '100%', borderRadius: 10, alignItems: 'center', padding: 15, paddingBottom: 0, backgroundColor: '#ffffff', marginTop: 10, marginBottom: 10,shadowOpacity: 0.1}}>
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
                                     <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0.7, 0]} style = {styles.component_bar} />

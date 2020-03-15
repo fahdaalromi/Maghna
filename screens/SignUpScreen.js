@@ -181,9 +181,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     width:250,
     height:35,
-    marginBottom:15,
+    marginBottom:19,
     bottom: 20,
-    borderColor: '#3E82A7'
+    borderColor: '#3E82A7',
+    shadowOpacity: 0.1,
+
   },
 
   smallContainer:{
@@ -194,7 +196,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius:30,
       width:300,
-      height:430
+      height:430,
+      shadowOpacity: 0.1
+
       
   },
  
@@ -227,6 +231,8 @@ const styles = StyleSheet.create({
    marginBottom:10,
    width:250,
    borderRadius:30,
+   shadowOpacity: 0.17
+
   },
   gradient: {
    // flex: 1,
@@ -282,17 +288,21 @@ const styles = StyleSheet.create({
     //flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop:10,
+    //marginTop:10,
+   // marginBottom:20,
     width:'85%',
     borderRadius:45,
     borderColor:'#6FA0AF',
     borderWidth:1,
+    shadowOpacity: 0.14,
+    height:35,
+
    },
   
    AddlocationButton: {
     backgroundColor: "#ffffff",
-    marginTop:-20,
-    marginBottom:20,
+    marginTop:-10,
+    marginBottom:15,
   
   },
  

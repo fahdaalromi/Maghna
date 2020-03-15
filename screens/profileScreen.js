@@ -97,7 +97,7 @@ profileScreen.navigationOptions = ({navigation})=> ({
 
   headerTint:'#F7FAFF',
   headerTitle: 'الملف الشخصي',
-  
+
   /*headerRight:()=>(
     <TouchableOpacity onPress={()=>{navigation.navigate('Home')}} style={{marginRight:15}}>
       <AntDesign name="right" size={24} color="#CDCCCE" />
@@ -183,7 +183,8 @@ const styles = StyleSheet.create({
       height:35,
       marginBottom:15,
       bottom: 20,
-      borderColor: '#3E82A7'
+      borderColor: '#3E82A7',
+      shadowOpacity: 0.1
   },
 
   smallContainer:{
@@ -194,7 +195,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius:10,
       width:300,
-      height:650
+      height:650,
+      shadowOpacity: 0.1
   },
  
   perInfo:{
@@ -225,6 +227,7 @@ const styles = StyleSheet.create({
    marginBottom:10,
    width:250,
    borderRadius:30,
+   shadowOpacity: 0.17
   },
 
   AnalysisButtonContainer:{
@@ -242,6 +245,7 @@ const styles = StyleSheet.create({
    //marginBottom:10,
    //width:100,
    borderRadius:20,
+   shadowOpacity: 0.17
   },
 
   AnalysisButton:{
@@ -271,6 +275,8 @@ const styles = StyleSheet.create({
    borderRadius:45,
    borderColor:'#6FA0AF',
    borderWidth:1,
+   shadowOpacity: 0.14,
+   height:35,
   },
  
   AddlocationButton: {

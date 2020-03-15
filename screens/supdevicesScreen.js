@@ -174,7 +174,9 @@ const styles = StyleSheet.create({
     paddingLeft: 220, 
     paddingRight:10, 
     paddingBottom: 15, 
-    bottom: -40
+    bottom: -40,
+    shadowOpacity: 0.1
+    
   },
 
     colseText:{

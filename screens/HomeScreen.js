@@ -73,10 +73,10 @@ export default class HomeScreen extends Component {
         
         return (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" , backgroundColor: '#F7FAFF' }}>
-                <Text style={{ fontSize:25, color: '#6FA0AF', bottom: -230 , paddingLeft: 180 }}>الأنماط الحياتية</Text>
+                <Text style={{ fontSize:25, color: '#6FA0AF', bottom: -200 , paddingLeft: 180 }}>الأنماط الحياتية</Text>
                 <TouchableOpacity
                     onPress={()=>this._onPress1()}
-                    style={{ fontSize:25, backgroundColor:toggle1?'white':'#6FA0AF' , color: '#6FA0AF', justifyContent: 'center', width: 150, height: 140, left:80, borderRadius: 25, marginHorizontal: 25, paddingLeft: 28, paddingRight:10, paddingTop: 9, bottom: -250}}>
+                    style={{ fontSize:25, backgroundColor:toggle1?'white':'#6FA0AF' , color: '#6FA0AF', justifyContent: 'center', width: 150, height: 140, left:80, borderRadius: 25, marginHorizontal: 25, paddingLeft: 28, paddingRight:10, paddingTop: 9, bottom: -250,shadowOpacity: 0.3}}>
                     <Ionicons style={{ left:17, paddingLeft: -40, paddingRight:5, paddingTop: 9, bottom: 90, top: -10}} name="md-home" size={70} color= {toggle1?'#6FA0AF':'white'} />
                     <Text style={{ left:0, paddingLeft: -40, paddingRight:5, bottom: 90, top: -10, color: toggle1?'#6FA0AF':'white' , fontWeight: 'bold', fontSize:13}}>الرجوع إلى المنزل</Text>
                 </TouchableOpacity>
@@ -84,7 +84,7 @@ export default class HomeScreen extends Component {
                 
                 <TouchableOpacity
                     onPress={()=>this._onPress2()}
-                    style={{ fontSize:25, backgroundColor:toggle2?'white':'#6FA0AF' , color: '#6FA0AF', justifyContent: 'center', width: 150, height: 140, left:80, borderRadius: 25, marginHorizontal: 25, paddingLeft: 28, paddingRight:10, paddingTop: 9, bottom: -270}}>
+                    style={{ fontSize:25, backgroundColor:toggle2?'white':'#6FA0AF' , color: '#6FA0AF', justifyContent: 'center', width: 150, height: 140, left:80, borderRadius: 25, marginHorizontal: 25, paddingLeft: 28, paddingRight:10, paddingTop: 9, bottom: -270,shadowOpacity: 0.3}}>
                     <Ionicons style={{ left:17, paddingLeft: -40, paddingRight:5, paddingTop: 9, bottom: 90, top: -10}} name="md-sunny" size={70} color= {toggle2?'#6FA0AF':'white'} />
                     <Text style={{ left:5, paddingLeft: -40, paddingRight:5, bottom: 90, top: -10, color: toggle2?'#6FA0AF':'white' , fontWeight: 'bold', fontSize:13}}>الوضع الصباحي</Text>
                 </TouchableOpacity>
@@ -92,7 +92,7 @@ export default class HomeScreen extends Component {
                 
                 <TouchableOpacity
                     onPress={()=>this._onPress3()}
-                    style={{ fontSize:25, backgroundColor:toggle3?'white':'#6FA0AF' , color: '#6FA0AF', justifyContent: 'center', width: 150, height: 140, left:-80, borderRadius: 25, marginHorizontal: 25, paddingLeft: 28, paddingRight:10, paddingTop: 9, bottom: -130}}>
+                    style={{ fontSize:25, backgroundColor:toggle3?'white':'#6FA0AF' , color: '#6FA0AF', justifyContent: 'center', width: 150, height: 140, left:-80, borderRadius: 25, marginHorizontal: 25, paddingLeft: 28, paddingRight:10, paddingTop: 9, bottom: -130,shadowOpacity: 0.3}}>
                     <MaterialCommunityIcons style={{ left:17, paddingLeft: -40, paddingRight:5, paddingTop: 9, bottom: 90, top: -10}} name="door-open" size={70} color= {toggle3?'#6FA0AF':'white'} ></MaterialCommunityIcons>
                     <Text style={{ left:0, paddingLeft: -60, paddingRight:5, bottom: 90, top: -10, color: toggle3?'#6FA0AF':'white' , fontWeight: 'bold', fontSize:13}}>الخروج من المنزل</Text>
                 </TouchableOpacity>
@@ -100,7 +100,7 @@ export default class HomeScreen extends Component {
                 
                 <TouchableOpacity
                     onPress={()=>this._onPress4()}
-                    style={{ fontSize:25, backgroundColor:toggle4?'white':'#6FA0AF' , color: '#6FA0AF', justifyContent: 'center', width: 150, height: 140, left:-80, borderRadius: 25, marginHorizontal: 25, paddingLeft: 28, paddingRight:10, paddingTop: 9, bottom: 170}}>
+                    style={{ fontSize:25, backgroundColor:toggle4?'white':'#6FA0AF' , color: '#6FA0AF', justifyContent: 'center', width: 150, height: 140, left:-80, borderRadius: 25, marginHorizontal: 25, paddingLeft: 28, paddingRight:10, paddingTop: 9, bottom: 170,shadowOpacity: 0.3}}>
                     <MaterialCommunityIcons style={{ left:17, paddingLeft: -40, paddingRight:5, paddingTop: 9, bottom: 90, top: -10}} name="weather-night" size={70} color= {toggle4?'#6FA0AF':'white'} ></MaterialCommunityIcons>
                     <Text style={{ left:5, paddingLeft: -40, paddingRight:5, bottom: 90, top: -10, color: toggle4?'#6FA0AF':'white' , fontWeight: 'bold', fontSize:13}}>الوضع المسائي</Text>
                 </TouchableOpacity>
