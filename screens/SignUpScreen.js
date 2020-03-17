@@ -14,9 +14,99 @@ import { ScrollView,
 import {withNavigation} from 'react-navigation';
 import WelcomeScreen from './WelcomeScreen';
 import locationPage from './locationPage';
+import * as firebase from 'firebase';
 
-export default function SignUP() {
+export default class SignUP extends Component {
 
+  register = () => {
+    if (this.state.fullName == '' || this.state.email == ''||this.state.password == ''||this.state.confirmPassword=='') {
+      this.setState({formErrorMsg: 'عفوًا، جميع الحقول مطلوبة'})
+      this.setState({errorMsgVisibilty: 'flex'})
+      return;
+    }
+    if (this.state.password.length < 6) {
+      this.setState({formErrorMsg: 'عفوًا، أدخل كلمة مرور أكثر من ٦ خانات'})
+      this.setState({errorMsgVisibilty: 'flex'})
+      return;
+    }
+
+
+if (this.state.passError != 'none')  {
+    return;
+}
+
+    firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
+    .then( (data) => {
+        firebase.auth().onAuthStateChanged( user => {
+            if (user) {
+              this.userId = user.uid;
+              user.sendEmailVerification();
+
+              firebase.database().ref(this.userId).set(
+                {
+                  name: this.state.fullName,
+                })
+
+                this.props.navigation.navigate('login')
+            }
+          });
+            Alert.alert("تم التسجيل بنجاح، تفقد بريدك الإلكترني")
+    })
+    .catch((error) => {
+      console.log(error.message)
+      this.setState({ errorMessage: error.message })
+      //or password is less than 6 characters, the below msg shows for both. which doesnt make sense
+      this.setState({formErrorMsg: 'البريد الإلكتروني مسجل مسبقًا، قم بتسجيل الدخول'})
+      this.setState({errorMsgVisibilty: 'flex'})
+    })
+
+}//end register
+
+  validateEmail = (email) => {
+
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+    if(reg.test(this.state.email)== false)
+    {
+    this.setState({emailBorder:'red'})
+      }
+    else {
+      this.setState({emailBorder:'#91b804'})
+    }
+  }
+
+  identicalPass = (password) => {
+    if (this.state.password != this.state.confirmPassword){
+      this.setState({passError: 'flex'})
+    }
+    else {
+      this.setState({passError: 'none'})
+    }
+
+    }//end identical check
+
+
+  state = {
+    fullName: '',
+    email: '',
+    password: '',
+    confirmPassword:'',
+    phoneNo:'',
+  }
+
+  UNSAFE_componentWillMount(){
+    firebase.initializeApp({
+      apiKey: "AIzaSyBUBKLW6Wrk48NQ_TcgUerucTZFphw6l-c",
+      authDomain: "maghna-62c55.firebaseapp.com",
+      databaseURL: "https://maghna-62c55.firebaseio.com",
+      projectId: "maghna-62c55",
+      storageBucket: "maghna-62c55.appspot.com",
+      messagingSenderId: "21464439338",
+      appId: "1:21464439338:web:8c6bb486fb3673e5d14153",
+      measurementId: "G-R3BQPCTCTM"
+    });
+  }
+
+render(){
   return (
 
 <View>
@@ -42,8 +132,12 @@ export default function SignUP() {
 
 <TextInput style={styles.inputs}
 placeholder="أسم المستخدم"
-keyboardType="acci-capable"
 underlineColorAndroid='transparent'
+
+onChangeText={(fullName) => {
+  this.setState({fullName})
+  this.setState({nameBorder: '#EAEAEA'})
+} }
 />
 </View>
 </View>
@@ -53,6 +147,13 @@ underlineColorAndroid='transparent'
 placeholder="البريد الإلكتروني"
 keyboardType="email-address"
 underlineColorAndroid='transparent'
+onChangeText={(email) => {
+  this.setState({email})
+  this.setState({emailBorder: '#EAEAEA'})
+}
+}
+onEndEditing={(email) => this.validateEmail(email)}
+value={this.state.email}
 />
 </View>
 
@@ -63,6 +164,12 @@ underlineColorAndroid='transparent'
   placeholder="كلمة المرور"
   secureTextEntry={true}
   underlineColorAndroid='transparent'
+
+  onChangeText={(password) => {
+    this.setState({password})
+    this.setState({passwordBorder: '#EAEAEA'})
+  } }
+  value={this.state.password}
   />
 </View>
 <View style={styles.inputContainer}>
@@ -71,24 +178,40 @@ underlineColorAndroid='transparent'
 placeholder="تأكيد كلمة المرور"
 secureTextEntry={true}
 underlineColorAndroid='transparent'
+onChangeText={(confirmPassword) => {
+  this.setState({confirmPassword})
+  this.setState({conPasswordBorder: '#EAEAEA'})
+  this.setState({passError: 'none'})
+} }
+  onEndEditing={(confirmPassword) =>{this.identicalPass(confirmPassword)} }
+value={this.state.confirmPassword}
 />
 </View>
+
+<View>
+
+<Text style={[styles.warning,styles.fontStyle, {display: this.state.passError}]}> كلمة المرور غير متطابقة </Text>
+</View>
+
+
 <TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} onPress={()=>{this.props.navigation.navigate('locationPage')}} >
         <Text style={styles.addLocationText}> إضافة موقع</Text>
         </TouchableHighlight>
 
 
        <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} >
-     <Text style={styles.signUpText}>  تسجيل جديد </Text>
+     <Text style={styles.signUpText}  onPress={this.register}>  تسجيل جديد </Text>
    </TouchableHighlight>
 
   </View>
+
 </ImageBackground>
   </View>
 
   </View>
 
 );
+}
 }
 
 SignUP.navigationOptions = ({navigation})=> ({
