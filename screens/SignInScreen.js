@@ -11,18 +11,74 @@ import {
   View,
   TextInput,
   Dimensions,
+  Alert
 } from 'react-native';
 import {Input, Button} from 'native-base';
 import {LinearGradient} from 'expo-linear-gradient';
 import { ifIphoneX } from 'react-native-iphone-x-helper'
-
+import * as firebase from 'firebase';
 
 export default class SignIn extends Component {
 
-  
-    constructor(props) {
-        super(props);
-      }
+  constructor(props) {
+    super(props);
+    this.state = {
+
+      email: '' ,
+      password: '',
+      errorMessage: null,
+      visibilty: 'none',
+      emailBorders:'#EAEAEA',
+        
+    }
+}
+
+
+  UNSAFE_componentWillMount(){
+
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
+      authDomain: "maghnaapplication.firebaseapp.com",
+      databaseURL: "https://maghnaapplication.firebaseio.com",
+      projectId: "maghnaapplication",
+      storageBucket: "maghnaapplication.appspot.com",
+      messagingSenderId: "244460583192",
+      appId: "1:244460583192:web:f650fa57532a682962c66d",
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+  }
+
+  }
+
+  handleLogin = () => {
+
+    const {email, password} = this.state
+    firebase
+    .auth()
+    .signInWithEmailAndPassword(email, password)
+    .then((userData) => {
+      firebase.auth().onAuthStateChanged( user => {
+        if (user) {
+          this.userId = user.uid
+
+          if (!user.emailVerified){
+            Alert.alert("يرجى تفعيل البريد الإلكتروني");
+          }else{
+            firebase.database().ref('mgnUsers/'+user.uid).on('value', snapshot => {
+              Alert.alert("تم تسجيلك بنجاح");
+              if (snapshot.exists()){
+                this.props.navigation.navigate('HomeStack')}
+          })
+        }
+
+  }});
+})}
+
+
+
     
       async redirectRoute(route) {
         const { navigation }  = this.props;
@@ -38,15 +94,26 @@ export default class SignIn extends Component {
                 <View style={styles.view}>
                 <View style={styles.form}>
                     <Image source={require('../assets/images/logo.png')} style={styles.logo} />
-                    <TextInput style={styles.input} placeholder="اسم المستخدم" />
-                    <TextInput style={styles.input} placeholder="كلمة المرور " />
-                    <Button style={styles.button} onPress={() => this.props.navigation.navigate('HomeStack', {name: 'Jane'})}>
+
+                    <TextInput style={styles.input} 
+                    placeholder="اسم المستخدم" 
+                    onChangeText={(text) => { this.setState({email: text}) }}
+                    keyboardType="email-address"
+                    autoCapitalize="none"/>
+
+                    <TextInput style={styles.input} 
+                    placeholder="كلمة المرور " 
+                    value={this.state.password}
+                    onChangeText={(text) => { this.setState({password: text}) }}/>
+
+
+                    <Button style={styles.button} onPress={this.handleLogin}  /*onPress={() => this.props.navigation.navigate('HomeStack', {name: 'Jane'})}*/>
                         <LinearGradient 
                             colors={['#1784ab', '#9dd1d9']} style={styles.gradient}
                             start={{ x: 0, y: 1 }}
                             end={{ x: 1, y: 1 }}
                         >
-                            <Text style={styles.buttonText}>تسجيل الدخول </Text>
+                            <Text style={styles.buttonText} >تسجيل الدخول </Text>
                         </LinearGradient>
                     </Button>
                     <Text style={styles.note}>هل نسيت كلمة المرور؟</Text>
@@ -98,6 +165,7 @@ const styles = StyleSheet.create({
     },
     input: {
       alignSelf: 'center',
+      overflow:'visible',
       //marginTop:20,
       shadowOpacity: 0.1,
       borderColor: '#7db4cb',

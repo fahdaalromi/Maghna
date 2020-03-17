@@ -15,9 +15,72 @@ import {withNavigation} from 'react-navigation';
 import WelcomeScreen from './WelcomeScreen';
 import locationPage from './locationPage';
 import {LinearGradient} from 'expo-linear-gradient';
+import * as firebase from 'firebase';
 
-export default function SignUP() {
+export default class SignUP extends Component{
 
+  state = {
+  username:"test",
+  email: "",
+  password: "",
+  confPassword: "",
+  errorMsg:null,
+};
+
+UNSAFE_componentWillMount(){
+
+  const firebaseConfig = {
+
+    apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
+    authDomain: "maghnaapplication.firebaseapp.com",
+    databaseURL: "https://maghnaapplication.firebaseio.com",
+    projectId: "maghnaapplication",
+    storageBucket: "maghnaapplication.appspot.com",
+    messagingSenderId: "244460583192",
+    appId: "1:244460583192:web:f650fa57532a682962c66d",
+  };
+
+
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+
+}
+
+handelSignUp =() =>{
+    try{
+  firebase
+  .auth()
+  .createUserWithEmailAndPassword(this.state.email, this.state.password)
+  .then((data) => {
+
+    firebase
+    .auth()
+    .onAuthStateChanged(user => {
+      if (user) {
+        this.userId = user.uid
+        user.sendEmailVerification();
+        firebase.database().ref('mgnUsers/'+this.userId).set(
+          {
+            name: this.state.username,
+          })
+
+         // this.props.navigation.navigate('login')
+      }
+    }
+    );
+    Alert.alert("تم التسجيل بنجاح، تفقد بريدك الإلكترني")
+
+    })
+  
+  .catch(error => console.log(error.message))
+
+    }catch(e){console.log(e.message)}
+
+};
+
+
+  render(){  
   return (
 
 <View>
@@ -45,6 +108,7 @@ export default function SignUP() {
 placeholder="أسم المستخدم"
 keyboardType="acci-capable"
 underlineColorAndroid='transparent'
+onChangeText={(text) => { this.setState({username: text}) }}
 />
 </View>
 </View>
@@ -54,6 +118,7 @@ underlineColorAndroid='transparent'
 placeholder="البريد الإلكتروني"
 keyboardType="email-address"
 underlineColorAndroid='transparent'
+onChangeText={(text) => { this.setState({email: text}) }}
 />
 </View>
 
@@ -64,22 +129,26 @@ underlineColorAndroid='transparent'
   placeholder="كلمة المرور"
   secureTextEntry={true}
   underlineColorAndroid='transparent'
+  onChangeText={(text) => { this.setState({password: text}) }}
   />
 </View>
-<View style={styles.inputContainer}>
 
+<View style={styles.inputContainer}>
 <TextInput style={styles.inputs}
 placeholder="تأكيد كلمة المرور"
 secureTextEntry={true}
 underlineColorAndroid='transparent'
+onChangeText={(text) => { this.setState({confPassword: text}) }}
 />
 </View>
+
+
 <TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} onPress={()=>{this.props.navigation.navigate('locationPage')}} >
         <Text style={styles.addLocationText}> إضافة موقع</Text>
         </TouchableHighlight>
 
 
-       <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} >
+       <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={this.handelSignUp} >
        <LinearGradient 
                             colors={['#1784ab', '#9dd1d9']} style={styles.gradient}
                             start={{ x: 0, y: 1 }}
@@ -98,7 +167,7 @@ underlineColorAndroid='transparent'
 
 );
 }
-
+}
 SignUP.navigationOptions = ({navigation})=> ({
 
   headerTint:'#F7FAFF',
@@ -118,9 +187,8 @@ SignUP.navigationOptions = ({navigation})=> ({
  headerTitleStyle: {
   color: '#fff'
 }
-    
-});
-
+}  
+);
 
 const styles = StyleSheet.create({
 
@@ -211,6 +279,7 @@ const styles = StyleSheet.create({
   },
 
   inputs:{
+    overflow:'visible',
       //flex:1,
       height:40,
       alignSelf:'flex-end',

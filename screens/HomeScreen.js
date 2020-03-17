@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { ScrollView, StyleSheet, Text, View, Image, Button, backgroundColor, Alert, border, WIDTH, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Image, 
+    Button, backgroundColor, Alert, border, WIDTH, TouchableHighlight, TouchableOpacity } from 'react-native';
 import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
 import { withNavigation } from 'react-navigation';
 import { Ionicons} from '@expo/vector-icons';
