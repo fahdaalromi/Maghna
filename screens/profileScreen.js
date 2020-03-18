@@ -107,6 +107,28 @@ export default class profileScreen extends Component {
 
       }
 
+      handelSignOut =() =>{
+       
+        try{
+          console.log("start logout");
+         firebase
+          .auth()
+          .signOut()
+          .then(function(){
+          console.log(this.state);
+          Alert.alert('تم تسجيل الخروج بنجاح');
+        this.props.navigation.navigate('welcome')
+    
+          })
+    
+        .catch(error => console.log(error.message))
+    
+          }catch(e){console.log(e.message)}
+    
+      };
+    
+    
+
     render() {
         return (
             <View>
@@ -192,7 +214,7 @@ profileScreen.navigationOptions = ({navigation})=> ({
   ),*/
 
   headerLeft:()=>(
-    <TouchableOpacity onPress={()=>{navigation.navigate('')}} style={{marginLeft:15}}>
+    <TouchableOpacity onPress={this.handelSignOut} style={{marginLeft:15}}>
       <SimpleLineIcons name="logout" size={24} color='white' />
     </TouchableOpacity>
   ),

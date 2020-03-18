@@ -73,7 +73,7 @@ export default class SignIn extends Component {
             Alert.alert("يرجى تفعيل البريد الإلكتروني");
           }else{
             firebase.database().ref('mgnUsers/'+user.uid).on('value', snapshot => {
-              Alert.alert("تم تسجيلك بنجاح");
+             // Alert.alert("تم تسجيلك بنجاح");
               if (snapshot.exists()){
                 this.props.navigation.navigate('HomeStack',{UID:user.uid})}
                 console.log('before set state:'+user.uid)
