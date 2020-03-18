@@ -764,13 +764,17 @@ RoutineScreen.navigationOptions = ({navigation})=> ({
   headerTitle: 'الأنماط الشخصية',
  /* headerRight:()=>(
     <TouchableOpacity onPress={()=>{navigation.navigate('Home')}} style={{marginRight:15}}>
-      <AntDesign name="right" size={24} color="#CDCCCE"  />
+      <AntDesign name="right" size={24} color="#fff"  />
     </TouchableOpacity>
 
   ),*/
   headerLeft:()=>(
     <TouchableOpacity onPress={()=>{navigation.navigate('')}} style={{marginLeft:15}}>
+<<<<<<< HEAD
       <SimpleLineIcons name="logout" size={24} color="white"  />
+=======
+      <SimpleLineIcons name="logout" size={24} color="#fff" />
+>>>>>>> Reem
     </TouchableOpacity>
   ),
   headerStyle: {
