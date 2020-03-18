@@ -17,15 +17,17 @@ import locationPage from './locationPage';
 import {LinearGradient} from 'expo-linear-gradient';
 import * as firebase from 'firebase';
 
-export default class SignUP extends Component{
+export default class forgetPassword extends Component{
 
-  state = {
-  username:"test",
-  email: "",
-  password: "",
-  confPassword: "",
-  errorMsg:null,
-};
+constructor(props) {
+    super(props);
+    this.state = {
+        email: "",
+        errorMsg:null,
+    };
+    
+    
+}
 
 UNSAFE_componentWillMount(){
 
@@ -47,131 +49,95 @@ UNSAFE_componentWillMount(){
 
 }
 
-handelSignUp =() =>{
-    try{
-  firebase
-  .auth()
-  .createUserWithEmailAndPassword(this.state.email, this.state.password)
-  .then((data) => {
+handelForgetPassword = () => {
+    const { navigation } = this.props;
 
     firebase
     .auth()
-    .onAuthStateChanged(user => {
-      if (user) {
-        this.userId = user.uid
-        user.sendEmailVerification();
-        firebase.database().ref('mgnUsers/'+this.userId).set(
-          {
-            name: this.state.username,
-          })
-
-         this.props.navigation.navigate('SignIn')
-      }
-    }
-    );
-    Alert.alert("تم التسجيل بنجاح، تفقد بريدك الإلكترني")
+    .sendPasswordResetEmail(this.state.email)
+    .then(function() {
+    try { 
+    navigation.navigate('SignIn')}
+    catch (e){console.log(e.message)}
+    Alert.alert("فضلًا تفقد بريدك الإلكتروني");
+    
 
     })
+    .catch((error) => {
+
+      if (error.message == 'There is no user record corresponding to this identifier. The user may have been deleted.')
+      {
+        this.setState({errorMsg: 'لا يوجد مستخدم بهذا البريد الإلكتروني'})
+        this.setState({visibilty: 'flex'})
+      }
+      else if(error.message == 'The email address is badly formatted.'){
+        this.setState({errorMsg: 'فضلًا، قم بإدخال بريد إلكتروني صحيح'})
+        this.setState({visibilty: 'flex'})
+      }
+
+
+      });
+
+
+}
+
+render(){  
+    return (
   
-  .catch(error => console.log(error.message))
-
-    }catch(e){console.log(e.message)}
-
-};
-
-
-  render(){  
-  return (
-
-<View>
-
-<View style={styles.container}>
-
-<View style={{backgroundColor :"#3E82A7", height:"19%",width:"100%", justifyContent: 'center',
-   alignItems: 'center'}}>
-
-   <Text style={styles.header}> التسجيل </Text>
-
-   </View>
-
-<ImageBackground source={require('../assets/images/halfBlue.png') } style={{ height:"100%",justifyContent: 'center',alignItems: 'center'}}>
-
-<Text style={styles.perInfo}>──  المعلومات الشخصية  ──</Text>
-
-<View style={styles.smallContainer}>
-
-
-<View style={styles.firstContainer}>
-<View style={styles.inputContainer} style={styles.inputContainer} >
-
-<TextInput style={styles.inputs}
-placeholder="أسم المستخدم"
-keyboardType="acci-capable"
-underlineColorAndroid='transparent'
-onChangeText={(text) => { this.setState({username: text}) }}
-/>
-</View>
-</View>
-<View style={styles.inputContainer}>
-
-<TextInput style={styles.inputs}
-placeholder="البريد الإلكتروني"
-keyboardType="email-address"
-underlineColorAndroid='transparent'
-onChangeText={(text) => { this.setState({email: text}) }}
-/>
-</View>
-
-
-<View style={styles.inputContainer}>
-
-<TextInput style={styles.inputs}
-  placeholder="كلمة المرور"
-  secureTextEntry={true}
+  <View>
+  
+  <View style={styles.container}>
+  
+  <View style={{backgroundColor :"#3E82A7", height:"19%",width:"100%", justifyContent: 'center',
+     alignItems: 'center'}}>
+  
+     <Text style={styles.header}> استرجاع كلمة المرور </Text>
+  
+     </View>
+  
+  <ImageBackground source={require('../assets/images/halfBlue.png') } style={{ height:"100%",justifyContent: 'center',alignItems: 'center'}}>
+  
+  <Text style={styles.perInfo}>──  فضلاً أدخل بريدك الإلكتروني ──</Text>
+  
+  <View style={styles.smallContainer}>
+  
+  
+  
+  <View style={styles.inputContainer}>
+  
+  <TextInput style={styles.inputs}
+  placeholder="البريد الإلكتروني"
+  keyboardType="email-address"
   underlineColorAndroid='transparent'
-  onChangeText={(text) => { this.setState({password: text}) }}
+  onChangeText={(text) => { this.setState({email: text}) }}
   />
-</View>
-
-<View style={styles.inputContainer}>
-<TextInput style={styles.inputs}
-placeholder="تأكيد كلمة المرور"
-secureTextEntry={true}
-underlineColorAndroid='transparent'
-onChangeText={(text) => { this.setState({confPassword: text}) }}
-/>
-</View>
-
-
-<TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} onPress={()=>{this.props.navigation.navigate('locationPage')}} >
-        <Text style={styles.addLocationText}> إضافة موقع</Text>
-        </TouchableHighlight>
-
-
-       <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={this.handelSignUp} >
-       <LinearGradient 
-                            colors={['#1784ab', '#9dd1d9']} style={styles.gradient}
-                            start={{ x: 0, y: 1 }}
-                            end={{ x: 1, y: 1 }}
-                        >
-     <Text style={styles.signUpText}>  تسجيل جديد </Text>
-     </LinearGradient>
-   </TouchableHighlight>
-
-
   </View>
-</ImageBackground>
-  </View>
-
-  </View>
-
-);
+  
+  
+         <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={this.handelForgetPassword} >
+         <LinearGradient 
+                              colors={['#1784ab', '#9dd1d9']} style={styles.gradient}
+                              start={{ x: 0, y: 1 }}
+                              end={{ x: 1, y: 1 }}
+                          >
+       <Text style={styles.signUpText}>  إرسال  </Text>
+       </LinearGradient>
+     </TouchableHighlight>
+  
+  
+    </View>
+  </ImageBackground>
+    </View>
+  
+    </View>
+  
+  );
+  }
 }
-}
-SignUP.navigationOptions = ({navigation})=> ({
+forgetPassword.navigationOptions = ({navigation})=> ({
 
   headerTint:'#F7FAFF',
-  headerTitle: 'التسجيل ',
+ // headerTitle: 'التسجيل ',
   headerRight:()=>(
     <TouchableOpacity onPress={()=>{navigation.navigate('WelcomeScreen')}} style={{marginRight:15}}>
       <AntDesign name="right" size={24} color="#CDCCCE" />
@@ -264,7 +230,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius:30,
       width:300,
-      height:430,
+      height:200,
       shadowOpacity: 0.1
 
       
@@ -405,6 +371,5 @@ const styles = StyleSheet.create({
 
 });
 
-const navigationConnected =withNavigation(SignUP)
-export {navigationConnected as SignUP}
-
+const navigationConnected =withNavigation(forgetPassword)
+export {navigationConnected as forgetPassword}

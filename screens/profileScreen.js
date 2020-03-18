@@ -13,15 +13,99 @@ import { ScrollView,
 } from 'react-native';
 import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
 import {LinearGradient} from 'expo-linear-gradient';
+import * as firebase from 'firebase';
+
 
 export default class profileScreen extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+
+          username:"",
+          email: "",
+          password: "",
+          confPassword: "",
+          errorMsg:null,
             
         }
     }
+
+    UNSAFE_componentWillMount(){
+
+      const firebaseConfig = {
+    
+        apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
+        authDomain: "maghnaapplication.firebaseapp.com",
+        databaseURL: "https://maghnaapplication.firebaseio.com",
+        projectId: "maghnaapplication",
+        storageBucket: "maghnaapplication.appspot.com",
+        messagingSenderId: "244460583192",
+        appId: "1:244460583192:web:f650fa57532a682962c66d",
+      };
+    
+    
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    
+    }
+    //view and fetch updated data
+    /*
+    componentDidMount(){
+    
+      //var Uid = "tWRTW1QU6kT8FhpnofVfxaCQcOy2";
+     
+    //  var userId =  this.props.navigation.getParam(id, 'NO-ID');
+    //  var userId = this.props.ID;
+      
+      console.log(userId);
+
+      if (userId !== 'NO-ID'){
+
+        firebase.database().ref('mgnUsers/').on('value', (snap) => {
+
+          snap.forEach((child) => {
+
+             if (child.val().id === userId){
+
+               this.setState({
+                 userKey:child.key,
+                 username: child.val().username,
+                 });
+              }
+              })
+
+          });
+        }   
+
+      }//end view and fetch
+*/
+
+
+    editProfile = () => {
+
+      try{
+
+        var userId =  this.props.navigation.getParam('id', 'NO-ID');
+
+        if (this.state.password == '') {
+          if (this.state.username != ''){
+            firebase.database()
+            .ref('mgnUsers/'+userId)
+            .update({username: this.state.username,})
+          }
+ 
+        }else {
+          firebase.database()
+          .ref('mgnUsers/'+userId)
+          .updatePassword(this.state.password)
+          
+          }
+       }catch(e){console.log(e.message)}
+
+
+      }
 
     render() {
         return (
@@ -35,8 +119,10 @@ export default class profileScreen extends Component {
                                 <View style={styles.inputContainer}>
                                     <TextInput style={styles.inputs}
                                         placeholder="أسم المستخدم"
-                                        keyboardType = 'ascii-capable'
-                                        underlineColorAndroid='transparent'
+                                        onChangeText={(text) => { this.setState({email: text}) }}
+                                        keyboardType="email-address"
+                                        autoCapitalize="none"
+                                        value={this.state.username}
                                     />
                                 </View>
                                 <View style={styles.inputContainer}>

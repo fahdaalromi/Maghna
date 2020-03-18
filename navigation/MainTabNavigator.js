@@ -59,7 +59,8 @@ const ProfileStack = createStackNavigator(
   {
     profile: profileScreen,
     Home:HomeScreen,
-    location:locationPage
+    location:locationPage,
+    SignIn:SignInScreen
     
   },
   config

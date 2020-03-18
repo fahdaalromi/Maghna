@@ -1,9 +1,24 @@
-import React from 'react';
-import { ScrollView, StyleSheet,Text,View,TouchableHighlight} from 'react-native';
+import React, {useState, useEffect} from "react";
+import { ScrollView, StyleSheet,Text,View,TouchableHighlight, Alert} from 'react-native';
 import MapView from 'react-native-maps';
 import { withNavigation } from 'react-navigation';
 
 export default function locationPage() {
+  
+  //for saving user location 
+  /*
+  const [coordinates, setCoordinates] = useState({
+    latitude: 24.76989911,
+    longitude: 46.66837581,
+  });
+
+  setCoordinates({latitude:4567,longitude:45678})
+  useEffect(() => {
+    
+    Alert.alert('hello');
+  },[]);
+    */
+  
   return (
 
     <View style={styles.container}>

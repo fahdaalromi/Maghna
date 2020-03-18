@@ -11,7 +11,8 @@ import {
   View,
   TextInput,
   Dimensions,
-  Alert
+  Alert,
+  TouchableOpacity
 } from 'react-native';
 import {Input, Button} from 'native-base';
 import {LinearGradient} from 'expo-linear-gradient';
@@ -23,7 +24,7 @@ export default class SignIn extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      username:'',
       email: '' ,
       password: '',
       errorMessage: null,
@@ -32,6 +33,7 @@ export default class SignIn extends Component {
         
     }
 }
+
 
 
   UNSAFE_componentWillMount(){
@@ -60,23 +62,29 @@ export default class SignIn extends Component {
     .auth()
     .signInWithEmailAndPassword(email, password)
     .then((userData) => {
-      firebase.auth().onAuthStateChanged( user => {
+      firebase
+      .auth()
+      .onAuthStateChanged( user => {
         if (user) {
-          this.userId = user.uid
-
+          this.userId = user.uid;
+          var username= this.username;
+          //this.username = username
           if (!user.emailVerified){
             Alert.alert("يرجى تفعيل البريد الإلكتروني");
           }else{
             firebase.database().ref('mgnUsers/'+user.uid).on('value', snapshot => {
               Alert.alert("تم تسجيلك بنجاح");
               if (snapshot.exists()){
-                this.props.navigation.navigate('HomeStack')}
+                this.props.navigation.navigate('HomeStack',{UID:user.uid})}
+                console.log('before set state:'+user.uid)
+            
           })
         }
 
   }});
 })}
 
+//this.props.navigation.navigate('HomeStack', {name: username })}
 
 
     
@@ -103,6 +111,7 @@ export default class SignIn extends Component {
 
                     <TextInput style={styles.input} 
                     placeholder="كلمة المرور " 
+                    secureTextEntry={true}
                     value={this.state.password}
                     onChangeText={(text) => { this.setState({password: text}) }}/>
 
@@ -116,7 +125,9 @@ export default class SignIn extends Component {
                             <Text style={styles.buttonText} >تسجيل الدخول </Text>
                         </LinearGradient>
                     </Button>
-                    <Text style={styles.note}>هل نسيت كلمة المرور؟</Text>
+                    <TouchableOpacity onPress={ () => {this.props.navigation.navigate('forgetPassword')}}>
+                    <Text style={styles.note} >هل نسيت كلمة المرور؟</Text>
+                    </TouchableOpacity>
                 </View>
                 </View>
             </LinearGradient>
@@ -125,7 +136,7 @@ export default class SignIn extends Component {
 }
  }
 
-
+//
 
 const styles = StyleSheet.create({
     container: {
