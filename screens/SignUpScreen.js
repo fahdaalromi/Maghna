@@ -24,7 +24,15 @@ export default class SignUP extends Component{
   email: "",
   password: "",
   confPassword: "",
+  latitude:0,
+  longitude:0,
+  amount:0,
   errorMsg:null,
+  passwordBorder:'#3E82A7',
+  conPasswordBorder:'#3E82A7',
+  emailBorder:'#3E82A7',
+  formErrorMsg:'',
+  errorMsgVisibilty:'none',
 };
 
 UNSAFE_componentWillMount(){
@@ -46,8 +54,50 @@ UNSAFE_componentWillMount(){
 }
 
 }
+validateEmail = (email) => {
+
+  let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+  if(reg.test(this.state.email)== false)
+  {
+  this.setState({emailBorder:'red'})
+    }
+  else {
+    this.setState({emailBorder:'#91b804'})
+  }
+}
+
+identicalPass = (password) => {
+  if (this.state.password != this.state.confPassword){
+    //this.setState({passError: 'flex'})
+  }
+  else {
+   // this.setState({passError: 'none'})
+  }
+  
+  }
+
 
 handelSignUp =() =>{
+
+  if (this.state.username == '' || this.state.email == ''||this.state.password == ''||this.state.confPassword=='') {
+    this.setState({formErrorMsg: 'عفوًا، جميع الحقول مطلوبة'})
+    this.setState({errorMsgVisibilty: 'flex'})
+    return;
+  }
+
+
+  if (this.state.password.length < 6) {
+    this.setState({formErrorMsg: ' أدخل كلمة مرور أكثر من ٦ خانات'})
+    //this.setState({errorMsgVisibilty: 'flex'})
+    return;
+  }
+  if (this.state.emailBorder == 'red'||this.state.passwordBorder == 'red'||this.state.conPasswordBorder=='red'){
+    this.setState({formErrorMsg: 'فضًلا، قم بتصحيح الخانات الحمراء'})
+    this.setState({errorMsgVisibilty: 'flex'})
+    return;
+  }
+
+
     try{
   firebase
   .auth()
@@ -63,6 +113,9 @@ handelSignUp =() =>{
         firebase.database().ref('mgnUsers/'+this.userId).set(
           {
             name: this.state.username,
+            latitude:this.state.latitude,
+            longitude:this.state.longitude,
+            amount:this.state.amount,
           })
 
          this.props.navigation.navigate('SignIn')
@@ -73,7 +126,12 @@ handelSignUp =() =>{
 
     })
   
-  .catch(error => console.log(error.message))
+  .catch((error) => {
+
+    console.log(error.message)
+    this.setState({formErrorMsg: 'نعتذر، البريد الإلكتروني مسجل مسبقًا'})
+    
+  })
 
     }catch(e){console.log(e.message)}
 
@@ -113,33 +171,46 @@ onChangeText={(text) => { this.setState({username: text}) }}
 />
 </View>
 </View>
-<View style={styles.inputContainer}>
+<View style={[styles.inputContainer , {borderColor: this.state.emailBorder}]}>
 
 <TextInput style={styles.inputs}
 placeholder="البريد الإلكتروني"
 keyboardType="email-address"
 underlineColorAndroid='transparent'
-onChangeText={(text) => { this.setState({email: text}) }}
+onChangeText={(text) => { 
+  this.setState({email: text}) 
+ this.setState({emailBorder: '#3E82A7'})
+  }}
+  onEndEditing={(email) => this.validateEmail(email)}
 />
 </View>
 
 
-<View style={styles.inputContainer}>
+<View style={[styles.inputContainer, {borderColor: this.state.passwordBorder}]}>
 
 <TextInput style={styles.inputs}
   placeholder="كلمة المرور"
   secureTextEntry={true}
   underlineColorAndroid='transparent'
-  onChangeText={(text) => { this.setState({password: text}) }}
+  onChangeText={(text) => { 
+    this.setState({password: text}) 
+    this.setState({passwordBorder: '#3E82A7'})
+  }}
+  value={this.state.password}
   />
 </View>
 
-<View style={styles.inputContainer}>
+<View style={[styles.inputContainer,{borderColor: this.state.conPasswordBorder}]}>
 <TextInput style={styles.inputs}
 placeholder="تأكيد كلمة المرور"
 secureTextEntry={true}
 underlineColorAndroid='transparent'
-onChangeText={(text) => { this.setState({confPassword: text}) }}
+onChangeText={(text) => { 
+  this.setState({confPassword: text}) 
+ this.setState({confPassword: '#3E82A7'})
+  }}
+  onEndEditing={(confPassword) =>{this.identicalPass(confPassword)} }
+  value={this.state.confPassword}
 />
 </View>
 

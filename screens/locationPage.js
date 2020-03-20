@@ -1,10 +1,92 @@
-import React, {useState, useEffect} from "react";
-import { ScrollView, StyleSheet,Text,View,TouchableHighlight, Alert} from 'react-native';
+import React, {useState, useEffect,Component} from 'react';
+import { ScrollView, StyleSheet,Text,View,TouchableHighlight, Alert,TouchableOpacity} from 'react-native';
 import MapView from 'react-native-maps';
 import { withNavigation } from 'react-navigation';
+import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
+import * as firebase from 'firebase';
 
-export default function locationPage() {
+  export default class locationPage extends Component {
+
+    constructor(props) {
+      super(props);
+      this.state = {
+        username:'',
+        userID:'',
+        email: '' ,
+        password: '',
+        errorMessage: null,
+        visibilty: 'none',
+        emailBorders:'#EAEAEA',
+        latitude:0,
+        longitude:0,
+          
+      }
+  }
+  // we have to put 2 1- for registered people  2- for thr unregisted people
+  componentDidMount(){
+    console.log("inside");
+    firebase
+    .auth()
+    .onAuthStateChanged((user) => {
+    if (user) {
+    var userId = firebase.auth().currentUser.uid;
+    email= firebase.auth().currentUser.email;
+    firebase
+    .database()
+    .ref('mgnUsers/'+userId)
+    .on('value', snapshot => {
+    this.setState({
+      userID : this.userID,
+      latitude :snapshot.val().latitude,
+      latitude:snapshot.val().latitude
+    });
+    console.log(JSON.stringify(snapshot)) });
+    }
+    }
+ 
+    )
+     this.getCurrentPosition()
+
+    }//end componentDidMount
   
+    UNSAFE_componentWillMount(){
+  
+      const firebaseConfig = {
+  
+        apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
+        authDomain: "maghnaapplication.firebaseapp.com",
+        databaseURL: "https://maghnaapplication.firebaseio.com",
+        projectId: "maghnaapplication",
+        storageBucket: "maghnaapplication.appspot.com",
+        messagingSenderId: "244460583192",
+        appId: "1:244460583192:web:f650fa57532a682962c66d",
+      };
+  
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+  
+    }
+
+    getCurrentPosition() {
+      console.log("inside");
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+            var latitude= position.coords.latitude;
+            var longitude= position.coords.longitude;
+           
+            firebase.database().ref('mgnUsers/'+this.state.userId).update({
+              latitude: latitude,
+              longitude: longitude,
+              
+           })//end update
+           console.log("latitude"+latitude); 
+          })
+        Alert.alert('تم تحديث موقعك بنجاح');
+        this.props.navigation.navigate('profile')
+      }
+    
+
   //for saving user location 
   /*
   const [coordinates, setCoordinates] = useState({
@@ -18,7 +100,7 @@ export default function locationPage() {
     Alert.alert('hello');
   },[]);
     */
-  
+    render() {
   return (
 
     <View style={styles.container}>
@@ -41,31 +123,39 @@ export default function locationPage() {
 
         </MapView>
 
-        <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]}>
-     <Text style={styles.signUpText}>  حفظ </Text>
-   </TouchableHighlight>
-
     </View>
 
 
   </View>
   );
-}
+}}
 
 locationPage.navigationOptions = ({navigation})=> ({
 
-  //headerTint:'#F7FAFF',
-  headerTitle: 'الموقع',
+ 
+  headerTint:'#F7FAFF',
+  headerTitle: ' الموقع',
+
+  headerRight:()=>(
+    <TouchableOpacity onPress={()=>{navigation.navigate('profile')}} style={{marginRight:15}}>
+      <AntDesign name="right" size={24} color="#CDCCCE" />
+    </TouchableOpacity>
+
+  ),
+/*
+  headerLeft:()=>(
+    <TouchableOpacity onPress={this.handelSignOut} style={{marginLeft:15}}>
+      <SimpleLineIcons name="logout" size={24} color='white' />
+    </TouchableOpacity>
+  ),*/
   headerStyle: {
-    backgroundColor: '#8BC4D0',
+    backgroundColor: '#4b9cb5',
     color:'white'
     
  },
  headerTitleStyle: {
   color: '#fff'
-}  
-,
-
+}
 
 });
 
@@ -102,7 +192,7 @@ const styles = StyleSheet.create({
 
   mapStyle: {
     alignSelf: 'stretch',
-    height:'97%',
+    height:'100%',
     //flex:1,
     marginTop : -25,
   },

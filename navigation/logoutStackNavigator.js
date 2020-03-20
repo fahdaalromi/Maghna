@@ -2,22 +2,26 @@ import React from 'react';
 import { Platform ,I18nManager} from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from "react-navigation";
-import instructionsScreen from "../screens/instructionsScreen";
+
 import HomeScreen from "../screens/HomeScreen";
+import instructionsScreen from "../screens/instructionsScreen";
 import supdevicesScreen from '../screens/supdevicesScreen';
 import RoutineScreen from '../screens/RoutineScreen';
 import reportScreen from '../screens/reportScreen';
 import profileScreen from '../screens/profileScreen';
+import SignInScreen from "../screens/SignInScreen";
 
-
-const HomeStack = createStackNavigator(
+const LogoutStack = createStackNavigator(
     {
-        HomeScreen: HomeScreen,
-        instructions:instructionsScreen,
-        supdevices:supdevicesScreen,
-        Routine:RoutineScreen,
-        report:reportScreen,
-        profile:profileScreen
+        LogOutHome: HomeScreen,
+        LogOutinstructions:instructionsScreen,
+        LogOutsupdevices:supdevicesScreen,
+        LogOutRoutine:RoutineScreen,
+        LogOutreport:reportScreen,
+       profile:profileScreen,
+       SignIn:SignInScreen,
+        
+
     },
     {
         navigationOptions: {
@@ -26,4 +30,4 @@ const HomeStack = createStackNavigator(
     }
 );
 
-export default createAppContainer(HomeStack);
+export default createAppContainer(LogoutStack);
