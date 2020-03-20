@@ -106,7 +106,16 @@ const styles = StyleSheet.create({
      TextInput2:{
       color: '#6FA0AF',
       fontSize:20,
-     }
+     }, 
+     gradient: {
+      flex: 1,
+      borderRadius: 32,
+      height: 46,
+      justifyContent: 'center',
+    },
+
+
+     
   });
 
 

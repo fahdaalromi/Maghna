@@ -107,7 +107,6 @@ handelSignUp =() =>{
 
 <TextInput style={styles.inputs}
 placeholder="أسم المستخدم"
-keyboardType="acci-capable"
 underlineColorAndroid='transparent'
 onChangeText={(text) => { this.setState({username: text}) }}
 />
@@ -161,6 +160,7 @@ onChangeText={(text) => { this.setState({confPassword: text}) }}
 
 
   </View>
+
 </ImageBackground>
   </View>
 
