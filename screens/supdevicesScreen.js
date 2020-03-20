@@ -31,7 +31,7 @@ export default function supdevicesScreen() {
     
     <View style={styles.scontainer}>
     <Text style={styles.colseText}>التلفاز</Text>
-    <Text style={styles.bottomText}>مغلق</Text>
+    <Text style={styles.bottomText}>غير متصل</Text>
     <FontAwesome style={{ right:190, bottom: 17}} name="tv" size={55} color= {'#6FA0AF'} />
     </View>
     
@@ -45,20 +45,20 @@ export default function supdevicesScreen() {
     
     <View style={styles.scontainer}>
     <Text style={styles.colseText}>الانترنت</Text>
-    <Text style={styles.bottomText}>مغلق</Text>
+    <Text style={styles.bottomText}> متصل</Text>
     <Feather style={{ right:190, bottom: 17}} name="wifi" size={55} color= {'#6FA0AF'} />
     </View>
     
     <View style={styles.scontainer}>
     <Text style={styles.openText}>التكييف</Text>
-    <Text style={styles.bottomText}>مفتوح</Text>
+    <Text style={styles.bottomText}>غير متصل</Text>
     < Entypo style={{ right:190, bottom: 17}} name="air" size={55} color= {'#2cb457'} />
     </View>
 
 
     <View style={styles.scontainer}>
     <Text style={styles.colseText}>آلة القهوة</Text>
-    <Text style={styles.bottomText}>مغلق</Text>
+    <Text style={styles.bottomText}>غير متصل</Text>
     <MaterialCommunityIcons style={{ right:190, bottom: 17}} name="coffee-outline" size={55} color= {'#6FA0AF'} />
     </View>
 
