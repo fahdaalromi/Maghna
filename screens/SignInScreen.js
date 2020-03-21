@@ -104,7 +104,7 @@ export default class SignIn extends Component {
                     <Image source={require('../assets/images/logo.png')} style={styles.logo} />
 
                     <TextInput style={styles.input} 
-                    placeholder="اسم المستخدم" 
+                    placeholder=" البريد الإلكتروني" 
                     onChangeText={(text) => { this.setState({email: text}) }}
                     keyboardType="email-address"
                     autoCapitalize="none"/>

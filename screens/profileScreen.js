@@ -13,6 +13,7 @@ import { ScrollView,
 } from 'react-native';
 import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
 import {LinearGradient} from 'expo-linear-gradient';
+import FlipToggle from 'react-native-flip-toggle-button';
 import * as firebase from 'firebase';
 
 
@@ -21,13 +22,15 @@ export default class profileScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+          uID:'',
           username:"",
           email: "",
           password: "",
           confPassword: "",
           errorMsg:null,
-            
+          latitude:0,
+          longitude:0,
+          isActive:false,
         }
     }
 
@@ -51,36 +54,44 @@ export default class profileScreen extends Component {
     
     }
     //view and fetch updated data
-    /*
-    componentDidMount(){
     
-      //var Uid = "tWRTW1QU6kT8FhpnofVfxaCQcOy2";
-     
-    //  var userId =  this.props.navigation.getParam(id, 'NO-ID');
-    //  var userId = this.props.ID;
+    componentDidMount(){
       
-      console.log(userId);
-
-      if (userId !== 'NO-ID'){
-
-        firebase.database().ref('mgnUsers/').on('value', (snap) => {
-
-          snap.forEach((child) => {
-
-             if (child.val().id === userId){
-
-               this.setState({
-                 userKey:child.key,
-                 username: child.val().username,
-                 });
-              }
-              })
-
-          });
-        }   
+      console.log("in did profile")
+      firebase
+      .auth()
+      .onAuthStateChanged((user) => {
+        if (user) {
+     
+      var userId = firebase.auth().currentUser.uid;
+      this.state.uID=userId;
+      console.log("user id "+userId)
+      console.log("user id "+uID)
+      
+      var email = firebase.auth().currentUser.email;
+      
+      console.log("user email" +email)
+      //console.log(JSON.stringify(snapshot))
+      firebase
+      .database()
+      .ref('mgnUsers/'+userId)
+      .on('value', snapshot => {
+        console.log(" "+ snapshot)
+        console.log("before sate")
+        this.setState({
+          username: snapshot.username,
+          latitude :snapshot.latitude,
+          longitude:snapshot.longitude
+        });
+        
+        console.log(JSON.stringify(snapshot))
+        console.log("after sate " +this.state.userId+this.state.username+this.state.latitude+this.state.longitude)
+      });
+       }
+      }); 
 
       }//end view and fetch
-*/
+
 
 
     editProfile = () => {
@@ -108,26 +119,22 @@ export default class profileScreen extends Component {
       }
 
       handelSignOut =() =>{
-       
+        console.log("inside");
         try{
-          console.log("start logout");
+          
          firebase
           .auth()
           .signOut()
           .then(function(){
           console.log(this.state);
-          Alert.alert('تم تسجيل الخروج بنجاح');
-        this.props.navigation.navigate('welcome')
-    
+          
           })
-    
-        .catch(error => console.log(error.message))
+          .catch(error => console.log(error.message))
     
           }catch(e){console.log(e.message)}
-    
       };
     
-    
+    //navigation.navigate('SignIn')
 
     render() {
         return (
@@ -152,6 +159,7 @@ export default class profileScreen extends Component {
                                         placeholder="البريد الإلكتروني"
                                         keyboardType="email-address"
                                         underlineColorAndroid='transparent'
+                                        value={this.state.email}
                                     />
                                 </View>
                                 <Text style={styles.perInfo}>── تغيير كلمة المرور  ──</Text>
@@ -184,10 +192,29 @@ export default class profileScreen extends Component {
                                 <View>
                                     <Text style={styles.AnalysisText}>  تحليل التحركات </Text>
                                 </View>
+
                                 <View style={styles.AnalysisButtonContainer}>
-                                    <TouchableHighlight  style={[styles.AnalysisButton]} >
-                                        <Text style={styles.subAnalysisText} > تفعيل </Text>
-                                    </TouchableHighlight>
+                              
+                                <FlipToggle
+                                
+                                alignSelf={'flex-end'}
+                                value={this.state.isActive}
+                                buttonWidth={75}
+                                buttonHeight={25}
+                                buttonRadius={50}
+                                onLabel={'مفتوح'}
+                                offLabel={'مغلق '}
+                                buttonOnColor={'#9acd32'}
+                                buttonOffColor={'#d3d3d3'}
+                                labelStyle={{ color: 'grey', fontSize: '12' }}
+                                borderColor={'#6FA0AF'}
+                                sliderOnColor={'#3E82A7'}
+                                sliderOffColor={'#3E82A7'}
+                                onToggle={(value) => {
+                                this.setState({ isActive: value });}}
+                                //onToggleLongPress={() => console.log('toggle long pressed!')}
+                                  />
+
                                 </View>
 
                                 <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} >
@@ -201,7 +228,7 @@ export default class profileScreen extends Component {
         );
     }
 }
-profileScreen.navigationOptions = ({navigation})=> ({
+profileScreen.navigationOptions = ()=> ({
 
   headerTint:'#F7FAFF',
   headerTitle: 'الملف الشخصي',
@@ -214,7 +241,7 @@ profileScreen.navigationOptions = ({navigation})=> ({
   ),*/
 
   headerLeft:()=>(
-    <TouchableOpacity onPress={this.handelSignOut} style={{marginLeft:15}}>
+    <TouchableOpacity onPress={()=>{this.handelSignOut}} style={{marginLeft:15}}>
       <SimpleLineIcons name="logout" size={24} color='white' />
     </TouchableOpacity>
   ),
@@ -334,27 +361,31 @@ const styles = StyleSheet.create({
    justifyContent: 'center',
    alignItems: 'center',
    marginBottom:10,
+   marginTop:20,
    width:250,
    borderRadius:30,
    shadowOpacity: 0.17
   },
 
   AnalysisButtonContainer:{
-    height:45,
-    width:70,
+    
+   // height:45,
+   // width:70,
  //borderWidth:1,
- marginRight:150,
- marginBottom:10,
+ //marginRight:500,
+ //marginBottom:100,
  //backgroundColor:'#3E82A7',
  //backgroundColor: this.sate.active?'#3E82A7':'red',
    //height:45,
    //flexDirection: 'row',
    //justifyContent: 'center',
    //alignItems: 'center',
-   //marginBottom:10,
+   marginBottom:5,
+   marginTop:10,
+   marginRight:150,
    //width:100,
-   borderRadius:20,
-   shadowOpacity: 0.17
+  // borderRadius:20,
+   //shadowOpacity: 0.17
   },
 
   AnalysisButton:{
