@@ -25,6 +25,7 @@ import * as firebase from 'firebase';
   // we have to put 2 1- for registered people  2- for thr unregisted people
   componentDidMount(){
     console.log("inside");
+    if(this.state.userID!==''){
     firebase
     .auth()
     .onAuthStateChanged((user) => {
@@ -44,7 +45,8 @@ import * as firebase from 'firebase';
     }
     }
  
-    )
+    )}
+
      this.getCurrentPosition()
 
     }//end componentDidMount
@@ -70,21 +72,35 @@ import * as firebase from 'firebase';
 
     getCurrentPosition() {
       console.log("inside");
+      console.log("id "+ this.state.userID);
       navigator.geolocation.getCurrentPosition(
         (position) => {
+
+            var userId =  this.props.navigation.getParam('id', '');
             var latitude= position.coords.latitude;
             var longitude= position.coords.longitude;
-           
-            firebase.database().ref('mgnUsers/'+this.state.userId).update({
+
+           if (this.state.userID!==''){
+            console.log("if");
+            firebase.database().ref('mgnUsers/'+this.state.userID).update({
               latitude: latitude,
               longitude: longitude,
               
-           })//end update
+           })
+          }
+          else{
+            console.log("else");
+            this.props.navigation.goBack()
+            this.props.navigation.state.params.updateData(latitude,longitude);
+
+          }
+         
+          //end update
            console.log("latitude"+latitude); 
           })
         Alert.alert('تم تحديث موقعك بنجاح');
-        this.props.navigation.navigate('profile')
-      }
+        this.props.navigation.goBack()
+            }
     
 
   //for saving user location 

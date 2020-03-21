@@ -23,7 +23,7 @@ export default class profileScreen extends Component {
         super(props);
         this.state = {
           uID:'',
-          username:"",
+          name:"",
           email: "",
           password: "",
           confPassword: "",
@@ -31,6 +31,7 @@ export default class profileScreen extends Component {
           latitude:0,
           longitude:0,
           isActive:false,
+          amount:0,
         }
     }
 
@@ -64,9 +65,10 @@ export default class profileScreen extends Component {
         if (user) {
      
       var userId = firebase.auth().currentUser.uid;
-      this.state.uID=userId;
+      //this.state.uID=userId;
+      this.setState({ uID:userId})
       console.log("user id "+userId)
-      console.log("user id "+uID)
+      //console.log("user id "+uID)
       
       var email = firebase.auth().currentUser.email;
       
@@ -79,13 +81,15 @@ export default class profileScreen extends Component {
         console.log(" "+ snapshot)
         console.log("before sate")
         this.setState({
-          username: snapshot.username,
-          latitude :snapshot.latitude,
-          longitude:snapshot.longitude
+          name: snapshot.val().name,
+          email:email,
+          latitude :snapshot.val().latitude,
+          longitude:snapshot.val().longitude,
+          amount:snapshot.val().amount+" "
         });
-        
+        console.log(this.state.amount)
         console.log(JSON.stringify(snapshot))
-        console.log("after sate " +this.state.userId+this.state.username+this.state.latitude+this.state.longitude)
+        console.log("after sate " +this.state.uID+this.state.name+this.state.latitude+this.state.longitude)
       });
        }
       }); 
@@ -151,7 +155,7 @@ export default class profileScreen extends Component {
                                         onChangeText={(text) => { this.setState({email: text}) }}
                                         keyboardType="email-address"
                                         autoCapitalize="none"
-                                        value={this.state.username}
+                                        value={this.state.name}
                                     />
                                 </View>
                                 <View style={styles.inputContainer}>
@@ -178,14 +182,17 @@ export default class profileScreen extends Component {
                                     />
                                 </View>
                                 <Text style={styles.perInfo}>──── غيرها    ────</Text> 
+
                                 <View style={styles.inputContainer}>
                                     <TextInput style={styles.inputs}
                                         placeholder="الحد الائتماني للفاتورة"
-                                        secureTextEntry={true}
+                                        keyboardType='numeric'
+                                        secureTextEntry={false}
                                         underlineColorAndroid='transparent'
+                                        value={this.state.s}
                                     />
                                 </View>
-                                <TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} onPress={()=>{this.props.navigation.navigate('location')}}  >
+                                <TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} onPress={()=>{this.props.navigation.navigate('location', {id : this.state.uID})}}  >
                                     <Text style={styles.addLocationText}> إضافة موقع</Text>
                                 </TouchableHighlight>
 
@@ -206,7 +213,7 @@ export default class profileScreen extends Component {
                                 offLabel={'مغلق '}
                                 buttonOnColor={'#9acd32'}
                                 buttonOffColor={'#d3d3d3'}
-                                labelStyle={{ color: 'grey', fontSize: '12' }}
+                                labelStyle={{ color: 'grey', fontSize: 12 }}
                                 borderColor={'#6FA0AF'}
                                 sliderOnColor={'#3E82A7'}
                                 sliderOffColor={'#3E82A7'}

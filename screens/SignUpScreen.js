@@ -118,7 +118,7 @@ handelSignUp =() =>{
       if (user) {
         this.userId = user.uid
         user.sendEmailVerification();
-        firebase.database().ref('mgnUsers/'+this.userId).set(
+        firebase.database().ref('mgnUsers/'+user.uid).set(
           {
             name: this.state.username,
             latitude:this.state.latitude,
@@ -145,7 +145,16 @@ handelSignUp =() =>{
 
 };
 
+  updateData = (long,lat) => {  
+  //(data);
+    this.setState({      
+      longitude:long,
+      latitude:lat,
 
+    })
+  console.log("udate: " + long +" "+lat);
+    // some other stuff
+  };
 
   render(){  
   return (
@@ -236,7 +245,7 @@ onChangeText={(text) => {
 
 
 
-<TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} onPress={()=>{this.props.navigation.navigate('locationPage')}} >
+<TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} onPress={()=>{this.props.navigation.navigate('locationPage', {updateData: this.updateData})}} >
         <Text style={styles.addLocationText}> إضافة موقع</Text>
         </TouchableHighlight>
 
