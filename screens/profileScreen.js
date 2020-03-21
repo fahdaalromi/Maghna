@@ -56,6 +56,7 @@ export default class profileScreen extends Component {
     //view and fetch updated data
     
     componentDidMount(){
+      
       console.log("in did profile")
       firebase
       .auth()
@@ -65,7 +66,8 @@ export default class profileScreen extends Component {
       var userId = firebase.auth().currentUser.uid;
       this.state.uID=userId;
       console.log("user id "+userId)
-
+      console.log("user id "+uID)
+      
       var email = firebase.auth().currentUser.email;
       
       console.log("user email" +email)
@@ -85,7 +87,7 @@ export default class profileScreen extends Component {
         console.log(JSON.stringify(snapshot))
         console.log("after sate " +this.state.userId+this.state.username+this.state.latitude+this.state.longitude)
       });
-        }
+       }
       }); 
 
       }//end view and fetch

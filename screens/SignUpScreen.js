@@ -20,19 +20,23 @@ import * as firebase from 'firebase';
 export default class SignUP extends Component{
 
   state = {
-  username:"test",
+  username:"",
   email: "",
   password: "",
   confPassword: "",
   latitude:0,
   longitude:0,
   amount:0,
-  errorMsg:null,
+
+  
   passwordBorder:'#3E82A7',
   conPasswordBorder:'#3E82A7',
   emailBorder:'#3E82A7',
+
   formErrorMsg:'',
   errorMsgVisibilty:'none',
+  passError:'none',
+  errorMsg:null,
 };
 
 UNSAFE_componentWillMount(){
@@ -62,16 +66,18 @@ validateEmail = (email) => {
   this.setState({emailBorder:'red'})
     }
   else {
-    this.setState({emailBorder:'#91b804'})
+    this.setState({emailBorder:'#3E82A7'})
   }
 }
 
 identicalPass = (password) => {
   if (this.state.password != this.state.confPassword){
-    //this.setState({passError: 'flex'})
+    this.setState({passError: 'flex'})
+   // this.setState({passwordBorder:'red'})
+   // this.setState({conPasswordBorder:'red'})
   }
   else {
-   // this.setState({passError: 'none'})
+   this.setState({passError: 'none'})
   }
   
   }
@@ -80,19 +86,21 @@ identicalPass = (password) => {
 handelSignUp =() =>{
 
   if (this.state.username == '' || this.state.email == ''||this.state.password == ''||this.state.confPassword=='') {
-    this.setState({formErrorMsg: 'عفوًا، جميع الحقول مطلوبة'})
+    this.setState({formErrorMsg: ' يرجى تعبأة جميع الحقول '})
     this.setState({errorMsgVisibilty: 'flex'})
     return;
   }
 
 
   if (this.state.password.length < 6) {
-    this.setState({formErrorMsg: ' أدخل كلمة مرور أكثر من ٦ خانات'})
-    //this.setState({errorMsgVisibilty: 'flex'})
+    this.setState({formErrorMsg: ' يجب أن تكون كلمة المرور أكثر من ٦ خانات'})
+    this.setState({errorMsgVisibilty: 'flex'})
+    this.setState({passwordBorder:'red'})
+   
     return;
   }
   if (this.state.emailBorder == 'red'||this.state.passwordBorder == 'red'||this.state.conPasswordBorder=='red'){
-    this.setState({formErrorMsg: 'فضًلا، قم بتصحيح الخانات الحمراء'})
+    this.setState({formErrorMsg: 'فضًلا، قم بتصحيح  الأخطاء الحمراء'})
     this.setState({errorMsgVisibilty: 'flex'})
     return;
   }
@@ -159,15 +167,24 @@ handelSignUp =() =>{
 
 <View style={styles.smallContainer}>
 
+<View >
+<Text style={[styles.warning,  {display: this.state.errorMsgVisibilty},{display: this.state.passError}]}> كلمة المرور غير متطابقة </Text>
+</View>
+
+<View >
+<Text style={[styles.warning, {display: this.state.errorMsgVisibilty}]}> {this.state.formErrorMsg} </Text>
+</View>
+
 
 <View style={styles.firstContainer}>
 <View style={styles.inputContainer} style={styles.inputContainer} >
 
 <TextInput style={styles.inputs}
 placeholder="أسم المستخدم"
-keyboardType="acci-capable"
+keyboardType="default"
 underlineColorAndroid='transparent'
 onChangeText={(text) => { this.setState({username: text}) }}
+value={this.state.username}
 />
 </View>
 </View>
@@ -179,9 +196,10 @@ keyboardType="email-address"
 underlineColorAndroid='transparent'
 onChangeText={(text) => { 
   this.setState({email: text}) 
- this.setState({emailBorder: '#3E82A7'})
+  this.setState({emailBorder: '#3E82A7'})
   }}
   onEndEditing={(email) => this.validateEmail(email)}
+  value={this.state.email}
 />
 </View>
 
@@ -207,12 +225,15 @@ secureTextEntry={true}
 underlineColorAndroid='transparent'
 onChangeText={(text) => { 
   this.setState({confPassword: text}) 
- this.setState({confPassword: '#3E82A7'})
+  this.setState({confPassword: '#3E82A7'})
+  this.setState({passError: 'none'})
   }}
   onEndEditing={(confPassword) =>{this.identicalPass(confPassword)} }
-  value={this.state.confPassword}
+  //value={this.state.confPassword}
 />
 </View>
+
+
 
 
 <TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} onPress={()=>{this.props.navigation.navigate('locationPage')}} >
@@ -233,6 +254,7 @@ onChangeText={(text) => {
 
   </View>
 </ImageBackground>
+
   </View>
 
   </View>
@@ -421,6 +443,13 @@ const styles = StyleSheet.create({
   signupButton: {
    //backgroundColor: "#3E82A7",
     
+  },
+
+  warning:{
+    color: 'red',
+    fontSize:12,
+    marginBottom:10,
+    textAlign:'center'
   },
 
   LocationButtonContainer:{
