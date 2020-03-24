@@ -253,7 +253,7 @@ profileScreen.navigationOptions = ()=> ({
     </TouchableOpacity>
   ),
   headerStyle: {
-    backgroundColor: '#4b9cb5',
+    backgroundColor: '#8BC4D0',
     color:'white'
     
  },

@@ -17,14 +17,17 @@
   "dependencies": {
     "@expo/samples": "~36.0.0",
     "@expo/vector-icons": "github:expo/vector-icons",
+    "@google-cloud/text-to-speech": "^2.3.0",
     "@paraboly/react-native-report-modal": "0.0.12",
     "@react-native-community/async-storage": "^1.8.1",
     "@react-native-community/masked-view": "0.1.5",
     "@react-navigation/native": "^5.0.9",
     "@react-navigation/stack": "^5.1.1",
     "@react-navigation/web": "~1.0.0-alpha.9",
+    "axios": "^0.19.2",
     "expo": "~36.0.0",
     "expo-asset": "~8.0.0",
+    "expo-av": "^8.0.0",
     "expo-constants": "~8.0.0",
     "expo-font": "~8.0.0",
     "expo-linear-gradient": "^8.0.0",
@@ -43,15 +46,26 @@
     "react-native-reanimated": "~1.4.0",
     "react-native-safe-area-context": "0.6.0",
     "react-native-screens": "2.0.0-alpha.12",
+    "react-native-tts": "^3.1.1",
     "react-native-web": "~0.11.7",
     "react-navigation": "^4.2.2",
     "react-navigation-stack": "~1.10.3",
     "react-navigation-tabs": "^2.8.2",
-    "undefined": "expo/vector-icons"
+    "undefined": "github:expo/vector-icons"
   },
   "devDependencies": {
     "@babel/core": "^7.8.7",
     "babel-preset-expo": "~8.0.0",
     "jest-expo": "~36.0.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fahdaalromi/Maghna.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fahdaalromi/Maghna/issues"
+  },
+  "homepage": "https://github.com/fahdaalromi/Maghna#readme"
 }

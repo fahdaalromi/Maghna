@@ -262,6 +262,7 @@ onChangeText={(text) => {
 
 
   </View>
+
 </ImageBackground>
 
   </View>

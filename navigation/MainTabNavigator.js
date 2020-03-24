@@ -49,9 +49,11 @@ const HomeStack = createStackNavigator(
 );
 
 HomeStack.navigationOptions = {
+
   tabBarLabel: ' الرئيسية',
   tabBarIcon:
   <MaterialCommunityIcons name="home-heart" size={43} color='white' />
+
 };
 HomeStack.path = '';
 
@@ -71,7 +73,7 @@ ProfileStack.navigationOptions = {
   tabBarLabel: ' الصفحة الشخصية',
   
   tabBarIcon:
-    <FontAwesome5 name="user" size={24} color="#CDCCCE" />
+    <FontAwesome5 name="user" size={24} color="#fff" />
   
 };
 
@@ -91,7 +93,7 @@ RoutineStack.navigationOptions = {
   tabBarLabel: 'الأنماط',
   tabBarIcon: ({ focused }) => (
     
-    <AntDesign name="sync" size={24} color="#CDCCCE" />
+    <AntDesign name="sync" size={24} color="#fff" />
   ),
 };
 
@@ -111,7 +113,7 @@ supdevicesStack.navigationOptions = {
   tabBarLabel: 'الأجهزة المتصلة',
   tabBarIcon: ({ focused }) => (
    // <LinearGradient colors={['#1784ab', '#9dd1d9']} style={{flex: 1}}>
-    <AntDesign name="sharealt" size={24} color="#CDCCCE" />
+    <AntDesign name="sharealt" size={24} color="#fff" />
   //  </LinearGradient>
   ),
 };
@@ -134,7 +136,7 @@ reportStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     
     
-    <FontAwesome name="newspaper-o" size={24} color="#CDCCCE" />
+    <FontAwesome name="newspaper-o" size={24} color="#fff" />
   ),
 };
 
