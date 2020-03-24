@@ -32,6 +32,17 @@ export default class profileScreen extends Component {
           longitude:0,
           isActive:false,
           amount:0,
+          changePassword:false,
+
+          passwordBorder:'#3E82A7',
+          conPasswordBorder:'#3E82A7',
+          emailBorder:'#3E82A7',
+        
+          formErrorMsg:'',
+          errorMsgVisibilty:'none',
+          passError:'none',
+          errorMsg:null,
+          nameBorders:"#3E82A7",
         }
     }
 
@@ -96,29 +107,134 @@ export default class profileScreen extends Component {
 
       }//end view and fetch
 
+    validateEmail = (email) => {
 
+        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+        if(reg.test(this.state.email)== false)
+        {
+        this.setState({emailBorder:'red'})
+          }
+        else {
+          this.setState({emailBorder:'#3E82A7'})
+        }
+      }
+      
+    identicalPass = (password) => {
+        if (this.state.password != this.state.confPassword){
+          this.setState({passError: 'flex'})
+         // this.setState({passwordBorder:'red'})
+         // this.setState({conPasswordBorder:'red'})
+        }
+        else {
+         this.setState({passError: 'none'})
+        }
+        
+        }
+      
 
     editProfile = () => {
 
+      console.log(this.state.changePassword);
+
+      // if the user left empty fields
+      if (this.state.name == '' || this.state.email == '') {
+        console.log('missing field');
+        this.setState({formErrorMsg: ' يرجى تعبأة جميع الحقول '})
+        this.setState({errorMsgVisibilty: 'flex'})
+        return;
+      }
+
+      //fill error
+      if (this.state.emailBorder == 'red'||this.state.passwordBorder == 'red'||this.state.conPasswordBorder=='red'){
+        this.setState({formErrorMsg: 'فضًلا، قم بتصحيح  الأخطاء الحمراء'})
+        this.setState({errorMsgVisibilty: 'flex'})
+        return;
+      }
+
+    // if the user wants to change his password  
+        //make sure the length is suitable 
+      if (this.state.changePassword && this.state.password.length < 6 && this.state.password.length > 0) {
+        console.log('short password');
+        this.setState({formErrorMsg: 'عفوًا، أدخل كلمة مرور أكثر من ٦ خانات'})
+        this.setState({errorMsgVisibilty: 'flex'})
+        return;
+      }
+        // make sure there are confirmation password 
+      if (this.state.changePassword && this.state.confPassword=='') {
+        console.log('confirm');
+        this.setState({formErrorMsg: 'عفوًا أدخل كلمة مرور تأكيدية'})
+        this.setState({errorMsgVisibilty: 'flex'})
+        return;
+      }
+
+        // change the conformation password without the passwor field
+    if (this.state.password=='' && this.state.confPassword!='') {
+      console.log('confirm');
+      this.setState({formErrorMsg: 'عفوًا، أدخل كلمة مرور'})
+      this.setState({errorMsgVisibilty: 'flex'})
+      return;
+    }
+
       try{
 
-        var userId =  this.props.navigation.getParam('id', 'NO-ID');
+        var user = firebase.auth().currentUser;
+        var uid;
+       // var userId =  this.props.navigation.getParam('id', 'NO-ID');
 
-        if (this.state.password == '') {
-          if (this.state.username != ''){
+        if (user){
+          uid = user.uid;
+          if (!this.state.changePassword ) {
+
+            if (this.state.email != ''){
+              user.updateEmail(this.state.email);
+            }
+
+            if (this.state.name != ''){
+              firebase
+              .database()
+              .ref('mgnUsers/'+ this.state.uID)
+              .update({name : this.state.name,})
+            }
+/*
+          if (this.state.name != ''){
             firebase.database()
             .ref('mgnUsers/'+userId)
-            .update({username: this.state.username,})
+            .update({name: this.state.name,})
+          }*/
+
+          if (this.state.amount != ''){
+            firebase.database()
+            .ref('mgnUsers/'+userId)
+            .update({amount: this.state.amount,})
           }
  
         }else {
+
+          if (this.state.changePassword && this.state.password == this.state.confirmPassword)
+          {
+
+            user
+            .updatePassword(this.state.password)
+            .then((error) => {
+            console.log(error);
+            // An error happened.
+          });
+        }
+/*
           firebase.database()
           .ref('mgnUsers/'+userId)
           .updatePassword(this.state.password)
-          
-          }
+          */
+
+          }}
        }catch(e){console.log(e.message)}
 
+
+
+        this.setState({emailBorder: '#3E82A7'})
+        this.setState({nameBorders: '#3E82A7'})
+        this.setState({passwordBorder: '#3E82A7'})
+        this.setState({conPasswordBorder: '#3E82A7'})
 
       }
 
@@ -148,22 +264,40 @@ export default class profileScreen extends Component {
 
                     <ImageBackground source={require('../assets/images/halfBlue.png') } style={{ height:"100%",justifyContent: 'center',alignItems: 'center', marginBottom:400}}>
                         <View style={styles.smallContainer}>
+
+                        <View >
+
+                          <Text style={[styles.warning,styles.fontStyle, {display: this.state.passError}]}> كلمة المرور غير متطابقة </Text>
+                        </View>
+
+                        <View >
+
+                          <Text style={[styles.fontStyle,styles.warning, {display: this.state.errorMsgVisibilty}]}> {this.state.formErrorMsg} </Text>
+                        </View>
+
+
+                          
                             <Text style={styles.perInfo}>── المعلومات الشخصية ──</Text>
-                                <View style={styles.inputContainer}>
+                                <View style={[styles.inputContainer,{borderColor: this.state.nameBorders}]} >
                                     <TextInput style={styles.inputs}
                                         placeholder="أسم المستخدم"
                                         onChangeText={(text) => { this.setState({email: text}) }}
-                                        keyboardType="email-address"
+                                        keyboardType="TextInput"
                                         autoCapitalize="none"
                                         value={this.state.name}
                                     />
                                 </View>
-                                <View style={styles.inputContainer}>
+                                <View style={[styles.inputContainer,, {borderColor: this.state.emailBorder}]}>
                                     <TextInput style={styles.inputs}
                                         placeholder="البريد الإلكتروني"
                                         keyboardType="email-address"
                                         underlineColorAndroid='transparent'
                                         value={this.state.email}
+                                        onChangeText={(email) => {
+                                          this.setState({email})
+                                          this.setState({emailBorder: '#3E82A7'})
+                                        }
+                                      }
                                     />
                                 </View>
                                 <Text style={styles.perInfo}>── تغيير كلمة المرور  ──</Text>
@@ -171,7 +305,35 @@ export default class profileScreen extends Component {
                                     <TextInput style={styles.inputs}
                                         placeholder="كلمة المرور"
                                         secureTextEntry={true}
+                                        textContentType="newPassword"
                                         underlineColorAndroid='transparent'
+                                        onChangeText={(password) => {
+                                          console.log(password);
+                                          if (password.length>0){
+                                          console.log(this.state.changePassword);
+                                          this.setState({changePassword:true})
+                                          console.log(this.state.changePassword);
+                                          this.setState({password})
+                                          console.log(this.state.password);
+                                          this.setState({passwordBorder: '#3E82A7'})
+                                          console.log(this.state.password);
+                                        }
+                                        else {
+                                          this.setState({changePassword:false})
+                                          this.setState({password})
+                                          console.log(this.state.password);
+                                          console.log('empty!');
+                                        }
+                                      }
+                                        }
+
+                                        onEndEditing={() => {
+                                          console.log(this.state.password);
+                                        if (this.state.password==''){
+                                          this.setState({changePassword:false})
+                                          console.log('endEditing');
+                                        }
+                                      }}
                                     />
                                 </View>
                                 <View style={styles.inputContainer}>
@@ -179,6 +341,12 @@ export default class profileScreen extends Component {
                                         placeholder="تأكيد كلمة المرور"
                                         secureTextEntry={true}
                                         underlineColorAndroid='transparent'
+                                        onChangeText={(confPassword) => {
+                                          this.setState({confPassword})
+                                          this.setState({conPasswordBorder: '#3E82A7'})
+                                          this.setState({passError: 'none'})
+                                        } }
+                                        onEndEditing={(confPassword) =>{this.identicalPass(confPassword)} }
                                     />
                                 </View>
                                 <Text style={styles.perInfo}>──── غيرها    ────</Text> 
@@ -224,7 +392,7 @@ export default class profileScreen extends Component {
 
                                 </View>
 
-                                <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} >
+                                <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={this.editProfile} >
                                     <Text style={styles.signUpText}>  حفظ </Text>
                                 </TouchableHighlight>
 
@@ -253,7 +421,7 @@ profileScreen.navigationOptions = ()=> ({
     </TouchableOpacity>
   ),
   headerStyle: {
-    backgroundColor: '#8BC4D0',
+    backgroundColor: '#4b9cb5',
     color:'white'
     
  },
@@ -360,7 +528,12 @@ const styles = StyleSheet.create({
  
   },
  
-
+  warning:{
+    color: 'red',
+    fontSize:12,
+    marginBottom:10,
+    textAlign:'center'
+  },
  
   buttonContainer: {
    height:45,

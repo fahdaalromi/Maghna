@@ -10,34 +10,40 @@ import * as firebase from 'firebase';
     constructor(props) {
       super(props);
       this.state = {
-        username:'',
-        userID:'',
-        email: '' ,
-        password: '',
-        errorMessage: null,
+
         visibilty: 'none',
-        emailBorders:'#EAEAEA',
+        uID:'',
+        name:"",
+        email: "",
+        password: "",
+        confPassword: "",
+        errorMsg:null,
         latitude:0,
         longitude:0,
+        isActive:false,
+        amount:0,
           
       }
   }
   // we have to put 2 1- for registered people  2- for thr unregisted people
   componentDidMount(){
-    console.log("inside");
-    if(this.state.userID!==''){
+    console.log("inside location page did ");
+    console.log("this.props.state.uID"+ this.state.uID);
+    if(firebase.auth().currentUser.uid!==''){
+      console.log("inside location page has user ");
     firebase
     .auth()
     .onAuthStateChanged((user) => {
     if (user) {
     var userId = firebase.auth().currentUser.uid;
-    email= firebase.auth().currentUser.email;
+    //email= firebase.auth().currentUser.email;
     firebase
     .database()
     .ref('mgnUsers/'+userId)
     .on('value', snapshot => {
-    this.setState({
-      userID : this.userID,
+      console.log(" "+ snapshot)
+      this.setState({
+        uID : this.uID,
       latitude :snapshot.val().latitude,
       latitude:snapshot.val().latitude
     });
@@ -46,6 +52,7 @@ import * as firebase from 'firebase';
     }
  
     )}
+
 
      this.getCurrentPosition()
 
@@ -72,7 +79,7 @@ import * as firebase from 'firebase';
 
     getCurrentPosition() {
       console.log("inside");
-      console.log("id "+ this.state.userID);
+      console.log("id "+ this.state.uID);
       navigator.geolocation.getCurrentPosition(
         (position) => {
 
@@ -80,9 +87,9 @@ import * as firebase from 'firebase';
             var latitude= position.coords.latitude;
             var longitude= position.coords.longitude;
 
-           if (this.state.userID!==''){
+           if (this.state.uID!==''){
             console.log("if");
-            firebase.database().ref('mgnUsers/'+this.state.userID).update({
+            firebase.database().ref('mgnUsers/'+this.state.uID).update({
               latitude: latitude,
               longitude: longitude,
               
