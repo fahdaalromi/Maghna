@@ -270,6 +270,7 @@ export default class profileScreen extends Component {
                           <Text style={[styles.warning,styles.fontStyle, {display: this.state.passError}]}> كلمة المرور غير متطابقة </Text>
                         </View>
 
+
                         <View >
 
                           <Text style={[styles.fontStyle,styles.warning, {display: this.state.errorMsgVisibilty}]}> {this.state.formErrorMsg} </Text>
@@ -281,7 +282,10 @@ export default class profileScreen extends Component {
                                 <View style={[styles.inputContainer,{borderColor: this.state.nameBorders}]} >
                                     <TextInput style={styles.inputs}
                                         placeholder="أسم المستخدم"
-                                        onChangeText={(text) => { this.setState({email: text}) }}
+                                        onChangeText={(text) => {
+                                           this.setState({name: text})
+                                           this.setState({errorMsgVisibilty:'none'})
+                                           }}
                                         keyboardType="TextInput"
                                         autoCapitalize="none"
                                         value={this.state.name}
@@ -296,7 +300,7 @@ export default class profileScreen extends Component {
                                         onChangeText={(email) => {
                                           this.setState({email})
                                           this.setState({emailBorder: '#3E82A7'})
-                                        }
+                                          this.setState({errorMsgVisibilty:'none'}) }
                                       }
                                     />
                                 </View>
@@ -356,8 +360,11 @@ export default class profileScreen extends Component {
                                         placeholder="الحد الائتماني للفاتورة"
                                         keyboardType='numeric'
                                         secureTextEntry={false}
+                                        onChangeText={(text) => { 
+                                          this.setState({amount: text}) 
+                                          this.setState({errorMsgVisibilty:'none'})}}
                                         underlineColorAndroid='transparent'
-                                        value={this.state.s}
+                                        value={this.state.amount}
                                     />
                                 </View>
                                 <TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} onPress={()=>{this.props.navigation.navigate('location', {id : this.state.uID})}}  >
