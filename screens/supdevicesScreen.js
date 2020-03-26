@@ -16,11 +16,13 @@ export default function supdevicesScreen() {
 
     return (
 
-      <ScrollView>
+      
 
     <View style={{ width:'100%' , height:'100%', flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: '#F7FAFF'}}>
 
     <ImageBackground source={require('./otherhalf.png')} style={{ width:'100%' , height:'120%', flex: 1, justifyContent: "center", alignItems: "center"}}>
+
+    <ScrollView>
 
     <View style={styles.scontainer}>
     <Text style={styles.openText}>الإنارة</Text>
@@ -62,14 +64,15 @@ export default function supdevicesScreen() {
     <MaterialCommunityIcons style={{ right:190, bottom: 17}} name="coffee-outline" size={55} color= {'#6FA0AF'} />
     </View>
 
-
+    </ScrollView>
+    
     </ImageBackground>
     
     
     
     
     </View>
-    </ScrollView>
+  
     );
     
     

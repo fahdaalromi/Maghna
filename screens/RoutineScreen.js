@@ -242,7 +242,7 @@ export default class RoutineScreen extends Component {
         return (
         
             <View style={styles.container}>
-                <ScrollView>
+               
 
                
                 <Modal animationType="slide"
@@ -303,6 +303,7 @@ export default class RoutineScreen extends Component {
                     </View>
                 </Modal>
                 <ImageBackground source={require('../assets/images/halfBlue.png') } style={{ height:"100%",justifyContent: 'center',alignItems: 'center', marginTop:20, }}>
+                <ScrollView>
                    <Root>
                     <ScrollView style = {{height:"100%", width: '100%'}}>
                         <View style={styles.smallContainer}>
@@ -749,8 +750,9 @@ export default class RoutineScreen extends Component {
                         </View>
                     </ScrollView>
                     </Root>
+                    </ScrollView>
                 </ImageBackground>
-                </ScrollView>
+               
             </View>
             
         
