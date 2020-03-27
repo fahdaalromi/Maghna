@@ -9,11 +9,88 @@ import {
 import { FontAwesome,FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons , Entypo} from "@expo/vector-icons";
 import { MonoText } from '../components/StyledText';
 import {LinearGradient} from 'expo-linear-gradient';
+import * as firebase from 'firebase';
 
-export default function supdevicesScreen() {
+
+export default class supdevicesScreen extends Component {
   
+  constructor(props) {
+    super(props);
+    this.state = {
+      uID:'',
+      name:"",
+      email: "",
+      password: "",
+      confPassword: "",
+      errorMsg:null,
+      latitude:0,
+      longitude:0,
+      isActive:false,
+      amount:0,
+      changePassword:false,
+
+      passwordBorder:'#3E82A7',
+      conPasswordBorder:'#3E82A7',
+      emailBorder:'#3E82A7',
+    
+      formErrorMsg:'',
+      errorMsgVisibilty:'none',
+      passError:'none',
+      errorMsg:null,
+      nameBorders:"#3E82A7",
+    }
+}
+
+UNSAFE_componentWillMount(){
+
+  const firebaseConfig = {
+
+    apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
+    authDomain: "maghnaapplication.firebaseapp.com",
+    databaseURL: "https://maghnaapplication.firebaseio.com",
+    projectId: "maghnaapplication",
+    storageBucket: "maghnaapplication.appspot.com",
+    messagingSenderId: "244460583192",
+    appId: "1:244460583192:web:f650fa57532a682962c66d",
+  };
 
 
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+
+}
+componentDidMount(){
+      
+  this.props.navigation.setParams({
+    headerLeft: (<TouchableOpacity onPress={this.handelSignOut}>
+       <SimpleLineIcons name="logout" size={24} color='white' style={{marginLeft:15}} />
+    </TouchableOpacity>)
+})
+}
+
+handelSignOut =() =>{
+  var {navigation}=this.props;
+  console.log("login method");
+  
+  console.log("inside");
+  try{
+    console.log(this.state);
+   firebase
+    .auth()
+    .signOut()
+    .then(function(){
+   navigation.navigate('WelcomeStackNavigator')
+    })
+    
+    .catch(error => console.log(error.message))
+
+    }catch(e){console.log(e.message)}
+    
+};
+
+
+  render() {
     return (
 
       
@@ -73,7 +150,7 @@ export default function supdevicesScreen() {
     
     </View>
   
-    );
+    );}
     
     
 }
@@ -91,12 +168,7 @@ supdevicesScreen.navigationOptions = ({navigation})=> ({
     </TouchableOpacity>
   ),
   */
-  headerLeft:()=>(
-
-    <TouchableOpacity onPress={()=>{navigation.navigate('')}} style={{marginLeft:15}}>
-      <SimpleLineIcons name="logout" size={24} color="#fff" />
-    </TouchableOpacity>
-  ),
+  headerLeft:navigation.state.params && navigation.state.params.headerLeft,
   headerStyle: {
     backgroundColor: '#8BC4D0',
     color:'white'

@@ -69,6 +69,12 @@ export default class profileScreen extends Component {
     
     componentDidMount(){
       
+      this.props.navigation.setParams({
+        headerLeft: (<TouchableOpacity onPress={this.handelSignOut}>
+           <SimpleLineIcons name="logout" size={24} color='white' style={{marginLeft:15}} />
+        </TouchableOpacity>)
+ })
+
       console.log("in did profile")
       firebase
       .auth()
@@ -204,8 +210,8 @@ export default class profileScreen extends Component {
 
           if (this.state.amount != ''){
             firebase.database()
-            .ref('mgnUsers/'+userId)
-            .update({amount: this.state.amount,})
+            .ref('mgnUsers/'+this.state.uID)
+            .update({amount: this.state.amount})
           }
  
         }else {
@@ -239,19 +245,23 @@ export default class profileScreen extends Component {
       }
 
       handelSignOut =() =>{
+        var {navigation}=this.props;
+        console.log("login method");
+        
         console.log("inside");
         try{
-          
+          console.log(this.state);
          firebase
           .auth()
           .signOut()
           .then(function(){
-          console.log(this.state);
-          
+         navigation.navigate('WelcomeStackNavigator')
           })
+          
           .catch(error => console.log(error.message))
     
           }catch(e){console.log(e.message)}
+          
       };
     
     //navigation.navigate('SignIn')
@@ -359,7 +369,6 @@ export default class profileScreen extends Component {
                                     <TextInput style={styles.inputs}
                                         placeholder="الحد الائتماني للفاتورة"
                                         keyboardType='numeric'
-                                        secureTextEntry={false}
                                         onChangeText={(text) => { 
                                           this.setState({amount: text}) 
                                           this.setState({errorMsgVisibilty:'none'})}}
@@ -410,7 +419,7 @@ export default class profileScreen extends Component {
         );
     }
 }
-profileScreen.navigationOptions = ()=> ({
+profileScreen.navigationOptions = ({navigation})=> ({
 
   headerTint:'#F7FAFF',
   headerTitle: 'الملف الشخصي',
@@ -422,13 +431,31 @@ profileScreen.navigationOptions = ()=> ({
 
   ),*/
 
-  headerLeft:()=>(
-    <TouchableOpacity onPress={()=>{this.handelSignOut}} style={{marginLeft:15}}>
+  //()=>{console.log("login button")}
+//()=>{this.handelSignOut}
+  headerLeft: navigation.state.params && navigation.state.params.headerLeft
+ /* ()=>(
+    <TouchableOpacity onPress={()=>{        
+      console.log("inside");
+    try{
+      
+     firebase
+      .auth()
+      .signOut()
+      .then(function(){
+      console.log(this.state);
+
+      navigation.navigate('WelcomeStackNavigator')
+      })
+      .catch(error => console.log(error.message))
+
+      }catch(e){console.log(e.message)}}} 
+                                  style={{marginLeft:15}}>
       <SimpleLineIcons name="logout" size={24} color='white' />
     </TouchableOpacity>
-  ),
+  ),*/,
   headerStyle: {
-    backgroundColor: '#4b9cb5',
+    backgroundColor: '#8BC4D0',
     color:'white'
     
  },

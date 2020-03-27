@@ -20,7 +20,7 @@ import * as firebase from 'firebase';
 export default class SignUP extends Component{
 
   state = {
-  username:"",
+  name:"",
   email: "",
   password: "",
   confPassword: "",
@@ -71,13 +71,19 @@ validateEmail = (email) => {
 }
 
 identicalPass = (password) => {
-  if (this.state.password != this.state.confPassword){
+  if (this.state.password !== this.state.confPassword){
+    console.log("identical if ");
     this.setState({passError: 'flex'})
-   // this.setState({passwordBorder:'red'})
-   // this.setState({conPasswordBorder:'red'})
+    this.setState({errorMsgVisibilty: 'flex'})
+   this.setState({passwordBorder:'red'})
+   this.setState({conPasswordBorder:'red'})
   }
   else {
-   this.setState({passError: 'none'})
+    console.log("identical else ");
+    this.setState({passError: 'none'})
+  // this.setState({errorMsgVisibilty: 'none'})
+   this.setState({passwordBorder:'#3E82A7'})
+   this.setState({conPasswordBorder:'#3E82A7'})
   }
   
   }
@@ -85,7 +91,7 @@ identicalPass = (password) => {
 
 handelSignUp =() =>{
 
-  if (this.state.username == '' || this.state.email == ''||this.state.password == ''||this.state.confPassword=='') {
+  if (this.state.name == '' || this.state.email == ''||this.state.password == ''||this.state.confPassword=='') {
     this.setState({formErrorMsg: ' يرجى تعبأة جميع الحقول '})
     this.setState({errorMsgVisibilty: 'flex'})
     return;
@@ -99,12 +105,23 @@ handelSignUp =() =>{
    
     return;
   }
+  /*
+  if (this.state.password!=this.state.confpassword){
+
+    this.setState({formErrorMsg: ' يجب أن تكون كلمة المرور متطابقة'})
+    this.setState({errorMsgVisibilty: 'flex'})
+    this.setState({passwordBorder:'red'})
+    return;
+
+  }*/
   if (this.state.emailBorder == 'red'||this.state.passwordBorder == 'red'||this.state.conPasswordBorder=='red'){
     this.setState({formErrorMsg: 'فضًلا، قم بتصحيح  الأخطاء الحمراء'})
     this.setState({errorMsgVisibilty: 'flex'})
     return;
   }
-
+  if (this.state.passError != 'none')  {
+    return;
+}
 
     try{
   firebase
@@ -120,7 +137,7 @@ handelSignUp =() =>{
         user.sendEmailVerification();
         firebase.database().ref('mgnUsers/'+user.uid).set(
           {
-            name: this.state.username,
+            name: this.state.name,
             latitude:this.state.latitude,
             longitude:this.state.longitude,
             amount:this.state.amount,
@@ -128,8 +145,12 @@ handelSignUp =() =>{
 
          this.props.navigation.navigate('SignIn')
       }
-    }
-    );
+    });
+
+    this.name.clear();
+    this.password.clear();
+    this.email.clear();
+    this.confPassword.clear();
     Alert.alert("تم التسجيل بنجاح، تفقد بريدك الإلكترني")
 
     })
@@ -176,30 +197,33 @@ handelSignUp =() =>{
 
 <View style={styles.smallContainer}>
 
-<View >
-<Text style={[styles.warning,  {display: this.state.errorMsgVisibilty},{display: this.state.passError}]}> كلمة المرور غير متطابقة </Text>
-</View>
+
 
 <View >
 <Text style={[styles.warning, {display: this.state.errorMsgVisibilty}]}> {this.state.formErrorMsg} </Text>
 </View>
+<View >
 
+<Text style={[styles.warning,styles.fontStyle, {display: this.state.passError}]}> يجب أن تكون كلمة المرور متطابقة </Text>
+</View>
 
 <View style={styles.firstContainer}>
 <View style={styles.inputContainer} style={styles.inputContainer} >
 
 <TextInput style={styles.inputs}
+ref={input=>this.name=input}
 placeholder="أسم المستخدم"
 keyboardType="default"
 underlineColorAndroid='transparent'
-onChangeText={(text) => { this.setState({username: text}) }}
-value={this.state.username}
+onChangeText={(text) => { this.setState({name: text}) }}
+value={this.state.name}
 />
 </View>
 </View>
 <View style={[styles.inputContainer , {borderColor: this.state.emailBorder}]}>
 
 <TextInput style={styles.inputs}
+ref={input=>this.email=input}
 placeholder="البريد الإلكتروني"
 keyboardType="email-address"
 underlineColorAndroid='transparent'
@@ -216,6 +240,7 @@ onChangeText={(text) => {
 <View style={[styles.inputContainer, {borderColor: this.state.passwordBorder}]}>
 
 <TextInput style={styles.inputs}
+ref={input=>this.password=input}
   placeholder="كلمة المرور"
   secureTextEntry={true}
   underlineColorAndroid='transparent'
@@ -223,19 +248,21 @@ onChangeText={(text) => {
     this.setState({password: text}) 
     this.setState({passwordBorder: '#3E82A7'})
   }}
+  //onEndEditing={(password) =>{this.identicalPass(password)} }
   value={this.state.password}
   />
 </View>
 
 <View style={[styles.inputContainer,{borderColor: this.state.conPasswordBorder}]}>
 <TextInput style={styles.inputs}
+ref={input=>this.confPassword=input}
 placeholder="تأكيد كلمة المرور"
 secureTextEntry={true}
 underlineColorAndroid='transparent'
 onChangeText={(text) => { 
   this.setState({confPassword: text}) 
-  this.setState({confPassword: '#3E82A7'})
-  this.setState({passError: 'none'})
+  this.setState({conPasswordBorder: '#3E82A7'})
+  this.setState({errorMsgVisibilty: 'none'})
   }}
   onEndEditing={(confPassword) =>{this.identicalPass(confPassword)} }
   //value={this.state.confPassword}

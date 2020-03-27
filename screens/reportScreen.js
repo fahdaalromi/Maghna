@@ -11,6 +11,8 @@ import {LinearGradient} from 'expo-linear-gradient';
 import { StackActions } from '@react-navigation/native';
 import { NavigationActions } from 'react-navigation';
 import ProgressCircle from 'react-native-progress-circle'
+import * as firebase from 'firebase';
+
 
 export default class reportScreen extends Component {
 
@@ -19,8 +21,66 @@ export default class reportScreen extends Component {
         this.state = {
             show_shape: false,
             profile_percent: 60.6,
+            uID:'',
+            name:"",
+            email: "",
+            password: "",
+            confPassword: "",
+            errorMsg:null,
+            latitude:0,
+            longitude:0,
+            isActive:false,
+            amount:0,
+            changePassword:false,
         }
     }
+    UNSAFE_componentWillMount(){
+
+        const firebaseConfig = {
+      
+          apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
+          authDomain: "maghnaapplication.firebaseapp.com",
+          databaseURL: "https://maghnaapplication.firebaseio.com",
+          projectId: "maghnaapplication",
+          storageBucket: "maghnaapplication.appspot.com",
+          messagingSenderId: "244460583192",
+          appId: "1:244460583192:web:f650fa57532a682962c66d",
+        };
+      
+      
+        if (!firebase.apps.length) {
+          firebase.initializeApp(firebaseConfig);
+      }
+      
+      }
+
+      componentDidMount(){
+      
+        this.props.navigation.setParams({
+          headerLeft: (<TouchableOpacity onPress={this.handelSignOut}>
+             <SimpleLineIcons name="logout" size={24} color='white' style={{marginLeft:15}} />
+          </TouchableOpacity>)
+   })}
+
+   handelSignOut =() =>{
+    var {navigation}=this.props;
+    console.log("login method");
+    
+    console.log("inside");
+    try{
+      console.log(this.state);
+     firebase
+      .auth()
+      .signOut()
+      .then(function(){
+     navigation.navigate('WelcomeStackNavigator')
+      })
+      
+      .catch(error => console.log(error.message))
+  
+      }catch(e){console.log(e.message)}
+      
+  };
 
     open_profile() {
         const navigateAction = NavigationActions.navigate({
@@ -155,14 +215,8 @@ reportScreen.navigationOptions = ({navigation})=> ({
     </TouchableOpacity>
   ),*/
 
-  headerLeft:()=>(
+  headerLeft:navigation.state.params && navigation.state.params.headerLeft,
 
-
-
-    <TouchableOpacity onPress={()=>{navigation.navigate('')}} style={{marginLeft:15}}>
-      <SimpleLineIcons name="logout" size={24} color="#fff" />
-    </TouchableOpacity>
-  ),
   headerStyle: {
     backgroundColor: '#8BC4D0',
     color:'white'

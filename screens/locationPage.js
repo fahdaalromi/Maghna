@@ -29,12 +29,13 @@ import * as firebase from 'firebase';
   componentDidMount(){
     console.log("inside location page did ");
     console.log("this.props.state.uID"+ this.state.uID);
-    if(firebase.auth().currentUser.uid!==''){
+    if(firebase.auth().currentUser!==null){
       console.log("inside location page has user ");
     firebase
     .auth()
     .onAuthStateChanged((user) => {
     if (user) {
+      console.log("find the user ")
     var userId = firebase.auth().currentUser.uid;
     //email= firebase.auth().currentUser.email;
     firebase
@@ -89,11 +90,15 @@ import * as firebase from 'firebase';
 
            if (this.state.uID!==''){
             console.log("if");
-            firebase.database().ref('mgnUsers/'+this.state.uID).update({
+            firebase
+            .database()
+            .ref('mgnUsers/'+this.state.uID)
+            .update({
               latitude: latitude,
               longitude: longitude,
               
            })
+           console.log("if id done ");
           }
           else{
             console.log("else");
@@ -165,14 +170,11 @@ locationPage.navigationOptions = ({navigation})=> ({
     </TouchableOpacity>
 
   ),
-/*
-  headerLeft:()=>(
-    <TouchableOpacity onPress={this.handelSignOut} style={{marginLeft:15}}>
-      <SimpleLineIcons name="logout" size={24} color='white' />
-    </TouchableOpacity>
-  ),*/
+
+  headerLeft: null,
+
   headerStyle: {
-    backgroundColor: '#4b9cb5',
+    backgroundColor: '#8BC4D0',
     color:'white'
     
  },

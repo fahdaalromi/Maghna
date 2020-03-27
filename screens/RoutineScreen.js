@@ -16,41 +16,115 @@ import { ScrollView,
 import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons, Entypo, FontAwesome} from "@expo/vector-icons";
 import { Root, Popup } from 'popup-ui'
 import { Ionicons} from '@expo/vector-icons';
+import * as firebase from 'firebase';
+
 
 export default class RoutineScreen extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            morning_toggle: false,
-            home_exit_toggle: false,
-            home_toggle: false,
-            evening_toggle: false,
+          uID:'',
+          name:"",
+          email: "",
+          password: "",
+          confPassword: "",
+          errorMsg:null,
+          latitude:0,
+          longitude:0,
+          isActive:false,
+          amount:0,
+          changePassword:false,
+    
+          passwordBorder:'#3E82A7',
+          conPasswordBorder:'#3E82A7',
+          emailBorder:'#3E82A7',
+        
+          formErrorMsg:'',
+          errorMsgVisibilty:'none',
+          passError:'none',
+          errorMsg:null,
+          nameBorders:"#3E82A7",
 
-            toggle_button_array: [
-                { image: require('../assets/images/222.png'), clicked: false },
-                { image: require('../assets/images/222.png'), clicked: false },
-                { image: require('../assets/images/222.png'), clicked: false },
-                { image: require('../assets/images/222.png'), clicked: false },
-                { image: require('../assets/images/222.png'), clicked: false },
-                { image: require('../assets/images/222.png'), clicked: false },
-                { image: require('../assets/images/222.png'), clicked: false }
-            ],
-            devices_array: [
-                { Text: " التكييف", clicked: false },
-                { Text: " آلة القهوة", clicked: false },
-                { Text: " باب المنزل", clicked: false },
-                { Text: " التلفاز", clicked: false },
-                { Text: " البوابة", clicked: false },
-                { Text: " الإضاءة", clicked: false },
-                { Text: " التكييف", clicked: false }
-            ],
+          morning_toggle: false,
+          home_exit_toggle: false,
+          home_toggle: false,
+          evening_toggle: false,
 
-            date_picker_display: false,
-            hours_array: [],
-            minute_array: [],
+          toggle_button_array: [
+              { image: require('../assets/images/222.png'), clicked: false },
+              { image: require('../assets/images/222.png'), clicked: false },
+              { image: require('../assets/images/222.png'), clicked: false },
+              { image: require('../assets/images/222.png'), clicked: false },
+              { image: require('../assets/images/222.png'), clicked: false },
+              { image: require('../assets/images/222.png'), clicked: false },
+              { image: require('../assets/images/222.png'), clicked: false }
+          ],
+          devices_array: [
+              { Text: " التكييف", clicked: false },
+              { Text: " آلة القهوة", clicked: false },
+              { Text: " باب المنزل", clicked: false },
+              { Text: " التلفاز", clicked: false },
+              { Text: " البوابة", clicked: false },
+              { Text: " الإضاءة", clicked: false },
+              { Text: " التكييف", clicked: false }
+          ],
+
+          date_picker_display: false,
+          hours_array: [],
+          minute_array: [],
         }
     }
+    
+    UNSAFE_componentWillMount(){
+    
+      const firebaseConfig = {
+    
+        apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
+        authDomain: "maghnaapplication.firebaseapp.com",
+        databaseURL: "https://maghnaapplication.firebaseio.com",
+        projectId: "maghnaapplication",
+        storageBucket: "maghnaapplication.appspot.com",
+        messagingSenderId: "244460583192",
+        appId: "1:244460583192:web:f650fa57532a682962c66d",
+      };
+    
+    
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    
+    }
+    componentDidMount(){
+          
+      this.props.navigation.setParams({
+        headerLeft: (<TouchableOpacity onPress={this.handelSignOut}>
+           <SimpleLineIcons name="logout" size={24} color='white' style={{marginLeft:15}} />
+        </TouchableOpacity>)
+    })
+    }
+    
+    handelSignOut =() =>{
+      var {navigation}=this.props;
+      console.log("login method");
+      
+      console.log("inside");
+      try{
+        console.log(this.state);
+       firebase
+        .auth()
+        .signOut()
+        .then(function(){
+       navigation.navigate('WelcomeStackNavigator')
+        })
+        
+        .catch(error => console.log(error.message))
+    
+        }catch(e){console.log(e.message)}
+        
+    };
+    
+  
 
     UNSAFE_componentWillMount() {
         var hours_array = [];
@@ -770,11 +844,7 @@ RoutineScreen.navigationOptions = ({navigation})=> ({
     </TouchableOpacity>
 
   ),*/
-  headerLeft:()=>(
-    <TouchableOpacity onPress={()=>{navigation.navigate('')}} style={{marginLeft:15}}>
-      <SimpleLineIcons name="logout" size={24} color="#fff" />
-    </TouchableOpacity>
-  ),
+  headerLeft:navigation.state.params && navigation.state.params.headerLeft,
   headerStyle: {
     backgroundColor: '#8BC4D0',
     color:'white'
