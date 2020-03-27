@@ -436,6 +436,7 @@ export default class profileScreen extends Component {
                                 sliderOffColor={'#3E82A7'}
                                 onToggle={(value) => {
 
+                                  console.log("on toggle value is "+value)
 
 
                                  this.state.isActive = value;
@@ -445,7 +446,7 @@ export default class profileScreen extends Component {
                                  .ref('mgnUsers/'+ this.state.uID)
                                   .update({isActive: this.state.isActive})
                                 }}
-                                //onToggleLongPress={() => console.log('toggle long pressed!')}
+                                
                                   />
 
                                 </View>

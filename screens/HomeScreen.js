@@ -34,18 +34,27 @@ export default class HomeScreen extends Component {
    async componentDidMount(){
     const firebaseConfig = {
 
-      apiKey: "AIzaSyBUBKLW6Wrk48NQ_TcgUerucTZFphw6l-c",
-      authDomain: "maghna-62c55.firebaseapp.com",
-      databaseURL: "https://maghna-62c55.firebaseio.com",
-      projectId: "maghna-62c55",
-      storageBucket: "maghna-62c55.appspot.com",
-      messagingSenderId: "21464439338",
-      appId: "1:21464439338:web:8c6bb486fb3673e5d14153",
-      measurementId: "G-R3BQPCTCTM"
+
+      apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
+      authDomain: "maghnaapplication.firebaseapp.com",
+      databaseURL: "https://maghnaapplication.firebaseio.com",
+      projectId: "maghnaapplication",
+      storageBucket: "maghnaapplication.appspot.com",
+      messagingSenderId: "244460583192",
+      appId: "1:244460583192:web:f650fa57532a682962c66d",
+
+
+    //  apiKey: "AIzaSyBUBKLW6Wrk48NQ_TcgUerucTZFphw6l-c",
+     // authDomain: "maghna-62c55.firebaseapp.com",
+     // databaseURL: "https://maghna-62c55.firebaseio.com",
+     // projectId: "maghna-62c55",
+    //  storageBucket: "maghna-62c55.appspot.com",
+    //  messagingSenderId: "21464439338",
+     // appId: "1:21464439338:web:8c6bb486fb3673e5d14153",
+     // measurementId: "G-R3BQPCTCTM"
     };
    
-  //  const { navigate }= navigation.getParams('toggleValue','nothing sent');
-//console.log("togle value is "+toggleValue)
+
       while(true){
     await this.startRecording()
     await this.wait(3000);
@@ -109,6 +118,14 @@ if(snap.val().isActive)
       } = this.state
     this.setState({ isFetching: false })
     if(    transcript == "تشغيل النور" ){
+
+      firebase.database().ref('mgnUsers/'+firebase.auth().currentUser.uid).once('value',(snap)=>{ 
+        if(snap.val().isActive===true)
+        {
+          this.analysis('001');
+        }
+        
+            })
 
 this.analysis('001');
   axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
@@ -405,9 +422,8 @@ checkData= async  ()=>{
         const {toggle3}= this.state;
         const {toggle4}= this.state;
         
-       const { navigation } = this.props;
-        const toggleValue= navigation.getParam('toggleValue','nothing sent')
-        console.log("togle value in con is "+toggleValue)
+       
+       
         return (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" , backgroundColor: '#F7FAFF' }}>
                 <Text style={{ fontSize:25, color: '#6FA0AF', bottom: -200 , paddingLeft: 180 }}>الأنماط الحياتية</Text>
