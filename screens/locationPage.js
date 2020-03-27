@@ -85,8 +85,8 @@ import * as firebase from 'firebase';
         (position) => {
 
             var userId =  this.props.navigation.getParam('id', '');
-            var latitude= position.coords.latitude;
-            var longitude= position.coords.longitude;
+            var lat= position.coords.latitude;
+            var long= position.coords.longitude;
 
            if (this.state.uID!==''){
             console.log("if");
@@ -94,22 +94,29 @@ import * as firebase from 'firebase';
             .database()
             .ref('mgnUsers/'+this.state.uID)
             .update({
-              latitude: latitude,
-              longitude: longitude,
+              latitude: lat,
+              longitude: long,
               
            })
-           console.log("if id done ");
+           this.props.navigation.state.params.updateData(lat,long);
+           console.log("if is done ");
           }
           else{
             console.log("else");
             this.props.navigation.goBack()
-            this.props.navigation.state.params.updateData(latitude,longitude);
+            this.props.navigation.state.params.updateData(lat,long);
 
           }
          
           //end update
-           console.log("latitude"+latitude); 
+           console.log("latitude"+lat);
+           console.log("state latitude"+this.state.latitude);
+           
+           console.log("longitude"+lat); 
+           console.log("state longitude"+this.state.longitude); 
+           
           })
+
         Alert.alert('تم تحديث موقعك بنجاح');
         this.props.navigation.goBack()
             }

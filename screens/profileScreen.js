@@ -201,6 +201,23 @@ export default class profileScreen extends Component {
               .ref('mgnUsers/'+ this.state.uID)
               .update({name : this.state.name,})
             }
+
+            if (this.state.latitude != 0){
+              console.log("latitude in if: " + this.state.latitude,);
+              firebase
+              .database()
+              .ref('mgnUsers/'+ this.state.uID)
+              .update({latitude : this.state.latitude,})
+            }
+
+            if (this.state.longitude != 0){
+              console.log("longitude in if: " + this.state.longitude,);
+              firebase
+              .database()
+              .ref('mgnUsers/'+ this.state.uID)
+              .update({longitude : this.state.longitude,})
+            }
+
 /*
           if (this.state.name != ''){
             firebase.database()
@@ -208,7 +225,7 @@ export default class profileScreen extends Component {
             .update({name: this.state.name,})
           }*/
 
-          if (this.state.amount != ''){
+          if (this.state.amount != 0){
             firebase.database()
             .ref('mgnUsers/'+this.state.uID)
             .update({amount: this.state.amount})
@@ -263,6 +280,18 @@ export default class profileScreen extends Component {
           }catch(e){console.log(e.message)}
           
       };
+
+      updateData = (long,lat) => {  
+        //(data);
+          this.setState({      
+            longitude:long,
+            latitude:lat,
+      
+          })
+        console.log("udate: " + long +" "+lat);
+        console.log("udate: " + this.state.longitude +" "+this.state.latitude);
+          // some other stuff
+        };
     
     //navigation.navigate('SignIn')
 
@@ -376,7 +405,9 @@ export default class profileScreen extends Component {
                                         value={this.state.amount}
                                     />
                                 </View>
-                                <TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} onPress={()=>{this.props.navigation.navigate('location', {id : this.state.uID})}}  >
+                                <TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} 
+                                onPress={()=>{this.props.navigation.navigate('location', {id : this.state.uID,
+                                                                                      updateData: this.updateData})}}  >
                                     <Text style={styles.addLocationText}> إضافة موقع</Text>
                                 </TouchableHighlight>
 
