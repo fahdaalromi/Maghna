@@ -10,33 +10,41 @@ import * as firebase from 'firebase';
     constructor(props) {
       super(props);
       this.state = {
-        username:'',
-        userID:'',
-        email: '' ,
-        password: '',
-        errorMessage: null,
+
         visibilty: 'none',
-        emailBorders:'#EAEAEA',
+        uID:'',
+        name:"",
+        email: "",
+        password: "",
+        confPassword: "",
+        errorMsg:null,
         latitude:0,
         longitude:0,
+        isActive:false,
+        amount:0,
           
       }
   }
   // we have to put 2 1- for registered people  2- for thr unregisted people
   componentDidMount(){
-    console.log("inside");
+    console.log("inside location page did ");
+    console.log("this.props.state.uID"+ this.state.uID);
+    if(firebase.auth().currentUser!==null){
+      console.log("inside location page has user ");
     firebase
     .auth()
     .onAuthStateChanged((user) => {
     if (user) {
+      console.log("find the user ")
     var userId = firebase.auth().currentUser.uid;
-    email= firebase.auth().currentUser.email;
+    //email= firebase.auth().currentUser.email;
     firebase
     .database()
     .ref('mgnUsers/'+userId)
     .on('value', snapshot => {
-    this.setState({
-      userID : this.userID,
+      console.log(" "+ snapshot)
+      this.setState({
+        uID : this.uID,
       latitude :snapshot.val().latitude,
       latitude:snapshot.val().latitude
     });
@@ -44,7 +52,9 @@ import * as firebase from 'firebase';
     }
     }
  
-    )
+    )}
+
+
      this.getCurrentPosition()
 
     }//end componentDidMount
@@ -70,21 +80,46 @@ import * as firebase from 'firebase';
 
     getCurrentPosition() {
       console.log("inside");
+      console.log("id "+ this.state.uID);
       navigator.geolocation.getCurrentPosition(
         (position) => {
-            var latitude= position.coords.latitude;
-            var longitude= position.coords.longitude;
-           
-            firebase.database().ref('mgnUsers/'+this.state.userId).update({
-              latitude: latitude,
-              longitude: longitude,
+
+            var userId =  this.props.navigation.getParam('id', '');
+            var lat= position.coords.latitude;
+            var long= position.coords.longitude;
+
+           if (this.state.uID!==''){
+            console.log("if");
+            firebase
+            .database()
+            .ref('mgnUsers/'+this.state.uID)
+            .update({
+              latitude: lat,
+              longitude: long,
               
-           })//end update
-           console.log("latitude"+latitude); 
+           })
+           this.props.navigation.state.params.updateData(lat,long);
+           console.log("if is done ");
+          }
+          else{
+            console.log("else");
+            this.props.navigation.goBack()
+            this.props.navigation.state.params.updateData(lat,long);
+
+          }
+         
+          //end update
+           console.log("latitude"+lat);
+           console.log("state latitude"+this.state.latitude);
+           
+           console.log("longitude"+lat); 
+           console.log("state longitude"+this.state.longitude); 
+           
           })
+
         Alert.alert('تم تحديث موقعك بنجاح');
-        this.props.navigation.navigate('profile')
-      }
+        this.props.navigation.goBack()
+            }
     
 
   //for saving user location 
@@ -142,14 +177,11 @@ locationPage.navigationOptions = ({navigation})=> ({
     </TouchableOpacity>
 
   ),
-/*
-  headerLeft:()=>(
-    <TouchableOpacity onPress={this.handelSignOut} style={{marginLeft:15}}>
-      <SimpleLineIcons name="logout" size={24} color='white' />
-    </TouchableOpacity>
-  ),*/
+
+  headerLeft: null,
+
   headerStyle: {
-    backgroundColor: '#4b9cb5',
+    backgroundColor: '#8BC4D0',
     color:'white'
     
  },

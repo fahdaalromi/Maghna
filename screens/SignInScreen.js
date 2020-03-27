@@ -52,7 +52,22 @@ export default class SignIn extends Component {
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
   }
+  /*
+  firebase
+  .auth()
+  .onAuthStateChanged(user=>{
 
+    if(!user){
+      this.email.clear();
+      this.password.clear();
+    }
+  }
+  );*/
+/*
+  this.setState({
+    password: '',
+    email:''})
+*/
   }
 
   handleLogin = () => {
@@ -73,6 +88,8 @@ export default class SignIn extends Component {
             Alert.alert("يرجى تفعيل البريد الإلكتروني");
           }else{
             firebase.database().ref('mgnUsers/'+user.uid).on('value', snapshot => {
+              this.email.clear();
+              this.password.clear();
              // Alert.alert("تم تسجيلك بنجاح");
               if (snapshot.exists()){
                 this.props.navigation.navigate('HomeStack',{UID:user.uid})}
@@ -104,12 +121,14 @@ export default class SignIn extends Component {
                     <Image source={require('../assets/images/logo.png')} style={styles.logo} />
 
                     <TextInput style={styles.input} 
+                    ref={input=>this.email=input}
                     placeholder=" البريد الإلكتروني" 
                     onChangeText={(text) => { this.setState({email: text}) }}
                     keyboardType="email-address"
                     autoCapitalize="none"/>
 
                     <TextInput style={styles.input} 
+                     ref={input=>this.password=input}
                     placeholder="كلمة المرور " 
                     secureTextEntry={true}
                     value={this.state.password}
