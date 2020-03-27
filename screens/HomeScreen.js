@@ -14,6 +14,8 @@ import * as FileSystem from 'expo-file-system';
 import * as Permissions from 'expo-permissions';
 import axios from 'axios'
 import { Audio } from 'expo-av';
+import * as firebase from 'firebase';
+import  moment from 'moment';
 
 
 
@@ -26,19 +28,38 @@ export default class HomeScreen extends Component {
     });
   }
 
+ 
+  
+  
+   async componentDidMount(){
+    const firebaseConfig = {
 
-  
-  
-  async componentDidMount(){
-    
+      apiKey: "AIzaSyBUBKLW6Wrk48NQ_TcgUerucTZFphw6l-c",
+      authDomain: "maghna-62c55.firebaseapp.com",
+      databaseURL: "https://maghna-62c55.firebaseio.com",
+      projectId: "maghna-62c55",
+      storageBucket: "maghna-62c55.appspot.com",
+      messagingSenderId: "21464439338",
+      appId: "1:21464439338:web:8c6bb486fb3673e5d14153",
+      measurementId: "G-R3BQPCTCTM"
+    };
+   
+  //  const { navigate }= navigation.getParams('toggleValue','nothing sent');
+//console.log("togle value is "+toggleValue)
       while(true){
-      await this.startRecording()
-      await this.wait(3000);
-       await this.stopRecording();
-       await this.getTranscription();
-       await this.resetRecording();
+    await this.startRecording()
+    await this.wait(3000);
+    await this.stopRecording();
+    await  this.getTranscription();
+    await this.resetRecording();
+    await this.insertRoutine();
+    await this.checkData();
+
+
     }
   }
+
+
   deleteRecordingFile = async () => {
     try {
       const info = await FileSystem.getInfoAsync(this.recording.getURI())
@@ -79,7 +100,7 @@ export default class HomeScreen extends Component {
     this.setState({ isFetching: false })
     if(    transcript == "تشغيل النور" ){
 
-
+this.analysis('001');
   axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
   {'on':true} )
 .then(res => res.json())
@@ -91,7 +112,7 @@ export default class HomeScreen extends Component {
     }
 
     if(    transcript == "اطفاء النور" ){
-
+this.analysis('002');
 
       axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
       {'on':false} )
@@ -108,7 +129,8 @@ export default class HomeScreen extends Component {
             }
 
   }
-
+  
+ 
   startRecording = async () => {
       console.log(recording)
     const { status } = await Permissions.askAsync(Permissions.AUDIO_RECORDING)
@@ -150,6 +172,144 @@ export default class HomeScreen extends Component {
   };
 
 
+   analysis =  async  (actionid)=>{
+
+    
+    //check if it is't the first command
+    console.log('before definition of flage')
+   var flag=false;
+   console.log('hiii')
+await firebase.database().ref('userActions/').once ('value', async (snap)=>{ 
+        console.log("iafter definition ")
+     await   snap.forEach((child)=>{
+            if(child.val().userID===firebase.auth().currentUser.uid && child.val().ActionID== actionid && child.val().day=== moment().format('dddd'))
+            
+                if (child.val().time=== new Date().getHours()|| (new Date().getHours()===((child.val().time+1)%24) &&(new Date().getMinutes<=10) ) ||( new Date().getHours()===( (child.val().time-1+24 )%24)  && new Date().getMinutes()>=49 ) ) {
+            var plus=parseInt(child.val().Repetition)+1;
+            console.log("before first use")
+            flag=true;
+            console.log("before first use 2")
+         firebase.database().ref('userActions/'+child.key).update(
+            {
+
+          
+               
+                Repetition:plus, 
+            }
+               
+            ).then(() => {
+                console.log('inserted the update')
+            }).catch((error)=>{
+                console.log(error)
+            });
+         } })
+    }
+    ).finally(()=>{
+        if(flag===false)
+        this.insertUserAction();
+    });
+
+}
+
+insertUserAction= async  ()=>{
+  console.log("inside inserUserAction")
+  var userActionKey =firebase.database().ref().child('userActions').push().key;
+  firebase.database().ref('userActions/'+userActionKey).set(
+      {
+      
+      userID: firebase.auth().currentUser.uid,
+      ActionID:'001',
+      time:new Date().getHours(),
+      day:moment().format('dddd'),
+      Repetition:'1',
+      inRoutine:'0',
+      insertedDate: new Date().getFullYear()+'/'+new Date().getMonth()+'/'+new Date().getDate(),
+      }).then(() => {
+          console.log('inserted')
+      }).catch((error)=>{
+          console.log(error)
+      });
+}
+
+
+ insertRoutine= async  ()=>{
+  console.log("inside inserRoutine");
+  var routineKey = await firebase.database().ref().child('routine').push().key;
+  await firebase.database().ref('userActions/').once('value',async (snap) =>{
+      snap.forEach((child)=>{
+          var date1= new Date(new Date().getFullYear()+'/'+new Date().getMonth()+'/'+new Date().getDate());
+          console.log("print date1"+date1)
+          var date2=new Date(child.val().insertedDate);
+      var timeDiff= date1.getTime() - date2.getTime();
+      console.log("data1 get time "+date1.getTime())
+      console.log("data2 get time "+date2.getTime())
+      console.log("print timeDiff"+timeDiff)
+     var dayDiff= timeDiff/(1000 * 3600 * 24);
+     console.log("before if 19")
+     console.log("dayDiff"+dayDiff)
+          if(child.val().Repetition===18)
+          if(dayDiff<=30)
+          if(child.val().inRoutine==='0')
+         {
+         firebase.database().ref('userActions/'+child.key).update(
+            {
+
+          
+               
+               inRoutine:'1', 
+            }
+              
+            )
+              console.log("inside if 18 "); 
+             firebase.database() .ref('routine/'+routineKey).set(
+                 {
+                    name:'analysis',
+                    actionID: child.val().ActionID,
+                    userID: child.val().userID,
+                    day: child.val().day,
+                    time: child.val().time,
+                    timeinserted: child.val().insertedDate,
+              
+                 }
+             )
+
+          }
+
+      })
+  })
+}
+
+
+checkData= async  ()=>{
+  console.log("inside checkData  ");
+
+  firebase.database().ref('routine/').once('value',(snap)=>{
+      snap.forEach((child)=>{
+        var date1= new Date(new Date().getFullYear()+'/'+new Date().getMonth()+'/'+new Date().getDate());
+        var date2=new Date(child.val().timeinserted);
+    var timeDiff= date1.getTime()- date2.getTime();
+    console.log("check date data1"+date1)
+    console.log("check date data2"+date2)
+    console.log("check date timeDiff"+timeDiff)
+          dayDiff=timeDiff/(1000 * 3600 * 24);
+          if(dayDiff>90){
+              firebase.database().ref('routine/'+child.key).remove();
+          }
+          
+      })
+  
+  })
+  
+  }
+
+
+
+
+
+
+
+
+
     static navigationOptions = ({navigation})=> ({
 
         headerTint:'#F7FAFF',
@@ -186,10 +346,14 @@ export default class HomeScreen extends Component {
           isRecording: false,
           transcript: '',
         }
-        
+       
     }
 
     
+  newMethod() {
+    return "before inserRoutine";
+  }
+
     _onPress1(){
         const newState = !this.state.toggle1;
         this.setState({toggle1:newState})
@@ -222,7 +386,9 @@ export default class HomeScreen extends Component {
         const {toggle3}= this.state;
         const {toggle4}= this.state;
         
-        
+       const { navigation } = this.props;
+        const toggleValue= navigation.getParam('toggleValue','nothing sent')
+        console.log("togle value in con is "+toggleValue)
         return (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" , backgroundColor: '#F7FAFF' }}>
                 <Text style={{ fontSize:25, color: '#6FA0AF', bottom: -200 , paddingLeft: 180 }}>الأنماط الحياتية</Text>

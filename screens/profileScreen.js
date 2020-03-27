@@ -415,6 +415,7 @@ export default class profileScreen extends Component {
 
                                 <View>
                                     <Text style={styles.AnalysisText}>  تحليل التحركات </Text>
+
                                 </View>
 
                                 <View style={styles.AnalysisButtonContainer}>
@@ -435,7 +436,10 @@ export default class profileScreen extends Component {
                                 sliderOnColor={'#3E82A7'}
                                 sliderOffColor={'#3E82A7'}
                                 onToggle={(value) => {
-                                this.setState({ isActive: value });}}
+
+
+                                  this.props.navigation.navigate('Home', {toggleValue: this.state.isActive ? `on` : `off` });
+                                }}
                                 //onToggleLongPress={() => console.log('toggle long pressed!')}
                                   />
 
