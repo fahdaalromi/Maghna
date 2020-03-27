@@ -30,7 +30,7 @@ export default class profileScreen extends Component {
           errorMsg:null,
           latitude:0,
           longitude:0,
-          isActive:false,
+          isActive:true,
           amount:0,
           changePassword:false,
 
@@ -102,7 +102,8 @@ export default class profileScreen extends Component {
           email:email,
           latitude :snapshot.val().latitude,
           longitude:snapshot.val().longitude,
-          amount:snapshot.val().amount+" "
+          amount:snapshot.val().amount+" ",
+          isActive:snapshot.val().isActive,
         });
         console.log(this.state.amount)
         console.log(JSON.stringify(snapshot))
@@ -436,7 +437,13 @@ export default class profileScreen extends Component {
                                 onToggle={(value) => {
 
 
-                                  this.props.navigation.navigate('Home', {toggleValue: this.state.isActive ? `on` : `off` });
+
+                                 this.state.isActive = value;
+
+                                 firebase
+                                 .database()
+                                 .ref('mgnUsers/'+ this.state.uID)
+                                  .update({isActive: this.state.isActive})
                                 }}
                                 //onToggleLongPress={() => console.log('toggle long pressed!')}
                                   />

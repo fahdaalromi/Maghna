@@ -52,8 +52,18 @@ export default class HomeScreen extends Component {
     await this.stopRecording();
     await  this.getTranscription();
     await this.resetRecording();
-    await this.insertRoutine();
-    await this.checkData();
+    firebase.database().ref('mgnUsers/'+firebase.auth().currentUser.uid).once('value',(snap)=>{ 
+if(snap.val().isActive)
+{
+   this.insertRoutine();
+   this.checkData();
+  console.log("in if is active "+snap.val().isActive);
+}
+
+    })
+
+    
+
 
 
     }
@@ -112,7 +122,16 @@ this.analysis('001');
     }
 
     if(    transcript == "اطفاء النور" ){
-this.analysis('002');
+
+      firebase.database().ref('mgnUsers/'+firebase.auth().currentUser.uid).once('value',(snap)=>{ 
+        if(snap.val().isActive===true)
+        {
+          this.analysis('002');
+        }
+        
+            })
+
+
 
       axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
       {'on':false} )
