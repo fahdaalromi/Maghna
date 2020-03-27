@@ -29,7 +29,8 @@ export default class SignIn extends Component {
       password: '',
       errorMessage: null,
       visibilty: 'none',
-      emailBorders:'#EAEAEA',
+      emailBorders:'#7db4cb',
+      passBorders:'#7db4cb',
         
     }
 }
@@ -70,7 +71,30 @@ export default class SignIn extends Component {
 */
   }
 
+  validateEmail = (email) => {
+
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+    if(reg.test(this.state.email)== false)
+    {
+    this.setState({emailBorders:'red'})
+      }
+    else {
+      this.setState({emailBorders:'#91b804'})
+    }
+  }//end validate phone number
+
+
   handleLogin = () => {
+
+    if (this.state.email == '') {
+      this.setState({emailBorders: 'red'})
+      return;
+    }
+
+    if ( this.state.password=='') {
+      this.setState({passBorders: 'red'})
+      return;
+    }
 
     const {email, password} = this.state
     firebase
@@ -99,7 +123,13 @@ export default class SignIn extends Component {
         }
 
   }});
-})}
+}).catch((error) => {
+  console.log(error.message)
+
+  this.setState({visibilty: 'flex'})
+})
+
+}
 
 //this.props.navigation.navigate('HomeStack', {name: username })}
 
@@ -120,19 +150,31 @@ export default class SignIn extends Component {
                 <View style={styles.form}>
                     <Image source={require('../assets/images/logo.png')} style={styles.logo} />
 
-                    <TextInput style={styles.input} 
+                    <View >
+                    <Text style={[styles.fontStyle,styles.warning, {display: this.state.visibilty}]}> البريد الإلكتروني أو كلمة المرور غير صحيحة </Text>
+                    </View>
+
+                    <TextInput style={[styles.input,{borderColor:this.state.emailBorders}]} 
                     ref={input=>this.email=input}
                     placeholder=" البريد الإلكتروني" 
-                    onChangeText={(text) => { this.setState({email: text}) }}
+                    onChangeText={(text) => { 
+                      this.setState({email: text}) 
+                      this.setState({visibilty: 'none'})
+                      this.setState({emailBorders: '#7db4cb'})
+                      this.setState({passBorders: '#7db4cb'})}}
                     keyboardType="email-address"
                     autoCapitalize="none"/>
 
-                    <TextInput style={styles.input} 
+                    <TextInput style={[styles.input,{borderColor:this.state.passBorders}]} 
                      ref={input=>this.password=input}
                     placeholder="كلمة المرور " 
                     secureTextEntry={true}
                     value={this.state.password}
-                    onChangeText={(text) => { this.setState({password: text}) }}/>
+                    onChangeText={(text) => { 
+                      this.setState({password: text}) 
+                      this.setState({visibilty: 'none'})
+                      this.setState({emailBorders: '#7db4cb'})
+                      this.setState({passBorders: '#7db4cb'})}}/>
 
 
                     <Button style={styles.button} onPress={this.handleLogin}  /*onPress={() => this.props.navigation.navigate('HomeStack', {name: 'Jane'})}*/>
@@ -179,7 +221,7 @@ const styles = StyleSheet.create({
       borderRadius: 40,
       ...ifIphoneX({
         width: 0.9 * width,
-        height: 0.65 * height,
+        height: 0.7 * height,
       }, {
         width: 0.8 * width,
         height: 0.75 * height,
@@ -238,6 +280,12 @@ const styles = StyleSheet.create({
       fontSize: 16,
       fontWeight: 'bold',
       textAlign: 'right',
+    },
+    warning:{
+      color: 'red',
+      fontSize:10,
+      textAlign:'center',
+      marginBottom:10,
     },
   });
 

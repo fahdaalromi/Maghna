@@ -402,7 +402,9 @@ export default class profileScreen extends Component {
                                           this.setState({amount: text}) 
                                           this.setState({errorMsgVisibilty:'none'})}}
                                         underlineColorAndroid='transparent'
-                                        value={this.state.amount}
+                                        value={
+                                          this.state.amount==0?'':this.state.amount
+                                         }
                                     />
                                 </View>
                                 <TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} 
