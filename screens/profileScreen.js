@@ -127,14 +127,20 @@ export default class profileScreen extends Component {
         }
       }
       
-    identicalPass = (password) => {
-        if (this.state.password != this.state.confPassword){
+      identicalPass = (password) => {
+        if (this.state.password !== this.state.confPassword){
+          console.log("identical if ");
           this.setState({passError: 'flex'})
-         // this.setState({passwordBorder:'red'})
-         // this.setState({conPasswordBorder:'red'})
+          this.setState({errorMsgVisibilty: 'flex'})
+          this.setState({passwordBorder:'red'})
+          this.setState({conPasswordBorder:'red'})
         }
         else {
-         this.setState({passError: 'none'})
+          console.log("identical else ");
+          this.setState({passError: 'none'})
+        // this.setState({errorMsgVisibilty: 'none'})
+         this.setState({passwordBorder:'#3E82A7'})
+         this.setState({conPasswordBorder:'#3E82A7'})
         }
         
         }
@@ -196,14 +202,12 @@ export default class profileScreen extends Component {
             if (this.state.email != ''){
               user.updateEmail(this.state.email);
             }
-
             if (this.state.name != ''){
               firebase
               .database()
               .ref('mgnUsers/'+ this.state.uID)
               .update({name : this.state.name,})
             }
-
             if (this.state.latitude != 0){
               console.log("latitude in if: " + this.state.latitude,);
               firebase
@@ -211,7 +215,6 @@ export default class profileScreen extends Component {
               .ref('mgnUsers/'+ this.state.uID)
               .update({latitude : this.state.latitude,})
             }
-
             if (this.state.longitude != 0){
               console.log("longitude in if: " + this.state.longitude,);
               firebase
@@ -354,7 +357,7 @@ export default class profileScreen extends Component {
                                     />
                                 </View>
                                 <Text style={styles.perInfo}>── تغيير كلمة المرور  ──</Text>
-                                <View style={styles.inputContainer}>
+                                <View style={[styles.inputContainer,{borderColor: this.state.passwordBorder}]}>
                                     <TextInput style={styles.inputs}
                                         placeholder="كلمة المرور"
                                         secureTextEntry={true}
@@ -363,25 +366,18 @@ export default class profileScreen extends Component {
                                         onChangeText={(password) => {
                                           console.log(password);
                                           if (password.length>0){
-                                          console.log(this.state.changePassword);
                                           this.setState({changePassword:true})
-                                          console.log(this.state.changePassword);
                                           this.setState({password})
-                                          console.log(this.state.password);
                                           this.setState({passwordBorder: '#3E82A7'})
-                                          console.log(this.state.password);
                                         }
                                         else {
                                           this.setState({changePassword:false})
                                           this.setState({password})
-                                          console.log(this.state.password);
                                           console.log('empty!');
                                         }
                                       }
                                         }
-
                                         onEndEditing={() => {
-                                          console.log(this.state.password);
                                         if (this.state.password==''){
                                           this.setState({changePassword:false})
                                           console.log('endEditing');
@@ -389,7 +385,7 @@ export default class profileScreen extends Component {
                                       }}
                                     />
                                 </View>
-                                <View style={styles.inputContainer}>
+                                <View style={[styles.inputContainer,{borderColor: this.state.conPasswordBorder}]}>
                                     <TextInput style={styles.inputs}
                                         placeholder="تأكيد كلمة المرور"
                                         secureTextEntry={true}
