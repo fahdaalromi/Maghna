@@ -69,7 +69,15 @@ export default class SignIn extends Component {
     password: '',
     email:''})
 */
+
   }
+  componentDidMount(){
+    /*
+    this.state.email='',
+    this.state.password=''
+    */
+  }
+
 
   validateEmail = (email) => {
 
@@ -86,6 +94,7 @@ export default class SignIn extends Component {
 
   handleLogin = () => {
 
+    console.log(this.state.email)
     if (this.state.email == '') {
       this.setState({emailBorders: 'red'})
       return;
@@ -114,6 +123,7 @@ export default class SignIn extends Component {
             firebase.database().ref('mgnUsers/'+user.uid).on('value', snapshot => {
               this.email.clear();
               this.password.clear();
+              console.log('after set state:'+this.state.email)
              // Alert.alert("تم تسجيلك بنجاح");
               if (snapshot.exists()){
                 this.props.navigation.navigate('HomeStack',{UID:user.uid})}

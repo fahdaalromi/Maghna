@@ -120,6 +120,7 @@ export default class profileScreen extends Component {
         if(reg.test(this.state.email)== false)
         {
         this.setState({emailBorder:'red'})
+        console.log("email not valid")
           }
         else {
           this.setState({emailBorder:'#3E82A7'})
@@ -162,7 +163,7 @@ export default class profileScreen extends Component {
         //make sure the length is suitable 
       if (this.state.changePassword && this.state.password.length < 6 && this.state.password.length > 0) {
         console.log('short password');
-        this.setState({formErrorMsg: 'عفوًا، أدخل كلمة مرور أكثر من ٦ خانات'})
+        this.setState({formErrorMsg: 'يجب أن تكون كلمة المرور أكثر من ٦ خانات'})
         this.setState({errorMsgVisibilty: 'flex'})
         return;
       }
@@ -231,6 +232,12 @@ export default class profileScreen extends Component {
             .ref('mgnUsers/'+this.state.uID)
             .update({amount: this.state.amount})
           }
+
+          if (this.state.isActive != ''){
+            firebase.database()
+            .ref('mgnUsers/'+this.state.uID)
+            .update({isActive: this.state.isActive})
+          }
  
         }else {
 
@@ -259,12 +266,13 @@ export default class profileScreen extends Component {
         this.setState({nameBorders: '#3E82A7'})
         this.setState({passwordBorder: '#3E82A7'})
         this.setState({conPasswordBorder: '#3E82A7'})
+        Alert.alert('تم تحديث بياناتك بنجاح');
 
       }
 
       handelSignOut =() =>{
         var {navigation}=this.props;
-        console.log("login method");
+        console.log("logout method");
         
         console.log("inside");
         try{
@@ -277,7 +285,7 @@ export default class profileScreen extends Component {
           })
           
           .catch(error => console.log(error.message))
-    
+          console.log("after"+this.state.email);
           }catch(e){console.log(e.message)}
           
       };
@@ -307,7 +315,7 @@ export default class profileScreen extends Component {
 
                         <View >
 
-                          <Text style={[styles.warning,styles.fontStyle, {display: this.state.passError}]}> كلمة المرور غير متطابقة </Text>
+                          <Text style={[styles.warning,styles.fontStyle, {display: this.state.passError}]}>يجب أن تكون كلمة المرور متطابقة </Text>
                         </View>
 
 
@@ -342,6 +350,7 @@ export default class profileScreen extends Component {
                                           this.setState({emailBorder: '#3E82A7'})
                                           this.setState({errorMsgVisibilty:'none'}) }
                                       }
+                                        onEndEditing={(email) => this.validateEmail(email)}
                                     />
                                 </View>
                                 <Text style={styles.perInfo}>── تغيير كلمة المرور  ──</Text>
@@ -437,16 +446,16 @@ export default class profileScreen extends Component {
                                 sliderOnColor={'#3E82A7'}
                                 sliderOffColor={'#3E82A7'}
                                 onToggle={(value) => {
-
+                                  this.setState({isActive:value })
                                   console.log("on toggle value is "+value)
-
+                                  /*
 
                                  this.state.isActive = value;
 
                                  firebase
                                  .database()
                                  .ref('mgnUsers/'+ this.state.uID)
-                                  .update({isActive: this.state.isActive})
+                                  .update({isActive: this.state.isActive})*/
                                 }}
                                 
                                   />

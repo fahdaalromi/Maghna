@@ -76,6 +76,12 @@ import * as firebase from 'firebase';
         firebase.initializeApp(firebaseConfig);
     }
   
+
+    }
+    sleep=(ms)=>{
+
+      return new Promise(resolve=>setTimeout(resolve,ms));
+
     }
 
     getCurrentPosition() {
@@ -117,8 +123,25 @@ import * as firebase from 'firebase';
            
           })
 
-        Alert.alert('تم تحديث موقعك بنجاح');
-        this.props.navigation.goBack()
+        setTimeout(()=>{Alert.alert(
+          'هل تريد تحديث موقعك ؟' , 
+          '',
+          [
+            {text:'إلغاء',
+            onPress:()=>
+              console.log("cancel is pressed"),
+              style:'cancel'
+            },{text:'نعم',
+            onPress:()=>
+              console.log("save is pressed"),
+              style:'cancel'
+            }
+
+
+
+          ]
+          );},5000);
+        setTimeout(()=>{this.props.navigation.goBack();},7000);
             }
     
 
