@@ -19,11 +19,15 @@ import { Ionicons} from '@expo/vector-icons';
 import * as firebase from 'firebase';
 
 
+
+// save button in line 394 
+
 export default class RoutineScreen extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+
           uID:'',
           name:"",
           email: "",
@@ -73,6 +77,36 @@ export default class RoutineScreen extends Component {
           date_picker_display: false,
           hours_array: [],
           minute_array: [],
+
+            morning_toggle: false,
+            home_exit_toggle: false,
+            home_toggle: false,
+            evening_toggle: false,
+
+            toggle_button_array: [
+                { image: require('../assets/images/222.png'), clicked: false },
+                { image: require('../assets/images/222.png'), clicked: false },
+                { image: require('../assets/images/222.png'), clicked: false },
+                { image: require('../assets/images/222.png'), clicked: false },
+                { image: require('../assets/images/222.png'), clicked: false },
+                { image: require('../assets/images/222.png'), clicked: false },
+                { image: require('../assets/images/222.png'), clicked: false }
+            ],
+            devices_array: [
+                { Text: " التكييف", clicked: false },
+                { Text: " آلة القهوة", clicked: false },
+                { Text: " باب المنزل", clicked: false },
+                { Text: " التلفاز", clicked: false },
+                { Text: " البوابة", clicked: false },
+                { Text: " الإضاءة", clicked: false },
+                { Text: " التكييف", clicked: false }
+            ],
+
+            date_picker_display: false,
+            hours_array: [],
+            minute_array: [],
+           
+
         }
     }
     
@@ -129,6 +163,7 @@ export default class RoutineScreen extends Component {
     UNSAFE_componentWillMount() {
         var hours_array = [];
         var minute_array = [];
+        var i;
         for(i = 0; i < 60; i ++) {
             if(i < 10) {
                 if( i == 0) {
@@ -140,7 +175,7 @@ export default class RoutineScreen extends Component {
                 }
                 
             } else {
-                if(i > 23) {
+                if(i > 24) {
                     minute_array.push({value: i.toString(), clicked: false})
                 } else {
                     hours_array.push({value: i.toString(), clicked: false})
@@ -153,10 +188,25 @@ export default class RoutineScreen extends Component {
             hours_array: hours_array,
            
         })
+        const firebaseConfig = {
+            apiKey: "AIzaSyCsKoPxvbEp7rAol5m-v3nvgF9t8gUDdNc",
+            authDomain: "maghnatest.firebaseapp.com",
+            databaseURL: "https://maghnatest.firebaseio.com",
+            projectId: "maghnatest",
+            storageBucket: "maghnatest.appspot.com",
+            messagingSenderId: "769071221745",
+            appId: "1:769071221745:web:1f0708d203330948655250"
+          };
+        
+        
+          if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
     }
 
     click_togglebutton(index) {
         var toggle_button_array = this.state.toggle_button_array;
+        // didn't understand ?
         toggle_button_array[index].clicked = !toggle_button_array[index].clicked;
         this.setState({
             toggle_button_array: toggle_button_array
@@ -194,40 +244,406 @@ export default class RoutineScreen extends Component {
             })
         }
     }
+    // No need Now ..
+    
+    /*setActionTable = () =>{
+        var action =0;
+        var device="";
+        var command ="";
+      for (i = 1 ;i<=14 ;i++ ){
+          switch(i){
+              case 1: 
+              action=1;
+              device="acOn";
+              command="Turn On AC";
+              firebase.database().ref('action/'+action).set(
+                {
+                    actionID:action,
+                deviceID: device,
+                commandStatment: command,
+    
+                  
+                 
+                  
+                })
+              break;
+              case 2:
+                action=2;
+                device="coffeeOn";
+                command="Turn On Coffee Machine";
+                firebase.database().ref('action/'+action).set(
+                  {
+                    actionID:action,
+                  deviceID: device,
+                  commandStatment:command,
+      
+                    
+                   
+                    
+                  })
+                break;
+                case 3:
+                    action=3;
+                    device="doorOpen";
+                    command="Open Door";
+                    firebase.database().ref('action/'+action).set(
+                      {
+                    
+                      deviceID: device,
+                      commandStatment: command,
+                      actionID:action,
+                        
+                       
+                        
+                      })
+                    break;
+                    case 4:
+                    action=4;
+                    device="tvOn";
+                    command="Turn On TV";
+                    firebase.database().ref('action/'+action).set(
+                      {
+                        actionID:action,
+                      deviceID: device,
+                      commandStatment:command,
+          
+                        
+                       
+                        
+                      })
+                    break;
+                    case 5:
+                        action=5;
+                        device="openGarage";
+                        command="Open Garage";
+                        firebase.database().ref('action/'+action).set(
+                          {
+                            actionID:action,
+                          deviceID: device,
+                          commandStatment: command,
+              
+                            
+                           
+                            
+                          })
+                        break;
+                        case 6:
+                            action=6;
+                            device="lightOn";
+                            command="Turn On Light";
+                            firebase.database().ref('action/'+action).set(
+                              {
+                                actionID:action,
+                              deviceID: device,
+                              commandStatment: command,
+                  
+                                
+                               
+                                
+                              })
+                            break;
+                            case 7:
+                                action=7;
+                                device="wifiOn";
+                                command="Turn On WiFi";
+                                firebase.database().ref('action/'+action).set(
+                                  {
+                                    actionID:action,
+                                  deviceID: device,
+                                  commandStatment:command,
+                      
+                                    
+                                   
+                                    
+                                  })
+                                break;
+                                 case 8:
+                                action=8;
+                                device="acOff";
+                                command="Turn Off AC";
+                                firebase.database().ref('action/'+action).set(
+                                  {
+                                  actionID:action,
+                                  deviceID: device,
+                                  commandStatment:command,
+                      
+                                    
+                                   
+                                    
+                                  })
+                                break;
+                                 case 9:
+                                action=9;
+                                device="coffeeOff";
+                                 command="Turn Off Coffee Machine";
+                                firebase.database().ref('action/'+action).set(
+                                  {
+                                  actionID:action,
+                                  deviceID: device,
+                                  commandStatment:command,
+                      
+                                    
+                                   
+                                    
+                                  })
+                                break;
+                                   case 10:
+                                action=10;
+                                device="doorClose";
+                               command="Close Door";
+                                firebase.database().ref('action/'+action).set(
+                                  {
+                                  actionID:action,
+                                  deviceID: device,
+                                  commandStatment:command,
+                      
+                                    
+                                   
+                                    
+                                  })
+                                break;
+                                      case 11:
+                                action=11;
+                              device="tvOff";
+                    command="Turn Off TV";
+                                firebase.database().ref('action/'+action).set(
+                                  {
+                                  actionID:action,
+                                  deviceID: device,
+                                  commandStatment:command,
+                      
+                                    
+                                   
+                                    
+                                  })
+                                break;
+                                 case 12:
+                                action=12;
+                            device="closeGarage";
+                        command="close Garage";
+                                firebase.database().ref('action/'+action).set(
+                                  {
+                                  actionID:action,
+                                  deviceID: device,
+                                  commandStatment:command,
+                      
+                                    
+                                   
+                                    
+                                  })
+                                break;
+                                 case 13:
+                                action=13;
+                              device="lightOff";
+                            command="Turn Off Light";
+                                firebase.database().ref('action/'+action).set(
+                                  {
+                                  actionID:action,
+                                  deviceID: device,
+                                  commandStatment:command,
+                      
+                                    
+                                   
+                                    
+                                  })
+                                break; 
+                                case 14:
+                                action=14;
+                              device="wifiOff";
+                                command="Turn Off WiFi";
+                                firebase.database().ref('action/'+action).set(
+                                  {
+                                  actionID:action,
+                                  deviceID: device,
+                                  commandStatment:command,
+                      
+                                    
+                                   
+                                    
+                                  })
+                                break;
+                                
 
+          }//end switch
+      }//end loop
+
+    }//end setActionTable */
     save_button_action(index) {
-
+        var flagForRoutine =false;
+        var arr =[]
+        var i=0;
+        //var routineTable =  firebase.database().ref('routine/'); 
+      // this.setActionTable();
+        var user = firebase.auth().currentUser;
+        console.log(user.uid)
+        var uId ;
+        var routineName ="";
+        var routineTime="";
+        var actions = [];
+        var disRoutine = ""
         var tmp_str = '';
-        if(this.state.morning_toggle) {
-            tmp_str += "الوضع الصباحي\n"
-        } else if(this.state.home_exit_toggle) {
-            tmp_str += "وضع الخروج\n"
-        } else if(this.state.home_toggle) {
-            tmp_str += "وضع العودة\n"
-        } else if(this.state.home_toggle) {
-            tmp_str += "الوضع المسائي\n"
-        }
+        var i ,j;
+        var flag = false
+        var flagForRoutine = false
+        if(this.state.morning_toggle&&index==0) {
+            routineName = "morning routine";
+            tmp_str += " الذي يحتوي على الأوامر الآتية:\n";
+            disRoutine = "الوضع الصباحي";
+            for(i =0;i<this.state.toggle_button_array.length;i++){
+                if (this.state.toggle_button_array[i].clicked){
+                    actions.push(i+1);
+
+                }
+                else {
+                    actions.push(i+8);
+                }
+            }
+        }// end if for morning routine
+         else if(this.state.home_exit_toggle&&index==1) {
+            routineName="leave routine";
+            tmp_str += " الذي يحتوي على الأوامر الآتية:\n";
+             disRoutine = "وضع الخروج";
+             flag = true
+             routineTime = "empty"
+             // check location
+            for(i =0;i<this.state.toggle_button_array.length;i++){
+                if (this.state.toggle_button_array[i].clicked){
+                    actions.push(i+1);
+
+                }
+                else {
+                    actions.push(i+8);
+                }
+            }
+        }// end if for leave routine
+         else if(this.state.home_toggle&&index==2) {
+            routineName="come routine";
+            tmp_str += " الذي يحتوي على الأوامر الآتية:\n";
+            disRoutine="وضع العودة";
+            routineTime = "empty"
+            flag =true
+            // set If cindition for check location
+            for(i =0;i<this.state.toggle_button_array.length;i++){
+                if (this.state.toggle_button_array[i].clicked){
+                  actions.push(i+1);
+
+                }
+                else {
+                    actions.push(i+8);
+                }
+            }
+        }//end if for come routine
+         else if(this.state.evening_toggle&&index==3) {
+            routineName="night routine";
+            tmp_str += " الذي يحتوي على الأوامر الآتية:\n";
+            disRoutine="الوضع المسائي";
+            for(i =0;i<this.state.toggle_button_array.length;i++){
+                if (this.state.toggle_button_array[i].clicked){
+                    actions.push(i+1);
+
+                }
+                else {
+                    actions.push(i+8);
+                }
+            }
+        }//end if for night routine
         for(i = 0; i < this.state.toggle_button_array.length; i ++) {
             if(this.state.toggle_button_array[i].clicked) {
-                tmp_str += i.toString() + " تمت إضافة الجهاز للنمط\n";
-            } else {
-                tmp_str += i.toString() + " لم تتم إضافة الجهاز للنمط\n";
-            }
-        }
+                switch(i){
+                    case 0 : tmp_str+= "- تشغيل المكيف \n"
+                    break;
+                    case 1: tmp_str+= "- تشغيل آلة القهوة \n"
+                    break;
+                    case 2: tmp_str+= "- فتح الباب \n"
+                    break;
+                    case 3: tmp_str+="- تشغيل التلفاز \n"
+                    break;
+                    case 4: tmp_str+="- فتح البوابة \n "
+                    break;
+                    case 5: tmp_str+= "-تشغيل النور \n"
+                    break;
+                    case 6:  tmp_str+= "- تشغيل الإنترنت \n"
+                    break;
+                   
+                }}
+                 
+                 else {
+                    switch(i){
+             case 0 : tmp_str+= "- إطفاء المكيف \n"
+             break;
+             case 1: tmp_str+= "- إطفاء القهوة \n"
+             break;
+             case 2: tmp_str+= "- إغلاق الباب \n"
+             break;
+             case 3: tmp_str+="- إطفاء التلفاز \n"
+             break;
+             case 4: tmp_str+="- إغلاق البوابة \n "
+             break;
+             case 5: tmp_str+= "-إطفاء النور \n"
+             break;
+             case 6:  tmp_str+= "- إطفاء الإنترنت \n"
+             break; 
+                 }}
+              
+              
+            } // print routine info 
+        
         for(i = 0; i < this.state.hours_array.length; i ++) {
-            if(this.state.hours_array[i].clicked) {
+            if(!flag&& this.state.hours_array[i].clicked) {
                 tmp_str += "الساعة: " + this.state.hours_array[i].value + '\n';
+                routineTime = this.state.hours_array[i].value;
                 break;
             }
         }
-        for(i = 0; i < this.state.minute_array.length; i ++) {
-            if(this.state.minute_array[i].clicked) {
-                tmp_str += "الدقيقة: " + this.state.minute_array[i].value;
+        //test it 
+        for(j = 0; j < this.state.minute_array.length; j ++) {
+            if(!flag&&this.state.minute_array[j].clicked) {
+                tmp_str += "الدقيقة: " + this.state.minute_array[j].value;
+                routineTime+= ":"+this.state.minute_array[j].value;
                 break;
             }
         }
-        Alert.alert("تم حفظ النمط ", tmp_str);
+        
+       /* routineTable.once('value').then (snapshot => {
+            snapshot.forEach(item => {
+            var temp = item.val();
+            arr.push(temp);
+          return false;
+                
+       });
+    });
 
+    for (i=0 ; i<arr.length;i++){
+        if ( arr[i].userID == user.uid && (ar[i].time == routineTime || arr[i].name == routineName)){
+            flagForRoutine = true
+            console.log("دخلت الميثود")
+                Alert.alert("" , "لقد قمت من قبل إنشاء روتين "+disRoutine);
+                
+                break;
+
+            }
+    } */
+        // if(user!=null){
+        //     uId = user.uid;
+        // }
+         
+         if (!flagForRoutine){
+        firebase.database().ref('routine/').push(
+            {
+              name: routineName,
+              time: routineTime,
+              actionsID: actions,
+              day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+              userID: user.uid
+
+              
+             
+              
+            })
+            
+        Alert.alert("تم حفظ نمط "+disRoutine, tmp_str);
+        console.log("save routine")
+         this.scheduleRoutines(user.uid);}
 
 
 
@@ -271,10 +687,108 @@ export default class RoutineScreen extends Component {
         this.setState({
             hours_array: hours_array
         })
+    }// end save action..
+      
+    checkRoutine =  (usId , routineName , routineTime , disRoutine) => {
+        var flagForRoutine =false;
+        var arr =[]
+        var i=0;
+        var routineTable =  firebase.database().ref('routine/'); 
+        routineTable.once('value').then (snapshot => {
+            snapshot.forEach(item => {
+            var temp = item.val();
+            arr.push(temp);
+          
+                
+       });
+    });
+    for (i=0 ; i<arr.length;i++){
+        if ( arr[i].userID == usId && (ar[i].time == routineTime || arr[i].name == routineName)){
+            flagForRoutine = true
+            console.log("دخلت الميثود")
+                Alert.alert("" , "لقد قمت من قبل إنشاء روتين "+disRoutine);
+                
+                break;
+
+            }
     }
+    return flagForRoutine;
+    }
+    // try first solution to trigger routine : 
+     // 1- setTime method :
+     // 2- schedule function using firebase: // buy 
+     scheduleRoutines = (userId) =>{
+         console.log("get userId" + userId)
+         var i,j,routineTime,hour,minute;
+       var routineTable= firebase.database().ref('/routine/');
+       var routineArr =[];
+       var actionArr =[];
+       
+       console.log("yeees1")
+       //console.log(routineTable)
+       
+       routineTable.once('value').then (snapshot => {
+        console.log("yeees2")
+        snapshot.forEach(item => {
+            var temp = item.val();
+            routineArr.push(temp);
+            return false;
+   });
+          
+           for(j=0 ; j<routineArr.length ; j++){
+               console.log(j)
+               if(routineArr[j].userID ==userId){
+                   //console.log("true found ID")
+                actionArr = routineArr[j].actionsID;
+                routineTime= routineArr[j].time;
+                hour = routineTime.substring (0,2);
+                console.log("Hour : "+hour)
+                minute = routineTime.substring(3);
+                console.log("Min :"+ minute)
+                for (i=0;i<actionArr.length;i++){
+                    var allActions =[];
+                    // some error here
+                    firebase.database().ref('action/').on('value', (snapshot) => {
+                        if(snapshot.exists){
+                            snapshot.forEach(item => {
+                                var temp = item.val();
+                                if (temp.actionID == actionArr[i]){
+                                //console.log ("temp" + temp.actionID)
+                                allActions.push(temp);}
+                                return false;
+                       });
+                        }
+                       
+                     
+                    //  console.log("I printed actions arr")
+                      // code for turn on and turn off light only ..
+                    // I know that is wrong 
+                         for (var z = 0 ; z<allActions.length ; z++){
+                      if(allActions[z].commandStatment =="Turn On Light"){
+
+                          // how put the time ?? 
+                    //       console.log("It is true found light ")
+                    //     exports.scheduledFunctionCrontab = functions.pubsub.schedule('50 3 * * *')
+                    //     .timeZone('SaudiArabia') 
+                    //     .onRun((context) => {
+                    //         Debug.WriteLine("yeees")
+                    //         console.log('This will be run every day at 3:50 AM Eastern!');
+                    //         Alert.alert("turn On Light");
+                    //     return null;
+                    //   });
+                      }}
+                    });//end action snapshot
+                   
+               }//end loop
+               }//end if
+           }// end biggest loop
+        
+     });//end routine snapshot
+    }//end schedule function()
 
     select_minute(index) {
         var minute_array = this.state.minute_array;
+        var i;
         for(i = 0; i < minute_array.length; i ++) {
             if(i == index) {
                 minute_array[i].clicked = true;
@@ -463,6 +977,7 @@ export default class RoutineScreen extends Component {
                                     
                                     )
                                 }
+                            
                                 </ScrollView>
                                 <View style = {{width: '100%', flexDirection: 'row', justifyContent: 'space-around'}}>
                                     <TouchableHighlight style={[styles.buttonContainer, styles.sTButton,{color: '#8abbc6',}]} onPress={() => this.save_button_action(0)} >
@@ -582,9 +1097,9 @@ export default class RoutineScreen extends Component {
                                     <TouchableHighlight style={[styles.buttonContainer, styles.sTButton,{color: '#8abbc6'}]} onPress={() => this.save_button_action(1)} >
                                         <Text style={[styles.signUpText,{color: '#8abbc6',}]}> حفظ </Text>
                                     </TouchableHighlight>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.setState({date_picker_display: true})} >
+                                    {/* <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.setState({date_picker_display: true})} >
                                         <Text style={styles.signUpText}> المؤقت </Text>
-                                    </TouchableHighlight>
+                                    </TouchableHighlight> */}
                                 </View>
                             </View>
                         }
@@ -684,9 +1199,9 @@ export default class RoutineScreen extends Component {
                                     <TouchableHighlight style={[styles.buttonContainer, styles.sTButton,{color: '#8abbc6',}]} onPress={() => this.save_button_action(2)} >
                                         <Text style={styles.signUpText,{color: '#8abbc6',}}> حفظ </Text>
                                     </TouchableHighlight>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.setState({date_picker_display: true})} >
+                                    {/* <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.setState({date_picker_display: true})} >
                                         <Text style={styles.signUpText}> المؤقت </Text>
-                                    </TouchableHighlight>
+                                    </TouchableHighlight> */}
                                 </View>
                             </View>
                         }
@@ -844,7 +1359,19 @@ RoutineScreen.navigationOptions = ({navigation})=> ({
     </TouchableOpacity>
 
   ),*/
+
   headerLeft:navigation.state.params && navigation.state.params.headerLeft,
+
+  headerLeft:()=>(
+    <TouchableOpacity onPress={()=>{navigation.navigate('')}} style={{marginLeft:15}}>
+
+      <SimpleLineIcons name="logout" size={24} color="white"  />
+
+      <SimpleLineIcons name="logout" size={24} color="#fff" />
+
+    </TouchableOpacity>
+  ),
+
   headerStyle: {
     backgroundColor: '#8BC4D0',
     color:'white'

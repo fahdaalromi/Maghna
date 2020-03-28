@@ -54,6 +54,12 @@ HomeStack.navigationOptions = {
   tabBarIcon:
   <MaterialCommunityIcons name="home-heart" size={43} color='white' />
 
+
+  ,tabBarLabel: ' الرئيسيه',
+  tabBarIcon:
+  <FontAwesome5 name="home" size={24} color="#fff" />
+
+
 };
 HomeStack.path = '';
 
