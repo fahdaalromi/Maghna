@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-<<<<<<< HEAD
+
 import { ScrollView, StyleSheet, Text, View, Image, 
     Button, backgroundColor, Alert, border, WIDTH, TouchableHighlight, TouchableOpacity } from 'react-native';
 import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
-=======
+
 import { ScrollView, StyleSheet, 
   ActivityIndicator,Text, View, Image,
    Button, backgroundColor, Alert, border, 
    WIDTH, TouchableHighlight, TouchableOpacity } from 'react-native';
 import { FontAwesome5 ,AntDesign,Feather
   ,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
->>>>>>> Reem
+
 import { withNavigation } from 'react-navigation';
 import { Ionicons} from '@expo/vector-icons';
 import { render } from 'react-dom';
