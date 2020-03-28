@@ -9,11 +9,49 @@ import {
 import { FontAwesome,FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons , Entypo} from "@expo/vector-icons";
 import { MonoText } from '../components/StyledText';
 import {LinearGradient} from 'expo-linear-gradient';
+import STTButton from '../STTButton'
+import axios from 'axios'
 
-export default function supdevicesScreen() {
+export default class  supdevicesScreen extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+
+    isLambConnected : '',
+    isLambOn : '' 
+
+    } 
+}
+  async componentDidMount(){
+    this.showLambStatus();
+    }
+
+    showLambStatus(){
+      axios.get('https://192.168.100.17/api/gFkvbAB2-8SKjoqdgiTg5iWEHnpRtpo-gR9WVzoR/lights/3')
+      .then(res => res.json())
+      .then(res => {
+        console.log(res.state.on)
+      }) 
+      .catch(error => {console.log(error);
+        isLambConnected = 'غير متصله',
+        isLambOn = 'مغلقه' 
+      })
+
+      if(res.state.on == true){
+        isLambConnected = 'متصله',
+        isLambOn = 'مفتوحه' 
+      }
+
+      if(res.state.on == false){
+        isLambConnected = 'متصله',
+        isLambOn = 'مغلقه' 
+      }
+    }
   
 
 
+render(){
     return (
 
       <ScrollView>
@@ -24,7 +62,8 @@ export default function supdevicesScreen() {
 
     <View style={styles.scontainer}>
     <Text style={styles.openText}>الإنارة</Text>
-    <Text style={styles.bottomText}>مفتوحة</Text>
+    <Text style={styles.bottomText}>{this.state.isLambConnected}</Text>
+    <Text style={styles.bottomText}>{this.state.isLambOn}</Text>
     <MaterialCommunityIcons style={{ right:190, bottom: 17}} name="lightbulb-on-outline" size={55} color= {'#2cb457'} />
     </View>
     
@@ -48,30 +87,17 @@ export default function supdevicesScreen() {
     <Text style={styles.bottomText}> متصل</Text>
     <Feather style={{ right:190, bottom: 17}} name="wifi" size={55} color= {'#6FA0AF'} />
     </View>
-    
-    <View style={styles.scontainer}>
-    <Text style={styles.openText}>التكييف</Text>
-    <Text style={styles.bottomText}>غير متصل</Text>
-    < Entypo style={{ right:190, bottom: 17}} name="air" size={55} color= {'#2cb457'} />
-    </View>
-
-
-    <View style={styles.scontainer}>
-    <Text style={styles.colseText}>آلة القهوة</Text>
-    <Text style={styles.bottomText}>غير متصل</Text>
-    <MaterialCommunityIcons style={{ right:190, bottom: 17}} name="coffee-outline" size={55} color= {'#6FA0AF'} />
-    </View>
 
 
     </ImageBackground>
     
     
-    
+
     
     </View>
     </ScrollView>
     );
-    
+}
     
 }
 

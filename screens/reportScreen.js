@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import {
   Platform,
     StyleSheet, Text, View, Image, Button, backgroundColor, Alert, border, WIDTH, TouchableHighlight, 
-    TouchableOpacity, ScrollView, ImageBackground,
+    TouchableOpacity, ScrollView, ImageBackground,AsyncStorage,ActivityIndicator,
 } from 'react-native';
 import { FontAwesome,FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
 import { MonoText } from '../components/StyledText';
@@ -11,18 +11,117 @@ import {LinearGradient} from 'expo-linear-gradient';
 import { StackActions } from '@react-navigation/native';
 import { NavigationActions } from 'react-navigation';
 import ProgressCircle from 'react-native-progress-circle'
+import * as FileSystem from 'expo-file-system';
+import * as Permissions from 'expo-permissions';
+import axios from 'axios'
+import { Audio } from 'expo-av';
+import STTButton from '../STTButton'
+
+
+const recordingOptions = {
+    android: {
+      extension: '.m4a',
+      outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
+      audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AAC,
+      sampleRate: 44100,
+      numberOfChannels: 1,
+      bitRate: 128000,
+    },
+    ios: {
+      extension: '.wav',
+      audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_HIGH,
+      sampleRate: 44100,
+      numberOfChannels: 1,
+      bitRate: 128000,
+      linearPCMBitDepth: 16,
+      linearPCMIsBigEndian: false,
+      linearPCMIsFloat: false,
+    },
+  }
+  
 
 export default class reportScreen extends Component {
+
+
 
     constructor(props) {
         super(props);
         this.state = {
             show_shape: false,
-            profile_percent: 60.6,
+            profile_percent: 40,
+            profile_color: '#56b058',
+
         }
     }
+    
+    
+    async componentDidMount(){
+        this.sendSpeechNotification();
+        this.calculateTotalConsuming();
+        this.colorChange(); 
+        this.readTheReport();
+    }
 
+    async readTheReport(){
+        // Page Info 
+        const playbackObject = await Audio.Sound.createAsync(
+            { uri: '' },
+            { shouldPlay: true }
+          ); 
+    }
+    async sendSpeechNotification(){
+
+
+        if(this.state.profile_percent >= 50){ 
+            const playbackObject = await Audio.Sound.createAsync(
+                { uri: '' },
+                { shouldPlay: true }
+              );
+         }
+    }
+
+    calculateTotalConsuming(){
+        let workingHours;
+        let totalConsuming;
+        let watts=40;
+
+         // workingHours=TimerData/60*60
+        let kwh= watts*workingHours/1000;
+     
+
+
+        if(kwhh > 6000){ 
+            totalConsuming=kwh*0.3*100;
+         }
+         if(kwh <= 6000){ 
+            totalConsuming=kwh*0.18*100;
+         }
+
+         this.setState.profile_percent = totalConsuming;
+    }
+
+  
+    colorChange(){
+
+        if(this.state.profile_percent < 50){ 
+           this.setState({profile_color : '#56b058'});
+        }
+        if(this.state.profile_percent  >=50 && this.state.profile_percent  <80 ){ 
+            this.setState({profile_color : '#fffb00'});
+        }
+        if(this.state.profile_percent  >=80 && this.state.profile_percent  <100 ){ 
+            this.setState({profile_color : '#f58f00'});
+        }
+       
+        if(this.state.profile_percent  >= 100 ){ 
+            this.setState({profile_color : '#ff3126'});
+        }
+       
+      return  this.setState.profile_color
+    }
     open_profile() {
+
+        
         const navigateAction = NavigationActions.navigate({
             routeName: 'profile',
             action: NavigationActions.navigate({ routeName: 'profile' }), 
@@ -32,6 +131,12 @@ export default class reportScreen extends Component {
     }
     
     render() {
+    
+        const {
+            profile_percent,
+            profile_color
+          } = this.state    
+
         return (
             <View style={styles.container}>
                 <ImageBackground source={require('./otherhalf.png')} style={{ width:'100%' , height:'150%', flex: 1, justifyContent: "center", alignItems: "center"}}>
@@ -54,14 +159,15 @@ export default class reportScreen extends Component {
                             this.state.show_shape &&
                             <View style = {{width: '100%', borderRadius: 10, alignItems: 'center', padding: 15, backgroundColor: '#ffffff', marginTop: 10, marginBottom: 10,opacity: 0.9,}}>
                              <ProgressCircle
+                              
                                 percent={this.state.profile_percent}
                                  radius={60}
                                  borderWidth={14}
-                                color="#fae169"
+                                color={this.state.profile_color}
                                 shadowColor="#ffffff"
                                bgColor="#fff"
                                                     >
-                                 <Text style={{ fontSize: 16 , color: "#fae169" }}>{this.state.profile_percent}{"%"}</Text>
+                                 <Text style={{ fontSize: 16 , color: "#757575" }}>{this.state.profile_percent}{"%"}</Text>
                                 </ProgressCircle>
                                  </View>
                         }
@@ -80,8 +186,8 @@ export default class reportScreen extends Component {
                             </View>
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0.2, 0]} style = {styles.component_bar} />
-                                    <Text style = {styles.bar_text}> ٢٠٪ </Text>
+                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 0]} style = {styles.component_bar} />
+                                    <Text style = {styles.bar_text}> ٠٪ </Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
                                     <Text style = {styles.contentText}> التلفاز </Text>
@@ -89,49 +195,16 @@ export default class reportScreen extends Component {
                             </View>
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0.1, 0]} style = {styles.component_bar} />
-                                    <Text style = {styles.bar_text}> ١٠٪ </Text>
+                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 0]} style = {styles.component_bar} />
+                                    <Text style = {styles.bar_text}> ٠٪ </Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
                                     <Text style = {styles.contentText}> البوابة </Text>
                                 </View>
                             </View>
-                            <View style = {styles.component_view}>
-                                <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0.05, 0]} style = {styles.component_bar} />
-                                    <Text style = {styles.bar_text}> ٥٪ </Text>
-                                </View>
-                                <View style = {styles.component_text_view}>
-                                    <Text style = {styles.contentText}> التكييف </Text>
-                                </View>
-                            </View>
-                            <View style = {styles.component_view}>
-                                <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0.01, 0]} style = {styles.component_bar} />
-                                    <Text style = {styles.bar_text}> ١٪ </Text>
-                                </View>
-                                <View style = {styles.component_text_view}>
-                                    <Text style = {styles.contentText}> باب المنزل </Text>
-                                </View>
-                            </View>
-                            <View style = {styles.component_view}>
-                                <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0.3, 0]} style = {styles.component_bar} />
-                                    <Text style = {styles.bar_text}> ٣٠٪ </Text>
-                                </View>
-                                <View style = {styles.component_text_view}>
-                                    <Text style = {styles.contentText}> آلة القهوة </Text>
-                                </View>
-                            </View>
-                            <View style = {styles.component_view}>
-                                <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0.35, 0]} style = {styles.component_bar} />
-                                    <Text style = {styles.bar_text}> ٣٥٪ </Text>
-                                </View>
-                                <View style = {styles.component_text_view}>
-                                    <Text style = {styles.contentText}> جهاز الإنترنت </Text>
-                                </View>
-                            </View>
+
+                            {/* <STTButton/> */}
+
                         </View>
                         <View style = {{height: 30}}/>
                     </ScrollView>

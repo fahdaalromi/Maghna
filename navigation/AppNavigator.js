@@ -30,7 +30,7 @@ export default createAppContainer(
         navigationOptions: {
             gesturesEnabled: false,
             backgroundColor: '#2d8cb1',
-        },
+          },
         initialRouteName: 'WelcomeStackNavigator'
     })
 );
