@@ -236,17 +236,17 @@ export default class profileScreen extends Component {
             .update({amount: this.state.amount})
           }
 
-          if (this.state.isActive != ''){
+          
             firebase.database()
             .ref('mgnUsers/'+this.state.uID)
             .update({isActive: this.state.isActive})
-          }
+          
  
         }else {
 
           if (this.state.changePassword && this.state.password == this.state.confirmPassword)
           {
-
+            console.log("user updated the password");
             user
             .updatePassword(this.state.password)
             .then((error) => {
@@ -261,6 +261,7 @@ export default class profileScreen extends Component {
           */
 
           }}
+
        }catch(e){console.log(e.message)}
 
 
@@ -270,7 +271,7 @@ export default class profileScreen extends Component {
         this.setState({passwordBorder: '#3E82A7'})
         this.setState({conPasswordBorder: '#3E82A7'})
         Alert.alert('تم تحديث بياناتك بنجاح');
-
+        this.props.navigation.navigate('HomeStack');
       }
 
       handelSignOut =() =>{
@@ -366,7 +367,9 @@ export default class profileScreen extends Component {
                                         onChangeText={(password) => {
                                           console.log(password);
                                           if (password.length>0){
+                                            console.log(this.state.changePassword);
                                           this.setState({changePassword:true})
+                                          console.log(this.state.changePassword);
                                           this.setState({password})
                                           this.setState({passwordBorder: '#3E82A7'})
                                         }
@@ -394,6 +397,8 @@ export default class profileScreen extends Component {
                                           this.setState({confPassword})
                                           this.setState({conPasswordBorder: '#3E82A7'})
                                           this.setState({passError: 'none'})
+                                          this.setState({errorMsgVisibilty: 'none'})
+                                          
                                         } }
                                         onEndEditing={(confPassword) =>{this.identicalPass(confPassword)} }
                                     />
