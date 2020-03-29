@@ -137,10 +137,13 @@ export default class profileScreen extends Component {
         }
         else {
           console.log("identical else ");
+          console.log("before set conf pass "+this.state.confPassword);
           this.setState({passError: 'none'})
         // this.setState({errorMsgVisibilty: 'none'})
          this.setState({passwordBorder:'#3E82A7'})
          this.setState({conPasswordBorder:'#3E82A7'})
+         this.setState({conPassword:password})
+         console.log("after set conf pass "+this.state.confPassword);
         }
         
         }
@@ -243,16 +246,31 @@ export default class profileScreen extends Component {
           
  
         }else {
-
-          if (this.state.changePassword && this.state.password == this.state.confirmPassword)
+          console.log("user changePassword val "+this.state.changePassword);
+          console.log(this.state.password );
+          console.log(this.state.confPassword);
+          console.log(this.state.changePassword &&(this.state.password == this.state.confPassword));
+         // console.log("user updated the password");
+          if (this.state.changePassword &&(this.state.password == this.state.confPassword))
           {
             console.log("user updated the password");
             user
             .updatePassword(this.state.password)
-            .then((error) => {
+            .then(()=>{
+              this.props.navigation.navigate('WelcomeStackNavigator')},
+              (error) => {
             console.log(error);
             // An error happened.
           });
+/*
+          firebase.database()
+          .ref('mgnUsers/'+user.uid)
+          .on('value', snapshot => {
+            this.confPassword.clear();
+            this.password.clear();
+             
+          
+        })*/
         }
 /*
           firebase.database()
@@ -360,6 +378,7 @@ export default class profileScreen extends Component {
                                 <Text style={styles.perInfo}>── تغيير كلمة المرور  ──</Text>
                                 <View style={[styles.inputContainer,{borderColor: this.state.passwordBorder}]}>
                                     <TextInput style={styles.inputs}
+                                        
                                         placeholder="كلمة المرور"
                                         secureTextEntry={true}
                                         textContentType="newPassword"
