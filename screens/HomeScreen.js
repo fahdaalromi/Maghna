@@ -32,6 +32,13 @@ export default class HomeScreen extends Component {
   
   
    async componentDidMount(){
+
+    this.props.navigation.setParams({
+      headerLeft: (<TouchableOpacity onPress={this.handelSignOut}>
+         <SimpleLineIcons name="logout" size={24} color='white' style={{marginLeft:15}} />
+      </TouchableOpacity>)
+})
+
     const firebaseConfig = {
 
 
@@ -342,7 +349,25 @@ checkData= async  ()=>{
 
 
 
-
+  handelSignOut =() =>{
+    var {navigation}=this.props;
+    console.log("logout method");
+    
+    console.log("inside");
+    try{
+      console.log(this.state);
+     firebase
+      .auth()
+      .signOut()
+      .then(function(){
+     navigation.navigate('WelcomeStackNavigator')
+      })
+      
+      .catch(error => console.log(error.message))
+      console.log("after"+this.state.email);
+      }catch(e){console.log(e.message)}
+      
+  };
 
 
 
@@ -356,11 +381,7 @@ checkData= async  ()=>{
           </TouchableOpacity>
       
         ),
-        headerLeft:()=>(
-          <TouchableOpacity onPress={()=>{navigation.navigate('')}} style={{marginLeft:15}}>
-            <SimpleLineIcons name="logout" size={24} color="#fff" />
-          </TouchableOpacity>
-        ),
+        headerLeft: navigation.state.params && navigation.state.params.headerLeft,
         headerStyle: {
             backgroundColor: '#8BC4D0',
             color:'white'

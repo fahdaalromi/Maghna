@@ -93,35 +93,7 @@ import * as firebase from 'firebase';
             var userId =  this.props.navigation.getParam('id', '');
             var lat= position.coords.latitude;
             var long= position.coords.longitude;
-
-           if (this.state.uID!==''){
-            console.log("if");
-            firebase
-            .database()
-            .ref('mgnUsers/'+this.state.uID)
-            .update({
-              latitude: lat,
-              longitude: long,
-              
-           })
-           this.props.navigation.state.params.updateData(lat,long);
-           console.log("if is done ");
-          }
-          else{
-            console.log("else");
-            this.props.navigation.goBack()
-            this.props.navigation.state.params.updateData(lat,long);
-
-          }
-         
           //end update
-           console.log("latitude"+lat);
-           console.log("state latitude"+this.state.latitude);
-           
-           console.log("longitude"+lat); 
-           console.log("state longitude"+this.state.longitude); 
-           
-          })
 
         setTimeout(()=>{Alert.alert(
           'هل تريد تحديث موقعك ؟' , 
@@ -132,15 +104,45 @@ import * as firebase from 'firebase';
               console.log("cancel is pressed"),
               style:'cancel'
             },{text:'نعم',
-            onPress:()=>
-              console.log("save is pressed"),
-              style:'cancel'
+
+            onPress:()=>{
+              
+              if (this.state.uID!==''){
+                console.log("if");
+                firebase
+                .database()
+                .ref('mgnUsers/'+this.state.uID)
+                .update({
+                  latitude: lat,
+                  longitude: long,
+                  
+               })
+               this.props.navigation.state.params.updateData(lat,long);
+               console.log("if is done ");
+              }
+              else{
+                console.log("else");
+                this.props.navigation.goBack()
+                this.props.navigation.state.params.updateData(lat,long);
+    
+              }
+
+              console.log("save is pressed")},
+              style:'ok'
             }
 
 
 
           ]
           );},5000);
+          
+           console.log("latitude"+lat);
+           console.log("state latitude"+this.state.latitude);
+           console.log("longitude"+long); 
+           console.log("state longitude"+this.state.longitude); 
+           
+          })
+
         setTimeout(()=>{this.props.navigation.goBack();},7000);
             }
     
