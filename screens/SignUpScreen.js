@@ -20,10 +20,23 @@ import * as firebase from 'firebase';
 export default class SignUP extends Component{
 
   state = {
-  username:"test",
+  name:"",
   email: "",
   password: "",
   confPassword: "",
+  latitude:0,
+  longitude:0,
+  amount:0,
+  isActive:true,
+
+  
+  passwordBorder:'#3E82A7',
+  conPasswordBorder:'#3E82A7',
+  emailBorder:'#3E82A7',
+
+  formErrorMsg:'',
+  errorMsgVisibilty:'none',
+  passError:'none',
   errorMsg:null,
 };
 
@@ -46,8 +59,71 @@ UNSAFE_componentWillMount(){
 }
 
 }
+validateEmail = (email) => {
+
+  let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+  if(reg.test(this.state.email)== false)
+  {
+  this.setState({emailBorder:'red'})
+    }
+  else {
+    this.setState({emailBorder:'#3E82A7'})
+  }
+}
+
+identicalPass = (password) => {
+  if (this.state.password !== this.state.confPassword){
+    console.log("identical if ");
+    this.setState({passError: 'flex'})
+    this.setState({errorMsgVisibilty: 'flex'})
+   this.setState({passwordBorder:'red'})
+   this.setState({conPasswordBorder:'red'})
+  }
+  else {
+    console.log("identical else ");
+    this.setState({passError: 'none'})
+  // this.setState({errorMsgVisibilty: 'none'})
+   this.setState({passwordBorder:'#3E82A7'})
+   this.setState({conPasswordBorder:'#3E82A7'})
+  }
+  
+  }
+
 
 handelSignUp =() =>{
+
+  if (this.state.name == '' || this.state.email == ''||this.state.password == ''||this.state.confPassword=='') {
+    this.setState({formErrorMsg: ' يرجى تعبأة جميع الحقول '})
+    this.setState({errorMsgVisibilty: 'flex'})
+    return;
+  }
+
+
+  if (this.state.password.length < 6) {
+    this.setState({formErrorMsg: ' يجب أن تكون كلمة المرور أكثر من ٦ خانات'})
+    this.setState({errorMsgVisibilty: 'flex'})
+    this.setState({passwordBorder:'red'})
+   
+    return;
+  }
+  /*
+  if (this.state.password!=this.state.confpassword){
+
+    this.setState({formErrorMsg: ' يجب أن تكون كلمة المرور متطابقة'})
+    this.setState({errorMsgVisibilty: 'flex'})
+    this.setState({passwordBorder:'red'})
+    return;
+
+  }*/
+  if (this.state.emailBorder == 'red'||this.state.passwordBorder == 'red'||this.state.conPasswordBorder=='red'){
+    this.setState({formErrorMsg: 'فضًلا، قم بتصحيح  الأخطاء الحمراء'})
+    this.setState({errorMsgVisibilty: 'flex'})
+    return;
+  }
+  if (this.state.passError != 'none')  {
+    return;
+}
+
     try{
   firebase
   .auth()
@@ -60,26 +136,48 @@ handelSignUp =() =>{
       if (user) {
         this.userId = user.uid
         user.sendEmailVerification();
-        firebase.database().ref('mgnUsers/'+this.userId).set(
+        firebase.database().ref('mgnUsers/'+user.uid).set(
           {
-            name: this.state.username,
+            name: this.state.name,
+            latitude:this.state.latitude,
+            longitude:this.state.longitude,
+            amount:this.state.amount,
+            isActive:this.state.isActive,
           })
 
          this.props.navigation.navigate('SignIn')
       }
-    }
-    );
+    });
+
+    this.name.clear();
+    this.password.clear();
+    this.email.clear();
+    this.confPassword.clear();
     Alert.alert("تم التسجيل بنجاح، تفقد بريدك الإلكترني")
 
     })
   
-  .catch(error => console.log(error.message))
+  .catch((error) => {
+
+    console.log(error.message)
+    this.setState({formErrorMsg: 'نعتذر، البريد الإلكتروني مسجل مسبقًا'})
+    
+  })
 
     }catch(e){console.log(e.message)}
 
 };
 
+  updateData = (long,lat) => {  
+  //(data);
+    this.setState({      
+      longitude:long,
+      latitude:lat,
 
+    })
+  console.log("udate: " + long +" "+lat);
+    // some other stuff
+  };
 
   render(){  
   return (
@@ -102,48 +200,81 @@ handelSignUp =() =>{
 <View style={styles.smallContainer}>
 
 
+
+<View >
+<Text style={[styles.warning, {display: this.state.errorMsgVisibilty}]}> {this.state.formErrorMsg} </Text>
+</View>
+<View >
+
+<Text style={[styles.warning,styles.fontStyle, {display: this.state.passError}]}> يجب أن تكون كلمة المرور متطابقة </Text>
+</View>
+
 <View style={styles.firstContainer}>
 <View style={styles.inputContainer} style={styles.inputContainer} >
 
 <TextInput style={styles.inputs}
+ref={input=>this.name=input}
 placeholder="أسم المستخدم"
+keyboardType="default"
 underlineColorAndroid='transparent'
-onChangeText={(text) => { this.setState({username: text}) }}
+onChangeText={(text) => { this.setState({name: text}) }}
+value={this.state.name}
 />
 </View>
 </View>
-<View style={styles.inputContainer}>
+<View style={[styles.inputContainer , {borderColor: this.state.emailBorder}]}>
 
 <TextInput style={styles.inputs}
+ref={input=>this.email=input}
 placeholder="البريد الإلكتروني"
 keyboardType="email-address"
 underlineColorAndroid='transparent'
-onChangeText={(text) => { this.setState({email: text}) }}
+onChangeText={(text) => { 
+  this.setState({email: text}) 
+  this.setState({emailBorder: '#3E82A7'})
+  }}
+  onEndEditing={(email) => this.validateEmail(email)}
+  value={this.state.email}
 />
 </View>
 
 
-<View style={styles.inputContainer}>
+<View style={[styles.inputContainer, {borderColor: this.state.passwordBorder}]}>
 
 <TextInput style={styles.inputs}
+ref={input=>this.password=input}
   placeholder="كلمة المرور"
   secureTextEntry={true}
   underlineColorAndroid='transparent'
-  onChangeText={(text) => { this.setState({password: text}) }}
+  onChangeText={(text) => { 
+    this.setState({password: text}) 
+    this.setState({passwordBorder: '#3E82A7'})
+  }}
+  //onEndEditing={(password) =>{this.identicalPass(password)} }
+  value={this.state.password}
   />
 </View>
 
-<View style={styles.inputContainer}>
+<View style={[styles.inputContainer,{borderColor: this.state.conPasswordBorder}]}>
 <TextInput style={styles.inputs}
+ref={input=>this.confPassword=input}
 placeholder="تأكيد كلمة المرور"
 secureTextEntry={true}
 underlineColorAndroid='transparent'
-onChangeText={(text) => { this.setState({confPassword: text}) }}
+onChangeText={(text) => { 
+  this.setState({confPassword: text}) 
+  this.setState({conPasswordBorder: '#3E82A7'})
+  this.setState({errorMsgVisibilty: 'none'})
+  }}
+  onEndEditing={(confPassword) =>{this.identicalPass(confPassword)} }
+  //value={this.state.confPassword}
 />
 </View>
 
 
-<TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} onPress={()=>{this.props.navigation.navigate('locationPage')}} >
+
+
+<TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} onPress={()=>{this.props.navigation.navigate('locationPage', {updateData: this.updateData})}} >
         <Text style={styles.addLocationText}> إضافة موقع</Text>
         </TouchableHighlight>
 
@@ -162,6 +293,7 @@ onChangeText={(text) => { this.setState({confPassword: text}) }}
   </View>
 
 </ImageBackground>
+
   </View>
 
   </View>
@@ -350,6 +482,13 @@ const styles = StyleSheet.create({
   signupButton: {
    //backgroundColor: "#3E82A7",
     
+  },
+
+  warning:{
+    color: 'red',
+    fontSize:12,
+    marginBottom:10,
+    textAlign:'center'
   },
 
   LocationButtonContainer:{

@@ -1,10 +1,152 @@
-import React, {useState, useEffect} from "react";
-import { ScrollView, StyleSheet,Text,View,TouchableHighlight, Alert} from 'react-native';
+import React, {useState, useEffect,Component} from 'react';
+import { ScrollView, StyleSheet,Text,View,TouchableHighlight, Alert,TouchableOpacity} from 'react-native';
 import MapView from 'react-native-maps';
 import { withNavigation } from 'react-navigation';
+import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
+import * as firebase from 'firebase';
 
-export default function locationPage() {
+  export default class locationPage extends Component {
+
+    constructor(props) {
+      super(props);
+      this.state = {
+
+        visibilty: 'none',
+        uID:'',
+        name:"",
+        email: "",
+        password: "",
+        confPassword: "",
+        errorMsg:null,
+        latitude:0,
+        longitude:0,
+        isActive:false,
+        amount:0,
+          
+      }
+  }
+  // we have to put 2 1- for registered people  2- for thr unregisted people
+  componentDidMount(){
+    console.log("inside location page did ");
+    console.log("this.props.state.uID"+ this.state.uID);
+    if(firebase.auth().currentUser!==null){
+      console.log("inside location page has user ");
+    firebase
+    .auth()
+    .onAuthStateChanged((user) => {
+    if (user) {
+      console.log("find the user ")
+    var userId = firebase.auth().currentUser.uid;
+    //email= firebase.auth().currentUser.email;
+    firebase
+    .database()
+    .ref('mgnUsers/'+userId)
+    .on('value', snapshot => {
+      console.log(" "+ snapshot)
+      this.setState({
+        uID : this.uID,
+      latitude :snapshot.val().latitude,
+      latitude:snapshot.val().latitude
+    });
+    console.log(JSON.stringify(snapshot)) });
+    }
+    }
+ 
+    )}
+
+
+     this.getCurrentPosition()
+
+    }//end componentDidMount
   
+    UNSAFE_componentWillMount(){
+  
+      const firebaseConfig = {
+  
+        apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
+        authDomain: "maghnaapplication.firebaseapp.com",
+        databaseURL: "https://maghnaapplication.firebaseio.com",
+        projectId: "maghnaapplication",
+        storageBucket: "maghnaapplication.appspot.com",
+        messagingSenderId: "244460583192",
+        appId: "1:244460583192:web:f650fa57532a682962c66d",
+      };
+  
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+  
+
+    }
+    sleep=(ms)=>{
+
+      return new Promise(resolve=>setTimeout(resolve,ms));
+
+    }
+
+    getCurrentPosition() {
+      console.log("inside");
+      console.log("id "+ this.state.uID);
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+
+            var userId =  this.props.navigation.getParam('id', '');
+            var lat= position.coords.latitude;
+            var long= position.coords.longitude;
+          //end update
+
+        setTimeout(()=>{Alert.alert(
+          'هل تريد تحديث موقعك ؟' , 
+          '',
+          [
+            {text:'إلغاء',
+            onPress:()=>
+              console.log("cancel is pressed"),
+              style:'cancel'
+            },{text:'نعم',
+
+            onPress:()=>{
+              
+              if (this.state.uID!==''){
+                console.log("if");
+                firebase
+                .database()
+                .ref('mgnUsers/'+this.state.uID)
+                .update({
+                  latitude: lat,
+                  longitude: long,
+                  
+               })
+               this.props.navigation.state.params.updateData(lat,long);
+               console.log("if is done ");
+              }
+              else{
+                console.log("else");
+                this.props.navigation.goBack()
+                this.props.navigation.state.params.updateData(lat,long);
+    
+              }
+
+              console.log("save is pressed")},
+              style:'ok'
+            }
+
+
+
+          ]
+          );},5000);
+          
+           console.log("latitude"+lat);
+           console.log("state latitude"+this.state.latitude);
+           console.log("longitude"+long); 
+           console.log("state longitude"+this.state.longitude); 
+           
+          })
+
+        setTimeout(()=>{this.props.navigation.goBack();},7000);
+            }
+    
+
   //for saving user location 
   /*
   const [coordinates, setCoordinates] = useState({
@@ -18,7 +160,7 @@ export default function locationPage() {
     Alert.alert('hello');
   },[]);
     */
-  
+    render() {
   return (
 
     <View style={styles.container}>
@@ -41,21 +183,28 @@ export default function locationPage() {
 
         </MapView>
 
-        <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]}>
-     <Text style={styles.signUpText}>  حفظ </Text>
-   </TouchableHighlight>
-
     </View>
 
 
   </View>
   );
-}
+}}
 
 locationPage.navigationOptions = ({navigation})=> ({
 
-  //headerTint:'#F7FAFF',
-  headerTitle: 'الموقع',
+ 
+  headerTint:'#F7FAFF',
+  headerTitle: ' الموقع',
+
+  headerRight:()=>(
+    <TouchableOpacity onPress={()=>{navigation.navigate('profile')}} style={{marginRight:15}}>
+      <AntDesign name="right" size={24} color="#CDCCCE" />
+    </TouchableOpacity>
+
+  ),
+
+  headerLeft: null,
+
   headerStyle: {
     backgroundColor: '#8BC4D0',
     color:'white'
@@ -63,9 +212,7 @@ locationPage.navigationOptions = ({navigation})=> ({
  },
  headerTitleStyle: {
   color: '#fff'
-}  
-,
-
+}
 
 });
 
@@ -102,7 +249,7 @@ const styles = StyleSheet.create({
 
   mapStyle: {
     alignSelf: 'stretch',
-    height:'97%',
+    height:'100%',
     //flex:1,
     marginTop : -25,
   },

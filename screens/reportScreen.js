@@ -56,21 +56,31 @@ export default class reportScreen extends Component {
     
     
     async componentDidMount(){
-       // this.getAudio();
-        this.sendSpeechNotification();
-        this.calculateTotalConsuming();
-        this.colorChange(); 
+ 
+
+        await this.sendSpeechNotification(); 
+        await this.wait(1000);
+
+        await this.getAudio();
+
+        await this.calculateTotalConsuming();
+        await this.colorChange(); 
 
     }
 
+    async  wait(ms) { 
+        return new Promise(resolve => {
+          setTimeout(resolve, ms);
+        });
+      }
 
 
     async getAudio () {  
  // Read report
 
-        let fileURL = '';
-        const text =  'عزيزي المستخدم ';
-    
+        
+ let fileURL = '';    
+ const text =  '  عزيزي المُسْتَخْدِم إجْمَالِي إسْتِهْلاكِكْ هُوَ خمسُووووون بِالمِئَةِ مِن مُجْمَلِ فَاتُورَتِكَ المُدخَلهْ وَتَفْصِيْلْ الْإسْتِهْلاكْ هُوَ  الإنَارَه سَبْعُونَ بِالمِئَة التِّلْفَازْ صِفْرٌ بِالمِئَة ';
 
         axios.post(`http://45.32.251.50`,  {text} )
           .then(res => {
@@ -115,7 +125,8 @@ export default class reportScreen extends Component {
         if(this.state.profile_percent >= 50){  
   
             let fileURL = '';    
-            const text =  ' عزيزي المُسْتَخْدِم إجْمِالِي إسْتِهْلاكِكْ هُوَ خمسُووووون بِالمِئَةِ مِن مُجْمَلِ فَاتُورَتِكَ المُدخَل وَتَفْصِيْلْ الْإسْتِهْلاكْ هُوِ  الإنَارِه سِبْون بِالمِئِهْ التِّلْفِازْ صِفْرْ بِالمِئِهْ ';
+            const text =  'ِعزيزي المُسْتَخْدِم لَقَدْ إستَهْلَكْتْ خَمسُوووون بِالمِئَةِ مِن مُجْمَلِ فَاتُورَتِكَ المُدخَل';
+
             axios.post(`http://45.32.251.50`,  {text} )
               .then(res => {
                  console.log("----------------------xxxx--------------------------"+res.data);   
@@ -129,8 +140,7 @@ export default class reportScreen extends Component {
          if(this.state.profile_percent >= 79){  
   
             let fileURL = '';    
-            const text =  'ِعزيزي المُسْتَخْدِم لَقَدْ إستَهْلَكْتْ ثمانوون بِالمِئَةِ مِن مُجْمَلِ فَاتُورَتِكَ المُدخَل';
-          
+            const text =  'ِعزيزي المُسْتَخْدِم لَقَدْ إستَهْلَكْتْ ثَمَانُووون بِالمِئَةِ مِن مُجْمَلِ فَاتُورَتِكَ المُدخَل';
             axios.post(`http://45.32.251.50`,  {text} )
               .then(res => {
                  console.log("----------------------xxxx--------------------------"+res.data);   
@@ -308,14 +318,8 @@ reportScreen.navigationOptions = ({navigation})=> ({
     </TouchableOpacity>
   ),*/
 
-  headerLeft:()=>(
+  headerLeft:navigation.state.params && navigation.state.params.headerLeft,
 
-
-
-    <TouchableOpacity onPress={()=>{navigation.navigate('')}} style={{marginLeft:15}}>
-      <SimpleLineIcons name="logout" size={24} color="#fff" />
-    </TouchableOpacity>
-  ),
   headerStyle: {
     backgroundColor: '#8BC4D0',
     color:'white'

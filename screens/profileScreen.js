@@ -13,6 +13,7 @@ import { ScrollView,
 } from 'react-native';
 import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
 import {LinearGradient} from 'expo-linear-gradient';
+import FlipToggle from 'react-native-flip-toggle-button';
 import * as firebase from 'firebase';
 
 
@@ -21,13 +22,27 @@ export default class profileScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
-          username:"",
+          uID:'',
+          name:"",
           email: "",
           password: "",
           confPassword: "",
           errorMsg:null,
-            
+          latitude:0,
+          longitude:0,
+          isActive:true,
+          amount:0,
+          changePassword:false,
+
+          passwordBorder:'#3E82A7',
+          conPasswordBorder:'#3E82A7',
+          emailBorder:'#3E82A7',
+        
+          formErrorMsg:'',
+          errorMsgVisibilty:'none',
+          passError:'none',
+          errorMsg:null,
+          nameBorders:"#3E82A7",
         }
     }
 
@@ -51,83 +66,265 @@ export default class profileScreen extends Component {
     
     }
     //view and fetch updated data
-    /*
-    componentDidMount(){
     
-      //var Uid = "tWRTW1QU6kT8FhpnofVfxaCQcOy2";
-     
-    //  var userId =  this.props.navigation.getParam(id, 'NO-ID');
-    //  var userId = this.props.ID;
+    componentDidMount(){
       
-      console.log(userId);
+      this.props.navigation.setParams({
+        headerLeft: (<TouchableOpacity onPress={this.handelSignOut}>
+           <SimpleLineIcons name="logout" size={24} color='white' style={{marginLeft:15}} />
+        </TouchableOpacity>)
+ })
 
-      if (userId !== 'NO-ID'){
-
-        firebase.database().ref('mgnUsers/').on('value', (snap) => {
-
-          snap.forEach((child) => {
-
-             if (child.val().id === userId){
-
-               this.setState({
-                 userKey:child.key,
-                 username: child.val().username,
-                 });
-              }
-              })
-
-          });
-        }   
+      console.log("in did profile")
+      firebase
+      .auth()
+      .onAuthStateChanged((user) => {
+        if (user) {
+     
+      var userId = firebase.auth().currentUser.uid;
+      //this.state.uID=userId;
+      this.setState({ uID:userId})
+      console.log("user id "+userId)
+      //console.log("user id "+uID)
+      
+      var email = firebase.auth().currentUser.email;
+      
+      console.log("user email" +email)
+      //console.log(JSON.stringify(snapshot))
+      firebase
+      .database()
+      .ref('mgnUsers/'+userId)
+      .on('value', snapshot => {
+        console.log(" "+ snapshot)
+        console.log("before sate")
+        this.setState({
+          name: snapshot.val().name,
+          email:email,
+          latitude :snapshot.val().latitude,
+          longitude:snapshot.val().longitude,
+          amount:snapshot.val().amount+" ",
+          isActive:snapshot.val().isActive,
+        });
+        console.log(this.state.amount)
+        console.log(JSON.stringify(snapshot))
+        console.log("after sate " +this.state.uID+this.state.name+this.state.latitude+this.state.longitude)
+      });
+       }
+      }); 
 
       }//end view and fetch
-*/
 
+    validateEmail = (email) => {
+
+        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+        if(reg.test(this.state.email)== false)
+        {
+        this.setState({emailBorder:'red'})
+        console.log("email not valid")
+          }
+        else {
+          this.setState({emailBorder:'#3E82A7'})
+        }
+      }
+      
+      identicalPass = (password) => {
+        if (this.state.password !== this.state.confPassword){
+          console.log("identical if ");
+          this.setState({passError: 'flex'})
+          this.setState({errorMsgVisibilty: 'flex'})
+          this.setState({passwordBorder:'red'})
+          this.setState({conPasswordBorder:'red'})
+        }
+        else {
+          console.log("identical else ");
+          console.log("before set conf pass "+this.state.confPassword);
+          this.setState({passError: 'none'})
+        // this.setState({errorMsgVisibilty: 'none'})
+         this.setState({passwordBorder:'#3E82A7'})
+         this.setState({conPasswordBorder:'#3E82A7'})
+         this.setState({conPassword:password})
+         console.log("after set conf pass "+this.state.confPassword);
+        }
+        
+        }
+      
 
     editProfile = () => {
 
+      console.log(this.state.changePassword);
+
+      // if the user left empty fields
+      if (this.state.name == '' || this.state.email == '') {
+        console.log('missing field');
+        this.setState({formErrorMsg: ' يرجى تعبأة جميع الحقول '})
+        this.setState({errorMsgVisibilty: 'flex'})
+        return;
+      }
+
+      //fill error
+      if (this.state.emailBorder == 'red'||this.state.passwordBorder == 'red'||this.state.conPasswordBorder=='red'){
+        this.setState({formErrorMsg: 'فضًلا، قم بتصحيح  الأخطاء الحمراء'})
+        this.setState({errorMsgVisibilty: 'flex'})
+        return;
+      }
+
+    // if the user wants to change his password  
+        //make sure the length is suitable 
+      if (this.state.changePassword && this.state.password.length < 6 && this.state.password.length > 0) {
+        console.log('short password');
+        this.setState({formErrorMsg: 'يجب أن تكون كلمة المرور أكثر من ٦ خانات'})
+        this.setState({errorMsgVisibilty: 'flex'})
+        return;
+      }
+        // make sure there are confirmation password 
+      if (this.state.changePassword && this.state.confPassword=='') {
+        console.log('confirm');
+        this.setState({formErrorMsg: 'عفوًا أدخل كلمة مرور تأكيدية'})
+        this.setState({errorMsgVisibilty: 'flex'})
+        return;
+      }
+
+        // change the conformation password without the passwor field
+    if (this.state.password=='' && this.state.confPassword!='') {
+      console.log('confirm');
+      this.setState({formErrorMsg: 'عفوًا، أدخل كلمة مرور'})
+      this.setState({errorMsgVisibilty: 'flex'})
+      return;
+    }
+
       try{
 
-        var userId =  this.props.navigation.getParam('id', 'NO-ID');
+        var user = firebase.auth().currentUser;
+        var uid;
+       // var userId =  this.props.navigation.getParam('id', 'NO-ID');
 
-        if (this.state.password == '') {
-          if (this.state.username != ''){
+        if (user){
+          uid = user.uid;
+          if (!this.state.changePassword ) {
+
+            if (this.state.email != ''){
+              user.updateEmail(this.state.email);
+            }
+            if (this.state.name != ''){
+              firebase
+              .database()
+              .ref('mgnUsers/'+ this.state.uID)
+              .update({name : this.state.name,})
+            }
+            if (this.state.latitude != 0){
+              console.log("latitude in if: " + this.state.latitude,);
+              firebase
+              .database()
+              .ref('mgnUsers/'+ this.state.uID)
+              .update({latitude : this.state.latitude,})
+            }
+            if (this.state.longitude != 0){
+              console.log("longitude in if: " + this.state.longitude,);
+              firebase
+              .database()
+              .ref('mgnUsers/'+ this.state.uID)
+              .update({longitude : this.state.longitude,})
+            }
+
+/*
+          if (this.state.name != ''){
             firebase.database()
             .ref('mgnUsers/'+userId)
-            .update({username: this.state.username,})
+            .update({name: this.state.name,})
+          }*/
+
+          if (this.state.amount != 0){
+            firebase.database()
+            .ref('mgnUsers/'+this.state.uID)
+            .update({amount: this.state.amount})
           }
+
+          
+            firebase.database()
+            .ref('mgnUsers/'+this.state.uID)
+            .update({isActive: this.state.isActive})
+          
  
         }else {
+          console.log("user changePassword val "+this.state.changePassword);
+          console.log(this.state.password );
+          console.log(this.state.confPassword);
+          console.log(this.state.changePassword &&(this.state.password == this.state.confPassword));
+         // console.log("user updated the password");
+          if (this.state.changePassword &&(this.state.password == this.state.confPassword))
+          {
+            console.log("user updated the password");
+            user
+            .updatePassword(this.state.password)
+            .then(()=>{
+              this.props.navigation.navigate('WelcomeStackNavigator')},
+              (error) => {
+            console.log(error);
+            // An error happened.
+          });
+/*
+          firebase.database()
+          .ref('mgnUsers/'+user.uid)
+          .on('value', snapshot => {
+            this.confPassword.clear();
+            this.password.clear();
+             
+          
+        })*/
+        }
+/*
           firebase.database()
           .ref('mgnUsers/'+userId)
           .updatePassword(this.state.password)
-          
-          }
+          */
+
+          }}
+
        }catch(e){console.log(e.message)}
 
 
+
+        this.setState({emailBorder: '#3E82A7'})
+        this.setState({nameBorders: '#3E82A7'})
+        this.setState({passwordBorder: '#3E82A7'})
+        this.setState({conPasswordBorder: '#3E82A7'})
+        Alert.alert('تم تحديث بياناتك بنجاح');
+        this.props.navigation.navigate('HomeStack');
       }
 
       handelSignOut =() =>{
-       
+        var {navigation}=this.props;
+        console.log("logout method");
+        
+        console.log("inside");
         try{
-          console.log("start logout");
+          console.log(this.state);
          firebase
           .auth()
           .signOut()
           .then(function(){
-          console.log(this.state);
-          Alert.alert('تم تسجيل الخروج بنجاح');
-        this.props.navigation.navigate('welcome')
-    
+         navigation.navigate('WelcomeStackNavigator')
           })
-    
-        .catch(error => console.log(error.message))
-    
+          
+          .catch(error => console.log(error.message))
+          console.log("after"+this.state.email);
           }catch(e){console.log(e.message)}
-    
+          
       };
+
+      updateData = (long,lat) => {  
+        //(data);
+          this.setState({      
+            longitude:long,
+            latitude:lat,
+      
+          })
+        console.log("udate: " + long +" "+lat);
+        console.log("udate: " + this.state.longitude +" "+this.state.latitude);
+          // some other stuff
+        };
     
-    
+    //navigation.navigate('SignIn')
 
     render() {
         return (
@@ -137,60 +334,155 @@ export default class profileScreen extends Component {
 
                     <ImageBackground source={require('../assets/images/halfBlue.png') } style={{ height:"100%",justifyContent: 'center',alignItems: 'center', marginBottom:400}}>
                         <View style={styles.smallContainer}>
+
+                        <View >
+
+                          <Text style={[styles.warning,styles.fontStyle, {display: this.state.passError}]}>يجب أن تكون كلمة المرور متطابقة </Text>
+                        </View>
+
+
+                        <View >
+
+                          <Text style={[styles.fontStyle,styles.warning, {display: this.state.errorMsgVisibilty}]}> {this.state.formErrorMsg} </Text>
+                        </View>
+
+
+                          
                             <Text style={styles.perInfo}>── المعلومات الشخصية ──</Text>
-                                <View style={styles.inputContainer}>
+                                <View style={[styles.inputContainer,{borderColor: this.state.nameBorders}]} >
                                     <TextInput style={styles.inputs}
                                         placeholder="أسم المستخدم"
-                                        onChangeText={(text) => { this.setState({email: text}) }}
-                                        keyboardType="email-address"
+                                        onChangeText={(text) => {
+                                           this.setState({name: text})
+                                           this.setState({errorMsgVisibilty:'none'})
+                                           }}
+                                        keyboardType="TextInput"
                                         autoCapitalize="none"
-                                        value={this.state.username}
+                                        value={this.state.name}
                                     />
                                 </View>
-                                <View style={styles.inputContainer}>
+                                <View style={[styles.inputContainer,, {borderColor: this.state.emailBorder}]}>
                                     <TextInput style={styles.inputs}
                                         placeholder="البريد الإلكتروني"
                                         keyboardType="email-address"
                                         underlineColorAndroid='transparent'
+                                        value={this.state.email}
+                                        onChangeText={(email) => {
+                                          this.setState({email})
+                                          this.setState({emailBorder: '#3E82A7'})
+                                          this.setState({errorMsgVisibilty:'none'}) }
+                                      }
+                                        onEndEditing={(email) => this.validateEmail(email)}
                                     />
                                 </View>
                                 <Text style={styles.perInfo}>── تغيير كلمة المرور  ──</Text>
-                                <View style={styles.inputContainer}>
+                                <View style={[styles.inputContainer,{borderColor: this.state.passwordBorder}]}>
                                     <TextInput style={styles.inputs}
+                                        
                                         placeholder="كلمة المرور"
                                         secureTextEntry={true}
+                                        textContentType="newPassword"
                                         underlineColorAndroid='transparent'
+                                        onChangeText={(password) => {
+                                          console.log(password);
+                                          if (password.length>0){
+                                            console.log(this.state.changePassword);
+                                          this.setState({changePassword:true})
+                                          console.log(this.state.changePassword);
+                                          this.setState({password})
+                                          this.setState({passwordBorder: '#3E82A7'})
+                                        }
+                                        else {
+                                          this.setState({changePassword:false})
+                                          this.setState({password})
+                                          console.log('empty!');
+                                        }
+                                      }
+                                        }
+                                        onEndEditing={() => {
+                                        if (this.state.password==''){
+                                          this.setState({changePassword:false})
+                                          console.log('endEditing');
+                                        }
+                                      }}
                                     />
                                 </View>
-                                <View style={styles.inputContainer}>
+                                <View style={[styles.inputContainer,{borderColor: this.state.conPasswordBorder}]}>
                                     <TextInput style={styles.inputs}
                                         placeholder="تأكيد كلمة المرور"
                                         secureTextEntry={true}
                                         underlineColorAndroid='transparent'
+                                        onChangeText={(confPassword) => {
+                                          this.setState({confPassword})
+                                          this.setState({conPasswordBorder: '#3E82A7'})
+                                          this.setState({passError: 'none'})
+                                          this.setState({errorMsgVisibilty: 'none'})
+                                          
+                                        } }
+                                        onEndEditing={(confPassword) =>{this.identicalPass(confPassword)} }
                                     />
                                 </View>
                                 <Text style={styles.perInfo}>──── غيرها    ────</Text> 
+
                                 <View style={styles.inputContainer}>
                                     <TextInput style={styles.inputs}
                                         placeholder="الحد الائتماني للفاتورة"
-                                        secureTextEntry={true}
+                                        keyboardType='numeric'
+                                        onChangeText={(text) => { 
+                                          this.setState({amount: text}) 
+                                          this.setState({errorMsgVisibilty:'none'})}}
                                         underlineColorAndroid='transparent'
+                                        value={
+                                          this.state.amount==0?'':this.state.amount
+                                         }
                                     />
                                 </View>
-                                <TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} onPress={()=>{this.props.navigation.navigate('location')}}  >
+                                <TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} 
+                                onPress={()=>{this.props.navigation.navigate('location', {id : this.state.uID,
+                                                                                      updateData: this.updateData})}}  >
                                     <Text style={styles.addLocationText}> إضافة موقع</Text>
                                 </TouchableHighlight>
 
                                 <View>
                                     <Text style={styles.AnalysisText}>  تحليل التحركات </Text>
-                                </View>
-                                <View style={styles.AnalysisButtonContainer}>
-                                    <TouchableHighlight  style={[styles.AnalysisButton]} >
-                                        <Text style={styles.subAnalysisText} > تفعيل </Text>
-                                    </TouchableHighlight>
+
                                 </View>
 
-                                <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} >
+                                <View style={styles.AnalysisButtonContainer}>
+                              
+                                <FlipToggle
+                                
+                                alignSelf={'flex-end'}
+                                value={this.state.isActive}
+                                buttonWidth={75}
+                                buttonHeight={25}
+                                buttonRadius={50}
+                                onLabel={'مفتوح'}
+                                offLabel={'مغلق '}
+                                buttonOnColor={'#9acd32'}
+                                buttonOffColor={'#d3d3d3'}
+                                labelStyle={{ color: 'grey', fontSize: 12 }}
+                                borderColor={'#6FA0AF'}
+                                sliderOnColor={'#3E82A7'}
+                                sliderOffColor={'#3E82A7'}
+                                onToggle={(value) => {
+                                  this.setState({isActive:value })
+                                  console.log("on toggle value is "+value)
+                                  /*
+
+                                 this.state.isActive = value;
+
+                                 firebase
+                                 .database()
+                                 .ref('mgnUsers/'+ this.state.uID)
+                                  .update({isActive: this.state.isActive})*/
+                                }}
+                                
+                                  />
+
+                                </View>
+
+                                <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={this.editProfile} >
                                     <Text style={styles.signUpText}>  حفظ </Text>
                                 </TouchableHighlight>
 
@@ -213,11 +505,29 @@ profileScreen.navigationOptions = ({navigation})=> ({
 
   ),*/
 
-  headerLeft:()=>(
-    <TouchableOpacity onPress={this.handelSignOut} style={{marginLeft:15}}>
+  //()=>{console.log("login button")}
+//()=>{this.handelSignOut}
+  headerLeft: navigation.state.params && navigation.state.params.headerLeft
+ /* ()=>(
+    <TouchableOpacity onPress={()=>{        
+      console.log("inside");
+    try{
+      
+     firebase
+      .auth()
+      .signOut()
+      .then(function(){
+      console.log(this.state);
+
+      navigation.navigate('WelcomeStackNavigator')
+      })
+      .catch(error => console.log(error.message))
+
+      }catch(e){console.log(e.message)}}} 
+                                  style={{marginLeft:15}}>
       <SimpleLineIcons name="logout" size={24} color='white' />
     </TouchableOpacity>
-  ),
+  ),*/,
   headerStyle: {
     backgroundColor: '#8BC4D0',
     color:'white'
@@ -326,7 +636,12 @@ const styles = StyleSheet.create({
  
   },
  
-
+  warning:{
+    color: 'red',
+    fontSize:12,
+    marginBottom:10,
+    textAlign:'center'
+  },
  
   buttonContainer: {
    height:45,
@@ -334,27 +649,31 @@ const styles = StyleSheet.create({
    justifyContent: 'center',
    alignItems: 'center',
    marginBottom:10,
+   marginTop:20,
    width:250,
    borderRadius:30,
    shadowOpacity: 0.17
   },
 
   AnalysisButtonContainer:{
-    height:45,
-    width:70,
+    
+   // height:45,
+   // width:70,
  //borderWidth:1,
- marginRight:150,
- marginBottom:10,
+ //marginRight:500,
+ //marginBottom:100,
  //backgroundColor:'#3E82A7',
  //backgroundColor: this.sate.active?'#3E82A7':'red',
    //height:45,
    //flexDirection: 'row',
    //justifyContent: 'center',
    //alignItems: 'center',
-   //marginBottom:10,
+   marginBottom:5,
+   marginTop:10,
+   marginRight:150,
    //width:100,
-   borderRadius:20,
-   shadowOpacity: 0.17
+  // borderRadius:20,
+   //shadowOpacity: 0.17
   },
 
   AnalysisButton:{
