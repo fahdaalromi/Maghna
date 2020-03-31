@@ -48,7 +48,7 @@ export default class reportScreen extends Component {
         super(props);
         this.state = {
             show_shape: false,
-            profile_percent: 40,
+            profile_percent: 50,
             profile_color: '#56b058',
 
         }
@@ -56,45 +56,125 @@ export default class reportScreen extends Component {
     
     
     async componentDidMount(){
+       // this.getAudio();
         this.sendSpeechNotification();
         this.calculateTotalConsuming();
         this.colorChange(); 
-        this.readTheReport();
+
     }
 
-    async readTheReport(){
-        // Page Info 
-        const playbackObject = await Audio.Sound.createAsync(
-            { uri: '' },
-            { shouldPlay: true }
-          ); 
-    }
+
+
+    async getAudio () {  
+ // Read report
+
+        let fileURL = '';
+        const text =  'عزيزي المستخدم ';
+    
+
+        axios.post(`http://45.32.251.50`,  {text} )
+          .then(res => {
+             console.log("----------------------xxxx--------------------------"+res.data);
+            fileURL = res.data;
+                console.log(fileURL);
+                this.playAudio(fileURL);
+
+          })
+        }
+        async playAudio(fileURL){
+        
+
+          await Audio.setAudioModeAsync({
+            interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+           playsInSilentModeIOS: true,
+           playsInSilentLockedModeIOS: true,
+           shouldDuckAndroid: true,
+           interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+           playThroughEarpieceAndroid: false,
+           staysActiveInBackground: true,
+         });
+   
+   
+   
+   
+      
+         // OR
+         const playbackObject = await Audio.Sound.createAsync(
+           { uri: fileURL },
+           { shouldPlay: true }
+         );
+
+          
+    
+    //http://localhost/fiels/output-0.6839748394381258.mp3
+      }
+
     async sendSpeechNotification(){
+ 
+        // Send audio request 
+        if(this.state.profile_percent >= 50){  
+  
+            let fileURL = '';    
+            const text =  ' عزيزي المُسْتَخْدِم إجْمِالِي إسْتِهْلاكِكْ هُوَ خمسُووووون بِالمِئَةِ مِن مُجْمَلِ فَاتُورَتِكَ المُدخَل وَتَفْصِيْلْ الْإسْتِهْلاكْ هُوِ  الإنَارِه سِبْون بِالمِئِهْ التِّلْفِازْ صِفْرْ بِالمِئِهْ ';
+            axios.post(`http://45.32.251.50`,  {text} )
+              .then(res => {
+                 console.log("----------------------xxxx--------------------------"+res.data);   
+                fileURL = res.data;
+       
+                    this.playAudio(fileURL); 
+    
+              })
+         }
+
+         if(this.state.profile_percent >= 79){  
+  
+            let fileURL = '';    
+            const text =  'ِعزيزي المُسْتَخْدِم لَقَدْ إستَهْلَكْتْ ثمانوون بِالمِئَةِ مِن مُجْمَلِ فَاتُورَتِكَ المُدخَل';
+          
+            axios.post(`http://45.32.251.50`,  {text} )
+              .then(res => {
+                 console.log("----------------------xxxx--------------------------"+res.data);   
+                fileURL = res.data;
+       
+                    this.playAudio(fileURL); 
+    
+              })
+         }k
 
 
-        if(this.state.profile_percent >= 50){ 
-            const playbackObject = await Audio.Sound.createAsync(
-                { uri: '' },
-                { shouldPlay: true }
-              );
+         if(this.state.profile_percent >= 100){  
+  
+            let fileURL = '';    
+            const text =  'ِعزيزي المُسْتَخْدِم لَقَدْ إستَهْلَكْتْ 100 بِالمِئَةِ مِن مُجْمَلِ فَاتُورَتِكَ المُدخَل';
+          
+            axios.post(`http://45.32.251.50`,  {text} )
+              .then(res => {
+                 console.log("----------------------xxxx--------------------------"+res.data);   
+                fileURL = res.data;
+       
+                    this.playAudio(fileURL); 
+    
+              })
          }
     }
 
     calculateTotalConsuming(){
-        let workingHours;
+  
+
+        let workingHours = this.props.state.curTime;
         let totalConsuming;
         let watts=40;
+         // in this screen I want to use the timer data which is the duration 
 
-         // workingHours=TimerData/60*60
         let kwh= watts*workingHours/1000;
      
 
 
-        if(kwhh > 6000){ 
+        if(kwh > 6000){ 
             totalConsuming=kwh*0.3*100;
          }
          if(kwh <= 6000){ 
-            totalConsuming=kwh*0.18*100;
+            totalConsuming=kwh*0.18*100; 
          }
 
          this.setState.profile_percent = totalConsuming;

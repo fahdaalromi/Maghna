@@ -11,6 +11,8 @@ import { MonoText } from '../components/StyledText';
 import {LinearGradient} from 'expo-linear-gradient';
 import STTButton from '../STTButton'
 import axios from 'axios'
+import * as FileSystem from 'expo-file-system';
+import * as Permissions from 'expo-permissions';
 
 export default class  supdevicesScreen extends Component {
 
@@ -18,9 +20,8 @@ export default class  supdevicesScreen extends Component {
     super(props);
     this.state = {
 
-    isLambConnected : '',
-    isLambOn : '' 
-
+      isLambConnected :'غير متصله',
+      isLambOn : 'مغلقه' 
     } 
 }
   async componentDidMount(){

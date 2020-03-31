@@ -6,6 +6,11 @@ import * as FileSystem from 'expo-file-system';
 import * as Permissions from 'expo-permissions';
 import axios from 'axios'
 import { Audio } from 'expo-av';
+import './global';
+
+
+// Here I use this time, I open the package 
+const rnTimer = require('react-native-timer');
 
 const recordingOptions = {
   android: {
@@ -30,37 +35,51 @@ const recordingOptions = {
 
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 40,
-    alignItems: 'center',
-  },
-  button: {
-    backgroundColor: '#1e88e5',
-    paddingVertical: 20,
-    width: '90%',
-    alignItems: 'center',
-    borderRadius: 5,
-    padding: 8,
-    marginTop: 20,
-  },
-  text: {
-    color: '#fff',
-  }
-})
-
+    container: {
+      marginTop: 10,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+    },
+    button: {
+      backgroundColor: '#1e88e5',
+      paddingVertical: 10,
+      width: '20%',
+      alignItems: 'center',
+      borderRadius: 5,
+      padding: 8,
+      marginTop: 5,
+    },
+    text: {
+      color: '#fff',
+    }
+  }) 
 
 
 export default class SpeechToTextButton extends Component {
     constructor(props) {
       super(props)
       this.recording = null
+
       this.state = {
         isFetching: false,
         isRecording: false,
         transcript: '',
+        //This is the dueation 
+        //this variable here in stt button I use to store the duration in seconds in
+        curTime : 0
       }
+
     }
 
+    onTimer() {
+      this.setState(prevState => {
+        // change here ? it works! but the stopping
+        return {curTime : prevState.curTime + 1};
+      }, function (){
+ console.log(this.state.curTime);
+   
+      });
+    }
 
 
   async  wait(ms) {
@@ -73,15 +92,26 @@ export default class SpeechToTextButton extends Component {
   
   
   async componentDidMount(){
-    
+
       while(true){
       await this.startRecording()
       await this.wait(3000);
        await this.stopRecording();
        await this.getTranscription();
        await this.resetRecording();
+    }    
+  }
+  deleteRecordingFile = async () => {
+    try {
+      const info = await FileSystem.getInfoAsync(this.recording.getURI())
+      await FileSystem.deleteAsync(info.uri)
+    } catch (error) {
+      console.log('There was an error deleting recorded file', error)
     }
   }
+// I need this 
+
+
   deleteRecordingFile = async () => {
     try {
       const info = await FileSystem.getInfoAsync(this.recording.getURI())
@@ -120,30 +150,53 @@ export default class SpeechToTextButton extends Component {
        transcript
       } = this.state
     this.setState({ isFetching: false })
-    //turning on the light 
 
-    const timer = require('react-native-timer');
+
+   if(this.state.timer == 2592000){
+    clearInterval(myInterval);
+    this.setState(() => {
+      return {
+        
+        countDown : false,
+      };
+    });
+
+    }
+
 
     if(    transcript == "تشغيل النور" ){
-        timer.setInterval( fn, () => {
-            this.setState({
-              second: this.state.second + 1,
-           })          });
+      //here the start 
+      var myInterval;
+   this.onTimer = this.onTimer.bind(this);
+    myInterval=setInterval(this.onTimer, 1000);
 
-  axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
+
+
+axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
   {'on':true} )
 .then(res => res.json())
-.then(res => {
+.then(res => {RTCCertificate
   console.log(res)
 }) 
 .catch(error => {console.log(error);
 })
     }
-// Turn off the light 
 
     if(    transcript == "اطفاء النور" ){
-        timer.clearInterval(this.timer);
+// Here the stopping 
 
+console.log('Hi');
+    
+		this.setState(prevState => {
+		  return {
+			countDown : false,
+		  };
+		});
+      clearInterval(myInterval);
+  
+  
+  
+    
       axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
       {'on':false} )
     .then(res => res.json())
@@ -157,6 +210,7 @@ export default class SpeechToTextButton extends Component {
         if(    transcript == "التعليمات" ){
           this.props.navigation.navigate('instructions');
             }
+
 
   }
 
