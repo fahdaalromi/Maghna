@@ -101,7 +101,7 @@ measurementId: "G-R3BQPCTCTM"
     else {
       this.setState({emailBorders:'#91b804'})
     }
-  }//end validate phone number
+  }//end validate
 
 
   handleLogin = () => {
