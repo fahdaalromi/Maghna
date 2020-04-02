@@ -38,7 +38,7 @@ export default class reportScreen extends Component {
 
         const firebaseConfig = {
       
-/*
+
     apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
     authDomain: "maghnaapplication.firebaseapp.com",
     databaseURL: "https://maghnaapplication.firebaseio.com",
@@ -47,7 +47,8 @@ export default class reportScreen extends Component {
     messagingSenderId: "244460583192",
     appId: "1:244460583192:web:f650fa57532a682962c66d",
 
-*/
+
+/*
 apiKey: "AIzaSyBUBKLW6Wrk48NQ_TcgUerucTZFphw6l-c",
 authDomain: "maghna-62c55.firebaseapp.com",
 databaseURL: "https://maghna-62c55.firebaseio.com",
@@ -56,7 +57,7 @@ storageBucket: "maghna-62c55.appspot.com",
 messagingSenderId: "21464439338",
 appId: "1:21464439338:web:8c6bb486fb3673e5d14153",
 measurementId: "G-R3BQPCTCTM"
-     
+     */
         };
       
       

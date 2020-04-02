@@ -1,12 +1,52 @@
 import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AppNavigator from './navigation/AppNavigator';
+//import Header from './components/Header';
+import STTButton from './STTButton';
+import global from './global';
+import { AsyncStorage } from 'react-native';
+
 
 export default function App(props) {
+const [displayMic, setDisplayMic] = useState(false);
+
+useEffect (()=>{
+ },[])
+
+ useEffect (()=>{
+  
+  retrieveLoginStatus();
+  console.log('displayMic is:'+displayMic)
+ })
+
+
+
+  async function retrieveLoginStatus() {
+    if(displayMic){return;
+    }
+    
+   
+         try{
+  let display= await AsyncStorage.getItem("loggedIn");
+  
+  if (display=='friday'){
+    console.log('11- were inside retrieving from asyncStorage and display='+display)
+    setDisplayMic(true)
+  }
+
+  
+          
+             } 
+              catch(e) {
+            console.log('error retrieving login status')
+             }
+            }
+
+
   const [isLoadingComplete, setLoadingComplete] = useState(false);
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
@@ -20,13 +60,19 @@ export default function App(props) {
   } else {
     return (
       <View style={styles.container}>
+           {/* <Header/> */}
+       
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <AppNavigator />
+       
+        <View style={{position:'absolute', display:displayMic?'flex':'none', zIndex:1000,bottom: 85, right:20}}>
+      <STTButton/>
+    </View>
       </View>
-    );
+     );
   }
 }
-
+//await return AsyncStorage.getItem("loggedIn")
 async function loadResourcesAsync() {
   await Promise.all([
     Asset.loadAsync([

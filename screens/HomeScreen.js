@@ -41,7 +41,7 @@ export default class HomeScreen extends Component {
 
     const firebaseConfig = {
 
-/*
+
       apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
       authDomain: "maghnaapplication.firebaseapp.com",
       databaseURL: "https://maghnaapplication.firebaseio.com",
@@ -50,7 +50,8 @@ export default class HomeScreen extends Component {
       messagingSenderId: "244460583192",
       appId: "1:244460583192:web:f650fa57532a682962c66d",
 
-*/
+
+/*
       apiKey: "AIzaSyBUBKLW6Wrk48NQ_TcgUerucTZFphw6l-c",
       authDomain: "maghna-62c55.firebaseapp.com",
       databaseURL: "https://maghna-62c55.firebaseio.com",
@@ -59,6 +60,7 @@ export default class HomeScreen extends Component {
       messagingSenderId: "21464439338",
       appId: "1:21464439338:web:8c6bb486fb3673e5d14153",
       measurementId: "G-R3BQPCTCTM"
+      */
     };
    
 
@@ -478,27 +480,7 @@ checkData= async  ()=>{
                     <MaterialCommunityIcons style={{ left:17, paddingLeft: -40, paddingRight:5, paddingTop: 9, bottom: 90, top: -10}} name="weather-night" size={70} color= {toggle4?'#6FA0AF':'white'} ></MaterialCommunityIcons>
                     <Text style={{ left:5, paddingLeft: -40, paddingRight:5, bottom: 90, top: -10, color: toggle4?'#6FA0AF':'white' , fontWeight: 'bold', fontSize:13}}>الوضع المسائي</Text>
                 </TouchableOpacity>
-                
 
-                <View style={styles.container}>
-        <TouchableOpacity
-          style={styles.button}
-          onPressIn={this.startRecording}
-          onPressOut={this.handleOnPressOut}
-        >
-
-            
-          {isFetching && <ActivityIndicator color="#ffffff" />}
-          {!isFetching && 
-            <Text style={styles.text}>
-              {isRecording ? 'انا اسمعك فضلاً تحدث...' : 'فهمت!'}
-            </Text>
-          }
-        </TouchableOpacity>
-        <Text>
-          {`${transcript}`}
-        </Text>
-      </View>
                 
                 <Image 
                     style={{ width: 440, height: 360, bottom: -20 }}
