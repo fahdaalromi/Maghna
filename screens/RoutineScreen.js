@@ -11,12 +11,22 @@ import { ScrollView,
  Alert,
  ImageBackground,
  Platform,
- Modal
+ Modal, 
+ Linking,
+ AppState,
 } from 'react-native';
 import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons, Entypo, FontAwesome} from "@expo/vector-icons";
 import { Root, Popup } from 'popup-ui'
 import { Ionicons} from '@expo/vector-icons';
 import * as firebase from 'firebase';
+import * as TaskManager from 'expo-task-manager';
+import * as Location from 'expo-location';
+import GeoFencing from 'react-native-geo-fencing';
+import { AsyncStorage } from 'react-native';
+import axios from 'axios';
+import Permissions from 'expo';
+import IntentLauncherAndroid from 'expo';
+import Modal from 'react-native-modal';
 
 
 export default class RoutineScreen extends Component {
@@ -73,12 +83,25 @@ export default class RoutineScreen extends Component {
           date_picker_display: false,
           hours_array: [],
           minute_array: [],
+          isLocationModalVisible:false,
+          appState: AppState.currentState,
         }
     }
-    
+    componentWillUnmount(){
+        AppState.removeEventListener('change',this.handleAppStateChange)  ;
+
+    }
+    handleAppStateChange=(nextAppState)=>{
+        if(this.state.appState.match(/inactive|background/)&&
+        nextAppState==='active'){
+            console.log('App has come to the foreground');
+            this._get
+        }
+        this.setState({appState: nextAppState});
+    }
     UNSAFE_componentWillMount(){
     
-      const firebaseConfig = {
+    /* const firebaseConfig = {
     
         apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
         authDomain: "maghnaapplication.firebaseapp.com",
@@ -92,17 +115,94 @@ export default class RoutineScreen extends Component {
     
       if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
-    }
+    }*/
+      AppState.addEventListener('change',this.handleAppStateChange)  ;
     
     }
-    componentDidMount(){
-          
+   async componentDidMount(){
+        const firebaseConfig = {
+
+
+            apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
+            authDomain: "maghnaapplication.firebaseapp.com",
+            databaseURL: "https://maghnaapplication.firebaseio.com",
+            projectId: "maghnaapplication",
+            storageBucket: "maghnaapplication.appspot.com",
+            messagingSenderId: "244460583192",
+            appId: "1:244460583192:web:f650fa57532a682962c66d",}
+
+
       this.props.navigation.setParams({
         headerLeft: (<TouchableOpacity onPress={this.handelSignOut}>
            <SimpleLineIcons name="logout" size={24} color='white' style={{marginLeft:15}} />
         </TouchableOpacity>)
     })
+    var lat;
+    var lng;
+
+    firebase.database().ref('mgnUsers/'+firebase.auth().currentUser.uid).once('value',(snap)=>{ 
+       
+        lat= snap.val().latitude;
+         lng= snap.val().longitude;
+    
+        
+            })
+
+
+await AsyncStorage.setItem('latPoint',lat);
+await AsyncStorage.setItem('lngPoint',lng);
+           
+try{
+
+
+let { status} = await Location.requestPermissionsAsync();
+
+
+if(status !=='granted'){
+
+}
+else {
+   // await Location.startLocationUpdatesAsync('locationTask', {
+    //    accuracy: Location.Accuracy.Balanced,
+    //  });
+    Location.startGeofencingAsync('locationTask',[
+        {
+            latitude: await AsyncStorage.getItem('latPoint'),
+            longitude:  await AsyncStorage.getItem('lngPoint'),
+            radius
+        }
+    ])
+
     }
+    }
+    catch(error){
+       // let status =Location.getProviderStatusAsync();
+        if(!Location.hasServicesEnabledAsync()){
+           this.setState({isLocationModalVisible: true});
+
+
+        }
+
+    }
+      
+    }
+
+    
+   static createPolygon = async () => {
+
+    const latValue= await AsyncStorage.getItem('latPoint');
+    const lngValue= await AsyncStorage.getItem('lngPoint');
+const polygon=[
+    { lat: latValue+50, lng: lngValue+50 },
+    { lat: latValue-50, lng: lngValue+50 },
+    { lat: latValue-50, lng: lngValue-50 },
+    { lat: latValue+50, lng: lngValue-50},
+    { lat: latValue+50, lng: lngValue+50 }
+]
+return polygon
+
+    }
+
     
     handelSignOut =() =>{
       var {navigation}=this.props;
@@ -312,11 +412,41 @@ export default class RoutineScreen extends Component {
         })
     }
 
+    openSetting =()=>{
+        if(Platform.OS=='ios')
+        {
+            Linking.openURL('app-settings:')
+        }
+        else{
+           IntentLauncherAndroid.startActivityAsync(
+               IntentLauncherAndroid.ACTION_LOCATION_SOURCE_SETTINGS
+           ) 
+        }
+        this.setState({openSetting: false})
+
+    }
+
     render() {
         return (
         
             <View style={styles.container}>
-               
+            <Modal 
+            onModalHide={this.state.openSetting?this.openSetting:undefined}
+
+
+            isVisible={this.state.isLocationModalVisible}
+               >
+               <View style={{
+                   height:300,
+                width: 300,
+            backgroundColor:'white',
+        alignItems:'center',
+    justifyContent:'center'}}>
+    <Button
+    onPress={()=> this.setState({isLocationModalVisible:false
+        ,openSetting:true})}
+     title="Enable Location Services"/>
+    </View>
 
                
                 <Modal animationType="slide"
@@ -834,6 +964,48 @@ export default class RoutineScreen extends Component {
         );
     }
 }
+
+
+TaskManager.defineTask('locationTask', async ({ data, error }) => {
+    if (error) {
+      // Error occurred - check `error.message` for more details.
+      return;
+    }
+    if (data) {
+      const { locations } = data;
+      console.log("Location"+locations )
+      const polygon = RoutineScreen.createPolygon();
+      const point= {
+          lat: locations.coords.latitude,
+          lng: locations.coords.longitude
+      };
+      GeoFencing.containsLocation(point,polygon)
+      .then(() =>
+      firebase.database().ref('routine/').once('value',(snap)=>{ 
+          snap.forEach((child)=>{
+              if(child.val().userID===firebase.auth().currentUser.uid )
+              if(child.val().name==='backHome'||hild.val().name==='leaveHome' )
+              if(child.val().actionID===001){
+
+                axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
+                {'on':true} )
+              .then(res => res.json())
+              }
+              else{
+              axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
+              {'on':false} )
+            .then(res => res.json())
+              }
+           
+     
+     
+     
+      // do something with the locations captured in the background
+      //console.log('point is within polygon');
+         } )
+        }))
+        }
+    });
 
 RoutineScreen.navigationOptions = ({navigation})=> ({
 
