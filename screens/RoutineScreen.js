@@ -26,7 +26,7 @@ import { AsyncStorage } from 'react-native';
 import axios from 'axios';
 import Permissions from 'expo';
 import IntentLauncherAndroid from 'expo';
-import Modal from 'react-native-modal';
+//import Modal from 'react-native-modal';
 
 
 export default class RoutineScreen extends Component {
@@ -113,7 +113,7 @@ export default class RoutineScreen extends Component {
     appId: "1:244460583192:web:f650fa57532a682962c66d",
 
 */
-apiKey: "AIzaSyBUBKLW6Wrk48NQ_TcgUerucTZFphw6l-c",
+/*apiKey: "AIzaSyBUBKLW6Wrk48NQ_TcgUerucTZFphw6l-c",
 authDomain: "maghna-62c55.firebaseapp.com",
 databaseURL: "https://maghna-62c55.firebaseio.com",
 projectId: "maghna-62c55",
@@ -143,7 +143,9 @@ measurementId: "G-R3BQPCTCTM"
             messagingSenderId: "244460583192",
             appId: "1:244460583192:web:f650fa57532a682962c66d",}
 
-
+           if (!firebase.apps.length) {
+               firebase.initializeApp(firebaseConfig);
+            }
       this.props.navigation.setParams({
         headerLeft: (<TouchableOpacity onPress={this.handelSignOut}>
            <SimpleLineIcons name="logout" size={24} color='white' style={{marginLeft:15}} />
@@ -153,16 +155,16 @@ measurementId: "G-R3BQPCTCTM"
     var lng;
 
     firebase.database().ref('mgnUsers/'+firebase.auth().currentUser.uid).once('value',(snap)=>{ 
-       
-        lat= snap.val().latitude;
-         lng= snap.val().longitude;
+       console.log("inside database with problem")
+      lat= snap.val().latitude;
+      lng= snap.val().longitude;
     
         
-            })
+          })
 
 
-await AsyncStorage.setItem('latPoint',lat);
-await AsyncStorage.setItem('lngPoint',lng);
+ // await AsyncStorage.setItem('latPoint',lat);
+//await AsyncStorage.setItem('lngPoint',lng);
            
 try{
 
@@ -177,27 +179,31 @@ else {
    // await Location.startLocationUpdatesAsync('locationTask', {
     //    accuracy: Location.Accuracy.Balanced,
     //  });
+    if(!(lat==='0'&& lng==='0')){
     Location.startGeofencingAsync('locationTask',[
         {
-            latitude: await AsyncStorage.getItem('latPoint'),
-            longitude:  await AsyncStorage.getItem('lngPoint'),
-            radius
+            "identifier": "A",
+            "latitude": lat,//await AsyncStorage.getItem('latPoint'),
+            "longitude": lng, //await AsyncStorage.getItem('lngPoint'),
+            "notifyOnEnter": true,
+            "notifyOnExit": true,
+            "radius":100
         }
     ])
-
+}
     }
-    }
+   }
     catch(error){
        // let status =Location.getProviderStatusAsync();
-        if(!Location.hasServicesEnabledAsync()){
-           this.setState({isLocationModalVisible: true});
+      //  if(!Location.hasServicesEnabledAsync()){
+        //   this.setState({isLocationModalVisible: true});
 
 
-        }
+    }
 
     }
       
-    }
+  // }
 
     
    static createPolygon = async () => {
@@ -442,23 +448,7 @@ return polygon
         return (
         
             <View style={styles.container}>
-            <Modal 
-            onModalHide={this.state.openSetting?this.openSetting:undefined}
-
-
-            isVisible={this.state.isLocationModalVisible}
-               >
-               <View style={{
-                   height:300,
-                width: 300,
-            backgroundColor:'white',
-        alignItems:'center',
-    justifyContent:'center'}}>
-    <Button
-    onPress={()=> this.setState({isLocationModalVisible:false
-        ,openSetting:true})}
-     title="Enable Location Services"/>
-    </View>
+               
 
                
                 <Modal animationType="slide"
@@ -506,8 +496,10 @@ return polygon
                                         </ScrollView>
                                     </View>
                                 </View>
-                                <View style = {{width: '100%', justifyContent: 'space-around', marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton,styles.timersButton , {color: '#8abbc6', marginTop: 0}]} onPress={() => this.setState({date_picker_display: false})} >
+                                <View s
+                                tyle = {{width: '100%', justifyContent: 'space-around', marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
+                                    <TouchableHighlight 
+                                    style={[styles.buttonContainer, styles.signupButton,styles.timersButton , {color: '#8abbc6', marginTop: 0}]} onPress={() => this.setState({date_picker_display: false})} >
                                         <Text style={styles.signUpText ,{color: '#8abbc6',}}> حفظ </Text>
                                     </TouchableHighlight>
                                     <TouchableHighlight style={[styles.buttonContainer, styles.signupButton, styles.timersButton ,{marginTop: 0}]} onPress={() => {this.setState({date_picker_display: false}); this.init_hourminute_array()}} >
@@ -605,6 +597,7 @@ return polygon
                                     
                                     )
                                 }
+                            
                                 </ScrollView>
                                 <View style = {{width: '100%', flexDirection: 'row', justifyContent: 'space-around'}}>
                                     <TouchableHighlight style={[styles.buttonContainer, styles.sTButton,{color: '#8abbc6',}]} onPress={() => this.save_button_action(0)} >
@@ -724,9 +717,9 @@ return polygon
                                     <TouchableHighlight style={[styles.buttonContainer, styles.sTButton,{color: '#8abbc6'}]} onPress={() => this.save_button_action(1)} >
                                         <Text style={[styles.signUpText,{color: '#8abbc6',}]}> حفظ </Text>
                                     </TouchableHighlight>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.setState({date_picker_display: true})} >
+                                    {/* <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.setState({date_picker_display: true})} >
                                         <Text style={styles.signUpText}> المؤقت </Text>
-                                    </TouchableHighlight>
+                                    </TouchableHighlight> */}
                                 </View>
                             </View>
                         }
@@ -826,9 +819,9 @@ return polygon
                                     <TouchableHighlight style={[styles.buttonContainer, styles.sTButton,{color: '#8abbc6',}]} onPress={() => this.save_button_action(2)} >
                                         <Text style={styles.signUpText,{color: '#8abbc6',}}> حفظ </Text>
                                     </TouchableHighlight>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.setState({date_picker_display: true})} >
+                                    {/* <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.setState({date_picker_display: true})} >
                                         <Text style={styles.signUpText}> المؤقت </Text>
-                                    </TouchableHighlight>
+                                    </TouchableHighlight> */}
                                 </View>
                             </View>
                         }
@@ -975,49 +968,84 @@ return polygon
 
         );
     }
+
+
 }
+    
 
 
 TaskManager.defineTask('locationTask', async ({ data, error }) => {
     if (error) {
       // Error occurred - check `error.message` for more details.
+      console.log("I am at defienTask with error" );
       return;
     }
     if (data) {
       const { locations } = data;
-      console.log("Location"+locations )
-      const polygon = RoutineScreen.createPolygon();
-      const point= {
+
+   await   console.log("I am at defienTask with data" );
+    await  console.log("Location "+ locations );
+     await console.log("data region "+data.region.state);
+     // const polygon = RoutineScreen.createPolygon();
+     /* const point= {
           lat: locations.coords.latitude,
           lng: locations.coords.longitude
-      };
-      GeoFencing.containsLocation(point,polygon)
-      .then(() =>
+      };*/
+    //  GeoFencing.containsLocation(point,polygon)
+     // .then(() =>
       firebase.database().ref('routine/').once('value',(snap)=>{ 
           snap.forEach((child)=>{
               if(child.val().userID===firebase.auth().currentUser.uid )
-              if(child.val().name==='backHome'||hild.val().name==='leaveHome' )
-              if(child.val().actionID===001){
+              if (data.region.state===1){   
+                console.log("data region "+data.region.state);
+                if(child.val().name==='backHome')
+                {
+                    if(child.val().actionID==='001'){
 
-                axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
-                {'on':true} )
-              .then(res => res.json())
+                        console.log("the light must be turend on user entern")
+                     //   axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
+                     //   {'on':true} )
+                    // .then(res => res.json())
+                      }
+                      else {
+                        console.log("the light must be turend off user entern")
+                     //   axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
+                     //   {'on':false} )
+                    //  .then(res => res.json())
+                      }
+                }
+
               }
-              else{
-              axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
-              {'on':false} )
-            .then(res => res.json())
+              if (data.region.state===2){
+               // console.log("the light must be turend on user leave before")
+                  if(child.val().name==='leaveHome' ){
+                    console.log("inside leave home")
+                    if(child.val().actionID==='001'){
+                        console.log("the light must be turend on user leave")
+                      // axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
+                       // {'on':true} )
+                     // .then(res => res.json())
+                      }
+                      else {
+                        console.log("the light must be turend off user leave")
+                       // axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
+                       // {'on':false} )
+                     // .then(res => res.json())
+                      }
+
+                  }
+
+
               }
-           
-     
-     
+              
      
       // do something with the locations captured in the background
       //console.log('point is within polygon');
          } )
-        }))
+        })
+       // )
         }
-    });
+    }); 
 
 RoutineScreen.navigationOptions = ({navigation})=> ({
 

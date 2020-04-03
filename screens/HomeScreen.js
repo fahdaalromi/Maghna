@@ -41,8 +41,8 @@ export default class HomeScreen extends Component {
 
     const firebaseConfig = {
 
-/*
-      apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
+
+     /* apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
       authDomain: "maghnaapplication.firebaseapp.com",
       databaseURL: "https://maghnaapplication.firebaseio.com",
       projectId: "maghnaapplication",
@@ -50,8 +50,8 @@ export default class HomeScreen extends Component {
       messagingSenderId: "244460583192",
       appId: "1:244460583192:web:f650fa57532a682962c66d",
 
-*/
-      apiKey: "AIzaSyBUBKLW6Wrk48NQ_TcgUerucTZFphw6l-c",
+    };*/
+     apiKey: "AIzaSyBUBKLW6Wrk48NQ_TcgUerucTZFphw6l-c",
       authDomain: "maghna-62c55.firebaseapp.com",
       databaseURL: "https://maghna-62c55.firebaseio.com",
       projectId: "maghna-62c55",
@@ -62,7 +62,7 @@ export default class HomeScreen extends Component {
     };
    
 
-      while(true){
+   /*   while(true){
     await this.startRecording()
     await this.wait(3000);
     await this.stopRecording();
@@ -82,7 +82,7 @@ if(snap.val().isActive)
 
 
 
-    }
+      }*/
   }
 
 

@@ -41,8 +41,8 @@ export default class SignIn extends Component {
 
     const firebaseConfig = {
 
-/*
-    apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
+
+   /* apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
     authDomain: "maghnaapplication.firebaseapp.com",
     databaseURL: "https://maghnaapplication.firebaseio.com",
     projectId: "maghnaapplication",
@@ -51,7 +51,7 @@ export default class SignIn extends Component {
     appId: "1:244460583192:web:f650fa57532a682962c66d",
 
 */
-apiKey: "AIzaSyBUBKLW6Wrk48NQ_TcgUerucTZFphw6l-c",
+ apiKey: "AIzaSyBUBKLW6Wrk48NQ_TcgUerucTZFphw6l-c",
 authDomain: "maghna-62c55.firebaseapp.com",
 databaseURL: "https://maghna-62c55.firebaseio.com",
 projectId: "maghna-62c55",
