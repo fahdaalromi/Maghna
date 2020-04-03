@@ -64,7 +64,7 @@ export default class HomeScreen extends Component {
     };
    
 
-      while(true){
+   /*   while(true){
     await this.startRecording()
     await this.wait(3000);
     await this.stopRecording();
@@ -84,7 +84,7 @@ if(snap.val().isActive)
 
 
 
-    }
+      }*/
   }
 
 

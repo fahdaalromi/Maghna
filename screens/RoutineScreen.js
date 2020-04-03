@@ -11,12 +11,22 @@ import { ScrollView,
  Alert,
  ImageBackground,
  Platform,
- Modal
+ Modal, 
+ Linking,
+ AppState,
 } from 'react-native';
 import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons, Entypo, FontAwesome} from "@expo/vector-icons";
 import { Root, Popup } from 'popup-ui'
 import { Ionicons} from '@expo/vector-icons';
 import * as firebase from 'firebase';
+import * as TaskManager from 'expo-task-manager';
+import * as Location from 'expo-location';
+import GeoFencing from 'react-native-geo-fencing';
+import { AsyncStorage } from 'react-native';
+import axios from 'axios';
+import Permissions from 'expo';
+import IntentLauncherAndroid from 'expo';
+//import Modal from 'react-native-modal';
 
 
 export default class RoutineScreen extends Component {
@@ -73,12 +83,25 @@ export default class RoutineScreen extends Component {
           date_picker_display: false,
           hours_array: [],
           minute_array: [],
+          isLocationModalVisible:false,
+          appState: AppState.currentState,
         }
     }
-    
+    componentWillUnmount(){
+        AppState.removeEventListener('change',this.handleAppStateChange)  ;
+
+    }
+    handleAppStateChange=(nextAppState)=>{
+        if(this.state.appState.match(/inactive|background/)&&
+        nextAppState==='active'){
+            console.log('App has come to the foreground');
+            this._get
+        }
+        this.setState({appState: nextAppState});
+    }
     UNSAFE_componentWillMount(){
     
-      const firebaseConfig = {
+     const firebaseConfig = {
     
 
     apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
@@ -106,16 +129,99 @@ measurementId: "G-R3BQPCTCTM"
       if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
     }
+      AppState.addEventListener('change',this.handleAppStateChange)  ;
     
     }
-    componentDidMount(){
-          
+   async componentDidMount(){
+        const firebaseConfig = {
+
+
+            apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
+            authDomain: "maghnaapplication.firebaseapp.com",
+            databaseURL: "https://maghnaapplication.firebaseio.com",
+            projectId: "maghnaapplication",
+            storageBucket: "maghnaapplication.appspot.com",
+            messagingSenderId: "244460583192",
+            appId: "1:244460583192:web:f650fa57532a682962c66d",}
+
+           if (!firebase.apps.length) {
+               firebase.initializeApp(firebaseConfig);
+            }
       this.props.navigation.setParams({
         headerLeft: (<TouchableOpacity onPress={this.handelSignOut}>
            <SimpleLineIcons name="logout" size={24} color='white' style={{marginLeft:15}} />
         </TouchableOpacity>)
     })
+    var lat;
+    var lng;
+
+    firebase.database().ref('mgnUsers/'+firebase.auth().currentUser.uid).once('value',(snap)=>{ 
+       console.log("inside database with problem")
+      lat= snap.val().latitude;
+      lng= snap.val().longitude;
+    
+        
+          })
+
+
+ // await AsyncStorage.setItem('latPoint',lat);
+//await AsyncStorage.setItem('lngPoint',lng);
+           
+try{
+
+
+let { status} = await Location.requestPermissionsAsync();
+
+
+if(status !=='granted'){
+
+}
+else {
+   // await Location.startLocationUpdatesAsync('locationTask', {
+    //    accuracy: Location.Accuracy.Balanced,
+    //  });
+    if(!(lat==='0'&& lng==='0')){
+    Location.startGeofencingAsync('locationTask',[
+        {
+            "identifier": "A",
+            "latitude": lat,//await AsyncStorage.getItem('latPoint'),
+            "longitude": lng, //await AsyncStorage.getItem('lngPoint'),
+            "notifyOnEnter": true,
+            "notifyOnExit": true,
+            "radius":100
+        }
+    ])
+}
     }
+   }
+    catch(error){
+       // let status =Location.getProviderStatusAsync();
+      //  if(!Location.hasServicesEnabledAsync()){
+        //   this.setState({isLocationModalVisible: true});
+
+
+    }
+
+    }
+      
+  // }
+
+    
+   static createPolygon = async () => {
+
+    const latValue= await AsyncStorage.getItem('latPoint');
+    const lngValue= await AsyncStorage.getItem('lngPoint');
+const polygon=[
+    { lat: latValue+50, lng: lngValue+50 },
+    { lat: latValue-50, lng: lngValue+50 },
+    { lat: latValue-50, lng: lngValue-50 },
+    { lat: latValue+50, lng: lngValue-50},
+    { lat: latValue+50, lng: lngValue+50 }
+]
+return polygon
+
+    }
+
     
     handelSignOut =() =>{
       var {navigation}=this.props;
@@ -325,6 +431,20 @@ measurementId: "G-R3BQPCTCTM"
         })
     }
 
+    openSetting =()=>{
+        if(Platform.OS=='ios')
+        {
+            Linking.openURL('app-settings:')
+        }
+        else{
+           IntentLauncherAndroid.startActivityAsync(
+               IntentLauncherAndroid.ACTION_LOCATION_SOURCE_SETTINGS
+           ) 
+        }
+        this.setState({openSetting: false})
+
+    }
+
     render() {
         return (
         
@@ -377,8 +497,10 @@ measurementId: "G-R3BQPCTCTM"
                                         </ScrollView>
                                     </View>
                                 </View>
-                                <View style = {{width: '100%', justifyContent: 'space-around', marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton,styles.timersButton , {color: '#8abbc6', marginTop: 0}]} onPress={() => this.setState({date_picker_display: false})} >
+                                <View s
+                                tyle = {{width: '100%', justifyContent: 'space-around', marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
+                                    <TouchableHighlight 
+                                    style={[styles.buttonContainer, styles.signupButton,styles.timersButton , {color: '#8abbc6', marginTop: 0}]} onPress={() => this.setState({date_picker_display: false})} >
                                         <Text style={styles.signUpText ,{color: '#8abbc6',}}> حفظ </Text>
                                     </TouchableHighlight>
                                     <TouchableHighlight style={[styles.buttonContainer, styles.signupButton, styles.timersButton ,{marginTop: 0}]} onPress={() => {this.setState({date_picker_display: false}); this.init_hourminute_array()}} >
@@ -476,6 +598,7 @@ measurementId: "G-R3BQPCTCTM"
                                     
                                     )
                                 }
+                            
                                 </ScrollView>
                                 <View style = {{width: '100%', flexDirection: 'row', justifyContent: 'space-around'}}>
                                     <TouchableHighlight style={[styles.buttonContainer, styles.sTButton,{color: '#8abbc6',}]} onPress={() => this.save_button_action(0)} >
@@ -595,9 +718,9 @@ measurementId: "G-R3BQPCTCTM"
                                     <TouchableHighlight style={[styles.buttonContainer, styles.sTButton,{color: '#8abbc6'}]} onPress={() => this.save_button_action(1)} >
                                         <Text style={[styles.signUpText,{color: '#8abbc6',}]}> حفظ </Text>
                                     </TouchableHighlight>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.setState({date_picker_display: true})} >
+                                    {/* <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.setState({date_picker_display: true})} >
                                         <Text style={styles.signUpText}> المؤقت </Text>
-                                    </TouchableHighlight>
+                                    </TouchableHighlight> */}
                                 </View>
                             </View>
                         }
@@ -697,9 +820,9 @@ measurementId: "G-R3BQPCTCTM"
                                     <TouchableHighlight style={[styles.buttonContainer, styles.sTButton,{color: '#8abbc6',}]} onPress={() => this.save_button_action(2)} >
                                         <Text style={styles.signUpText,{color: '#8abbc6',}}> حفظ </Text>
                                     </TouchableHighlight>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.setState({date_picker_display: true})} >
+                                    {/* <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.setState({date_picker_display: true})} >
                                         <Text style={styles.signUpText}> المؤقت </Text>
-                                    </TouchableHighlight>
+                                    </TouchableHighlight> */}
                                 </View>
                             </View>
                         }
@@ -846,7 +969,84 @@ measurementId: "G-R3BQPCTCTM"
 
         );
     }
+
+
 }
+    
+
+
+TaskManager.defineTask('locationTask', async ({ data, error }) => {
+    if (error) {
+      // Error occurred - check `error.message` for more details.
+      console.log("I am at defienTask with error" );
+      return;
+    }
+    if (data) {
+      const { locations } = data;
+
+   await   console.log("I am at defienTask with data" );
+    await  console.log("Location "+ locations );
+     await console.log("data region "+data.region.state);
+     // const polygon = RoutineScreen.createPolygon();
+     /* const point= {
+          lat: locations.coords.latitude,
+          lng: locations.coords.longitude
+      };*/
+    //  GeoFencing.containsLocation(point,polygon)
+     // .then(() =>
+      firebase.database().ref('routine/').once('value',(snap)=>{ 
+          snap.forEach((child)=>{
+              if(child.val().userID===firebase.auth().currentUser.uid )
+              if (data.region.state===1){   
+                console.log("data region "+data.region.state);
+                if(child.val().name==='backHome')
+                {
+                    if(child.val().actionID==='001'){
+
+                        console.log("the light must be turend on user entern")
+                     //   axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
+                     //   {'on':true} )
+                    // .then(res => res.json())
+                      }
+                      else {
+                        console.log("the light must be turend off user entern")
+                     //   axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
+                     //   {'on':false} )
+                    //  .then(res => res.json())
+                      }
+                }
+
+              }
+              if (data.region.state===2){
+               // console.log("the light must be turend on user leave before")
+                  if(child.val().name==='leaveHome' ){
+                    console.log("inside leave home")
+                    if(child.val().actionID==='001'){
+                        console.log("the light must be turend on user leave")
+                      // axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
+                       // {'on':true} )
+                     // .then(res => res.json())
+                      }
+                      else {
+                        console.log("the light must be turend off user leave")
+                       // axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
+                       // {'on':false} )
+                     // .then(res => res.json())
+                      }
+
+                  }
+
+
+              }
+              
+     
+      // do something with the locations captured in the background
+      //console.log('point is within polygon');
+         } )
+        })
+       // )
+        }
+    }); 
 
 RoutineScreen.navigationOptions = ({navigation})=> ({
 

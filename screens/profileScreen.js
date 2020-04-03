@@ -165,8 +165,14 @@ measurementId: "G-R3BQPCTCTM"
 
     editProfile = () => {
 
+
       console.log(this.state.changePassword);
 
+
+      firebase
+      .database()
+      .ref('mgnUsers/'+ this.state.uID)
+       .update({isActive: this.state.isActive})
       // if the user left empty fields
       if (this.state.name == '' || this.state.email == '') {
         console.log('missing field');
@@ -239,7 +245,7 @@ measurementId: "G-R3BQPCTCTM"
               .ref('mgnUsers/'+ this.state.uID)
               .update({longitude : this.state.longitude,})
             }
-
+           
 /*
           if (this.state.name != ''){
             firebase.database()
