@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {
-  StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Platform,
+  StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Platform,TouchableHighlight
 } from 'react-native'
 import * as FileSystem from 'expo-file-system';
 import * as Permissions from 'expo-permissions';
@@ -49,6 +49,18 @@ const styles = StyleSheet.create({
       //padding: 8,
       marginTop: 5,
     },
+    buttonContainer: {
+      height:45,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginBottom:10,
+      width:250,
+      borderRadius:30,
+      shadowOpacity: 0.17,
+      backgroundColor: '#fff',
+   
+     },
     text: {
       color: '#fff',
     }
@@ -265,6 +277,13 @@ console.log('Hi');
 
 
         <View style={styles.container}>
+
+          <TouchableHighlight style={[styles.buttonContainer,]} onPress={()=>console.log("the button is pressed")} >
+
+       <Text style={styles.signUpText}>  إرسال  </Text>
+    
+     </TouchableHighlight>
+
         <TouchableOpacity
           style={styles.button}
           onPressIn={this.startRecording}
