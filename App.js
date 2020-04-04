@@ -2,7 +2,7 @@ import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import React, { useState,useEffect } from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View ,TouchableHighlight,Text} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AppNavigator from './navigation/AppNavigator';
 //import Header from './components/Header';
@@ -12,6 +12,8 @@ import { AsyncStorage } from 'react-native';
 
 
 export default function App(props) {
+
+  
 const [displayMic, setDisplayMic] = useState(false);
 
 useEffect (()=>{
@@ -50,6 +52,7 @@ useEffect (()=>{
   const [isLoadingComplete, setLoadingComplete] = useState(false);
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
+    
     return (
       <AppLoading
         startAsync={loadResourcesAsync}
@@ -58,6 +61,8 @@ useEffect (()=>{
       />
     );
   } else {
+    const varible= <AppNavigator />;
+    console.log(varible)
     return (
       <View style={styles.container}>
            {/* <Header/> */}
@@ -66,7 +71,12 @@ useEffect (()=>{
         <AppNavigator />
        
         <View style={{position:'absolute', display:displayMic?'flex':'none', zIndex:1000,bottom: 85, right:20}}>
-      <STTButton/>
+        <TouchableHighlight style={[styles.buttonContainer,]} onPress={()=>{console.log("hheloo")}} >
+
+<Text style={styles.signUpText}>  إرسال  </Text>
+
+</TouchableHighlight>
+   
     </View>
       </View>
      );
@@ -104,4 +114,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  buttonContainer: {
+    height:45,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom:10,
+    width:250,
+    borderRadius:30,
+    shadowOpacity: 0.17,
+    backgroundColor: '#fff',
+ 
+   },
 });

@@ -7,6 +7,8 @@ import * as Permissions from 'expo-permissions';
 import axios from 'axios'
 import { Audio } from 'expo-av';
 import './global';
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
 
 
 // Here I use this time, I open the package 
@@ -278,7 +280,7 @@ console.log('Hi');
 
         <View style={styles.container}>
 
-          <TouchableHighlight style={[styles.buttonContainer,]} onPress={()=>console.log("the button is pressed")} >
+          <TouchableHighlight style={[styles.buttonContainer,]} onPress={()=>{this.props.navigation.navigate('welcome')}} >
 
        <Text style={styles.signUpText}>  إرسال  </Text>
     

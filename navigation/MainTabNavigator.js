@@ -60,7 +60,6 @@ HomeStack.path = '';
 const ProfileStack = createStackNavigator(
   {
     profile: profileScreen,
-    SignIn:SignInScreen,
     Home:HomeScreen,
     location:locationPage,
     //SignIn:SignInScreen
