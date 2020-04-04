@@ -281,7 +281,7 @@ console.log('Hi');
 
         <View style={styles.container}>
 
-          <TouchableHighlight style={[styles.buttonContainer,]} onPress={()=>{NavigationService.navigate('profile')}} >
+          <TouchableHighlight style={[styles.buttonContainer,]} onPress={()=>{NavigationService.navigate('instructions')}} >
 
        <Text style={styles.signUpText}>  إرسال  </Text>
     
