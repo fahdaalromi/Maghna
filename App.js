@@ -9,7 +9,7 @@ import AppNavigator from './navigation/AppNavigator';
 import STTButton from './STTButton';
 import global from './global';
 import { AsyncStorage } from 'react-native';
-
+import NavigationService from './navigation/NavigationService';
 
 export default function App(props) {
 
@@ -65,20 +65,31 @@ useEffect (()=>{
     console.log(varible)
     return (
       <View style={styles.container}>
-           {/* <Header/> */}
-       
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <AppNavigator />
-       
-        <View style={{position:'absolute', display:displayMic?'flex':'none', zIndex:1000,bottom: 85, right:20}}>
-        <TouchableHighlight style={[styles.buttonContainer,]} onPress={()=>{console.log("hheloo")}} >
+      {/* <Header/> */}
+  
+   {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
 
-<Text style={styles.signUpText}>  إرسال  </Text>
+      
+      <AppNavigator
+        ref={navigatorRef => {
+          NavigationService.setTopLevelNavigator(navigatorRef);
+        }}
+      >
+  
 
-</TouchableHighlight>
-   
-    </View>
+      
+      </AppNavigator>
+            <View style={{position:'absolute', display:'flex', zIndex:1000,bottom: 85, right:20}}>
+            <View style={[styles.buttonContainer,]} >
+    
+        <STTButton/>
+    
+        </View>
+        </View>
+
       </View>
+
+
      );
   }
 }

@@ -26,7 +26,7 @@ import { Audio } from 'expo-av';
 
 
 
-export default class HomeScreen extends Component {
+export default class instructionsScreen extends Component {
     
 
   async  wait(ms) {

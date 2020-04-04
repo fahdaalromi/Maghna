@@ -9,6 +9,7 @@ import { Audio } from 'expo-av';
 import './global';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
+import NavigationService from './navigation/NavigationService';
 
 
 // Here I use this time, I open the package 
@@ -280,7 +281,7 @@ console.log('Hi');
 
         <View style={styles.container}>
 
-          <TouchableHighlight style={[styles.buttonContainer,]} onPress={()=>{this.props.navigation.navigate('welcome')}} >
+          <TouchableHighlight style={[styles.buttonContainer,]} onPress={()=>{NavigationService.navigate('profile')}} >
 
        <Text style={styles.signUpText}>  إرسال  </Text>
     
