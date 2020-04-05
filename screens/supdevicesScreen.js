@@ -13,6 +13,8 @@ import STTButton from '../STTButton'
 import axios from 'axios'
 import * as FileSystem from 'expo-file-system';
 import * as Permissions from 'expo-permissions';
+import firebase from 'firebase'; 
+import { Audio } from 'expo-av';
 
 export default class  supdevicesScreen extends Component {
 
@@ -41,33 +43,140 @@ export default class  supdevicesScreen extends Component {
       errorMsg:null,
       nameBorders:"#3E82A7",
       isLambConnected :'غير متصله',
-      isLambOn : 'مغلقه' 
+      isLambOn : 'مغلقه' ,
+      lambColor : 'grey',
+      textColor: styles.NotConnText
     } 
 }
-  async componentDidMount(){
-    this.showLambStatus();
+
+
+
+   async componentDidMount(){
+    this.props.navigation.setParams({
+      headerLeft: (<TouchableOpacity onPress={this.handelSignOut}>
+         <SimpleLineIcons name="logout" size={24} color='white' style={{marginLeft:15}} />
+      </TouchableOpacity>)
+  })
+    await this.getAudio();
     }
 
-    showLambStatus(){
+
+    async getAudio () {  
+      // Read report
+     
+       
+      let fileURL = '';    
+      const text =  'الأجهزة المُتَّصِلَه ، الإنَارَهْ ، غَيْر مُتَّصِلَه  ، التِّلْفَازْ ، غَيْر مُتَّصِل ، البَّوابَهْ غَيْر مُتَّصِلَهْ';
+       
+     
+             axios.post(`http://45.32.251.50`,  {text} )
+               .then(res => {
+                  console.log("----------------------xxxx--------------------------"+res.data);
+                 fileURL = res.data;
+                     console.log(fileURL);
+           
+                     this.playAudio(fileURL);
+     
+               })
+             }
+             async playAudio(fileURL){
+             
+     
+               await Audio.setAudioModeAsync({
+                 interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+                playsInSilentModeIOS: true,
+                playsInSilentLockedModeIOS: true,
+                shouldDuckAndroid: true,
+                interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+                playThroughEarpieceAndroid: false,
+                staysActiveInBackground: true,
+              });
+        
+        
+        
+        
+           
+              // OR
+              const playbackObject = await Audio.Sound.createAsync(
+                { uri: fileURL },
+                { shouldPlay: true }
+              );
+     
+               
+         
+         //http://localhost/fiels/output-0.6839748394381258.mp3
+           }
+     
+
+
+
+
+    async showLambStatus(){
       axios.get('https://192.168.100.17/api/gFkvbAB2-8SKjoqdgiTg5iWEHnpRtpo-gR9WVzoR/lights/3')
       .then(res => res.json())
       .then(res => {
         console.log(res.state.on)
       }) 
+      
       .catch(error => {console.log(error);
-        isLambConnected = 'غير متصله',
-        isLambOn = 'مغلقه' 
+      
       })
 
       if(res.state.on == true){
         isLambConnected = 'متصله',
         isLambOn = 'مفتوحه' 
+        lambColor = '#2cb457'
+        textColor = styles.openText
+       
+        let fileURL = '';    
+        const text =  'الأجهزة المُتَّصِلَه ، الإنَارَهْ ، مُتَّصِلَه وَ مَفْتُوحَه ، التِّلْفَازْ ، غَيْر مُتَّصِل ومُغْلَق ، البَّوابَهْ غَيْر مُتَّصِلَه وَ مُغْلَقَهْ';
+       
+               axios.post(`http://45.32.251.50`,  {text} )
+                 .then(res => {
+                    console.log("----------------------xxxx--------------------------"+res.data);
+                   fileURL = res.data;
+                       console.log(fileURL);
+                       this.playAudio(fileURL);
+       
+                 })
       }
+      
 
       if(res.state.on == false){
         isLambConnected = 'متصله',
         isLambOn = 'مغلقه' 
+        lambColor = '#6FA0AF'
+        textColor = styles.colseText
+
+        let fileURL = '';    
+        const text =  ' الأجهزة المُتَّصِلَه ، الإنَارَهْ ، مُتَّصِلَه وَ مُغْلَقَهْ ، التِّلْفَازْ ، غَيْر مُتَّصِل ومُغْلَق ، البَّوابَهْ غَيْر مُتَّصِلَه وَ مُغْلَقَهْ';
+       
+               axios.post(`http://45.32.251.50`,  {text} )
+                 .then(res => {
+                    console.log("----------------------xxxx--------------------------"+res.data);
+                   fileURL = res.data;
+                       console.log(fileURL);
+                       this.playAudio(fileURL);
+       
+                 })
       }
+
+      else {  isLambConnected = 'غير متصله',
+      isLambOn = 'مغلقه' 
+      lambColor = 'grey'
+      textColor = styles.NotConnText  
+
+      let fileURL = '';    
+      const text =  'الأجهزة المُتَّصِلَه ، الإنَارَهْ ، غَيْر مُتَّصِلَه وَ مُغْلَقَهْ ، التِّلْفَازْ ، غَيْر مُتَّصِل ومُغْلَق ، البَّوابَهْ غَيْر مُتَّصِلَه وَ مُغْلَقَهْ';
+     
+             axios.post(`http://45.32.251.50`,  {text} )
+               .then(res => {
+                  console.log("----------------------xxxx--------------------------"+res.data);
+                 fileURL = res.data;
+                     console.log(fileURL);
+                     this.playAudio(fileURL);
+     
+               })}
     }
 
 
@@ -90,14 +199,8 @@ UNSAFE_componentWillMount(){
 }
 
 }
-componentDidMount(){
-      
-  this.props.navigation.setParams({
-    headerLeft: (<TouchableOpacity onPress={this.handelSignOut}>
-       <SimpleLineIcons name="logout" size={24} color='white' style={{marginLeft:15}} />
-    </TouchableOpacity>)
-})
-}
+
+
 
 handelSignOut =() =>{
   var {navigation}=this.props;
@@ -120,6 +223,7 @@ handelSignOut =() =>{
 };
 
 
+
   render() {
     return (
 
@@ -132,17 +236,19 @@ handelSignOut =() =>{
     <ScrollView>
 
     <View style={styles.scontainer}>
-    <Text style={styles.openText}>الإنارة</Text>
+    
+    <Text style={this.state.textColor}>الإنارة</Text>
     <Text style={styles.bottomText}>{this.state.isLambConnected}</Text>
     <Text style={styles.bottomText}>{this.state.isLambOn}</Text>
-    <MaterialCommunityIcons style={{ right:190, bottom: 17}} name="lightbulb-on-outline" size={55} color= {'#2cb457'} />
+    <MaterialCommunityIcons style={{ right:190, bottom: 17}} name="lightbulb-on-outline" size={55} color= {this.state.lambColor} />
+   
     </View>
     
-    
+  
     <View style={styles.scontainer}>
-    <Text style={styles.colseText}>التلفاز</Text>
+    <Text style={styles.NotConnText}>التلفاز</Text>
     <Text style={styles.bottomText}>غير متصل</Text>
-    <FontAwesome style={{ right:190, bottom: 17}} name="tv" size={55} color= {'#6FA0AF'} />
+    <FontAwesome style={{ right:190, bottom: 17}} name="tv" size={55} color= {'grey'} />
     </View>
     
     
@@ -154,9 +260,9 @@ handelSignOut =() =>{
     
     
     <View style={styles.scontainer}>
-    <Text style={styles.colseText}>الانترنت</Text>
-    <Text style={styles.bottomText}> متصل</Text>
-    <Feather style={{ right:190, bottom: 17}} name="wifi" size={55} color= {'#6FA0AF'} />
+    <Text style={styles.NotConnText}>الانترنت</Text>
+    <Text style={styles.bottomText}> غير متصل</Text>
+    <Feather style={{ right:190, bottom: 17}} name="wifi" size={55} color= {'grey'} />
     </View>
 
     </ScrollView>

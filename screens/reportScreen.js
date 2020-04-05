@@ -3,68 +3,78 @@ import React, { Component } from 'react';
 import {
   Platform,
     StyleSheet, Text, View, Image, Button, backgroundColor, Alert, border, WIDTH, TouchableHighlight, 
-    TouchableOpacity, ScrollView, ImageBackground,AsyncStorage,ActivityIndicator,
+    TouchableOpacity, ScrollView, ImageBackground,AsyncStorage,ActivityIndicator
 } from 'react-native';
 import { FontAwesome,FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
 import { MonoText } from '../components/StyledText';
 import {LinearGradient} from 'expo-linear-gradient';
 import { StackActions } from '@react-navigation/native';
 import { NavigationActions } from 'react-navigation';
-import ProgressCircle from 'react-native-progress-circle'
+import ProgressCircle from 'react-native-progress-circle';
 import * as FileSystem from 'expo-file-system';
 import * as Permissions from 'expo-permissions';
 import axios from 'axios'
 import { Audio } from 'expo-av';
-import STTButton from '../STTButton'
 
 
-const recordingOptions = {
-    android: {
-      extension: '.m4a',
-      outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
-      audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AAC,
-      sampleRate: 44100,
-      numberOfChannels: 1,
-      bitRate: 128000,
-    },
-    ios: {
-      extension: '.wav',
-      audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_HIGH,
-      sampleRate: 44100,
-      numberOfChannels: 1,
-      bitRate: 128000,
-      linearPCMBitDepth: 16,
-      linearPCMIsBigEndian: false,
-      linearPCMIsFloat: false,
-    },
-  }
-  
 
 export default class reportScreen extends Component {
 
 
 
     constructor(props) {
+
         super(props);
+        console.log(props);
         this.state = {
             show_shape: false,
-            profile_percent: 50,
+            profile_percent: 0,
             profile_color: '#56b058',
+            curTime:0,
+            amount:0,
+            show_click:true
 
         }
+
+
+       
+
     }
+
+
+   
     
-    
-    async componentDidMount(){
  
 
-        await this.sendSpeechNotification(); 
-        await this.wait(1000);
 
-        await this.getAudio();
+     async componentDidMount(){
+   
+        try {
+            const value = await AsyncStorage.getItem('currentTime');
+            const billValue = await AsyncStorage.getItem('amount');
+            if (value !== null && billValue !== 0 ) {
+            this.setState({curTime:value});
+            this.setState({amount:billValue});
 
-        await this.calculateTotalConsuming();
-        await this.colorChange(); 
+          
+         
+            //  alert(this.state.curTime)
+            }
+          } catch (error) {
+            // Error retrieving data
+          } 
+                
+   
+
+          await this.calculateTotalConsuming();
+          await this.colorChange(); 
+        
+
+          await this.getAudio();
+          await this.wait(10000);
+          await this.sendSpeechNotification(); 
+
+
 
     }
 
@@ -80,7 +90,8 @@ export default class reportScreen extends Component {
 
         
  let fileURL = '';    
- const text =  '  عزيزي المُسْتَخْدِم إجْمَالِي إسْتِهْلاكِكْ هُوَ خمسُووووون بِالمِئَةِ مِن مُجْمَلِ فَاتُورَتِكَ المُدخَلهْ وَتَفْصِيْلْ الْإسْتِهْلاكْ هُوَ  الإنَارَه سَبْعُونَ بِالمِئَة التِّلْفَازْ صِفْرٌ بِالمِئَة ';
+ const text =  '  عزيزي المُسْتَخْدِم إجْمَالِي إسْتِهْلاكِكْ هُوَ ' +this.state.profile_percent +
+ 'بِالمِئَة مِن مُجْمَلِ فَاتُورَتِكَ المُدخَلهْ وَتَفْصِيْلْ الْإسْتِهْلاكْ هُوَ  الإنَارَه 100 بِالمِئَة التِّلْفَازْ صِفْرٌ بِالمِئَة البَّوابَهْ صِفْر  بِالمِئَة';
 
         axios.post(`http://45.32.251.50`,  {text} )
           .then(res => {
@@ -125,7 +136,7 @@ export default class reportScreen extends Component {
         if(this.state.profile_percent >= 50){  
   
             let fileURL = '';    
-            const text =  'ِعزيزي المُسْتَخْدِم لَقَدْ إستَهْلَكْتْ خَمسُوووون بِالمِئَةِ مِن مُجْمَلِ فَاتُورَتِكَ المُدخَل';
+            const text =  'ِعزيزي المستخدم لقد استلكت ستون بالمئه من مجمل  فاتورتك المدخله';
 
             axios.post(`http://45.32.251.50`,  {text} )
               .then(res => {
@@ -136,7 +147,7 @@ export default class reportScreen extends Component {
     
               })
          }
-
+   
          if(this.state.profile_percent >= 79){  
   
             let fileURL = '';    
@@ -149,7 +160,7 @@ export default class reportScreen extends Component {
                     this.playAudio(fileURL); 
     
               })
-         }k
+         }
 
 
          if(this.state.profile_percent >= 100){  
@@ -170,8 +181,10 @@ export default class reportScreen extends Component {
 
     calculateTotalConsuming(){
   
+ 
 
-        let workingHours = this.props.state.curTime;
+        let workingHours = this.state.curTime;
+        let bill = this.state.amount;
         let totalConsuming;
         let watts=40;
          // in this screen I want to use the timer data which is the duration 
@@ -187,7 +200,12 @@ export default class reportScreen extends Component {
             totalConsuming=kwh*0.18*100; 
          }
 
-         this.setState.profile_percent = totalConsuming;
+
+         totalConsuming = Math.floor(totalConsuming)
+         totalConsuming = (totalConsuming*100)/bill;
+         this.setState({profile_percent:totalConsuming});
+
+
     }
 
   
@@ -206,8 +224,7 @@ export default class reportScreen extends Component {
         if(this.state.profile_percent  >= 100 ){ 
             this.setState({profile_color : '#ff3126'});
         }
-       
-      return  this.setState.profile_color
+
     }
     open_profile() {
 
@@ -236,7 +253,7 @@ export default class reportScreen extends Component {
                         </View>
                         {
 
-                        !this.state.show_shape &&
+                      !this.state.show_shape && this.state.show_click &&
                         <View style = {{width: '100%', borderRadius: 10, alignItems: 'center', padding: 15, backgroundColor: '#ffffff', marginTop: 10, marginBottom: 10,shadowOpacity: 0.1, opacity: 0.9,}}>
                             <Text style = {styles.contentText}> إذا كنت تريد تفعيل هذة الخاصية يرجى ملء خانة "الحد الإئتماني للفاتورة" </Text>
                             <TouchableOpacity style = {styles.button_style} onPress = {() => this.open_profile(),
@@ -261,14 +278,15 @@ export default class reportScreen extends Component {
                                 </ProgressCircle>
                                  </View>
                         }
+
                         <View style = {{width: '100%', alignItems: 'flex-end'}}>
                             <Text style={styles.routineTitle}> تفصيل الإستهلاك </Text>
                         </View>
                         <View style = {{width: '100%', borderRadius: 10, alignItems: 'center', padding: 15, paddingBottom: 0, backgroundColor: '#ffffff', marginTop: 10, marginBottom: 10,shadowOpacity: 0.1,opacity: 0.9,}}>
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0.7, 0]} style = {styles.component_bar} />
-                                    <Text style = {styles.bar_text}> ٧٠٪ </Text>
+                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[1, 0]} style = {styles.component_bar} />
+                                    <Text style = {styles.bar_text}> ١٠٠٪ </Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
                                     <Text style = {styles.contentText}> الإنارة </Text>

@@ -15,7 +15,7 @@ import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons}
 import {LinearGradient} from 'expo-linear-gradient';
 import FlipToggle from 'react-native-flip-toggle-button';
 import * as firebase from 'firebase';
-
+import axios from 'axios'
 
 export default class profileScreen extends Component {
 
@@ -50,13 +50,16 @@ export default class profileScreen extends Component {
 
       const firebaseConfig = {
     
-        apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
-        authDomain: "maghnaapplication.firebaseapp.com",
-        databaseURL: "https://maghnaapplication.firebaseio.com",
-        projectId: "maghnaapplication",
-        storageBucket: "maghnaapplication.appspot.com",
-        messagingSenderId: "244460583192",
-        appId: "1:244460583192:web:f650fa57532a682962c66d",
+
+    apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
+    authDomain: "maghnaapplication.firebaseapp.com",
+    databaseURL: "https://maghnaapplication.firebaseio.com",
+    projectId: "maghnaapplication",
+    storageBucket: "maghnaapplication.appspot.com",
+    messagingSenderId: "244460583192",
+    appId: "1:244460583192:web:f650fa57532a682962c66d",
+
+     
       };
     
     
@@ -148,7 +151,14 @@ export default class profileScreen extends Component {
         
         }
       
-
+        storeData = async () => {
+          try {
+            await AsyncStorage.setItem('bill', ''+this.state.amount);
+          } catch (error) {
+            // Error saving data
+          }
+    
+        }
     editProfile = () => {
 
       console.log(this.state.changePassword);
@@ -430,6 +440,7 @@ export default class profileScreen extends Component {
                                         keyboardType='numeric'
                                         onChangeText={(text) => { 
                                           this.setState({amount: text}) 
+                                          this.storeData()
                                           this.setState({errorMsgVisibilty:'none'})}}
                                         underlineColorAndroid='transparent'
                                         value={
@@ -469,9 +480,7 @@ export default class profileScreen extends Component {
                                   this.setState({isActive:value })
                                   console.log("on toggle value is "+value)
                                   /*
-
                                  this.state.isActive = value;
-
                                  firebase
                                  .database()
                                  .ref('mgnUsers/'+ this.state.uID)
@@ -502,7 +511,6 @@ profileScreen.navigationOptions = ({navigation})=> ({
     <TouchableOpacity onPress={()=>{navigation.navigate('Home')}} style={{marginRight:15}}>
       <AntDesign name="right" size={24} color="#CDCCCE" />
     </TouchableOpacity>
-
   ),*/
 
   //()=>{console.log("login button")}
@@ -518,11 +526,9 @@ profileScreen.navigationOptions = ({navigation})=> ({
       .signOut()
       .then(function(){
       console.log(this.state);
-
       navigation.navigate('WelcomeStackNavigator')
       })
       .catch(error => console.log(error.message))
-
       }catch(e){console.log(e.message)}}} 
                                   style={{marginLeft:15}}>
       <SimpleLineIcons name="logout" size={24} color='white' />

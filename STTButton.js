@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import {
   StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Platform,
+  AsyncStorage,
 } from 'react-native'
 import * as FileSystem from 'expo-file-system';
 import * as Permissions from 'expo-permissions';
 import axios from 'axios'
 import { Audio } from 'expo-av';
-import './global';
+import {withNavigation} from 'react-navigation'
 
 
 // Here I use this time, I open the package 
@@ -35,53 +36,65 @@ const recordingOptions = {
 
 
 const styles = StyleSheet.create({
-    container: {
-      marginTop: 10,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-    },
-    button: {
-      backgroundColor: '#1e88e5',
-      paddingVertical: 10,
-      width: '20%',
-      alignItems: 'center',
-      borderRadius: 5,
-      padding: 8,
-      marginTop: 5,
-    },
-    text: {
-      color: '#fff',
-    }
-  }) 
+  container: {
+    marginTop: 5,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+  },
+  button: {
+    backgroundColor: '#1e88e5',
+    paddingVertical: 5,
+    width: '80%',
+    alignItems: 'center',
+    borderRadius: 5,
+    padding: 8,
+    marginTop: 5,
+  },
+  text: {
+    color: '#fff',
+  }
+})
 
 
-export default class SpeechToTextButton extends Component {
-    constructor(props) {
-      super(props)
-      this.recording = null
+class SpeechToTextButton extends Component {
+  constructor(props) {
+    super(props)
+    this.recording = null
 
-      this.state = {
-        isFetching: false,
-        isRecording: false,
-        transcript: '',
-        //This is the dueation 
-        //this variable here in stt button I use to store the duration in seconds in
-        curTime : 0
-      }
-
+    this.state = {
+      isFetching: false,
+      isRecording: false,
+      transcript: '',
+      //This is the dueation 
+      //this variable here in stt button I use to store the duration in seconds in
+      curTime: 0
     }
 
-    onTimer() {
-      this.setState(prevState => {
-        // change here ? it works! but the stopping
-        return {curTime : prevState.curTime + 1};
-      }, function (){
- console.log(this.state.curTime);
-   
-      });
+  }
+
+
+  storeData = async () => {
+    try {
+      await AsyncStorage.setItem('currentTime', '' + this.state.curTime);
+    } catch (error) {
+      // Error saving data
     }
 
+  }
 
+
+
+  onTimer() {
+    this.setState(prevState => {
+      // change here ? it works! but the stopping
+      return { curTime: prevState.curTime + 1 };
+    }, function () {
+      console.log(this.state.curTime);
+
+    });
+  }
+
+  myInterval;
   async  wait(ms) {
     return new Promise(resolve => {
       setTimeout(resolve, ms);
@@ -89,27 +102,27 @@ export default class SpeechToTextButton extends Component {
   }
 
 
-  
-  
-  async componentDidMount(){
 
-      while(true){
+
+  async componentDidMount() {
+
+    while (true) {
       await this.startRecording()
       await this.wait(3000);
-       await this.stopRecording();
-       await this.getTranscription();
-       await this.resetRecording();
-    }    
+      await this.stopRecording();
+      await this.getTranscription();
+      await this.resetRecording();
+    }
   }
   deleteRecordingFile = async () => {
     try {
       const info = await FileSystem.getInfoAsync(this.recording.getURI())
       await FileSystem.deleteAsync(info.uri)
     } catch (error) {
-      console.log('There was an error deleting recorded file', error)
+      // console.log('There was an error deleting recorded file', error)
     }
   }
-// I need this 
+  // I need this 
 
 
   deleteRecordingFile = async () => {
@@ -117,11 +130,13 @@ export default class SpeechToTextButton extends Component {
       const info = await FileSystem.getInfoAsync(this.recording.getURI())
       await FileSystem.deleteAsync(info.uri)
     } catch (error) {
-      console.log('There was an error deleting recorded file', error)
+      // console.log('There was an error deleting recorded file', error)
     }
   }
 
-  getTranscription = async () => { 
+  getTranscription = async () => {
+    
+    console.log("this:",this);
     this.setState({ isFetching: true })
     try {
       const { uri } = await FileSystem.getInfoAsync(this.recording.getURI())
@@ -130,7 +145,7 @@ export default class SpeechToTextButton extends Component {
       formData.append('file', {
         uri,
         type: Platform.OS === 'ios' ? 'audio/x-wav' : 'audio/m4a',
-        name: Platform.OS === 'ios' ? `${Date.now()}.wav` :`${Date.now()}.m4a`,
+        name: Platform.OS === 'ios' ? `${Date.now()}.wav` : `${Date.now()}.m4a`,
       })
 
       const { data } = await axios.post('http://localhost:3004/speech', formData, {
@@ -141,81 +156,106 @@ export default class SpeechToTextButton extends Component {
 
       this.setState({ transcript: data.transcript })
     } catch (error) {
-      console.log('There was an error reading file', error)
+      // console.log('There was an error reading file', error)
       this.stopRecording()
       this.resetRecording()
     }
 
     const {
-       transcript
-      } = this.state
+      transcript
+    } = this.state
     this.setState({ isFetching: false })
 
 
-   if(this.state.timer == 2592000){
-    clearInterval(myInterval);
-    this.setState(() => {
-      return {
-        
-        countDown : false,
-      };
-    });
-
-    }
-
-
-    if(    transcript == "تشغيل النور" ){
-      //here the start 
-      var myInterval;
-   this.onTimer = this.onTimer.bind(this);
-    myInterval=setInterval(this.onTimer, 1000);
-
-
-
-axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
-  {'on':true} )
-.then(res => res.json())
-.then(res => {RTCCertificate
-  console.log(res)
-}) 
-.catch(error => {console.log(error);
-})
-    }
-
-    if(    transcript == "اطفاء النور" ){
-// Here the stopping 
-
-console.log('Hi');
-    
-		this.setState(prevState => {
-		  return {
-			countDown : false,
-		  };
-		});
+    if (this.state.timer == 2592000) {
       clearInterval(myInterval);
-  
-  
-  
-    
-      axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
-      {'on':false} )
-    .then(res => res.json())
-    .then(res => {
-      console.log(res)
-    }) 
-    .catch(error => {console.log(error);
-    })
-        }
+      this.setState(() => {
+        return {
 
-        if(    transcript == "التعليمات" ){
-          this.props.navigation.navigate('instructions');
-            }
+          countDown: false,
+        };
+      });
+
+    }
+
+
+    if (transcript == "تشغيل النور") {
+      //here the start 
+      rnTimer.setInterval("duration", () => {
+        this.setState(prevState => {
+          // change here ? it works! but the stopping
+          return { curTime: prevState.curTime + 1 };
+        }, function () {
+          console.log(this.state.curTime);
+
+        });
+      }, 1000);
+
+
+      axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
+        { 'on': true })
+        .then(res => res.json())
+        .then(res => {
+          RTCCertificate
+          // console.log(res)
+        })
+        .catch(error => {
+          console.log();
+        })
+    }
+
+    if (transcript == "ايقاف النور") {
+      // Here the stopping 
+      this.storeData();
+      console.log('Hi');
+
+
+      rnTimer.clearInterval("duration");
+
+
+
+
+      axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
+        { 'on': false })
+        .then(res => res.json())
+        .then(res => {
+          // console.log(res)
+        })
+        .catch(error => {
+          // console.log(error);
+        })
+    }
+
+    if (transcript == "التعليمات") {
+      try{
+      alert("Hi");
+      this.props.navigation.navigate('instructions');}
+      catch(e){console.log("Not responding"+e)}
+
+    }
+
+    // if(    transcript == "الصفحه الشخصيه" ){
+    //   this.props.navigation.navigate('profile');
+    //     }
+
+    //     if(    transcript == "الانماط" ){
+    //       this.props.navigation.navigate('routine');
+    //         }
+
+    //         if(    transcript == "رجوع" ){
+    //           this.props.navigation.navigate('Home');
+    //             }
+    //             if(    transcript == "التقارير" ){
+    //               this.props.navigation.navigate('report');
+    //                 }
+
+
 
 
   }
 
   startRecording = async () => {
-      console.log(recording)
+    // console.log(recording)
     const { status } = await Permissions.askAsync(Permissions.AUDIO_RECORDING)
     if (status !== 'granted') return
 
@@ -233,7 +273,7 @@ console.log('Hi');
       await recording.prepareToRecordAsync(recordingOptions)
       await recording.startAsync()
     } catch (error) {
-      console.log(error)
+      // console.log(error)
       this.stopRecording()
     }
 
@@ -254,25 +294,26 @@ console.log('Hi');
     this.recording = null
   };
 
-  
-  render(){
+
+  render() {
     const {
-        isRecording, transcript, isFetching,
-      } = this.state
+      isRecording, transcript, isFetching,
+    } = this.state
 
-      return(
+    return (
 
 
-        <View style={styles.container}>
+      <View style={styles.container}>
+        <Text>{this.state.curTime}</Text>
         <TouchableOpacity
           style={styles.button}
           onPressIn={this.startRecording}
           onPressOut={this.handleOnPressOut}
         >
 
-            
+
           {isFetching && <ActivityIndicator color="#ffffff" />}
-          {!isFetching && 
+          {!isFetching &&
             <Text style={styles.text}>
               {isRecording ? 'انا اسمعك فضلاً تحدث...' : 'فهمت!'}
             </Text>
@@ -282,7 +323,7 @@ console.log('Hi');
           {`${transcript}`}
         </Text>
       </View>
-      );
+    );
 
   }
 

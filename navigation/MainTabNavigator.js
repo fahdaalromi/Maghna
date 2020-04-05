@@ -18,6 +18,7 @@ import WelcomeScreen from "../screens/WelcomeScreen";
 import {LinearGradient} from 'expo-linear-gradient';
 import locationPage from "../screens/locationPage";
 import routineSubPage from "../screens/routineSubPage";
+import STTButton from "../STTButton"
 
 I18nManager.forceRTL(false)
 
@@ -29,6 +30,7 @@ const config = Platform.select({
 
 const welcomeStack = createStackNavigator(
   {
+
     welcome:WelcomeScreen,
     SignIn: SignInScreen,
     SignUp:SignUpScreen,
@@ -41,9 +43,10 @@ welcomeStack.path = '';
 
 const HomeStack = createStackNavigator(
   {
-   
+    STTButton:STTButton,
     Home:HomeScreen,
     instructions:instructionsScreen,
+
   },
   config
 );

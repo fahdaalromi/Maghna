@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Button, 
+  Alert
 } from 'react-native';
 import { Header, Left, Body, Right, Footer, FooterTab,Icon } from 'native-base';
 import { ifIphoneX } from 'react-native-iphone-x-helper'
@@ -26,141 +27,56 @@ import { Audio } from 'expo-av';
 
 
 
-export default class HomeScreen extends Component {
+export default class instructionsScreen extends Component {
     
+  async componentDidMount(){await this.getAudio();}
 
-  async  wait(ms) {
-    return new Promise(resolve => {
-      setTimeout(resolve, ms);
-    });
-  }
-
-
-  
-  
-  async componentDidMount(){
+  async getAudio () {  
+    // Read report
+   
+           
+    let fileURL = '';    
+    const text = '  لِتَحْرِيْرْ اَلْأَنْمَاطْ، يَجِبْ عَلَيْكْ:  ،   قَوْلْ،  تَحْرِيْرْ اَلْأَنْمَاطْ اَلْحَيَاتِيَّة ،     ثُمَّ اخْتِيَارْ نَوْعْ النَّمَطْ،   وَمِنْ ثُمَّ تَحْدِيْدْ الأَجْهِزَهْ ،إِذَا كَانَ النَّمَطْ صَبَاحِيْ أَوْ مَسَائِيْ ، يَجِبْ عَلَيْكَ تَحْدِيْدْ الوَقْتْ ،       إِذَا كَانَ خُرُوْجْ أَوْ عَوْدَهْ،  يَجِبْ عَلَيْكَ حِفْظْ مَوْقِعْ المَنْزِلْ  ،   لِعَرْضْ التَّقْرِيْرْ يَجِبْ عَلَيْكْ:      ،  قَوْلْ ، التَّقْرِيْرْ" ،  يُمْكِنُكَ أَيْضًا عَرْضُهَا عَنْ طَرِيْقْ النَّقْرْ عَلَى خَانَةِ، التَّقَارِيْرْ" ،  لِعَرْضْ  الأَجْهِزَهْ الْمُتَّصِلَه، يَجِبْ عَلَيْكْ:،     قَوْلْ ، الأَجْهِزَهْ الْمُتَّصِلَهْ"  ،     يُمْكِنُكَ أَيْضًا عَرْضُهَا عَنْ طَرِيْقْ النَّقْرْ عَلَى خَانَةِ ، الأَجْهِزَهْ الْمُتَّصِلَهْ'
+          
     
-      while(true){
-      await this.startRecording()
-      await this.wait(3000);
-       await this.stopRecording();
-       await this.getTranscription();
-       await this.resetRecording();
-    }
-  }
-  deleteRecordingFile = async () => {
-    try {
-      const info = await FileSystem.getInfoAsync(this.recording.getURI())
-      await FileSystem.deleteAsync(info.uri)
-    } catch (error) {
-      console.log('There was an error deleting recorded file', error)
-    }
-  }
+    axios.post(`http://45.32.251.50`,  {text} )
+             .then(res => {
+                console.log("----------------------xxxx----instructions----------------"+res.data);
+                alert(res.data)
+               fileURL = res.data;
+                   console.log(fileURL);
+                   this.playAudio(fileURL);
+   
+             })
+           }
+           async playAudio(fileURL){
+           
+   
+             await Audio.setAudioModeAsync({
+               interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+              playsInSilentModeIOS: true,
+              playsInSilentLockedModeIOS: true,
+              shouldDuckAndroid: true,
+              interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+              playThroughEarpieceAndroid: false,
+              staysActiveInBackground: true,
+            });
+      
+      
+      
+      
+         
+            // OR
+            const playbackObject = await Audio.Sound.createAsync(
+              { uri: fileURL },
+              { shouldPlay: true }
+            );
+   
+             
+       
+       //http://localhost/fiels/output-0.6839748394381258.mp3
+         }
 
-  getTranscription = async () => { 
-    this.setState({ isFetching: true })
-    try {
-      const { uri } = await FileSystem.getInfoAsync(this.recording.getURI())
-
-      const formData = new FormData()
-      formData.append('file', {
-        uri,
-        type: Platform.OS === 'ios' ? 'audio/x-wav' : 'audio/m4a',
-        name: Platform.OS === 'ios' ? `${Date.now()}.wav` :`${Date.now()}.m4a`,
-      })
-
-      const { data } = await axios.post('http://localhost:3004/speech', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-
-      this.setState({ transcript: data.transcript })
-    } catch (error) {
-      console.log('There was an error reading file', error)
-      this.stopRecording()
-      this.resetRecording()
-    }
-
-    const {
-       transcript
-      } = this.state
-    this.setState({ isFetching: false })
-    if(    transcript == "تشغيل النور" ){
-
-
-  axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
-  {'on':true} )
-.then(res => res.json())
-.then(res => {
-  console.log(res)
-}) 
-.catch(error => {console.log(error);
-})
-    }
-
-    if(    transcript == "اطفاء النور" ){
-
-
-      axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
-      {'on':false} )
-    .then(res => res.json())
-    .then(res => {
-      console.log(res)
-    }) 
-    .catch(error => {console.log(error);
-    })
-        }
-
-        if(    transcript == "التعليمات" ){
-          this.props.navigation.navigate('instructions');
-            }
-
-            if(    transcript == "رجوع" ){
-              this.props.navigation.navigate('Home');
-                }
-    
-  }
-
-  startRecording = async () => {
-      console.log(recording)
-    const { status } = await Permissions.askAsync(Permissions.AUDIO_RECORDING)
-    if (status !== 'granted') return
-
-    this.setState({ isRecording: true })
-    await Audio.setAudioModeAsync({
-      allowsRecordingIOS: true,
-      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
-      playsInSilentModeIOS: true,
-      interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
-      playThroughEarpieceAndroid: true,
-    })
-    const recording = new Audio.Recording()
-
-    try {
-      await recording.prepareToRecordAsync(recordingOptions)
-      await recording.startAsync()
-    } catch (error) {
-      console.log(error)
-      this.stopRecording()
-    }
-
-    this.recording = recording
-  }
-
-  stopRecording = async () => {
-    this.setState({ isRecording: false })
-    try {
-      await this.recording.stopAndUnloadAsync()
-    } catch (error) {
-      // noop
-    }
-  }
-
-  resetRecording = () => {
-    this.deleteRecordingFile();
-    this.recording = null
-  };
 
 
 static navigationOptions = ({navigation})=> ({
@@ -217,12 +133,9 @@ static navigationOptions = ({navigation})=> ({
   
   <ImageBackground source={require('../assets/images/infobackground.png')} style={styles.bg_container}>
 
-<ScrollView
-  
-  contentContainerStyle={styles.contentContainer}>
 
-    <View style={styles.view}>
-      <View style={styles.articleView}>
+    <View >
+      <View style={styles.articleView2}>
         <Text style={styles.articleTitle}>تحرير الأنماط</Text>
         <Text style={styles.articleDescription}>
           لتحرير الأنماط يجب عليك:
@@ -254,7 +167,6 @@ static navigationOptions = ({navigation})=> ({
     </View>
  
 
-</ScrollView>
 </ImageBackground>
 
 <View style={styles.container}>
@@ -316,6 +228,7 @@ const styles = StyleSheet.create({
   container: {
     
     //flex: 1,
+    marginTop:40,
    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F7FAFF',
@@ -350,12 +263,23 @@ const styles = StyleSheet.create({
 
   view: {
     width: width,
-    height: height,
+    height: height*0.1,
   },
   articleView: {
     shadowOpacity: 0.07,
     width: 0.9 * width,
     height:0.2*height,
+    alignSelf: 'center',
+    backgroundColor: '#ffffff',
+    opacity: 0.9,
+    marginTop: 20,
+    borderRadius: 30,
+    padding: 16,
+  },
+  articleView2: {
+    shadowOpacity: 0.07,
+    width: 0.9 * width,
+    height:0.25*height,
     alignSelf: 'center',
     backgroundColor: '#ffffff',
     opacity: 0.9,
@@ -400,24 +324,3 @@ const styles = StyleSheet.create({
   }
   });
   
-
-const recordingOptions = {
-    android: {
-      extension: '.m4a',
-      outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
-      audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AAC,
-      sampleRate: 44100,
-      numberOfChannels: 1,
-      bitRate: 128000,
-    },
-    ios: {
-      extension: '.wav',
-      audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_HIGH,
-      sampleRate: 44100,
-      numberOfChannels: 1,
-      bitRate: 128000,
-      linearPCMBitDepth: 16,
-      linearPCMIsBigEndian: false,
-      linearPCMIsFloat: false,
-    },
-  }
