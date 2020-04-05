@@ -83,6 +83,10 @@ if(snap.val().isActive)
 
 
       }*/
+      //this._onPress1()
+     // this._onPress2()
+//this._onPress3()
+     // this._onPress4()
   }
 
 
@@ -412,20 +416,130 @@ checkData= async  ()=>{
   }
 
     _onPress1(){
+    //   console.log("enter 1");
+    //   var user = firebase.auth().currentUser;
+    //   var  userRoutineArr =[];
+    //   var routineName = 'come home';
+    //   firebase.database().ref('/routine').once("value",snapshot=>{
+    //     snapshot.forEach(item => {
+    //      var temp = item.val();
+    //      if(temp.userID == user.uid){
+    //          console.log("yes have user1");
+    //         userRoutineArr.push(temp.name);
+    //         console.log(temp.name);
+    //      }//end if 
+    //     });//end forEach
+
+    //  });//end snapshot..
+    //  var theId;
+    
+    //  if(userRoutineArr.indexOf(routineName)!=-1){
+    //    console.log("Trueee");
+    //   firebase.database().ref('/routine').once("value" , (snapshot)=>{
+    //   snapshot.forEach(item => {
+                        
+    //     var temp = item.val();
+    //     console.log(temp);
+    //     if(temp.userID == user.uid && temp.name == routineName){
+    //         theId = item.key;
+    //     }});
+
+    //      firebase.database().ref('/routine'+theId).once("value" , (snapshot)=>{
+    //        if(snapshot.exists()){
+    //          console.log(snapshot);
+    //        }
+    //      });
         const newState = !this.state.toggle1;
         this.setState({toggle1:newState})
-    }
+   // });
+ // }
+}
     
     
     _onPress2(){
+    //   console.log("enter 2");
+    //   var routineName='morning routine';
+    //   var user = firebase.auth().currentUser;
+    //   var  userRoutineArr =[];
+    //   firebase.database().ref('/routine').once("value",snapshot=>{
+    //     snapshot.forEach(item => {
+    //      var temp = item.val();
+    //      if(temp.userID == user.uid){
+    //          console.log("yes have user");
+    //         userRoutineArr.push(temp.name);
+    //         console.log(temp.name);
+    //      }//end if 
+    //     });//end forEach
+
+    //  });//end snapshot..
+    //  var theId;
+    //  console.log(userRoutineArr[0]);
+    // console.log(userRoutineArr.indexOf(routineName));
+    //  if(userRoutineArr.indexOf(routineName)!=-1){
+    //    console.log("enter ");
+    //   firebase.database().ref('/routine').on("value" , (snapshot)=>{
+    //   snapshot.forEach(item => {
+                        
+    //     var temp = item.val();
+    //     console.log(temp);
+    //     if(temp.userID == user.uid && temp.name == routineName){
+    //         theId = item.key;
+    //     }});
+
+    //      firebase.database().ref('/routine'+theId).on("value" , (snapshot)=>{
+    //        if(snapshot.exists()){
+    //        var status = snapshot.val();
+    //        console.log(status);
+    //        }
+    //      });
         const newState = !this.state.toggle2;
         this.setState({toggle2:newState})
-    }
+     // });
+    
+   // }
+  }
     
     
     _onPress3(){
-        const newState = !this.state.toggle3;
-        this.setState({toggle3:newState})
+    //   var routineName;
+    //   var user = firebase.auth().currentUser;
+    //   var  userRoutineArr =[];
+    //   firebase.database().ref('/routine').once("value",snapshot=>{
+    //     snapshot.forEach(item => {
+    //      var temp = item.val();
+    //      if(temp.userID == user.uid){
+    //          console.log("yes have user");
+    //         userRoutineArr.push(temp.name);
+    //         console.log(temp.name);
+    //      }//end if 
+    //     });//end forEach
+
+    //  });//end snapshot..
+    //  var theId;
+    //  console(userRoutineArr.indexOf(routineName))
+    //  if(userRoutineArr.indexOf(routineName)!=-1){
+    //    console.log("it is true");
+    //   firebase.database().ref('/routine').on("value" , (snapshot)=>{
+    //   snapshot.forEach(item => {
+                        
+    //     var temp = item.val();
+    //     console.log(temp);
+    //     if(temp.userID == user.uid && temp.name == routineName){
+    //         theId = item.key;
+    //     }});
+
+    //      firebase.database().ref('/routine'+theId).on("value" , (snapshot)=>{
+    //        if(snapshot.exists()){
+    //        var status = snapshot.val();
+    //        console.log(status);
+    //        }
+    //      });
+     
+    //      });
+         
+    // }
+    const newState = !this.state.toggle3;
+         this.setState({toggle3:newState})
     }
     
     
