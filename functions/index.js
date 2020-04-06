@@ -1,62 +1,12 @@
-import * as React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
-import { Constants } from 'expo';
-import * as TaskManager from 'expo-task-manager';
-import * as BackgroundFetch from 'expo-background-fetch';
+const functions = require('firebase-functions');
 
-// You can import from local files
-import AssetExample from './components/AssetExample';
+// // Create and Deploy Your First Cloud Functions
+// // https://firebase.google.com/docs/functions/write-firebase-functions
+//
+// exports.helloWorld = functions.https.onRequest((request, response) => {
+//  response.send("Hello from Firebase!");
+// });
 
-// or any pure javascript modules available in npma
-import { Card } from 'react-native-paper';
-BackgroundFetch.setMinimumIntervalAsync(1);
-const taskName = 'test-background-fetch';
-TaskManager.defineTask(taskName, async () => {
-  alert('background featch running');
-  return BackgroundFetch.Result.NewData;
-});
-
-
-export default class App extends React.Component {
-  componentDidMount() {
-    this.registerTaskAsync;
-  }
-
-  registerTaskAsync = async () => {
-    await BackgroundFetch.registerTaskAsync(taskName);
-    alert('task registered');
-  };
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.paragraph}>
-          Change code in the editor and watch it change on your psasahone! Save to
-          get a shareable url.
-        </Text>
-        <Card>
-          <AssetExample />
-        </Card>
-      </View>
-    );
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingTop: Constants.statusBarHeight,
-    backgroundColor: '#ecf0f1',
-    padding: 8,
-  },
-  paragraph: {
-    margin: 24,
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-});
 const functions = require('firebase-functions');
 const axios = require('axios')
 const admin = require('firebase-admin');

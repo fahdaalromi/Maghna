@@ -20,7 +20,88 @@ import  moment from 'moment';
 
 
 export default class HomeScreen extends Component {
+ async checkRoutine () {
     
+    var user = firebase.auth().currentUser;
+   var  userRoutineArr =[];
+   var routineLeave = 'leave home';
+   var routineCome = 'come routine';
+   var routineMornig = 'morning routine';
+   var routineNight = 'night routine';
+   firebase.database().ref('/routine').once("value",snapshot=>{
+        snapshot.forEach(item => {
+         var temp = item.val();
+         if(temp.userID == user.uid){
+             console.log("yes have user1");
+            userRoutineArr.push(temp.name);
+            console.log(temp.name);
+         }//end if 
+         var theId;
+         var nameR;
+         var statusR;
+          if(userRoutineArr.indexOf(routineLeave)!=-1 ||userRoutineArr.indexOf(routineCome)!=-1 
+          || userRoutineArr.indexOf(routineMornig)!=-1 || userRoutineArr.indexOf(routineNight)!=-1){
+              console.log("Trueee");
+   firebase.database().ref('/routine').once("value" , (snapshot)=>{
+     snapshot.forEach(item => {
+                      
+      var temp = item.val();
+      console.log(temp);
+      if(temp.userID == user.uid && (temp.name == routineMornig ||temp.name == routineNight
+        || temp.name == routineLeave || temp.name == routineCome  )){
+          console.log("in if");
+          theId = item.key;
+          nameR = temp.name;
+      }});
+         console.log('outside if');
+         console.log('the'+theId);
+       firebase.database().ref('/routine').once("value" , (snapshot)=>{
+         console.log('in snapshot');
+        snapshot.forEach(item => {
+                     console.log('in for each');   
+                     if(item.key == theId){
+                       console.log("true second");
+                      var temp = item.val();
+                      statusR = temp.status;
+                      console.log('theS'+statusR);
+
+                      
+                     }
+         
+          console.log('now'+statusR)
+                     if (nameR == 'leave routine' && statusR ==1){
+                      const newState = !this.state.toggle3;
+                      this.setState({toggle3:newState})
+                     }
+                     if (nameR == 'come routine' && statusR ==1){
+                      const newState = !this.state.toggle1;
+                      this.setState({toggle1:newState})
+                     
+                    }
+                    if (nameR == 'morning routine'&& statusR ==1){
+                      const newState = !this.state.toggle2;
+                      this.setState({toggle2:newState})
+                    }
+                    if (nameR == 'night routine' && statusR ==1){
+                      const newState = !this.state.toggle4;
+                      this.setState({toggle4:newState})
+                    }
+         
+         
+         });
+        });
+     
+
+        });//end forEach
+
+    }
+    //end snapshot..
+  });
+  });
+
+}
+
+
 
   async  wait(ms) {
     return new Promise(resolve => {
@@ -32,12 +113,14 @@ export default class HomeScreen extends Component {
   
   
    async componentDidMount(){
-
+   this.checkRoutine();
     this.props.navigation.setParams({
       headerLeft: (<TouchableOpacity onPress={this.handelSignOut}>
          <SimpleLineIcons name="logout" size={24} color='white' style={{marginLeft:15}} />
       </TouchableOpacity>)
+    
 })
+
 
     const firebaseConfig = {
 
@@ -51,14 +134,13 @@ export default class HomeScreen extends Component {
       appId: "1:244460583192:web:f650fa57532a682962c66d",
 
     };*/
-     apiKey: "AIzaSyBUBKLW6Wrk48NQ_TcgUerucTZFphw6l-c",
-      authDomain: "maghna-62c55.firebaseapp.com",
-      databaseURL: "https://maghna-62c55.firebaseio.com",
-      projectId: "maghna-62c55",
-      storageBucket: "maghna-62c55.appspot.com",
-      messagingSenderId: "21464439338",
-      appId: "1:21464439338:web:8c6bb486fb3673e5d14153",
-      measurementId: "G-R3BQPCTCTM"
+    apiKey: "AIzaSyCsKoPxvbEp7rAol5m-v3nvgF9t8gUDdNc",
+    authDomain: "maghnatest.firebaseapp.com",
+    databaseURL: "https://maghnatest.firebaseio.com",
+    projectId: "maghnatest",
+    storageBucket: "maghnatest.appspot.com",
+    messagingSenderId: "769071221745",
+    appId: "1:769071221745:web:1f0708d203330948655250" ,
     };
    
 
@@ -396,6 +478,7 @@ checkData= async  ()=>{
         }  
     })
     constructor(props) {
+      
         super(props);
         this.state = {
             toggle: false
@@ -416,84 +499,137 @@ checkData= async  ()=>{
   }
 
     _onPress1(){
-    //   console.log("enter 1");
-    //   var user = firebase.auth().currentUser;
-    //   var  userRoutineArr =[];
-    //   var routineName = 'come home';
-    //   firebase.database().ref('/routine').once("value",snapshot=>{
-    //     snapshot.forEach(item => {
-    //      var temp = item.val();
-    //      if(temp.userID == user.uid){
-    //          console.log("yes have user1");
-    //         userRoutineArr.push(temp.name);
-    //         console.log(temp.name);
-    //      }//end if 
-    //     });//end forEach
-
-    //  });//end snapshot..
-    //  var theId;
-    
-    //  if(userRoutineArr.indexOf(routineName)!=-1){
-    //    console.log("Trueee");
-    //   firebase.database().ref('/routine').once("value" , (snapshot)=>{
-    //   snapshot.forEach(item => {
-                        
-    //     var temp = item.val();
-    //     console.log(temp);
-    //     if(temp.userID == user.uid && temp.name == routineName){
-    //         theId = item.key;
-    //     }});
-
-    //      firebase.database().ref('/routine'+theId).once("value" , (snapshot)=>{
-    //        if(snapshot.exists()){
-    //          console.log(snapshot);
-    //        }
-    //      });
+      var theId;
+         firebase.database().ref('/routine').once("value",snapshot=>{
+            snapshot.forEach(item => {
+             var temp = item.val();
+             if(temp.userID == user.uid){
+                
+               userRoutineArr.push(temp.name);
+               console.log(temp.name);
+             }//end if 
+             if(userRoutineArr.indexOf(routineName)!= -1){
+              theId = item.key;
+              firebase.database().ref('routine/'+theId).update(  {
+                status: 1,
+      
+              }); 
+             }
+      
+             this.setState({toggle2:newState})});//end forEach
+          }); //end snapshot..
+      var routineName = 'come routine';
+      var user = firebase.auth().currentUser;
+        var  userRoutineArr =[];
         const newState = !this.state.toggle1;
-        this.setState({toggle1:newState})
+        if (newState){
+          firebase.database().ref('/routine').once("value",snapshot=>{
+            snapshot.forEach(item => {
+             var temp = item.val();
+             if(temp.userID == user.uid){
+                
+               userRoutineArr.push(temp.name);
+               console.log(temp.name);
+             }//end if 
+             if(userRoutineArr.indexOf(routineName)!= -1){
+              theId = item.key;
+              firebase.database().ref('routine/'+theId).update(  {
+                status: 1,
+      
+              }); 
+              this.setState({toggle1:newState}) }
+              else {
+               Alert.alert("عذراً", " لم تقم بإنشاء وضع العودة إلى المنزل من قبل ، عليك أولاً إنشاؤه");
+               this.setState({toggle1:!newState})
+ 
+              }
+      
+             });//end forEach
+          }); //end snapshot..
+      
+         }
+         else {
+          firebase.database().ref('/routine').once("value",snapshot=>{
+            snapshot.forEach(item => {
+             var temp = item.val();
+             if(temp.userID == user.uid){
+                
+               userRoutineArr.push(temp.name);
+               console.log(temp.name);
+             }//end if 
+             if(userRoutineArr.indexOf(routineName)!= -1){
+              theId = item.key;
+              firebase.database().ref('routine/'+theId).update(  {
+                status: 0,
+      
+              }); 
+             }
+      
+             this.setState({toggle1:newState})});//end forEach
+          }); //end snapshot..
+         }
+
+     
    // });
  // }
 }
     
     
     _onPress2(){
-    //   console.log("enter 2");
-    //   var routineName='morning routine';
-    //   var user = firebase.auth().currentUser;
-    //   var  userRoutineArr =[];
-    //   firebase.database().ref('/routine').once("value",snapshot=>{
-    //     snapshot.forEach(item => {
-    //      var temp = item.val();
-    //      if(temp.userID == user.uid){
-    //          console.log("yes have user");
-    //         userRoutineArr.push(temp.name);
-    //         console.log(temp.name);
-    //      }//end if 
-    //     });//end forEach
-
-    //  });//end snapshot..
-    //  var theId;
-    //  console.log(userRoutineArr[0]);
-    // console.log(userRoutineArr.indexOf(routineName));
-    //  if(userRoutineArr.indexOf(routineName)!=-1){
-    //    console.log("enter ");
-    //   firebase.database().ref('/routine').on("value" , (snapshot)=>{
-    //   snapshot.forEach(item => {
-                        
-    //     var temp = item.val();
-    //     console.log(temp);
-    //     if(temp.userID == user.uid && temp.name == routineName){
-    //         theId = item.key;
-    //     }});
-
-    //      firebase.database().ref('/routine'+theId).on("value" , (snapshot)=>{
-    //        if(snapshot.exists()){
-    //        var status = snapshot.val();
-    //        console.log(status);
-    //        }
-    //      });
+      var theId;
+      var routineName = 'morning routine';
+      var user = firebase.auth().currentUser;
+        var  userRoutineArr =[];
+   
         const newState = !this.state.toggle2;
-        this.setState({toggle2:newState})
+        if (newState){
+          firebase.database().ref('/routine').once("value",snapshot=>{
+            snapshot.forEach(item => {
+             var temp = item.val();
+             if(temp.userID == user.uid){
+                
+               userRoutineArr.push(temp.name);
+               console.log(temp.name);
+             }//end if 
+             if(userRoutineArr.indexOf(routineName)!= -1){
+              theId = item.key;
+              firebase.database().ref('routine/'+theId).update(  {
+                status: 1,
+      
+              }); 
+              this.setState({toggle2:newState}) }
+             else {
+              Alert.alert("عذراً", " لم تقم بإنشاء الوضع الصباحي من قبل ، عليك أولاً إنشاؤه");
+              this.setState({toggle2:!newState})
+
+             }
+      
+             });//end forEach
+          }); //end snapshot..
+      
+         }
+         else {
+          firebase.database().ref('/routine').once("value",snapshot=>{
+            snapshot.forEach(item => {
+             var temp = item.val();
+             if(temp.userID == user.uid){
+                
+               userRoutineArr.push(temp.name);
+               console.log(temp.name);
+             }//end if 
+             if(userRoutineArr.indexOf(routineName)!= -1){
+              theId = item.key;
+              firebase.database().ref('routine/'+theId).update(  {
+                status: 0,
+      
+              }); 
+             }
+      
+             this.setState({toggle2:newState})});//end forEach
+          }); //end snapshot..
+         }
+
+       
      // });
     
    // }
@@ -501,51 +637,118 @@ checkData= async  ()=>{
     
     
     _onPress3(){
-    //   var routineName;
-    //   var user = firebase.auth().currentUser;
-    //   var  userRoutineArr =[];
-    //   firebase.database().ref('/routine').once("value",snapshot=>{
-    //     snapshot.forEach(item => {
-    //      var temp = item.val();
-    //      if(temp.userID == user.uid){
-    //          console.log("yes have user");
-    //         userRoutineArr.push(temp.name);
-    //         console.log(temp.name);
-    //      }//end if 
-    //     });//end forEach
-
-    //  });//end snapshot..
-    //  var theId;
-    //  console(userRoutineArr.indexOf(routineName))
-    //  if(userRoutineArr.indexOf(routineName)!=-1){
-    //    console.log("it is true");
-    //   firebase.database().ref('/routine').on("value" , (snapshot)=>{
-    //   snapshot.forEach(item => {
-                        
-    //     var temp = item.val();
-    //     console.log(temp);
-    //     if(temp.userID == user.uid && temp.name == routineName){
-    //         theId = item.key;
-    //     }});
-
-    //      firebase.database().ref('/routine'+theId).on("value" , (snapshot)=>{
-    //        if(snapshot.exists()){
-    //        var status = snapshot.val();
-    //        console.log(status);
-    //        }
-    //      });
-     
-    //      });
-         
-    // }
+      var theId;
+      var routineName = 'leave routine';
+    var user = firebase.auth().currentUser;
+      var  userRoutineArr =[];
+      
     const newState = !this.state.toggle3;
-         this.setState({toggle3:newState})
+   if (newState){
+    firebase.database().ref('/routine').once("value",snapshot=>{
+      snapshot.forEach(item => {
+       var temp = item.val();
+       if(temp.userID == user.uid){
+          
+         userRoutineArr.push(temp.name);
+         console.log(temp.name);
+       }//end if 
+       if(userRoutineArr.indexOf(routineName)!= -1){
+        theId = item.key;
+        firebase.database().ref('routine/'+theId).update(  {
+          status: 1,
+
+        }); 
+       
+       this.setState({toggle3:newState}) }
+       else {
+        Alert.alert("عذراً", " لم تقم بإنشاء وضع الخروج من المنزل من قبل ، عليك أولاً إنشاؤه");
+        this.setState({toggle3:!newState})
+
+       }
+
+        });//end forEach
+    }); //end snapshot..
+
+   }
+   else {
+    firebase.database().ref('/routine').once("value",snapshot=>{
+      snapshot.forEach(item => {
+       var temp = item.val();
+       if(temp.userID == user.uid){
+          
+         userRoutineArr.push(temp.name);
+         console.log(temp.name);
+       }//end if 
+       if(userRoutineArr.indexOf(routineName)!= -1){
+        theId = item.key;
+        firebase.database().ref('routine/'+theId).update(  {
+          status: 0,
+
+        }); 
+        this.setState({toggle3:newState})
+       }
+       
+
+       });//end forEach
+    }); //end snapshot..
+   }
+      
     }
     
     
     _onPress4(){
+      var theId;
+      var routineName = 'naight routine';
+      var user = firebase.auth().currentUser;
+        var  userRoutineArr =[];
         const newState = !this.state.toggle4;
-        this.setState({toggle4:newState})
+        if (newState){
+          firebase.database().ref('/routine').once("value",snapshot=>{
+            snapshot.forEach(item => {
+             var temp = item.val();
+             if(temp.userID == user.uid){
+                
+               userRoutineArr.push(temp.name);
+               console.log(temp.name);
+             }//end if 
+             if(userRoutineArr.indexOf(routineName)!= -1){
+              theId = item.key;
+              firebase.database().ref('routine/'+theId).update(  {
+                status: 1,
+      
+              }); 
+              this.setState({toggle4:newState}) }
+             else {
+              Alert.alert("عذراً", " لم تقم بإنشاء الوضع المسائي من قبل ، عليك أولاً إنشاؤه");
+              this.setState({toggle4:!newState})
+
+             }
+      
+              });//end forEach
+          }); //end snapshot..
+      
+         }
+         else {
+          firebase.database().ref('/routine').once("value",snapshot=>{
+            snapshot.forEach(item => {
+             var temp = item.val();
+             if(temp.userID == user.uid){
+                
+               userRoutineArr.push(temp.name);
+               console.log(temp.name);
+             }//end if 
+             if(userRoutineArr.indexOf(routineName)!= -1){
+              theId = item.key;
+              firebase.database().ref('routine/'+theId).update(  {
+                status: 0,
+      
+              }); 
+             }
+      
+             this.setState({toggle4:newState})});//end forEach
+          }); //end snapshot..
+         }
+       
     }
     render() {
 
