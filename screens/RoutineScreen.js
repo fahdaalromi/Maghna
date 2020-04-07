@@ -514,6 +514,7 @@ return polygon
     var actions = [];
     var i ,j;
     var flag = false
+    var flagH = false ;
     firebase.database().ref('mgnUsers/'+firebase.auth().currentUser.uid).once('value',(snap)=>{ 
       console.log("inside database with problem")
      lat= snap.val().latitude;
@@ -525,6 +526,7 @@ return polygon
      // this.setActionTable();
         
         if(this.state.morning_toggle&&index==0) {
+            flagH = false ;
             routineName = "morning routine";
             tmp_str += " الذي يحتوي على الأوامر الآتية:\n";
             disRoutine = "الوضع الصباحي";
@@ -619,6 +621,7 @@ return polygon
     }//end if for set info of come routine.
         }//end if for come routine
          else if(this.state.evening_toggle&&index==3) {
+            flagH=false;
             routineName="night routine";
             tmp_str += " الذي يحتوي على الأوامر الآتية:\n";
             disRoutine="الوضع المسائي";
@@ -684,11 +687,17 @@ return polygon
             } // print routine info 
         
         for(i = 0; i < this.state.hours_array.length; i ++) {
-            if(!flag&& this.state.hours_array[i].clicked) {
+            if( !flag&&this.state.hours_array[i].clicked) {
+                  flagH = true;
                 tmp_str += "الساعة: " + this.state.hours_array[i].value + '\n';
                 routineTime = this.state.hours_array[i].value;
                 break;
             }
+          
+        }
+        if (!flagH){
+            Alert.alert("عذراً", " عليك اختيار وقت للوضع أولاً");
+            this.init_hourminute_array()
         }
         //test it 
         for(j = 0; j < this.state.minute_array.length; j ++) {
@@ -700,7 +709,7 @@ return polygon
         }
         
          
-         if ( routineName == "morning routine" || routineName == "evening routine"){
+         if (( routineName == "morning routine" || routineName == "evening routine" )&& flagH){
              
              var userRoutineArr = [];
              firebase.database().ref('/routine').once("value",snapshot=>{
@@ -742,7 +751,7 @@ return polygon
                     });//end forEach
             
                  });//end snapshot..
-            }
+                 }
             else {
                 firebase.database().ref('routine/').push(
                     {
@@ -754,12 +763,13 @@ return polygon
                       status: 1,
         
                     })//end set routine.
+                   
             }
       
-            Alert.alert("تم حفظ نمط "+disRoutine, tmp_str);
-        }//end set morning or night routine.
+          
+            Alert.alert("تم حفظ نمط "+disRoutine, tmp_str);  }//end set morning or night routine.
       else if(routineName == "leave routine" || routineName == "come routine" 
-                    && user.longitude != 0 && user.latitude !=0){
+                    && user.longitude != 0 && user.latitude !=0 ){
                         var userRoutineArr = [];
                         firebase.database().ref('/routine').once("value",snapshot=>{
                            snapshot.forEach(item => {
@@ -802,7 +812,7 @@ return polygon
                             });//end snapshot..
                             
                        
-                            Alert.alert("تم حفظ نمط "+disRoutine, tmp_str);
+                            
             }
             else{
             firebase.database().ref('routine/').push(
@@ -817,7 +827,7 @@ return polygon
                 })//end set routine. 
             
             }
-        }
+            Alert.alert("تم حفظ نمط "+disRoutine, tmp_str); }
       
         console.log("save routine");
         
@@ -986,8 +996,7 @@ return polygon
                                         </ScrollView>
                                     </View>
                                 </View>
-                                <View s
-                                tyle = {{width: '100%', justifyContent: 'space-around', marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
+                                <View style = {{width: '100%', justifyContent: 'space-around', marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
                                     <TouchableHighlight 
                                     style={[styles.buttonContainer, styles.signupButton,styles.timersButton , {color: '#8abbc6', marginTop: 1}]} onPress={() => this.setState({date_picker_display: false})} >
                                         <Text style={styles.signUpText ,{color: '#8abbc6',}}> حفظ </Text>
