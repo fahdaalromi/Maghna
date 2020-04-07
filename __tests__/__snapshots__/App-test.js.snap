@@ -18,5 +18,112 @@ exports[`App renders the root without loading screen 1`] = `
   }
 >
   <AppNavigator />
+  <View
+    style={
+      Object {
+        "bottom": 85,
+        "display": "flex",
+        "position": "absolute",
+        "right": 20,
+        "zIndex": 1000,
+      }
+    }
+  >
+    <View
+      style={
+        Array [
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "#fff",
+            "borderRadius": 30,
+            "flexDirection": "row",
+            "height": 45,
+            "justifyContent": "center",
+            "marginBottom": 10,
+            "shadowOpacity": 0.17,
+            "width": 250,
+          },
+        ]
+      }
+    >
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "#fff",
+            "marginTop": 10,
+          }
+        }
+      >
+        <View
+          accessible={true}
+          focusable={true}
+          isTVSelectable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Array [
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "#fff",
+                "borderRadius": 30,
+                "flexDirection": "row",
+                "height": 45,
+                "justifyContent": "center",
+                "marginBottom": 10,
+                "shadowOpacity": 0.17,
+                "width": 250,
+              },
+            ]
+          }
+        >
+          <Text
+            style={null}
+          >
+              إرسال  
+          </Text>
+        </View>
+        <View
+          accessible={true}
+          focusable={false}
+          isTVSelectable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "backgroundColor": "#1e88e5",
+              "borderRadius": 5,
+              "marginTop": 5,
+              "opacity": 1,
+              "width": 100,
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "color": "#fff",
+              }
+            }
+          >
+            فهمت!
+          </Text>
+        </View>
+        <Text>
+          
+        </Text>
+      </View>
+    </View>
+  </View>
 </View>
 `;

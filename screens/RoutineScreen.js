@@ -16,7 +16,7 @@ import { ScrollView,
  AppState,
 } from 'react-native';
 import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons, Entypo, FontAwesome} from "@expo/vector-icons";
-import { Root, Popup } from 'popup-ui'
+import { Root } from 'popup-ui'
 import { Ionicons} from '@expo/vector-icons';
 import * as firebase from 'firebase';
 import * as TaskManager from 'expo-task-manager';

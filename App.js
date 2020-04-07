@@ -74,10 +74,7 @@ useEffect (()=>{
         ref={navigatorRef => {
           NavigationService.setTopLevelNavigator(navigatorRef);
         }}
-      >
-  
-
-      
+      >      
       </AppNavigator>
             <View style={{position:'absolute', display:'flex', zIndex:1000,bottom: 85, right:20}}>
             <View style={[styles.buttonContainer,]} >

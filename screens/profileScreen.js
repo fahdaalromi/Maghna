@@ -1,5 +1,6 @@
 import React ,{ Component } from 'react';
 import { ScrollView,
+  Platform,
     StyleSheet,
     Text,
     View,
@@ -15,6 +16,7 @@ import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons}
 import {LinearGradient} from 'expo-linear-gradient';
 import FlipToggle from 'react-native-flip-toggle-button';
 import * as firebase from 'firebase';
+
 
 
 export default class profileScreen extends Component {
