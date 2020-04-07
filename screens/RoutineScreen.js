@@ -11,16 +11,87 @@ import { ScrollView,
  Alert,
  ImageBackground,
  Platform,
- Modal
+ Modal, 
+ Linking,
+ AppState,
 } from 'react-native';
 import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons, Entypo, FontAwesome} from "@expo/vector-icons";
 import { Root, Popup } from 'popup-ui'
 import { Ionicons} from '@expo/vector-icons';
 import * as firebase from 'firebase';
+import * as TaskManager from 'expo-task-manager';
+import * as Location from 'expo-location';
+import GeoFencing from 'react-native-geo-fencing';
+import { AsyncStorage } from 'react-native';
+import axios from 'axios';
+import Permissions from 'expo';
+import IntentLauncherAndroid from 'expo';
+//import Modal from 'react-native-modal';
+
+import * as BackgroundFetch from 'expo-background-fetch';
+// End import .. 
 
 
+// save button in line 394 
+BackgroundFetch.setMinimumIntervalAsync(60);
+const BACKGROUND_FETCH_TASK = 'background-fetch';
+const LAST_FETCH_DATE_KEY = 'background-fetch-date';
+
+// Start Class : 
+
+TaskManager.defineTask(BACKGROUND_FETCH_TASK, async ()=>{
+    console.log("YEEEEEEEES");
+    var timez, timeH ,timeM , minInt ,hourInt ,hourInRiyadh,i   ;
+    firebase.database().ref('routine/').once('value',(snap)=>{ 
+        snap.forEach((child)=>{
+            if(child.val().userID===firebase.auth().currentUser.uid ){
+                if(child.val().name == 'morning routine'|| child.val().name == "night routine"){
+                    var date = new Date();
+                     timez = date.toLocaleTimeString();
+                    timeH = timez.substring(0,2);
+                    timeM= timez.substring(3,5);
+                    minInt = parseInt(timeM);
+                    hourInt = parseInt(timeH);
+                    hourInRiyadh;
+                    if(hourInt == 22 ){
+                 
+                     hourInRiyadh =1;
+                    }
+                    else if ( hourInt == 23){
+                     hourInRiyadh = 2 ;
+                    }
+                    else if ( hourInt ==24){
+                     hourInRiyadh = 3;
+                    }
+                    else {
+                     hourInRiyadh = hourInt +3 ;
+                    }
+                    hour = child.val().time.substring (0,2);
+                    minute = child.val().time.substring(3);
+                    var RminInt = parseInt(minute);
+                   var RhourInt = parseInt(hour);
+        console.log (hourInRiyadh == RhourInt && RminInt == minInt);
+         if(hourInRiyadh == RhourInt && RminInt == minInt){
+             for (i = 0 ; i<child.val().actionsID.length ; i++){
+                 if(child.val().actionsID[i] == "001"){
+                      console.log("turn on light");
+                      break;
+                 }//end if turn on..
+                 else if (child.val().actionsID[i] == "002" ){
+                    console.log("turn off light");
+                    break;
+                 } //end else turn off 
+             }//end loop 
+         }//end time equals..
+                }//end check name of routine..
+            }//end if user routine.
+
+}); //end for each 
+}); //end snap shot 
+return BackgroundFetch.Result.NewData;
+}); // end task manager for schedule ..
 export default class RoutineScreen extends Component {
-
+    
     constructor(props) {
         super(props);
         this.state = {
@@ -73,36 +144,236 @@ export default class RoutineScreen extends Component {
           date_picker_display: false,
           hours_array: [],
           minute_array: [],
+          isLocationModalVisible:false,
+          appState: AppState.currentState,
+          isRegistered: false,
+          fetchDate: null,
         }
     }
-    
+    async refreshLastFetchDateAsync() {
+        const lastFetchDateStr = await AsyncStorage.getItem(LAST_FETCH_DATE_KEY);
+     
+        if (lastFetchDateStr) {
+          this.setState({ fetchDate: new Date(+lastFetchDateStr) });
+        }
+      }
+      handleAppStateChange = nextAppState => {
+        if (nextAppState === 'active') {
+          this.refreshLastFetchDateAsync();
+          this.checkStatusAsync();
+        }
+      };
+    componentWillUnmount(){
+        this.checkStatusAsync();
+        AppState.removeEventListener('change',this.handleAppStateChange)  ;
+        const firebaseConfig = {
+
+            apiKey: "AIzaSyCsKoPxvbEp7rAol5m-v3nvgF9t8gUDdNc",
+            authDomain: "maghnatest.firebaseapp.com",
+            databaseURL: "https://maghnatest.firebaseio.com",
+            projectId: "maghnatest",
+            storageBucket: "maghnatest.appspot.com",
+            messagingSenderId: "769071221745",
+            appId: "1:769071221745:web:1f0708d203330948655250" ,
+
+            // apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
+            // authDomain: "maghnaapplication.firebaseapp.com",
+            // databaseURL: "https://maghnaapplication.firebaseio.com",
+            // projectId: "maghnaapplication",
+            // storageBucket: "maghnaapplication.appspot.com",
+            // messagingSenderId: "244460583192",
+            // appId: "1:244460583192:web:f650fa57532a682962c66d",
+        }//end firebase config.
+
+           if (!firebase.apps.length) {
+               firebase.initializeApp(firebaseConfig);
+            }//end if
+    }
+    handleAppStateChange=(nextAppState)=>{
+        if(this.state.appState.match(/inactive|background/)&&
+        nextAppState==='active'){
+            console.log('App has come to the foreground');
+            this._get
+            }
+        this.setState({appState: nextAppState});
+       
+    }
+    async checkStatusAsync() {
+                 
+   
+        const isRegistered = await TaskManager.isTaskRegisteredAsync(BACKGROUND_FETCH_TASK);
+        console.log({isRegistered});
+        this.setState({ status, isRegistered });
+      }
+      
+     
     UNSAFE_componentWillMount(){
     
-      const firebaseConfig = {
+    /* const firebaseConfig = {
     
-        apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
-        authDomain: "maghnaapplication.firebaseapp.com",
-        databaseURL: "https://maghnaapplication.firebaseio.com",
-        projectId: "maghnaapplication",
-        storageBucket: "maghnaapplication.appspot.com",
-        messagingSenderId: "244460583192",
-        appId: "1:244460583192:web:f650fa57532a682962c66d",
+/*
+    apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
+    authDomain: "maghnaapplication.firebaseapp.com",
+    databaseURL: "https://maghnaapplication.firebaseio.com",
+    projectId: "maghnaapplication",
+    storageBucket: "maghnaapplication.appspot.com",
+    messagingSenderId: "244460583192",
+    appId: "1:244460583192:web:f650fa57532a682962c66d",
+
+*/
+/*apiKey: "AIzaSyBUBKLW6Wrk48NQ_TcgUerucTZFphw6l-c",
+authDomain: "maghna-62c55.firebaseapp.com",
+databaseURL: "https://maghna-62c55.firebaseio.com",
+projectId: "maghna-62c55",
+storageBucket: "maghna-62c55.appspot.com",
+messagingSenderId: "21464439338",
+appId: "1:21464439338:web:8c6bb486fb3673e5d14153",
+measurementId: "G-R3BQPCTCTM"
+     
       };
     
     
       if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
-    }
+    }*/
+      AppState.addEventListener('change',this.handleAppStateChange)  ;
     
     }
-    componentDidMount(){
-          
+    
+    
+   async componentDidMount(){
+   
+
+        // const firebaseConfig = {
+
+
+        //     // apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
+        //     // authDomain: "maghnaapplication.firebaseapp.com",
+        //     // databaseURL: "https://maghnaapplication.firebaseio.com",
+        //     // projectId: "maghnaapplication",
+        //     // storageBucket: "maghnaapplication.appspot.com",
+        //     // messagingSenderId: "244460583192",
+        //     // appId: "1:244460583192:web:f650fa57532a682962c66d",
+        // }//end firebase config.
+
+        //    if (!firebase.apps.length) {
+        //        firebase.initializeApp(firebaseConfig);
+        //     }//end if
       this.props.navigation.setParams({
         headerLeft: (<TouchableOpacity onPress={this.handelSignOut}>
            <SimpleLineIcons name="logout" size={24} color='white' style={{marginLeft:15}} />
         </TouchableOpacity>)
-    })
+    }) //end logout
+    var lat;
+    var lng;
+    var iduser = firebase.auth().currentUser.uid;
+    var usersArr =[];
+
+    firebase.database().ref('mgnUsers/'+firebase.auth().currentUser.uid).once('value',(snap)=>{ 
+       console.log("inside database with problem")
+      lat= snap.val().latitude;
+      lng= snap.val().longitude;
+
+    
+        
+          })// end location
+          firebase.database().ref('routine/').once('value',(snap)=>{ 
+              console.log("enter routine");
+            snap.forEach(item => {
+                var temp = item.val();
+                if(temp.userID == iduser )
+                usersArr.push(temp.userID);
+                return false;
+       });
+       if (usersArr.indexOf(iduser)!= -1){
+           console.log("I'm ture");
+           register(usersArr[usersArr.indexOf(iduser)]);
+        
+       } });
+       
+     async function register(data) {
+        try {
+            console.log(TaskManager.isTaskDefined(BACKGROUND_FETCH_TASK));
+            if (TaskManager.isTaskDefined(BACKGROUND_FETCH_TASK)) {
+                console.log("in register task");
+            
+              
+      await BackgroundFetch.registerTaskAsync(BACKGROUND_FETCH_TASK, {
+        minimumInterval: 60, // 1 minute
+        stopOnTerminate: false,
+        startOnBoot: true,
+      });
     }
+  
+        }
+            catch (err) {
+                console.log("registerTaskAsync() failed:", err);
+              }
+
+         
+       
+      console.log("in register task in the end");
+    }
+        
+ // await AsyncStorage.setItem('latPoint',lat);
+//await AsyncStorage.setItem('lngPoint',lng);
+           
+try{
+
+
+let { status} = await Location.requestPermissionsAsync();
+
+
+if(status !=='granted'){
+
+}
+else {
+   // await Location.startLocationUpdatesAsync('locationTask', {
+    //    accuracy: Location.Accuracy.Balanced,
+    //  });
+    if(!(lat==='0'&& lng==='0')){
+    Location.startGeofencingAsync('locationTask',[
+        {
+            "identifier": "A",
+            "latitude": lat,//await AsyncStorage.getItem('latPoint'),
+            "longitude": lng, //await AsyncStorage.getItem('lngPoint'),
+            "notifyOnEnter": true,
+            "notifyOnExit": true,
+            "radius":100
+        }
+    ])
+}
+    }
+   }//end try
+    catch(error){
+       // let status =Location.getProviderStatusAsync();
+      //  if(!Location.hasServicesEnabledAsync()){
+        //   this.setState({isLocationModalVisible: true});
+
+
+    }//end catch
+   
+    }
+    
+      
+  // }
+
+    
+   static createPolygon = async () => {
+
+    const latValue= await AsyncStorage.getItem('latPoint');
+    const lngValue= await AsyncStorage.getItem('lngPoint');
+const polygon=[
+    { lat: latValue+50, lng: lngValue+50 },
+    { lat: latValue-50, lng: lngValue+50 },
+    { lat: latValue-50, lng: lngValue-50 },
+    { lat: latValue+50, lng: lngValue-50},
+    { lat: latValue+50, lng: lngValue+50 }
+]
+return polygon
+
+    }
+
     
     handelSignOut =() =>{
       var {navigation}=this.props;
@@ -194,41 +465,362 @@ export default class RoutineScreen extends Component {
             })
         }
     }
+     
+    setActionTable = () =>{
+        var action =0;
+        var device="";
+        var command ="";
+      for (i = 1 ;i<=2 ;i++ ){
+          switch(i){
+              case 1: 
+              action="001";
+              device="001";
+              command="Turn On Light";
+              firebase.database().ref('action/'+action).set(
+                {
+                    actionID:action,
+                deviceID: device,
+                commandStatment: command,
+    
+                  
+                 
+                  
+                })
+              break;
+              case 2: 
+              action="002";
+              device="001";
+              command="Turn Off Light";
+              firebase.database().ref('action/'+action).set(
+                {
+                    actionID:action,
+                deviceID: device,
+                commandStatment: command,
+    
+                  
+                 
+                  
+                })
+              break;}
+            }
+        }//end set
+  save_button_action(index) {
+    var lat , lng , i;
+   
+    var user = firebase.auth().currentUser;
+    console.log(user.uid)
+    var routineName,routineTime , disRoutine
+    var tmp_str = "" ;
+    var actions = [];
+    var i ,j;
+    var flag = false
+    firebase.database().ref('mgnUsers/'+firebase.auth().currentUser.uid).once('value',(snap)=>{ 
+      console.log("inside database with problem")
+     lat= snap.val().latitude;
+     lng= snap.val().longitude;})
 
-    save_button_action(index) {
+     
 
-        var tmp_str = '';
-        if(this.state.morning_toggle) {
-            tmp_str += "الوضع الصباحي\n"
-        } else if(this.state.home_exit_toggle) {
-            tmp_str += "وضع الخروج\n"
-        } else if(this.state.home_toggle) {
-            tmp_str += "وضع العودة\n"
-        } else if(this.state.home_toggle) {
-            tmp_str += "الوضع المسائي\n"
-        }
+        //var routineTable =  firebase.database().ref('routine/'); 
+     // this.setActionTable();
+        
+        if(this.state.morning_toggle&&index==0) {
+            routineName = "morning routine";
+            tmp_str += " الذي يحتوي على الأوامر الآتية:\n";
+            disRoutine = "الوضع الصباحي";
+            for(i =0;i<this.state.toggle_button_array.length;i++){
+                if (this.state.toggle_button_array[i].clicked){
+                    var ac = i+1;
+                    if (ac == 6 ){
+                        actions.push("00"+1);
+                    }
+                  
+
+                }
+                else {
+                    var num = i+8 ;
+                   
+                    
+                        if (num == 13){
+                            actions.push("00"+2);  
+                        }
+                       
+                    }
+                    
+                
+            }
+        }// end if for morning routine
+         else if(this.state.home_exit_toggle&&index==1) {
+          
+             console.log((lat === 0 && lng===0) + "have error");
+             if(lat === 0 && lng===0){
+                Alert.alert("عذراً", " عليك تفعيل خاصية الموقع حتى يتم انشاء وضع الخروج");
+             }// end if check location
+             else {
+            routineName="leave routine";
+            tmp_str += " الذي يحتوي على الأوامر الآتية:\n";
+             disRoutine = "وضع الخروج";
+             flag = true
+             routineTime = "empty"
+             // check location
+            for(i =0;i<this.state.toggle_button_array.length;i++){
+                if (this.state.toggle_button_array[i].clicked){
+                    var ac = i+1;
+                    if (ac = 6 ){
+                        actions.push("00"+1);
+                    }
+                  
+
+                }
+                else {
+                    var num = i+8 ;
+                   
+                    
+                        if (num == 13){
+                            actions.push("00"+2);  
+                        }
+                       
+                    }
+        }//end loop
+    }//end set info of leave routine.
+        }// end if for leave routine
+         else if(this.state.home_toggle&&index==2) {
+            if(lat === 0 && lng===0){
+                Alert.alert("عذراً", " عليك تفعيل خاصية الموقع حتى يتم انشاء وضع العودة");
+             }
+             else {
+                
+             
+            routineName="come routine";
+            tmp_str += " الذي يحتوي على الأوامر الآتية:\n";
+            disRoutine="وضع العودة";
+            routineTime = "empty"
+            flag =true
+            // set If cindition for check location
+            for(i =0;i<this.state.toggle_button_array.length;i++){
+                if (this.state.toggle_button_array[i].clicked){
+                    var ac = i+1;
+                    if (ac == 6 ){
+                        actions.push("00"+1);
+                    }
+                  
+
+                }
+                else {
+                    var num = i+8 ;
+                   
+                    
+                        if (num == 13){
+                            actions.push("00"+2);  
+                        }
+                       
+                    }
+        }//end loop
+    }//end if for set info of come routine.
+        }//end if for come routine
+         else if(this.state.evening_toggle&&index==3) {
+            routineName="night routine";
+            tmp_str += " الذي يحتوي على الأوامر الآتية:\n";
+            disRoutine="الوضع المسائي";
+            for(i =0;i<this.state.toggle_button_array.length;i++){
+                if (this.state.toggle_button_array[i].clicked){
+                    var ac = i+1;
+                    if (ac = 6 ){
+                        actions.push("00"+1);
+                    }
+                  
+
+                }
+                else {
+                    var num = i+8 ;
+                   
+                    
+                        if (num == 13){
+                            actions.push("00"+2);  
+                        }
+                       
+                    }
+        }//end loop
+        }//end if for night routine
         for(i = 0; i < this.state.toggle_button_array.length; i ++) {
             if(this.state.toggle_button_array[i].clicked) {
-                tmp_str += i.toString() + " تمت إضافة الجهاز للنمط\n";
-            } else {
-                tmp_str += i.toString() + " لم تتم إضافة الجهاز للنمط\n";
-            }
-        }
+                switch(i){
+                    case 0 : tmp_str+= "- تشغيل المكيف \n"
+                    break;
+                    case 1: tmp_str+= "- تشغيل آلة القهوة \n"
+                    break;
+                    case 2: tmp_str+= "- فتح الباب \n"
+                    break;
+                    case 3: tmp_str+="- تشغيل التلفاز \n"
+                    break;
+                    case 4: tmp_str+="- فتح البوابة \n "
+                    break;
+                    case 5: tmp_str+= "-تشغيل النور \n"
+                    break;
+                    case 6:  tmp_str+= "- تشغيل الإنترنت \n"
+                    break;
+                   
+                }}
+                 
+                 else {
+                    switch(i){
+             case 0 : tmp_str+= "- إطفاء المكيف \n"
+             break;
+             case 1: tmp_str+= "- إطفاء القهوة \n"
+             break;
+             case 2: tmp_str+= "- إغلاق الباب \n"
+             break;
+             case 3: tmp_str+="- إطفاء التلفاز \n"
+             break;
+             case 4: tmp_str+="- إغلاق البوابة \n "
+             break;
+             case 5: tmp_str+= "-إطفاء النور \n"
+             break;
+             case 6:  tmp_str+= "- إطفاء الإنترنت \n"
+             break; 
+                 }}
+              
+              
+            } // print routine info 
+        
         for(i = 0; i < this.state.hours_array.length; i ++) {
-            if(this.state.hours_array[i].clicked) {
+            if(!flag&& this.state.hours_array[i].clicked) {
                 tmp_str += "الساعة: " + this.state.hours_array[i].value + '\n';
+                routineTime = this.state.hours_array[i].value;
                 break;
             }
         }
-        for(i = 0; i < this.state.minute_array.length; i ++) {
-            if(this.state.minute_array[i].clicked) {
-                tmp_str += "الدقيقة: " + this.state.minute_array[i].value;
+        //test it 
+        for(j = 0; j < this.state.minute_array.length; j ++) {
+            if(!flag&&this.state.minute_array[j].clicked) {
+                tmp_str += "الدقيقة: " + this.state.minute_array[j].value;
+                routineTime+= ":"+this.state.minute_array[j].value;
                 break;
             }
         }
-        Alert.alert("تم حفظ النمط ", tmp_str);
-
-
+        
+         
+         if ( routineName == "morning routine" || routineName == "evening routine"){
+             
+             var userRoutineArr = [];
+             firebase.database().ref('/routine').once("value",snapshot=>{
+                snapshot.forEach(item => {
+                 var temp = item.val();
+                 if(temp.userID == user.uid){
+                     console.log("yes have user");
+                    userRoutineArr.push(temp.name);
+                    console.log(temp.name);
+                 }//end if 
+                });//end forEach
+        
+             });//end snapshot..
+          
+            if(userRoutineArr.indexOf(routineName)!=-1){
+                console.log("enter if check")
+                firebase.database().ref('/routine').once("value" , (snapshot)=>{
+                    snapshot.forEach(item => {
+                        
+                     var temp = item.val();
+                     console.log(temp);
+                     if(temp.userID == user.uid && temp.name == routineName){
+                         var theId = item.key;
+                
+                    
+                     firebase.database().ref('routine/'+theId).update(  {
+                        name: routineName,
+                       time: routineTime,
+                        actionsID: actions,
+                        day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                        userID: user.uid,
+                        status: 1,
+          
+                      }); 
+                     
+                   
+                  
+                     }//end if 
+                    });//end forEach
+            
+                 });//end snapshot..
+            }
+            else {
+                firebase.database().ref('routine/').push(
+                    {
+                      name: routineName,
+                      time: routineTime,
+                      actionsID: actions,
+                      day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                      userID: user.uid,
+                      status: 1,
+        
+                    })//end set routine.
+            }
+      
+            Alert.alert("تم حفظ نمط "+disRoutine, tmp_str);
+        }//end set morning or night routine.
+      else if(routineName == "leave routine" || routineName == "come routine" 
+                    && user.longitude != 0 && user.latitude !=0){
+                        var userRoutineArr = [];
+                        firebase.database().ref('/routine').once("value",snapshot=>{
+                           snapshot.forEach(item => {
+                            var temp = item.val();
+                            if(temp.userID == user.uid){
+                                console.log("yes have user");
+                               userRoutineArr.push(temp.name);
+                               console.log(temp.name);
+                            }//end if 
+                           });//end forEach
+                   
+                        });//end snapshot..
+                     
+                       if(userRoutineArr.indexOf(routineName)!=-1){
+                           console.log("enter if check")
+                           firebase.database().ref('/routine').once("value" , (snapshot)=>{
+                               snapshot.forEach(item => {
+                                   
+                                var temp = item.val();
+                                console.log(temp);
+                                if(temp.userID == user.uid && temp.name == routineName){
+                                    var theId = item.key;
+                           
+                               
+                                firebase.database().ref('routine/'+theId).update(  {
+                                   name: routineName,
+                                  time: routineTime,
+                                   actionsID: actions,
+                                   day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                                   userID: user.uid,
+                                   status: 1,
+                     
+                                 }); 
+                                
+                              
+                             
+                                }//end if 
+                               });//end forEach
+                       
+                            });//end snapshot..
+                            
+                       
+                            Alert.alert("تم حفظ نمط "+disRoutine, tmp_str);
+            }
+            else{
+            firebase.database().ref('routine/').push(
+                {
+                  name: routineName,
+                  time: routineTime,
+                  actionsID: actions,
+                  day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                  userID: user.uid,
+                  status: 1,
+    
+                })//end set routine. 
+            
+            }
+        }
+      
+        console.log("save routine");
+        
 
 
         if(index == 0) {
@@ -258,7 +850,22 @@ export default class RoutineScreen extends Component {
 
         this.init_hourminute_array()
     }
+    
 
+    select_hour(index) {
+        var hours_array = this.state.hours_array;
+        for(i = 0; i < hours_array.length; i ++) {
+            if(i == index) {
+                hours_array[i].clicked = true;
+            } else {
+                hours_array[i].clicked = false;
+            }
+        }
+        this.setState({
+            hours_array: hours_array
+        })
+    }// end save action..
+      
     select_hour(index) {
         var hours_array = this.state.hours_array;
         for(i = 0; i < hours_array.length; i ++) {
@@ -312,6 +919,21 @@ export default class RoutineScreen extends Component {
         })
     }
 
+    openSetting =()=>{
+        if(Platform.OS=='ios')
+        {
+            Linking.openURL('app-settings:')
+        }
+        else{
+           IntentLauncherAndroid.startActivityAsync(
+               IntentLauncherAndroid.ACTION_LOCATION_SOURCE_SETTINGS
+           ) 
+        }
+        this.setState({openSetting: false})
+
+    }
+
+    
     render() {
         return (
         
@@ -364,8 +986,10 @@ export default class RoutineScreen extends Component {
                                         </ScrollView>
                                     </View>
                                 </View>
-                                <View style = {{width: '100%', justifyContent: 'space-around', marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.signupButton,styles.timersButton , {color: '#8abbc6', marginTop: 0}]} onPress={() => this.setState({date_picker_display: false})} >
+                                <View s
+                                tyle = {{width: '100%', justifyContent: 'space-around', marginTop: 10, marginBottom: 10, flexDirection: 'row'}}>
+                                    <TouchableHighlight 
+                                    style={[styles.buttonContainer, styles.signupButton,styles.timersButton , {color: '#8abbc6', marginTop: 1}]} onPress={() => this.setState({date_picker_display: false})} >
                                         <Text style={styles.signUpText ,{color: '#8abbc6',}}> حفظ </Text>
                                     </TouchableHighlight>
                                     <TouchableHighlight style={[styles.buttonContainer, styles.signupButton, styles.timersButton ,{marginTop: 0}]} onPress={() => {this.setState({date_picker_display: false}); this.init_hourminute_array()}} >
@@ -463,6 +1087,7 @@ export default class RoutineScreen extends Component {
                                     
                                     )
                                 }
+                            
                                 </ScrollView>
                                 <View style = {{width: '100%', flexDirection: 'row', justifyContent: 'space-around'}}>
                                     <TouchableHighlight style={[styles.buttonContainer, styles.sTButton,{color: '#8abbc6',}]} onPress={() => this.save_button_action(0)} >
@@ -582,9 +1207,9 @@ export default class RoutineScreen extends Component {
                                     <TouchableHighlight style={[styles.buttonContainer, styles.sTButton,{color: '#8abbc6'}]} onPress={() => this.save_button_action(1)} >
                                         <Text style={[styles.signUpText,{color: '#8abbc6',}]}> حفظ </Text>
                                     </TouchableHighlight>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.setState({date_picker_display: true})} >
+                                    {/* <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.setState({date_picker_display: true})} >
                                         <Text style={styles.signUpText}> المؤقت </Text>
-                                    </TouchableHighlight>
+                                    </TouchableHighlight> */}
                                 </View>
                             </View>
                         }
@@ -684,9 +1309,9 @@ export default class RoutineScreen extends Component {
                                     <TouchableHighlight style={[styles.buttonContainer, styles.sTButton,{color: '#8abbc6',}]} onPress={() => this.save_button_action(2)} >
                                         <Text style={styles.signUpText,{color: '#8abbc6',}}> حفظ </Text>
                                     </TouchableHighlight>
-                                    <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.setState({date_picker_display: true})} >
+                                    {/* <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.setState({date_picker_display: true})} >
                                         <Text style={styles.signUpText}> المؤقت </Text>
-                                    </TouchableHighlight>
+                                    </TouchableHighlight> */}
                                 </View>
                             </View>
                         }
@@ -833,7 +1458,85 @@ export default class RoutineScreen extends Component {
 
         );
     }
+
+
+
 }
+ 
+
+
+TaskManager.defineTask('locationTask', async ({ data, error }) => {
+    if (error) {
+      // Error occurred - check `error.message` for more details.
+      console.log("I am at defienTask with error" );
+      return;
+    }
+    if (data) {
+      const { locations } = data;
+
+   await   console.log("I am at defienTask with data" );
+    await  console.log("Location "+ locations );
+     await console.log("data region "+data.region.state);
+     // const polygon = RoutineScreen.createPolygon();
+     /* const point= {
+          lat: locations.coords.latitude,
+          lng: locations.coords.longitude
+      };*/
+    //  GeoFencing.containsLocation(point,polygon)
+     // .then(() =>
+      firebase.database().ref('routine/').once('value',(snap)=>{ 
+          snap.forEach((child)=>{
+              if(child.val().userID===firebase.auth().currentUser.uid )
+              if (data.region.state===1){   
+                console.log("data region "+data.region.state);
+                if(child.val().name==='backHome')
+                {
+                    if(child.val().actionID==='001'){
+
+                        console.log("the light must be turend on user entern")
+                     //   axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
+                     //   {'on':true} )
+                    // .then(res => res.json())
+                      }
+                      else {
+                        console.log("the light must be turend off user entern")
+                     //   axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
+                     //   {'on':false} )
+                    //  .then(res => res.json())
+                      }
+                }
+
+              }
+              if (data.region.state===2){
+               // console.log("the light must be turend on user leave before")
+                  if(child.val().name==='leaveHome' ){
+                    console.log("inside leave home")
+                    if(child.val().actionID==='001'){
+                        console.log("the light must be turend on user leave")
+                      // axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
+                       // {'on':true} )
+                     // .then(res => res.json())
+                      }
+                      else {
+                        console.log("the light must be turend off user leave")
+                       // axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
+                       // {'on':false} )
+                     // .then(res => res.json())
+                      }
+
+                  }
+
+
+              }
+              
+     
+      // do something with the locations captured in the background
+      //console.log('point is within polygon');
+         } )
+        })
+       // )
+        }
+    }); 
 
 RoutineScreen.navigationOptions = ({navigation})=> ({
 
@@ -940,8 +1643,9 @@ const styles = StyleSheet.create({
 
  buttonContainer: {
   //height:100,
- marginRight:-100,
+ marginRight:-70,
   flexDirection: 'row',
+  
   justifyContent: 'center',
   alignItems: 'center',
  //marginBottom:30,
