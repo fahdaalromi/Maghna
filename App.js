@@ -1,19 +1,59 @@
 import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
-import React, { useState } from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import React, { useState,useEffect } from 'react';
+import { Platform, StatusBar, StyleSheet, View ,TouchableHighlight,Text} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AppNavigator from './navigation/AppNavigator';
-import Header from './components/Header';
+//import Header from './components/Header';
 import STTButton from './STTButton';
 import global from './global';
-
+import { AsyncStorage } from 'react-native';
+import NavigationService from './navigation/NavigationService';
 
 export default function App(props) {
+
+  
+const [displayMic, setDisplayMic] = useState(false);
+const [buttonDisplay, setButtonDisplay] = useState(false);
+
+useEffect (()=>{
+ },[])
+
+ useEffect (()=>{
+  
+  retrieveLoginStatus();
+  console.log('displayMic is:'+displayMic)
+ })
+
+
+
+  async function retrieveLoginStatus() {
+    if(displayMic){return;
+    }
+    
+   
+         try{
+  let display= await AsyncStorage.getItem("loggedIn");
+  
+  if (display=='friday'){
+    console.log('11- were inside retrieving from asyncStorage and display='+display)
+    setDisplayMic(true)
+  }
+
+  
+          
+             } 
+              catch(e) {
+            console.log('error retrieving login status')
+             }
+            }
+
+
   const [isLoadingComplete, setLoadingComplete] = useState(false);
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
+    
     return (
       <AppLoading
         startAsync={loadResourcesAsync}
@@ -24,16 +64,45 @@ export default function App(props) {
   } else {
     return (
       <View style={styles.container}>
-           {/* <Header/> */}
-       
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <AppNavigator />
-        <STTButton/>
+      {/* <Header/> */}
+  
+   {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+
+      
+      <AppNavigator
+        ref={navigatorRef => {
+          NavigationService.setTopLevelNavigator(navigatorRef);
+        }}
+        onNavigationStateChange={(prevState, currentState) => {
+
+          if(currentState.routes[currentState.index].routeName == 'WelcomeStackNavigator')
+          {
+            setButtonDisplay(false);
+          }
+          else{
+            setButtonDisplay(true);
+          }
+  
+        }}
+      >
+      </AppNavigator>
+      {buttonDisplay &&
+      <View style={{position:'absolute', display:'flex', zIndex:1000,bottom: 85, right:20}}>
+        <View style={[styles.buttonContainer,]} >
+  
+          <STTButton/>
+  
+        </View>
+      </View>  
+      }
+
       </View>
-    );
+
+
+     );
   }
 }
-
+//await return AsyncStorage.getItem("loggedIn")
 async function loadResourcesAsync() {
   await Promise.all([
     Asset.loadAsync([
@@ -65,4 +134,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  buttonContainer: {
+    height:50,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom:10,
+marginRight:40,
+    width:250,
+//     borderRadius:30,
+//     shadowOpacity: 0.17,
+//     backgroundColor: '#fff',
+ 
+   },
 });

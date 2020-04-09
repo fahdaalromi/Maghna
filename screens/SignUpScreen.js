@@ -33,7 +33,7 @@ export default class SignUP extends Component{
   passwordBorder:'#3E82A7',
   conPasswordBorder:'#3E82A7',
   emailBorder:'#3E82A7',
-
+  nameBorder: 'red',
   formErrorMsg:'',
   errorMsgVisibilty:'none',
   passError:'none',
@@ -70,6 +70,18 @@ validateEmail = (email) => {
     this.setState({emailBorder:'#3E82A7'})
   }
 }
+
+
+validateUser = (name) => {
+
+  if(this.state.name == "")
+  {
+  this.setState({nameBorder:'red'})
+    }
+  else {
+    this.setState({nameBorder:'#91b804'})
+  }
+}//end validate phone number
 
 identicalPass = (password) => {
   if (this.state.password !== this.state.confPassword){
@@ -212,36 +224,47 @@ handelSignUp =() =>{
 <View style={styles.firstContainer}>
 <View style={styles.inputContainer} style={styles.inputContainer} >
 
-<TextInput style={styles.inputs}
+<TextInput   style={[styles.input,{borderColor:this.state.nameBorder}]} 
 ref={input=>this.name=input}
 placeholder="أسم المستخدم"
 keyboardType="default"
 underlineColorAndroid='transparent'
-onChangeText={(text) => { this.setState({name: text}) }}
+onChangeText={(text) => { this.setState({name: text})
+this.setState({visibilty: 'none'})
+this.setState({nameBorder: 'red'})
+this.setState({passBorders: '#7db4cb'})}
+}
+
+
+onEndEditing={(name) => this.validateUser(name)}
 value={this.state.name}
+autoCapitalize="none"
 />
 </View>
 </View>
 <View style={[styles.inputContainer , {borderColor: this.state.emailBorder}]}>
 
-<TextInput style={styles.inputs}
-ref={input=>this.email=input}
-placeholder="البريد الإلكتروني"
-keyboardType="email-address"
-underlineColorAndroid='transparent'
-onChangeText={(text) => { 
-  this.setState({email: text}) 
-  this.setState({emailBorder: '#3E82A7'})
-  }}
-  onEndEditing={(email) => this.validateEmail(email)}
-  value={this.state.email}
+<TextInput 
+  style={[styles.input,{borderColor:this.state.emailBorders}]} 
+  ref={input=>this.email=input}
+  placeholder=" البريد الإلكتروني" 
+  onChangeText={(text) => { 
+    this.setState({email: text}) 
+    this.setState({visibilty: 'none'})
+    this.setState({emailBorders: '#7db4cb'})
+    this.setState({passBorders: '#7db4cb'})}}
+    onEndEditing={(email) => this.validateEmail(email)}
+    value={this.state.email}
+  keyboardType="email-address"
+  autoCapitalize="none"
+
 />
 </View>
 
 
 <View style={[styles.inputContainer, {borderColor: this.state.passwordBorder}]}>
 
-<TextInput style={styles.inputs}
+<TextInput   style={[styles.input,{borderColor:this.state.emailBorders}]} 
 ref={input=>this.password=input}
   placeholder="كلمة المرور"
   secureTextEntry={true}
@@ -256,7 +279,7 @@ ref={input=>this.password=input}
 </View>
 
 <View style={[styles.inputContainer,{borderColor: this.state.conPasswordBorder}]}>
-<TextInput style={styles.inputs}
+<TextInput   style={[styles.input,{borderColor:this.state.emailBorders}]} 
 ref={input=>this.confPassword=input}
 placeholder="تأكيد كلمة المرور"
 secureTextEntry={true}
@@ -407,20 +430,29 @@ const styles = StyleSheet.create({
     color: '#9F9F9F',
     fontSize: 20,
     bottom: 30,
-    marginTop: -300,
+    marginTop: -170,
     marginBottom:20,
   },
 
   inputs:{
+    alignSelf: 'center',
+    textAlign: 'center',
     overflow:'visible',
-      //flex:1,
       height:40,
-      alignSelf:'flex-end',
       borderColor: '#EAEAEA',
-      marginRight:20,
-     //marginLeft:-50,
  
   },
+
+  input: {
+    alignSelf: 'center',
+    overflow:'visible',
+    marginTop:-5,
+    textAlign: 'center',
+    height: 46,
+    width: 250,
+  },
+
+  
   firstContainer:{
   marginTop:40,
   },

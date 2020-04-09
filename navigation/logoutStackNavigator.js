@@ -20,8 +20,6 @@ const LogoutStack = createStackNavigator(
         LogOutreport:reportScreen,
        profile:profileScreen,
        SignIn:SignInScreen,
-        
-
     },
     {
         navigationOptions: {

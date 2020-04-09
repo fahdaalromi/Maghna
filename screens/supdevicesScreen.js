@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import {
   Platform,
     StyleSheet, Text, View, Image, Button, backgroundColor, Alert, border, WIDTH, TouchableHighlight, 
-    TouchableOpacity, ScrollView, ImageBackground
+    TouchableOpacity, ScrollView, ImageBackground, AsyncStorage
 } from 'react-native';
 import { FontAwesome,FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons , Entypo} from "@expo/vector-icons";
 import { MonoText } from '../components/StyledText';
@@ -13,6 +13,11 @@ import STTButton from '../STTButton'
 import axios from 'axios'
 import * as FileSystem from 'expo-file-system';
 import * as Permissions from 'expo-permissions';
+import firebase from 'firebase'; 
+import { Audio } from 'expo-av';
+import * as Helper from "../components/Helper";
+ 
+
 
 export default class  supdevicesScreen extends Component {
 
@@ -41,34 +46,159 @@ export default class  supdevicesScreen extends Component {
       errorMsg:null,
       nameBorders:"#3E82A7",
       isLambConnected :'غير متصله',
-      isLambOn : 'مغلقه' 
+      isLambOn : 'مغلقه' ,
+   lambColor :'#2cb457',
+      textColor: styles.openText
     } 
 }
-  async componentDidMount(){
-    this.showLambStatus();
-    }
 
-    showLambStatus(){
-      axios.get('https://192.168.100.17/api/gFkvbAB2-8SKjoqdgiTg5iWEHnpRtpo-gR9WVzoR/lights/3')
-      .then(res => res.json())
-      .then(res => {
-        console.log(res.state.on)
-      }) 
-      .catch(error => {console.log(error);
-        isLambConnected = 'غير متصله',
-        isLambOn = 'مغلقه' 
+
+
+    componentDidMount(){
+ 
+      this._unsubscribe = this.props.navigation.addListener('willFocus',async() => {
+          
+          await this.getAudio();
+
+          var lampStatus = await Helper.getLightStatus();     
+
+          if(lampStatus==true)
+          {
+            this.setState({lambColor :'#2cb457'}); 
+            this.setState({textColor :styles.openText});
+          }
+          else {
+              this.setState({lambColor:'#6FA0AF'});
+              this.setState({textColor:styles.colseText});
+          }
+    
+      });
+
+      this.props.navigation.setParams({
+          headerLeft: (<TouchableOpacity onPress={this.handelSignOut}>
+            <SimpleLineIcons name="logout" size={24} color='white' style={{marginLeft:15}} />
+          </TouchableOpacity>)
       })
-
-      if(res.state.on == true){
-        isLambConnected = 'متصله',
-        isLambOn = 'مفتوحه' 
-      }
-
-      if(res.state.on == false){
-        isLambConnected = 'متصله',
-        isLambOn = 'مغلقه' 
-      }
+  
     }
+ 
+    async getAudio () {  
+      // Read report
+     
+       
+      let fileURL = '';    
+      const text =  ' الأجهزة المُتَّصِلَه ، الإنَارَهْ ، مُتَّصِلَه  ، التِّلْفَازْ ، غَيْر مُتَّصِل ، البَّوابَهْ غَيْر مُتَّصِلَهْ، الإنترنت غَيْر مُتَّصِل';
+       
+      
+             axios.post(`http://45.32.251.50`,  {text} )
+               .then(res => {
+                  console.log("----------------------xxxx--------------------------"+res.data);
+                 fileURL = res.data;
+                     console.log(fileURL);
+           
+                     this.playAudio(fileURL);
+     
+               })
+             }
+             async playAudio(fileURL){
+             
+     
+               await Audio.setAudioModeAsync({
+                 interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+                playsInSilentModeIOS: true,
+                playsInSilentLockedModeIOS: true,
+                shouldDuckAndroid: true,
+                interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+                playThroughEarpieceAndroid: false,
+                staysActiveInBackground: true,
+              });
+        
+        
+        
+        
+           
+              // OR
+              const playbackObject = await Audio.Sound.createAsync(
+                { uri: fileURL },
+                { shouldPlay: true }
+              );
+     
+               
+         
+         //http://localhost/fiels/output-0.6839748394381258.mp3
+           }
+     
+
+
+
+
+    // async showLambStatus(){
+    //   axios.get('https://192.168.100.17/api/gFkvbAB2-8SKjoqdgiTg5iWEHnpRtpo-gR9WVzoR/lights/3')
+    //   .then(res => res.json())
+    //   .then(res => {
+    //     console.log(res.state.on)
+    //   }) 
+      
+    //   .catch(error => {console.log(error);
+      
+    //   })
+
+    //   if(res.state.on == true){
+    //     isLambConnected = 'متصله',
+    //     isLambOn = 'مفتوحه' 
+    //     lambColor = '#2cb457'
+    //     textColor = styles.openText
+       
+    //     let fileURL = '';    
+    //     const text =  'الأجهزة المُتَّصِلَه ، الإنَارَهْ ، مُتَّصِلَه وَ مَفْتُوحَه ، التِّلْفَازْ ، غَيْر مُتَّصِل ومُغْلَق ، البَّوابَهْ غَيْر مُتَّصِلَه وَ مُغْلَقَهْ';
+       
+    //            axios.post(`http://45.32.251.50`,  {text} )
+    //              .then(res => {
+    //                 console.log("----------------------xxxx--------------------------"+res.data);
+    //                fileURL = res.data;
+    //                    console.log(fileURL);
+    //                    this.playAudio(fileURL);
+       
+    //              })
+    //   }
+      
+
+    //   if(res.state.on == false){
+    //     isLambConnected = 'متصله',
+    //     isLambOn = 'مغلقه' 
+    //     lambColor = '#6FA0AF'
+    //     textColor = styles.colseText
+
+    //     let fileURL = '';    
+    //     const text =  ' الأجهزة المُتَّصِلَه ، الإنَارَهْ ، مُتَّصِلَه وَ مُغْلَقَهْ ، التِّلْفَازْ ، غَيْر مُتَّصِل ومُغْلَق ، البَّوابَهْ غَيْر مُتَّصِلَه وَ مُغْلَقَهْ';
+       
+    //            axios.post(`http://45.32.251.50`,  {text} )
+    //              .then(res => {
+    //                 console.log("----------------------xxxx--------------------------"+res.data);
+    //                fileURL = res.data;
+    //                    console.log(fileURL);
+    //                    this.playAudio(fileURL);
+       
+    //              })
+    //   }
+
+    //   else {  isLambConnected = 'غير متصله',
+    //   isLambOn = 'مغلقه' 
+    //   lambColor = 'grey'
+    //   textColor = styles.NotConnText  
+
+    //   let fileURL = '';    
+    //   const text =  'الأجهزة المُتَّصِلَه ، الإنَارَهْ ، غَيْر مُتَّصِلَه وَ مُغْلَقَهْ ، التِّلْفَازْ ، غَيْر مُتَّصِل ومُغْلَق ، البَّوابَهْ غَيْر مُتَّصِلَه وَ مُغْلَقَهْ';
+     
+    //          axios.post(`http://45.32.251.50`,  {text} )
+    //            .then(res => {
+    //               console.log("----------------------xxxx--------------------------"+res.data);
+    //              fileURL = res.data;
+    //                  console.log(fileURL);
+    //                  this.playAudio(fileURL);
+     
+    //            })}
+    // }
 
 
 UNSAFE_componentWillMount(){
@@ -90,14 +220,8 @@ UNSAFE_componentWillMount(){
 }
 
 }
-componentDidMount(){
-      
-  this.props.navigation.setParams({
-    headerLeft: (<TouchableOpacity onPress={this.handelSignOut}>
-       <SimpleLineIcons name="logout" size={24} color='white' style={{marginLeft:15}} />
-    </TouchableOpacity>)
-})
-}
+
+
 
 handelSignOut =() =>{
   var {navigation}=this.props;
@@ -119,6 +243,9 @@ handelSignOut =() =>{
     
 };
 
+  componentWillUnmount(){
+    this._unsubscribe();
+  }
 
   render() {
     return (
@@ -129,34 +256,45 @@ handelSignOut =() =>{
 
     <ImageBackground source={require('./otherhalf.png')} style={{ width:'100%' , height:'120%', flex: 1, justifyContent: "center", alignItems: "center"}}>
 
-    <ScrollView>
+    <ScrollView  style={styles.scrollView}>
 
     <View style={styles.scontainer}>
-    <Text style={styles.openText}>الإنارة</Text>
-    <Text style={styles.bottomText}>{this.state.isLambConnected}</Text>
-    <Text style={styles.bottomText}>{this.state.isLambOn}</Text>
-    <MaterialCommunityIcons style={{ right:190, bottom: 17}} name="lightbulb-on-outline" size={55} color= {'#2cb457'} />
+    
+    <Text style={this.state.textColor}>الإنارة</Text>
+    <MaterialCommunityIcons style={{ right:190, bottom: 17}} name="lightbulb-on-outline" size={55} color= {this.state.lambColor} />
+   
     </View>
     
-    
+  
     <View style={styles.scontainer}>
-    <Text style={styles.colseText}>التلفاز</Text>
-    <Text style={styles.bottomText}>غير متصل</Text>
-    <FontAwesome style={{ right:190, bottom: 17}} name="tv" size={55} color= {'#6FA0AF'} />
+    <Text style={styles.NotConnText}>التلفاز</Text>
+
+    <FontAwesome style={{ right:190, bottom: 17}} name="tv" size={55} color= {'grey'} />
     </View>
     
     
     <View style={styles.scontainer}>
     <Text style={styles.NotConnText}>البوابة</Text>
-    <Text style={styles.bottomText}>غير متصلة</Text>
+ 
     <MaterialCommunityIcons style={{ right:190, bottom: 17}} name="garage" size={55} color= {'grey'} />
     </View>
     
     
     <View style={styles.scontainer}>
-    <Text style={styles.colseText}>الانترنت</Text>
-    <Text style={styles.bottomText}> متصل</Text>
-    <Feather style={{ right:190, bottom: 17}} name="wifi" size={55} color= {'#6FA0AF'} />
+    <Text style={styles.NotConnText}>الانترنت</Text>
+
+    <Feather style={{ right:190, bottom: 17}} name="wifi" size={55} color= {'grey'} />
+    </View>
+
+    <View style={styles.scontainer}>
+    <Text style={styles.colseText}>التكييف</Text>
+    < Entypo style={{ right:190, bottom: 17}} name="air" size={55} color= {'grey'} />
+    </View>
+
+
+    <View style={styles.scontainer}>
+    <Text style={styles.colseText}>آلة القهوة</Text>
+    <MaterialCommunityIcons style={{ right:190, bottom: 17}} name="coffee-outline" size={55} color= {'grey'} />
     </View>
 
     </ScrollView>
@@ -169,10 +307,10 @@ handelSignOut =() =>{
     </View>
     );
 }
-    
+       
 }
 
-
+   
 
 
 supdevicesScreen.navigationOptions = ({navigation})=> ({
@@ -247,6 +385,9 @@ const styles = StyleSheet.create({
    
     
   },
+
+  scrollView: {
+  },
   signUpText: {
     color: 'white',
     fontSize:15,
@@ -288,7 +429,7 @@ const styles = StyleSheet.create({
         paddingTop:8, 
         paddingRight:13,
         top:40,
-        width:80,
+        width:80, 
         marginLeft:-20,
         
       },
@@ -306,7 +447,7 @@ const styles = StyleSheet.create({
     NotConnText:{
       color: 'grey' ,
       fontWeight: 'bold', 
-      fontSize:22, 
+      fontSize:22,    
       top:37,
       marginLeft:-20,
     }

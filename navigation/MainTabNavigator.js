@@ -41,7 +41,6 @@ welcomeStack.path = '';
 
 const HomeStack = createStackNavigator(
   {
-   
     Home:HomeScreen,
     instructions:instructionsScreen,
   },
