@@ -26,6 +26,7 @@ export default class reportScreen extends Component {
     constructor(props) {
 
         super(props);
+        console.log(props);
         this.state = {
             show_shape: true,
             profile_percent: 80,
@@ -38,6 +39,9 @@ export default class reportScreen extends Component {
         }
 
     }
+
+
+   
     
     async componentDidMount(){
 

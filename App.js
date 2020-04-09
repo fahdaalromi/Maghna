@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import AppNavigator from './navigation/AppNavigator';
 //import Header from './components/Header';
 import STTButton from './STTButton';
+
 import global from './global';
 import { AsyncStorage } from 'react-native';
 import NavigationService from './navigation/NavigationService';

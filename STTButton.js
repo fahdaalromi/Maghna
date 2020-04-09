@@ -144,7 +144,6 @@ export default class SpeechToTextButton extends Component {
   }
 
   getTranscription = async () => {
-
     console.log("this:",this);
     this.setState({ isFetching: true })
     try {

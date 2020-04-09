@@ -44,6 +44,7 @@ UNSAFE_componentWillMount(){
 
   const firebaseConfig = {
 
+/*
     apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
     authDomain: "maghnaapplication.firebaseapp.com",
     databaseURL: "https://maghnaapplication.firebaseio.com",
@@ -51,6 +52,24 @@ UNSAFE_componentWillMount(){
     storageBucket: "maghnaapplication.appspot.com",
     messagingSenderId: "244460583192",
     appId: "1:244460583192:web:f650fa57532a682962c66d",
+
+*/
+// apiKey: "AIzaSyBUBKLW6Wrk48NQ_TcgUerucTZFphw6l-c",
+// authDomain: "maghna-62c55.firebaseapp.com",
+// databaseURL: "https://maghna-62c55.firebaseio.com",
+// projectId: "maghna-62c55",
+// storageBucket: "maghna-62c55.appspot.com",
+// messagingSenderId: "21464439338",
+// appId: "1:21464439338:web:8c6bb486fb3673e5d14153",
+// measurementId: "G-R3BQPCTCTM"
+apiKey: "AIzaSyCsKoPxvbEp7rAol5m-v3nvgF9t8gUDdNc",
+authDomain: "maghnatest.firebaseapp.com",
+databaseURL: "https://maghnatest.firebaseio.com",
+projectId: "maghnatest",
+storageBucket: "maghnatest.appspot.com",
+messagingSenderId: "769071221745",
+appId: "1:769071221745:web:1f0708d203330948655250" ,
+     
   };
 
 
