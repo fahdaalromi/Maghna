@@ -499,29 +499,12 @@ checkData= async  ()=>{
   }
 
     _onPress1(){
+      const newState = !this.state.toggle1;
       var theId;
-         firebase.database().ref('/routine').once("value",snapshot=>{
-            snapshot.forEach(item => {
-             var temp = item.val();
-             if(temp.userID == user.uid){
-                
-               userRoutineArr.push(temp.name);
-               console.log(temp.name);
-             }//end if 
-             if(userRoutineArr.indexOf(routineName)!= -1){
-              theId = item.key;
-              firebase.database().ref('routine/'+theId).update(  {
-                status: 1,
-      
-              }); 
-             }
-      
-             this.setState({toggle2:newState})});//end forEach
-          }); //end snapshot..
       var routineName = 'come routine';
       var user = firebase.auth().currentUser;
         var  userRoutineArr =[];
-        const newState = !this.state.toggle1;
+       
         if (newState){
           firebase.database().ref('/routine').once("value",snapshot=>{
             snapshot.forEach(item => {

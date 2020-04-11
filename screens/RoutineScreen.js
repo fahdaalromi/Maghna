@@ -239,8 +239,7 @@ measurementId: "G-R3BQPCTCTM"
       AppState.addEventListener('change',this.handleAppStateChange)  ;
     
     }
-    
-    
+   
    async componentDidMount(){
    
 
@@ -287,7 +286,7 @@ measurementId: "G-R3BQPCTCTM"
        });
        if (usersArr.indexOf(iduser)!= -1){
            console.log("I'm ture");
-           register(usersArr[usersArr.indexOf(iduser)]);
+           this.triggerTimeBasedRoutine(usersArr[usersArr.indexOf(iduser)]);
         
        } });
        
@@ -307,6 +306,57 @@ measurementId: "G-R3BQPCTCTM"
   
         }
             catch (err) {
+                TaskManager.defineTask(BACKGROUND_FETCH_TASK, async ()=>{
+                    console.log("YEEEEEEEES");
+                    var timez, timeH ,timeM , minInt ,hourInt ,hourInRiyadh,i   ;
+                    firebase.database().ref('routine/').once('value',(snap)=>{ 
+                        snap.forEach((child)=>{
+                            if(child.val().userID===firebase.auth().currentUser.uid ){
+                                if(child.val().name == 'morning routine'|| child.val().name == "night routine"){
+                                    var date = new Date();
+                                     timez = date.toLocaleTimeString();
+                                    timeH = timez.substring(0,2);
+                                    timeM= timez.substring(3,5);
+                                    minInt = parseInt(timeM);
+                                    hourInt = parseInt(timeH);
+                                    hourInRiyadh;
+                                    if(hourInt == 22 ){
+                                 
+                                     hourInRiyadh =1;
+                                    }
+                                    else if ( hourInt == 23){
+                                     hourInRiyadh = 2 ;
+                                    }
+                                    else if ( hourInt ==24){
+                                     hourInRiyadh = 3;
+                                    }
+                                    else {
+                                     hourInRiyadh = hourInt +3 ;
+                                    }
+                                    hour = child.val().time.substring (0,2);
+                                    minute = child.val().time.substring(3);
+                                    var RminInt = parseInt(minute);
+                                   var RhourInt = parseInt(hour);
+                        console.log (hourInRiyadh == RhourInt && RminInt == minInt);
+                         if(hourInRiyadh == RhourInt && RminInt == minInt){
+                             for (i = 0 ; i<child.val().actionsID.length ; i++){
+                                 if(child.val().actionsID[i] == "001"){
+                                      console.log("turn on light");
+                                      break;
+                                 }//end if turn on..
+                                 else if (child.val().actionsID[i] == "002" ){
+                                    console.log("turn off light");
+                                    break;
+                                 } //end else turn off 
+                             }//end loop 
+                         }//end time equals..
+                                }//end check name of routine..
+                            }//end if user routine.
+                
+                }); //end for each 
+                }); //end snap shot 
+                return BackgroundFetch.Result.NewData;
+                }); // end task manager for schedule ..
                 console.log("registerTaskAsync() failed:", err);
               }
 

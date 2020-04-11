@@ -23,6 +23,7 @@ var  hour , minute;
   .onRun((context) => {
     var actionArr =[] ;
     var date = new Date();
+    var routineStatus ; 
    var time = date.getHours();
    var timez = date.toLocaleTimeString();
    var timeH = timez.substring(0,2);
@@ -67,6 +68,7 @@ console.log("enter to database");
     minute = routineTime.substring(3);
     RminInt = parseInt(minute);
     RhourInt = parseInt(hour);
+   
     if(hourInRiyadh == RhourInt && RminInt == minInt && temp.status == 1){
         if (actionArr.indexOf("001")!= -1){
             console.log("It is true id is 001")
