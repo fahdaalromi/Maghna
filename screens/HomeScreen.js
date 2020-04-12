@@ -521,13 +521,16 @@ checkData= async  ()=>{
       
               }); 
               this.setState({toggle1:newState}) }
-              else {
-               Alert.alert("عذراً", " لم تقم بإنشاء وضع العودة إلى المنزل من قبل ، عليك أولاً إنشاؤه");
-               this.setState({toggle1:!newState})
- 
-              }
+             
       
              });//end forEach
+             if (userRoutineArr.indexOf(routineName)== -1){
+              
+                Alert.alert("عذراً", " لم تقم بإنشاء وضع العودة إلى المنزل من قبل ، عليك أولاً إنشاؤه");
+                this.setState({toggle1:!newState})
+  
+               
+             }
           }); //end snapshot..
       
          }
@@ -581,13 +584,16 @@ checkData= async  ()=>{
       
               }); 
               this.setState({toggle2:newState}) }
-             else {
-              Alert.alert("عذراً", " لم تقم بإنشاء الوضع الصباحي من قبل ، عليك أولاً إنشاؤه");
-              this.setState({toggle2:!newState})
-
-             }
+           
       
              });//end forEach
+             if(userRoutineArr.indexOf(routineName)== -1){
+              
+                Alert.alert("عذراً", " لم تقم بإنشاء الوضع الصباحي من قبل ، عليك أولاً إنشاؤه");
+                this.setState({toggle2:!newState})
+  
+               
+             }
           }); //end snapshot..
       
          }
@@ -643,13 +649,16 @@ checkData= async  ()=>{
         }); 
        
        this.setState({toggle3:newState}) }
-       else {
-        Alert.alert("عذراً", " لم تقم بإنشاء وضع الخروج من المنزل من قبل ، عليك أولاً إنشاؤه");
-        this.setState({toggle3:!newState})
-
-       }
+      
 
         });//end forEach
+        if(userRoutineArr.indexOf(routineName) == -1){
+       
+            Alert.alert("عذراً", " لم تقم بإنشاء وضع الخروج من المنزل من قبل ، عليك أولاً إنشاؤه");
+            this.setState({toggle3:!newState})
+    
+           
+        }
     }); //end snapshot..
 
    }
@@ -681,7 +690,7 @@ checkData= async  ()=>{
     
     _onPress4(){
       var theId;
-      var routineName = 'naight routine';
+      var routineName = 'night routine';
       var user = firebase.auth().currentUser;
         var  userRoutineArr =[];
         const newState = !this.state.toggle4;
@@ -701,13 +710,14 @@ checkData= async  ()=>{
       
               }); 
               this.setState({toggle4:newState}) }
-             else {
-              Alert.alert("عذراً", " لم تقم بإنشاء الوضع المسائي من قبل ، عليك أولاً إنشاؤه");
-              this.setState({toggle4:!newState})
-
-             }
+           
       
               });//end forEach
+              if (userRoutineArr.indexOf(routineName)== -1) {
+                Alert.alert("عذراً", " لم تقم بإنشاء الوضع المسائي من قبل ، عليك أولاً إنشاؤه");
+                this.setState({toggle4:!newState})
+  
+               }
           }); //end snapshot..
       
          }

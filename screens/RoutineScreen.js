@@ -39,57 +39,7 @@ const LAST_FETCH_DATE_KEY = 'background-fetch-date';
 
 // Start Class : 
 
-TaskManager.defineTask(BACKGROUND_FETCH_TASK, async ()=>{
-    console.log("YEEEEEEEES");
-    var timez, timeH ,timeM , minInt ,hourInt ,hourInRiyadh,i   ;
-    firebase.database().ref('routine/').once('value',(snap)=>{ 
-        snap.forEach((child)=>{
-            if(child.val().userID===firebase.auth().currentUser.uid ){
-                if(child.val().name == 'morning routine'|| child.val().name == "night routine"){
-                    var date = new Date();
-                     timez = date.toLocaleTimeString();
-                    timeH = timez.substring(0,2);
-                    timeM= timez.substring(3,5);
-                    minInt = parseInt(timeM);
-                    hourInt = parseInt(timeH);
-                    hourInRiyadh;
-                    if(hourInt == 22 ){
-                 
-                     hourInRiyadh =1;
-                    }
-                    else if ( hourInt == 23){
-                     hourInRiyadh = 2 ;
-                    }
-                    else if ( hourInt ==24){
-                     hourInRiyadh = 3;
-                    }
-                    else {
-                     hourInRiyadh = hourInt +3 ;
-                    }
-                    hour = child.val().time.substring (0,2);
-                    minute = child.val().time.substring(3);
-                    var RminInt = parseInt(minute);
-                   var RhourInt = parseInt(hour);
-        console.log (hourInRiyadh == RhourInt && RminInt == minInt);
-         if(hourInRiyadh == RhourInt && RminInt == minInt){
-             for (i = 0 ; i<child.val().actionsID.length ; i++){
-                 if(child.val().actionsID[i] == "001"){
-                      console.log("turn on light");
-                      break;
-                 }//end if turn on..
-                 else if (child.val().actionsID[i] == "002" ){
-                    console.log("turn off light");
-                    break;
-                 } //end else turn off 
-             }//end loop 
-         }//end time equals..
-                }//end check name of routine..
-            }//end if user routine.
 
-}); //end for each 
-}); //end snap shot 
-return BackgroundFetch.Result.NewData;
-}); // end task manager for schedule ..
 export default class RoutineScreen extends Component {
     
     constructor(props) {
@@ -106,6 +56,8 @@ export default class RoutineScreen extends Component {
           isActive:false,
           amount:0,
           changePassword:false,
+          timeText : "" ,
+          isSelectTime: false,
     
           passwordBorder:'#3E82A7',
           conPasswordBorder:'#3E82A7',
@@ -149,20 +101,20 @@ export default class RoutineScreen extends Component {
           isRegistered: false,
           fetchDate: null,
         }
-    }
+    } //end constructor 
     async refreshLastFetchDateAsync() {
         const lastFetchDateStr = await AsyncStorage.getItem(LAST_FETCH_DATE_KEY);
      
         if (lastFetchDateStr) {
           this.setState({ fetchDate: new Date(+lastFetchDateStr) });
         }
-      }
+      } //end refreshLastFetchDateAsync()..
       handleAppStateChange = nextAppState => {
         if (nextAppState === 'active') {
           this.refreshLastFetchDateAsync();
           this.checkStatusAsync();
         }
-      };
+      }; // end handleAppStateChange..
     componentWillUnmount(){
         this.checkStatusAsync();
         AppState.removeEventListener('change',this.handleAppStateChange)  ;
@@ -188,7 +140,7 @@ export default class RoutineScreen extends Component {
            if (!firebase.apps.length) {
                firebase.initializeApp(firebaseConfig);
             }//end if
-    }
+    } //end componentWillUnmount()
     handleAppStateChange=(nextAppState)=>{
         if(this.state.appState.match(/inactive|background/)&&
         nextAppState==='active'){
@@ -197,14 +149,14 @@ export default class RoutineScreen extends Component {
             }
         this.setState({appState: nextAppState});
        
-    }
+    } //end handleAppStateChange ,,
     async checkStatusAsync() {
                  
    
         const isRegistered = await TaskManager.isTaskRegisteredAsync(BACKGROUND_FETCH_TASK);
         console.log({isRegistered});
         this.setState({ status, isRegistered });
-      }
+      } //end checkStatusAsync()..
       
      
     UNSAFE_componentWillMount(){
@@ -238,7 +190,7 @@ measurementId: "G-R3BQPCTCTM"
     }*/
       AppState.addEventListener('change',this.handleAppStateChange)  ;
     
-    }
+    }//UNSAFE_componentWillMount()..
    
    async componentDidMount(){
    
@@ -286,84 +238,11 @@ measurementId: "G-R3BQPCTCTM"
        });
        if (usersArr.indexOf(iduser)!= -1){
            console.log("I'm ture");
-           this.triggerTimeBasedRoutine(usersArr[usersArr.indexOf(iduser)]);
+          
         
        } });
        
-     async function register(data) {
-        try {
-            console.log(TaskManager.isTaskDefined(BACKGROUND_FETCH_TASK));
-            if (TaskManager.isTaskDefined(BACKGROUND_FETCH_TASK)) {
-                console.log("in register task");
-            
-              
-      await BackgroundFetch.registerTaskAsync(BACKGROUND_FETCH_TASK, {
-        minimumInterval: 60, // 1 minute
-        stopOnTerminate: false,
-        startOnBoot: true,
-      });
-    }
-  
-        }
-            catch (err) {
-                TaskManager.defineTask(BACKGROUND_FETCH_TASK, async ()=>{
-                    console.log("YEEEEEEEES");
-                    var timez, timeH ,timeM , minInt ,hourInt ,hourInRiyadh,i   ;
-                    firebase.database().ref('routine/').once('value',(snap)=>{ 
-                        snap.forEach((child)=>{
-                            if(child.val().userID===firebase.auth().currentUser.uid ){
-                                if(child.val().name == 'morning routine'|| child.val().name == "night routine"){
-                                    var date = new Date();
-                                     timez = date.toLocaleTimeString();
-                                    timeH = timez.substring(0,2);
-                                    timeM= timez.substring(3,5);
-                                    minInt = parseInt(timeM);
-                                    hourInt = parseInt(timeH);
-                                    hourInRiyadh;
-                                    if(hourInt == 22 ){
-                                 
-                                     hourInRiyadh =1;
-                                    }
-                                    else if ( hourInt == 23){
-                                     hourInRiyadh = 2 ;
-                                    }
-                                    else if ( hourInt ==24){
-                                     hourInRiyadh = 3;
-                                    }
-                                    else {
-                                     hourInRiyadh = hourInt +3 ;
-                                    }
-                                    hour = child.val().time.substring (0,2);
-                                    minute = child.val().time.substring(3);
-                                    var RminInt = parseInt(minute);
-                                   var RhourInt = parseInt(hour);
-                        console.log (hourInRiyadh == RhourInt && RminInt == minInt);
-                         if(hourInRiyadh == RhourInt && RminInt == minInt){
-                             for (i = 0 ; i<child.val().actionsID.length ; i++){
-                                 if(child.val().actionsID[i] == "001"){
-                                      console.log("turn on light");
-                                      break;
-                                 }//end if turn on..
-                                 else if (child.val().actionsID[i] == "002" ){
-                                    console.log("turn off light");
-                                    break;
-                                 } //end else turn off 
-                             }//end loop 
-                         }//end time equals..
-                                }//end check name of routine..
-                            }//end if user routine.
-                
-                }); //end for each 
-                }); //end snap shot 
-                return BackgroundFetch.Result.NewData;
-                }); // end task manager for schedule ..
-                console.log("registerTaskAsync() failed:", err);
-              }
-
-         
-       
-      console.log("in register task in the end");
-    }
+    
         
  // await AsyncStorage.setItem('latPoint',lat);
 //await AsyncStorage.setItem('lngPoint',lng);
@@ -461,7 +340,7 @@ return polygon
                 }
                 
             } else {
-                if(i > 23) {
+                if(i > 24) {
                     minute_array.push({value: i.toString(), clicked: false})
                 } else {
                     hours_array.push({value: i.toString(), clicked: false})
@@ -485,6 +364,10 @@ return polygon
     }
 
     release_button_action(index) {
+        this.setState({
+            timeText:""
+                  })
+        var user = firebase.auth().currentUser;
         if(index == 0) {
             this.setState({
                 morning_toggle: true,
@@ -492,13 +375,65 @@ return polygon
                 home_toggle: false,
                 evening_toggle: false,
             })
-        } else if(index == 1) {
+           
+                 
+            var routineAcc = [];
+            var routineTime ;
+            firebase.database().ref('/routine').once("value",snapshot=>{
+               snapshot.forEach(item => {
+                var temp = item.val();
+                console.log('for each')
+                if(temp.userID == user.uid && temp.name == 'morning routine'){
+                    console.log('in if')
+                    console.log("yes have user");
+                   routineAcc= temp.actionsID;
+                     routineTime = temp.time;
+                   console.log(temp.name);
+                   console.log(routineTime);
+                   this.setState({
+                    timeText: "وقت النمط الذي قمت بتخزينه هو: " +routineTime
+                          })
+                }//end if 
+               });//end forEach
+        
+            });//end snapshot..
+            
+            if (routineAcc.indexOf ('001') != -1){
+  
+               this.click_togglebutton(5);
+               
+            }
+           
+         
+            
+        }
+         else if(index == 1) {
             this.setState({
                 morning_toggle: false,
                 home_exit_toggle: true,
                 home_toggle: false,
                 evening_toggle: false,
             })
+            var routineAcc = [];
+            var routineTime ;
+            firebase.database().ref('/routine').once("value",snapshot=>{
+               snapshot.forEach(item => {
+                var temp = item.val();
+                console.log('for each')
+                if(temp.userID == user.uid && temp.name == 'leave routine'){
+                    console.log('in if')
+                    console.log("yes have user");
+                   routineAcc= temp.actionsID;
+                     routineTime = temp.time;
+                   console.log(temp.name);
+                }//end if 
+               });//end forEach
+       
+            });//end snapshot..
+            if (routineAcc.indexOf ('001') != -1){
+               this.click_togglebutton(5);
+            }
+            
         } else if(index == 2) {
             this.setState({
                 morning_toggle: false,
@@ -506,6 +441,26 @@ return polygon
                 home_toggle: true,
                 evening_toggle: false,
             })
+            var routineAcc = [];
+            var routineTime ;
+            firebase.database().ref('/routine').once("value",snapshot=>{
+               snapshot.forEach(item => {
+                var temp = item.val();
+                console.log('for each')
+                if(temp.userID == user.uid && temp.name == 'come routine'){
+                    console.log('in if')
+                    console.log("yes have user");
+                   routineAcc= temp.actionsID;
+                     routineTime = temp.time;
+                   console.log(temp.name);
+                }//end if 
+               });//end forEach
+       
+            });//end snapshot..
+            if (routineAcc.indexOf ('001') != -1){
+               this.click_togglebutton(5);
+            }
+            
         } else if(index == 3) {
             this.setState({
                 morning_toggle: false,
@@ -513,6 +468,31 @@ return polygon
                 home_toggle: false,
                 evening_toggle: true,
             })
+            var routineAcc = [];
+            var routineTime ;
+            firebase.database().ref('/routine').once("value",snapshot=>{
+               snapshot.forEach(item => {
+                var temp = item.val();
+                console.log('for each')
+                if(temp.userID == user.uid && temp.name == 'night routine'){
+                    console.log('in if')
+                    console.log("yes have user");
+                   routineAcc= temp.actionsID;
+                     routineTime = temp.time;
+                   console.log(temp.name);
+                   this.setState({
+                    timeText: "وقت النمط الذي قمت بتخزينه هو: " +routineTime
+                          })
+                }//end if 
+
+               });//end forEach
+             
+       
+            });//end snapshot..
+            if (routineAcc.indexOf ('001') != -1){
+                this.click_togglebutton(5);
+             }
+            
         }
     }
      
@@ -566,7 +546,7 @@ return polygon
     var flag = false
     var flagH = false ;
     firebase.database().ref('mgnUsers/'+firebase.auth().currentUser.uid).once('value',(snap)=>{ 
-      console.log("inside database with problem")
+    
      lat= snap.val().latitude;
      lng= snap.val().longitude;})
 
@@ -601,6 +581,30 @@ return polygon
                     
                 
             }
+                 
+        for(i = 0; i < this.state.hours_array.length; i ++) {
+            if( !flag&&this.state.hours_array[i].clicked) {
+                this.setState ({isSelectTime :true});
+                  flagH = true;
+               
+                routineTime = this.state.hours_array[i].value;
+                break;
+            }
+          
+        }
+        if (!this.state.isSelectTime){
+            Alert.alert("عذراً", " عليك اختيار وقت للوضع أولاً");
+           return;
+        }
+        //test it 
+        for(j = 0; j < this.state.minute_array.length; j ++) {
+            if(!flag&&this.state.minute_array[j].clicked) {
+             
+                routineTime+= ":"+this.state.minute_array[j].value;
+                break;
+            }
+        }
+        
         }// end if for morning routine
          else if(this.state.home_exit_toggle&&index==1) {
           
@@ -694,6 +698,29 @@ return polygon
                        
                     }
         }//end loop
+        for(i = 0; i < this.state.hours_array.length; i ++) {
+            if( !flag&&this.state.hours_array[i].clicked) {
+                this.setState ({isSelectTime :true});
+                  flagH = true;
+               
+                routineTime = this.state.hours_array[i].value;
+                console.log("print")
+                break;
+            }
+          
+        }
+        if (!this.state.isSelectTime){
+            Alert.alert("عذراً", " عليك اختيار وقت للوضع أولاً");
+           return;
+        }
+        //test it 
+        for(j = 0; j < this.state.minute_array.length; j ++) {
+            if(!flag&&this.state.minute_array[j].clicked) {
+                
+                routineTime+= ":"+this.state.minute_array[j].value;
+                break;
+            }
+        }
         }//end if for night routine
         for(i = 0; i < this.state.toggle_button_array.length; i ++) {
             if(this.state.toggle_button_array[i].clicked) {
@@ -735,32 +762,9 @@ return polygon
               
               
             } // print routine info 
-        
-        for(i = 0; i < this.state.hours_array.length; i ++) {
-            if( !flag&&this.state.hours_array[i].clicked) {
-                  flagH = true;
-                tmp_str += "الساعة: " + this.state.hours_array[i].value + '\n';
-                routineTime = this.state.hours_array[i].value;
-                break;
-            }
-          
-        }
-        if (!flagH){
-            Alert.alert("عذراً", " عليك اختيار وقت للوضع أولاً");
-            this.init_hourminute_array()
-        }
-        //test it 
-        for(j = 0; j < this.state.minute_array.length; j ++) {
-            if(!flag&&this.state.minute_array[j].clicked) {
-                tmp_str += "الدقيقة: " + this.state.minute_array[j].value;
-                routineTime+= ":"+this.state.minute_array[j].value;
-                break;
-            }
-        }
-        
-         
-         if (( routineName == "morning routine" || routineName == "evening routine" )&& flagH){
-             
+   
+         if (( routineName == "morning routine" || routineName == "night routine" )){
+             console.log("in if save")
              var userRoutineArr = [];
              firebase.database().ref('/routine').once("value",snapshot=>{
                 snapshot.forEach(item => {
@@ -772,7 +776,7 @@ return polygon
                  }//end if 
                 });//end forEach
         
-             });//end snapshot..
+            
           
             if(userRoutineArr.indexOf(routineName)!=-1){
                 console.log("enter if check")
@@ -813,11 +817,18 @@ return polygon
                       status: 1,
         
                     })//end set routine.
+                    
                    
-            }
+            } });//end snapshot..
       
-          
-            Alert.alert("تم حفظ نمط "+disRoutine, tmp_str);  }//end set morning or night routine.
+            tmp_str +=  " وقت النمط هو :" + routineTime + '\n';
+            Alert.alert("تم حفظ نمط "+disRoutine, tmp_str);
+            this.setState({
+                morning_toggle: false,
+                home_exit_toggle: false,
+                home_toggle: false,
+                evening_toggle: false,}) 
+         }//end set morning or night routine.
       else if(routineName == "leave routine" || routineName == "come routine" 
                     && user.longitude != 0 && user.latitude !=0 ){
                         var userRoutineArr = [];
@@ -831,7 +842,7 @@ return polygon
                             }//end if 
                            });//end forEach
                    
-                        });//end snapshot..
+                       
                      
                        if(userRoutineArr.indexOf(routineName)!=-1){
                            console.log("enter if check")
@@ -859,9 +870,9 @@ return polygon
                                 }//end if 
                                });//end forEach
                        
-                            });//end snapshot..
                             
-                       
+                            
+                            });//end snapshot..
                             
             }
             else{
@@ -876,8 +887,13 @@ return polygon
     
                 })//end set routine. 
             
-            }
-            Alert.alert("تم حفظ نمط "+disRoutine, tmp_str); }
+            }  });//end snapshot..
+            Alert.alert("تم حفظ نمط "+disRoutine, tmp_str);
+            this.setState({
+            morning_toggle: false,
+            home_exit_toggle: false,
+            home_toggle: false,
+            evening_toggle: false,})  }
       
         console.log("save routine");
         
@@ -913,6 +929,7 @@ return polygon
     
 
     select_hour(index) {
+        this.setState ({isSelectTime:true})
         var hours_array = this.state.hours_array;
         for(i = 0; i < hours_array.length; i ++) {
             if(i == index) {
@@ -955,13 +972,12 @@ return polygon
     }
 
     init_hourminute_array() {
+        this.setState ({isSelectTime:false})
         var hours_array = this.state.hours_array;
         for(i = 0; i < hours_array.length; i ++) {
-            if(i == 0) {
-                hours_array[i].clicked = true;
-            } else {
+           
                 hours_array[i].clicked = false;
-            }
+            
             
         }
         var minute_array = this.state.minute_array;
@@ -1024,7 +1040,7 @@ return polygon
                                         <ScrollView style = {{width: '100%'}}>
                                         {
                                             this.state.hours_array.map((item, index) => 
-                                            <TouchableOpacity key = {index} style = {{width: '100%', height: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: item.clicked ? '#e8e8e8' : null}} onPress = {() => this.select_hour(index)}>
+                                            <TouchableOpacity key = {index} style = {{width: '100%', height: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: item.clicked ? '#e8e8e8' : null}} onPress = {() =>{ this.select_hour(index); this.setState ({isSelectTime:true})}}>
                                                 <Text style={styles.signUpText}>{item.value}</Text>
                                             </TouchableOpacity>
                                             )
@@ -1069,21 +1085,28 @@ return polygon
                                     <Text style={styles.routineTitle}>
                                     الوضع الصباحي
                                     </Text>
+                
                             </View>
+                            
+                            
                         {
                             this.state.morning_toggle &&
-                            <View style = {{width: '100%', marginTop: 15}}>
+                            <View style = {{width: '100%', marginTop: 6}}>
+                                <Text style={styles.routineTimeStyle}>{this.state.timeText} </Text>
                                 <ScrollView style = {{width: '100%', height: 80}} horizontal = {true}>
                                 {
                                     this.state.toggle_button_array.map((item, index) => 
+                                     
                                     <TouchableOpacity key = {index} style = {[styles.toggle_button, {marginRight: 5}, item.clicked ? {backgroundColor: '#2287ac'} : {backgroundColor: '#c0c0c0'}]} onPress = {() => this.click_togglebutton(index)}>
                                     {
                                         (index == 0) &&
                                         < Entypo
+                                        
                                             name="air"
                                             size={40}
                                             color=
-                                            {'white'}
+                                            {'#8abbc6'}
+                                           
                                         />
 
                                     }
@@ -1093,7 +1116,7 @@ return polygon
                                             name="coffee-outline"
                                             size={40}
                                             color=
-                                            {'white'}
+                                            {'#8abbc6'}
                                         />
                                     }
                                     {
@@ -1102,7 +1125,7 @@ return polygon
                                         name="door"
                                         size={40}
                                         color=
-                                        {'white'}
+                                        {'#8abbc6'}
                                         />
                                     }
                                     {
@@ -1111,7 +1134,7 @@ return polygon
                                             name="tv"
                                             size={40}
                                             color=
-                                            {'white'}
+                                            {'#8abbc6'}
                                             />
                                     }
                                     {
@@ -1120,7 +1143,7 @@ return polygon
                                         name="garage"
                                         size={40}
                                         color=
-                                        {'white'}
+                                        {'#8abbc6'}
                                         />
                                     }
                                     {
@@ -1138,16 +1161,18 @@ return polygon
                                             name="air"
                                             size={40}
                                             color=
-                                            {'white'}
+                                            {'#8abbc6'}
                                         />
                                     }
 
                                     </TouchableOpacity>
                                     
                                     )
+                                    
                                 }
-                            
+                           
                                 </ScrollView>
+                                
                                 <View style = {{width: '100%', flexDirection: 'row', justifyContent: 'space-around'}}>
                                     <TouchableHighlight style={[styles.buttonContainer, styles.sTButton,{color: '#8abbc6',}]} onPress={() => this.save_button_action(0)} >
                                         <Text style={styles.signUpText,{color: '#8abbc6',}}> حفظ </Text>
@@ -1199,7 +1224,9 @@ return polygon
                                             name="air"
                                             size={40}
                                             color=
-                                            {'white'}
+                                            {'#8abbc6'}
+                                           
+                                          
                                         />
 
                                     }
@@ -1209,7 +1236,7 @@ return polygon
                                             name="coffee-outline"
                                             size={40}
                                             color=
-                                            {'white'}
+                                            {'#8abbc6'}
                                         />
                                     }
                                     {
@@ -1218,7 +1245,7 @@ return polygon
                                         name="door"
                                         size={40}
                                         color=
-                                        {'white'}
+                                        {'#8abbc6'}
                                         />
                                     }
                                     {
@@ -1227,7 +1254,7 @@ return polygon
                                             name="tv"
                                             size={40}
                                             color=
-                                            {'white'}
+                                            {'#8abbc6'}
                                             />
                                     }
                                     {
@@ -1236,7 +1263,7 @@ return polygon
                                         name="garage"
                                         size={40}
                                         color=
-                                        {'white'}
+                                        {'#8abbc6'}
                                         />
                                     }
                                     {
@@ -1254,7 +1281,7 @@ return polygon
                                             name="air"
                                             size={40}
                                             color=
-                                            {'white'}
+                                            {'#8abbc6'}
                                         />
                                     }
 
@@ -1301,7 +1328,7 @@ return polygon
                                             name="air"
                                             size={40}
                                             color=
-                                            {'white'}
+                                            {'#8abbc6'}
                                         />
 
                                     }
@@ -1311,7 +1338,7 @@ return polygon
                                             name="coffee-outline"
                                             size={40}
                                             color=
-                                            {'white'}
+                                            {'#8abbc6'}
                                         />
                                     }
                                     {
@@ -1320,7 +1347,7 @@ return polygon
                                         name="door"
                                         size={40}
                                         color=
-                                        {'white'}
+                                        {'#8abbc6'}
                                         />
                                     }
                                     {
@@ -1329,7 +1356,7 @@ return polygon
                                             name="tv"
                                             size={40}
                                             color=
-                                            {'white'}
+                                            {'#8abbc6'}
                                             />
                                     }
                                     {
@@ -1338,7 +1365,7 @@ return polygon
                                         name="garage"
                                         size={40}
                                         color=
-                                        {'white'}
+                                        {'#8abbc6'}
                                         />
                                     }
                                     {
@@ -1356,7 +1383,7 @@ return polygon
                                             name="air"
                                             size={40}
                                             color=
-                                            {'white'}
+                                            {'#8abbc6'}
                                         />
                                     }
 
@@ -1404,6 +1431,7 @@ return polygon
                         {
                             this.state.evening_toggle &&
                             <View style = {{width: '100%', marginTop: 15}}>
+                                <Text style={styles.routineTimeStyle}>{this.state.timeText} </Text>
                                 <ScrollView style = {{width: '100%', height: 80}} horizontal = {true}>
                                 {
                                     this.state.toggle_button_array.map((item, index) => 
@@ -1415,7 +1443,7 @@ return polygon
                                         name="air"
                                         size={40}
                                         color=
-                                        {'white'}
+                                        {'#8abbc6'}
                                     />
 
                                 }
@@ -1425,7 +1453,7 @@ return polygon
                                         name="coffee-outline"
                                         size={40}
                                         color=
-                                        {'white'}
+                                        {'#8abbc6'}
                                     />
                                 }
                                 {
@@ -1434,7 +1462,7 @@ return polygon
                                     name="door"
                                     size={40}
                                     color=
-                                    {'white'}
+                                    {'#8abbc6'}
                                     />
                                 }
                                 {
@@ -1443,7 +1471,7 @@ return polygon
                                         name="tv"
                                         size={40}
                                         color=
-                                        {'white'}
+                                        {'#8abbc6'}
                                         />
                                 }
                                 {
@@ -1452,7 +1480,7 @@ return polygon
                                     name="garage"
                                     size={40}
                                     color=
-                                    {'white'}
+                                    {'#8abbc6'}
                                     />
                                 }
                                 {
@@ -1470,7 +1498,7 @@ return polygon
                                         name="air"
                                         size={40}
                                         color=
-                                        {'white'}
+                                        {'#8abbc6'}
                                     />
                                 }
 
@@ -1641,6 +1669,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#2287ac',
     marginLeft:80,
+    marginBottom:10,
+    
+  },
+  routineTimeStyle: {
+    fontSize: 12.25,
+    textAlign: 'right',
+    fontWeight: 'bold',
+    color: '#8abbc6',
+    marginLeft:80,
+   
     marginBottom:20,
     
   },
