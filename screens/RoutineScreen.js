@@ -88,77 +88,6 @@ export default class RoutineScreen extends Component {
           appState: AppState.currentState,
         }
     }
-<<<<<<< Updated upstream
-=======
-
-    async routineSpeech(){
-       
-
-        if(transcript == "روتين الصباح" ){
-            routineArr.push('1');
-        }
-
-        if(transcript == "روتين المساء" ){
-            routineArr.push('2');
-        }
-
-        if(transcript == "تشغيل النور")
-    {
-        routineArr.push('turnOnLight');
-    }
-
-    if(transcript == "إغلاق النور")
-    {
-        routineArr.push('turnOffLight');
-    }
-
-if(transcript == "حفظ")
-    {
-        routineArr.push('0');
-    }
-    
-    }
-
-    async routineSpeechValidate(){
-        
-        if(routineArr[0]==='1')
-        {
-            if(routineArr[1]==='turnOffLight' ||routineArr[1]==='turnOnLight'  )
-            {
-                 if(routineArr[2]==='0'){
-                    /// I will call morning routine  
-                 }
-              
-            }
-        }
-
-        if(routineArr[0]==='2')
-        {
-            if(routineArr[1]==='turnOffLight' ||routineArr[1]==='turnOnLight'  )
-            {
-                 if(routineArr[2]==='0'){
-                    /// I will call night routine  
-                 }
-              
-            }
-        }
-        
-
-    }
-    async refreshLastFetchDateAsync() {
-        const lastFetchDateStr = await AsyncStorage.getItem(LAST_FETCH_DATE_KEY);
-     
-        if (lastFetchDateStr) {
-          this.setState({ fetchDate: new Date(+lastFetchDateStr) });
-        }
-      }
-      handleAppStateChange = nextAppState => {
-        if (nextAppState === 'active') {
-          this.refreshLastFetchDateAsync();
-          this.checkStatusAsync();
-        }
-      };
->>>>>>> Stashed changes
     componentWillUnmount(){
         AppState.removeEventListener('change',this.handleAppStateChange)  ;
 
@@ -277,6 +206,61 @@ else {
     }
       
   // }
+
+  async routineSpeech(){
+       
+
+    if(transcript == "روتين الصباح" ){
+        routineArr.push('1');
+    }
+
+    if(transcript == "روتين المساء" ){
+        routineArr.push('2');
+    }
+
+    if(transcript == "تشغيل النور")
+{
+    routineArr.push('turnOnLight');
+}
+
+if(transcript == "إغلاق النور")
+{
+    routineArr.push('turnOffLight');
+}
+
+if(transcript == "حفظ")
+{
+    routineArr.push('0');
+}
+
+}
+
+async routineSpeechValidate(){
+    
+    if(routineArr[0]==='1')
+    {
+        if(routineArr[1]==='turnOffLight' ||routineArr[1]==='turnOnLight'  )
+        {
+             if(routineArr[2]==='0'){
+                /// I will call morning routine  
+             }
+          
+        }
+    }
+
+    if(routineArr[0]==='2')
+    {
+        if(routineArr[1]==='turnOffLight' ||routineArr[1]==='turnOnLight'  )
+        {
+             if(routineArr[2]==='0'){
+                /// I will call night routine  
+             }
+          
+        }
+    }
+    
+
+}
 
     
    static createPolygon = async () => {
