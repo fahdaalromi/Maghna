@@ -28,9 +28,11 @@
     "expo": "~36.0.0",
     "expo-asset": "~8.0.0",
     "expo-av": "^8.0.0",
+    "expo-background-fetch": "^8.1.0",
     "expo-constants": "~8.0.0",
     "expo-font": "~8.0.0",
     "expo-linear-gradient": "^8.0.0",
+    "expo-task-manager": "^8.1.0",
     "expo-web-browser": "~8.0.0",
     "firebase": "^7.11.0",
     "moment": "^2.24.0",
@@ -42,6 +44,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
     "react-native-firebase": "^5.6.0",
     "react-native-flip-toggle-button": "^1.0.8",
+    "react-native-geo-fencing": "^0.1.0",
     "react-native-gesture-handler": "~1.5.0",
     "react-native-iphone-x-helper": "^1.2.1",
     "react-native-maps": "0.26.1",
@@ -56,6 +59,8 @@
     "react-navigation-stack": "~1.10.3",
     "react-navigation-tabs": "^2.8.2",
     "sync-storage": "^0.4.2",
+    "redux": "4.0.1",
+    "react-redux": "6.0.1",
     "undefined": "github:expo/vector-icons"
   },
   "devDependencies": {
