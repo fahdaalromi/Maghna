@@ -121,6 +121,26 @@ export default class instructionsScreen extends Component {
                 }
     
   }
+  handelSignOut =() =>{
+    var {navigation}=this.props;
+    console.log("logout method");
+    
+    console.log("inside");
+    try{
+      console.log(this.state);
+     firebase
+      .auth()
+      .signOut()
+      .then(function(){
+     navigation.navigate('WelcomeStackNavigator')
+      })
+      
+      .catch(error => console.log(error.message))
+      console.log("after"+this.state.email);
+      }catch(e){console.log(e.message)}
+      
+  };
+
 
   startRecording = async () => {
       console.log(recording)
