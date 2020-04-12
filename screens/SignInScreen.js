@@ -18,6 +18,7 @@ import {Input, Button} from 'native-base';
 import {LinearGradient} from 'expo-linear-gradient';
 import { ifIphoneX } from 'react-native-iphone-x-helper'
 import * as firebase from 'firebase';
+import { AsyncStorage } from 'react-native';
 
 export default class SignIn extends Component {
 
@@ -41,13 +42,26 @@ export default class SignIn extends Component {
 
     const firebaseConfig = {
 
-      apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
-      authDomain: "maghnaapplication.firebaseapp.com",
-      databaseURL: "https://maghnaapplication.firebaseio.com",
-      projectId: "maghnaapplication",
-      storageBucket: "maghnaapplication.appspot.com",
-      messagingSenderId: "244460583192",
-      appId: "1:244460583192:web:f650fa57532a682962c66d",
+
+    apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
+    authDomain: "maghnaapplication.firebaseapp.com",
+    databaseURL: "https://maghnaapplication.firebaseio.com",
+    projectId: "maghnaapplication",
+    storageBucket: "maghnaapplication.appspot.com",
+    messagingSenderId: "244460583192",
+    appId: "1:244460583192:web:f650fa57532a682962c66d",
+
+/*
+apiKey: "AIzaSyBUBKLW6Wrk48NQ_TcgUerucTZFphw6l-c",
+authDomain: "maghna-62c55.firebaseapp.com",
+databaseURL: "https://maghna-62c55.firebaseio.com",
+projectId: "maghna-62c55",
+storageBucket: "maghna-62c55.appspot.com",
+messagingSenderId: "21464439338",
+appId: "1:21464439338:web:8c6bb486fb3673e5d14153",
+measurementId: "G-R3BQPCTCTM"
+*/
+     
     };
 
     if (!firebase.apps.length) {
@@ -89,7 +103,7 @@ export default class SignIn extends Component {
     else {
       this.setState({emailBorders:'#91b804'})
     }
-  }//end validate phone number
+  }//end validate
 
 
   handleLogin = () => {
@@ -120,19 +134,27 @@ export default class SignIn extends Component {
           if (!user.emailVerified){
             Alert.alert("يرجى تفعيل البريد الإلكتروني");
           }else{
-            firebase.database().ref('mgnUsers/'+user.uid).on('value', snapshot => {
+            firebase.database().ref('mgnUsers/'+user.uid).on('value', 
+            async(snapshot)  => {
               this.email.clear();
               this.password.clear();
               console.log('after set state:'+this.state.email)
              // Alert.alert("تم تسجيلك بنجاح");
               if (snapshot.exists()){
-                this.props.navigation.navigate('HomeStack',{UID:user.uid})}
+                try {
+                   await AsyncStorage.setItem("loggedIn", "friday");
+                    this.props.navigation.navigate('HomeStack',{UID:user.uid})
+                      } catch (error) {
+                            console.log("2Something went wrong", error);
+                            } // user full info are retrieved
+              }
                 console.log('before set state:'+user.uid)
-            
+
           })
         }
 
-  }});
+  }
+});
 }).catch((error) => {
   console.log(error.message)
 
@@ -144,11 +166,11 @@ export default class SignIn extends Component {
 //this.props.navigation.navigate('HomeStack', {name: username })}
 
 
-    
+    /*
       async redirectRoute(route) {
         const { navigation }  = this.props;
         navigation.navigate(route);
-      }
+      }*/
       
   render() {
     return (

@@ -170,8 +170,14 @@ export default class profileScreen extends Component {
         }
     editProfile = () => {
 
+
       console.log(this.state.changePassword);
 
+
+      firebase
+      .database()
+      .ref('mgnUsers/'+ this.state.uID)
+       .update({isActive: this.state.isActive})
       // if the user left empty fields
       if (this.state.name == '' || this.state.email == '') {
         console.log('missing field');
@@ -247,7 +253,7 @@ export default class profileScreen extends Component {
               .ref('mgnUsers/'+ this.state.uID)
               .update({longitude : this.state.longitude,})
             }
-
+           
 /*
           if (this.state.name != ''){
             firebase.database()
