@@ -1310,7 +1310,7 @@ return polygon
 
                         <View style={styles.smallContainer}>
                             <View style={{flexDirection: 'row'}} > 
-                                <AntDesign name="home" size={70} color="#2287ac" />
+                                <Ionicons name="md-home" size={70} color="#2287ac" />
                                 <Text style={styles.routineTitle}>
                                 وضع العودة 
                                 </Text>

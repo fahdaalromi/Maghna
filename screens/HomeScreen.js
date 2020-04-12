@@ -20,96 +20,10 @@ import  moment from 'moment';
 
 
 export default class HomeScreen extends Component {
- async checkRoutine () {
-    
-    var user = firebase.auth().currentUser;
-   var  userRoutineArr =[];
-   var routineLeave = 'leave home';
-   var routineCome = 'come routine';
-   var routineMornig = 'morning routine';
-   var routineNight = 'night routine';
-   firebase.database().ref('/routine').once("value",snapshot=>{
-        snapshot.forEach(item => {
-         var temp = item.val();
-         if(temp.userID == user.uid){
-             console.log("yes have user1");
-            userRoutineArr.push(temp.name);
-            console.log(temp.name);
-         }//end if 
-         var theId;
-         var nameR;
-         var statusR;
-          if(userRoutineArr.indexOf(routineLeave)!=-1 ||userRoutineArr.indexOf(routineCome)!=-1 
-          || userRoutineArr.indexOf(routineMornig)!=-1 || userRoutineArr.indexOf(routineNight)!=-1){
-              console.log("Trueee");
-   firebase.database().ref('/routine').once("value" , (snapshot)=>{
-     snapshot.forEach(item => {
-                      
-      var temp = item.val();
-      console.log(temp);
-      if(temp.userID == user.uid && (temp.name == routineMornig ||temp.name == routineNight
-        || temp.name == routineLeave || temp.name == routineCome  )){
-          console.log("in if");
-          theId = item.key;
-          nameR = temp.name;
-      }});
-         console.log('outside if');
-         console.log('the'+theId);
-       firebase.database().ref('/routine').once("value" , (snapshot)=>{
-         console.log('in snapshot');
-        snapshot.forEach(item => {
-                     console.log('in for each');   
-                     if(item.key == theId){
-                       console.log("true second");
-                      var temp = item.val();
-                      statusR = temp.status;
-                      console.log('theS'+statusR);
-
-                      
-                     }
-         
-          console.log('now'+statusR)
-                     if (nameR == 'leave routine' && statusR ==1){
-                      const newState = !this.state.toggle3;
-                      this.setState({toggle3:newState})
-                     }
-                     if (nameR == 'come routine' && statusR ==1){
-                      const newState = !this.state.toggle1;
-                      this.setState({toggle1:newState})
-                     
-                    }
-                    if (nameR == 'morning routine'&& statusR ==1){
-                      const newState = !this.state.toggle2;
-                      this.setState({toggle2:newState})
-                    }
-                    if (nameR == 'night routine' && statusR ==1){
-                      const newState = !this.state.toggle4;
-                      this.setState({toggle4:newState})
-                    }
-         
-         
-         });
-        });
-     
-
-        });//end forEach
-
-    }
-    //end snapshot..
-  });
-  });
-
-}
-
-
-
-  async  wait(ms) {
-    return new Promise(resolve => {
-      setTimeout(resolve, ms);
-    });
-  }
-
  
+
+
+
   
   
    async componentDidMount(){
@@ -194,126 +108,6 @@ if(snap.val().isActive)
       console.log('There was an error deleting recorded file', error)
     }
   }
-
-  getTranscription = async () => { 
-    this.setState({ isFetching: true })
-    try {
-      const { uri } = await FileSystem.getInfoAsync(this.recording.getURI())
-
-      const formData = new FormData()
-      formData.append('file', {
-        uri,
-        type: Platform.OS === 'ios' ? 'audio/x-wav' : 'audio/m4a',
-        name: Platform.OS === 'ios' ? `${Date.now()}.wav` :`${Date.now()}.m4a`,
-      })
-
-      const { data } = await axios.post('http://localhost:3004/speech', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-
-      this.setState({ transcript: data.transcript })
-    } catch (error) {
-      console.log('There was an error reading file', error)
-      this.stopRecording()
-      this.resetRecording()
-    }
-
-    const {
-       transcript
-      } = this.state
-    this.setState({ isFetching: false })
-    if(    transcript == "تشغيل النور" ){
-
-      firebase.database().ref('mgnUsers/'+firebase.auth().currentUser.uid).once('value',(snap)=>{ 
-        if(snap.val().isActive===true)
-        {
-          this.analysis('001');
-        }
-        
-            })
-
-this.analysis('001');
-  axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
-  {'on':true} )
-.then(res => res.json())
-.then(res => {
-  console.log(res)
-}) 
-.catch(error => {console.log(error);
-})
-    }
-
-    if(    transcript == "اطفاء النور" ){
-
-      firebase.database().ref('mgnUsers/'+firebase.auth().currentUser.uid).once('value',(snap)=>{ 
-        if(snap.val().isActive===true)
-        {
-          this.analysis('002');
-        }
-        
-            })
-
-
-
-      axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
-      {'on':false} )
-    .then(res => res.json())
-    .then(res => {
-      console.log(res)
-    }) 
-    .catch(error => {console.log(error);
-    })
-        }
-
-        if(    transcript == "التعليمات" ){
-          this.props.navigation.navigate('instructions');
-            }
-
-  }
-  
- 
-  startRecording = async () => {
-      console.log(recording)
-    const { status } = await Permissions.askAsync(Permissions.AUDIO_RECORDING)
-    if (status !== 'granted') return
-
-    this.setState({ isRecording: true })
-    await Audio.setAudioModeAsync({
-      allowsRecordingIOS: true,
-      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
-      playsInSilentModeIOS: true,
-      interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
-      playThroughEarpieceAndroid: true,
-    })
-    const recording = new Audio.Recording()
-
-    try {
-      await recording.prepareToRecordAsync(recordingOptions)
-      await recording.startAsync()
-    } catch (error) {
-      console.log(error)
-      this.stopRecording()
-    }
-
-    this.recording = recording
-  }
-
-  stopRecording = async () => {
-    this.setState({ isRecording: false })
-    try {
-      await this.recording.stopAndUnloadAsync()
-    } catch (error) {
-      // noop
-    }
-  }
-
-  resetRecording = () => {
-    this.deleteRecordingFile();
-    this.recording = null
-  };
-
 
    analysis =  async  (actionid)=>{
 
@@ -759,9 +553,6 @@ checkData= async  ()=>{
     }
     render() {
 
-        const {
-            isRecording, transcript, isFetching,
-          } = this.state
         const {toggle1}= this.state;
         const {toggle2}= this.state;
         const {toggle3}= this.state;
@@ -803,7 +594,12 @@ checkData= async  ()=>{
                     <Text style={{ left:5, paddingLeft: -40, paddingRight:5, bottom: 90, top: -10, color: toggle4?'#6FA0AF':'white' , fontWeight: 'bold', fontSize:13}}>الوضع المسائي</Text>
                 </TouchableOpacity>
 
+
                 
+
+              
+            
+
                 <Image 
                     style={{ width: 440, height: 360, bottom: -20 }}
                     source={require('./222.png')} />
@@ -867,28 +663,3 @@ const styles = StyleSheet.create({
   }
   });
   
-
-const recordingOptions = {
-    android: {
-      extension: '.m4a',
-      outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
-      audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AAC,
-      sampleRate: 44100,
-      numberOfChannels: 1,
-      bitRate: 128000,
-    },
-    ios: {
-      extension: '.wav',
-      audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_HIGH,
-      sampleRate: 44100,
-      numberOfChannels: 1,
-      bitRate: 128000,
-      linearPCMBitDepth: 16,
-      linearPCMIsBigEndian: false,
-      linearPCMIsFloat: false,
-    },
-  }
-
-  
-// const navigationConnected =withNavigation(HomeScreen)
-// export {navigationConnected as HomeScreen}

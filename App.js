@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import AppNavigator from './navigation/AppNavigator';
 //import Header from './components/Header';
 import STTButton from './STTButton';
+
 import global from './global';
 import { AsyncStorage } from 'react-native';
 import NavigationService from './navigation/NavigationService';
@@ -15,6 +16,7 @@ export default function App(props) {
 
   
 const [displayMic, setDisplayMic] = useState(false);
+const [buttonDisplay, setButtonDisplay] = useState(false);
 
 useEffect (()=>{
  },[])
@@ -61,8 +63,6 @@ useEffect (()=>{
       />
     );
   } else {
-    const varible= <AppNavigator />;
-    console.log(varible)
     return (
       <View style={styles.container}>
       {/* <Header/> */}
@@ -74,18 +74,28 @@ useEffect (()=>{
         ref={navigatorRef => {
           NavigationService.setTopLevelNavigator(navigatorRef);
         }}
-      >
-  
+        onNavigationStateChange={(prevState, currentState) => {
 
-      
+          if(currentState.routes[currentState.index].routeName == 'WelcomeStackNavigator')
+          {
+            setButtonDisplay(false);
+          }
+          else{
+            setButtonDisplay(true);
+          }
+  
+        }}
+      >
       </AppNavigator>
-            <View style={{position:'absolute', display:'flex', zIndex:1000,bottom: 85, right:20}}>
-            <View style={[styles.buttonContainer,]} >
-    
-        <STTButton/>
-    
+      {buttonDisplay &&
+      <View style={{position:'absolute', display:'flex', zIndex:1000,bottom: 85, right:20}}>
+        <View style={[styles.buttonContainer,]} >
+  
+          <STTButton/>
+  
         </View>
-        </View>
+      </View>  
+      }
 
       </View>
 
@@ -126,15 +136,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   buttonContainer: {
-    height:45,
+    height:50,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom:10,
+marginRight:40,
     width:250,
-    borderRadius:30,
-    shadowOpacity: 0.17,
-    backgroundColor: '#fff',
+//     borderRadius:30,
+//     shadowOpacity: 0.17,
+//     backgroundColor: '#fff',
  
    },
 });

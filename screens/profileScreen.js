@@ -10,12 +10,13 @@ import { ScrollView,
     Alert,
     ImageBackground,
     TouchableOpacity,
+    AsyncStorage,
 } from 'react-native';
 import { FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
 import {LinearGradient} from 'expo-linear-gradient';
 import FlipToggle from 'react-native-flip-toggle-button';
 import * as firebase from 'firebase';
-
+import axios from 'axios'
 
 export default class profileScreen extends Component {
 
@@ -26,7 +27,7 @@ export default class profileScreen extends Component {
           name:"",
           email: "",
           password: "",
-          confPassword: "",
+          confPassword: "", 
           errorMsg:null,
           latitude:0,
           longitude:0,
@@ -51,6 +52,7 @@ export default class profileScreen extends Component {
       const firebaseConfig = {
     
 
+
     apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
     authDomain: "maghnaapplication.firebaseapp.com",
     databaseURL: "https://maghnaapplication.firebaseio.com",
@@ -58,6 +60,7 @@ export default class profileScreen extends Component {
     storageBucket: "maghnaapplication.appspot.com",
     messagingSenderId: "244460583192",
     appId: "1:244460583192:web:f650fa57532a682962c66d",
+
 
 
 /*
@@ -70,6 +73,7 @@ messagingSenderId: "21464439338",
 appId: "1:21464439338:web:8c6bb486fb3673e5d14153",
 measurementId: "G-R3BQPCTCTM"
 */
+
      
       };
     
@@ -79,12 +83,16 @@ measurementId: "G-R3BQPCTCTM"
     }
     
     }
-    //view and fetch updated data
-    
+    //view and fetch updated data // this versio nis same as mine.>? it is but you may work on another pagrm any wat what are you lloking for ? 
+    // We had async wait all those removed ? y do u need it ? No . Let me work.
+
+ 
     componentDidMount(){
+      // it is not being updated you see? 
+      // alert(this.state.amount)
       
       this.props.navigation.setParams({
-        headerLeft: (<TouchableOpacity onPress={this.handelSignOut}>
+        headerLeft: (<TouchableOpacity onPress={this.handelSignOut}> 
            <SimpleLineIcons name="logout" size={24} color='white' style={{marginLeft:15}} />
         </TouchableOpacity>)
  })
@@ -153,16 +161,27 @@ measurementId: "G-R3BQPCTCTM"
           console.log("identical else ");
           console.log("before set conf pass "+this.state.confPassword);
           this.setState({passError: 'none'})
-        // this.setState({errorMsgVisibilty: 'none'})
+        // this.setState({errorMsgVisibilty: 'none'})   
          this.setState({passwordBorder:'#3E82A7'})
          this.setState({conPasswordBorder:'#3E82A7'})
-         this.setState({conPassword:password})
+         this.setState({conPassword:password}) 
          console.log("after set conf pass "+this.state.confPassword);
         }
         
-        }
+        }  
       
 
+        storeData = async () => {
+// here to store 
+          try {
+   
+            var billAmount = { 'value' : this.state.amount};
+            await AsyncStorage.setItem('bill',60);
+          } catch (error) {
+
+          } 
+    
+        }
     editProfile = () => {
 
 
@@ -214,6 +233,9 @@ measurementId: "G-R3BQPCTCTM"
 
       try{
 
+          // store in local
+        this._storeData();
+        
         var user = firebase.auth().currentUser;
         var uid;
        // var userId =  this.props.navigation.getParam('id', 'NO-ID');
@@ -252,9 +274,9 @@ measurementId: "G-R3BQPCTCTM"
             .ref('mgnUsers/'+userId)
             .update({name: this.state.name,})
           }*/
-
+// Here i store it in firebase it is easier to retrieve thaan solving this error what do u thinl ? No. It Please wait a bit. Trying to understand where ialert is from// Bcz we have nto not put any
           if (this.state.amount != 0){
-            firebase.database()
+            firebase.database()      
             .ref('mgnUsers/'+this.state.uID)
             .update({amount: this.state.amount})
           }
@@ -309,7 +331,7 @@ measurementId: "G-R3BQPCTCTM"
         this.setState({passwordBorder: '#3E82A7'})
         this.setState({conPasswordBorder: '#3E82A7'})
         Alert.alert('تم تحديث بياناتك بنجاح');
-        this.props.navigation.navigate('HomeStack');
+        this.props.navigation.navigate('HomeStack'); 
       }
 
       handelSignOut =() =>{
@@ -345,6 +367,13 @@ measurementId: "G-R3BQPCTCTM"
         };
     
     //navigation.navigate('SignIn')
+
+    _storeData = async() => {
+      let amount = {
+        value : this.state.amount
+      }
+      await AsyncStorage.setItem('amount',JSON.stringify(amount));
+    }   
 
     render() {
         return (
@@ -449,7 +478,8 @@ measurementId: "G-R3BQPCTCTM"
                                         placeholder="الحد الائتماني للفاتورة"
                                         keyboardType='numeric'
                                         onChangeText={(text) => { 
-                                          this.setState({amount: text}) 
+                                          this.setState({amount: text})   
+            
                                           this.setState({errorMsgVisibilty:'none'})}}
                                         underlineColorAndroid='transparent'
                                         value={
@@ -462,7 +492,6 @@ measurementId: "G-R3BQPCTCTM"
                                                                                       updateData: this.updateData})}}  >
                                     <Text style={styles.addLocationText}> إضافة موقع</Text>
                                 </TouchableHighlight>
-
                                 <View>
                                     <Text style={styles.AnalysisText}>  تحليل التحركات </Text>
 
@@ -489,9 +518,7 @@ measurementId: "G-R3BQPCTCTM"
                                   this.setState({isActive:value })
                                   console.log("on toggle value is "+value)
                                   /*
-
                                  this.state.isActive = value;
-
                                  firebase
                                  .database()
                                  .ref('mgnUsers/'+ this.state.uID)
@@ -522,7 +549,6 @@ profileScreen.navigationOptions = ({navigation})=> ({
     <TouchableOpacity onPress={()=>{navigation.navigate('Home')}} style={{marginRight:15}}>
       <AntDesign name="right" size={24} color="#CDCCCE" />
     </TouchableOpacity>
-
   ),*/
 
   //()=>{console.log("login button")}
@@ -538,11 +564,9 @@ profileScreen.navigationOptions = ({navigation})=> ({
       .signOut()
       .then(function(){
       console.log(this.state);
-
       navigation.navigate('WelcomeStackNavigator')
       })
       .catch(error => console.log(error.message))
-
       }catch(e){console.log(e.message)}}} 
                                   style={{marginLeft:15}}>
       <SimpleLineIcons name="logout" size={24} color='white' />
