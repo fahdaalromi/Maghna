@@ -295,7 +295,7 @@ export default class SpeechToTextButton extends Component {
                                                               // Starting from here related to routineScreen
                                                               //
                                                               //
-                                                              if(transcript == "الوضع الصباحي"){
+                                                              if(transcript == "تحرير الوضع الصباحي"){
                                                               //this.release_button_action(0);
 
                                                               }

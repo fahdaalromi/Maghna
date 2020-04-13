@@ -34,5 +34,10 @@ export async function getLightStatus() {
     } catch (error) {
         return false;
     }
+
+
+}
+export async function saveRoutine ( routineNAme , routineTime , routineAction ){
+    
 }
 

@@ -31,11 +31,1175 @@ import IntentLauncherAndroid from 'expo';
 import * as BackgroundFetch from 'expo-background-fetch';
 // End import .. 
 
+/* This is rania solution : 
+if(transcript == "تحرير الوضع الصباحي"){
+    this.setState({
+            timeText:""
+                  })
+        var user = firebase.auth().currentUser;
+                this.setState({
+                morning_toggle: true,
+                home_exit_toggle: false,
+                home_toggle: false,
+                evening_toggle: false,
+            })
+           
+                 
+            var routineAcc = [];
+            var routineTime ;
+            firebase.database().ref('/routine').once("value",snapshot=>{
+               snapshot.forEach(item => {
+                var temp = item.val();
+                console.log('for each')
+                if(temp.userID == user.uid && temp.name == 'morning routine'){
+                    console.log('in if')
+                    console.log("yes have user");
+                   routineAcc= temp.actionsID;
+                     routineTime = temp.time;
+                   console.log(temp.name);
+                   console.log(routineTime);
+                   this.setState({
+                    timeText: "وقت النمط الذي قمت بتخزينه هو: " +routineTime
+                          })
+                }//end if 
+               });//end forEach
+        
+            });//end snapshot..
+            
+            if (routineAcc.indexOf ('001') != -1){
+  
+               this.click_togglebutton(5);
+               
+            }
+            this.saveSpeechM();
+
+           
+
+}
+if(transcript == "تحرير وضع الخروج من المنزل"){
+            this.setState({
+                morning_toggle: false,
+                home_exit_toggle: true,
+                home_toggle: false,
+                evening_toggle: false,
+            })
+            var routineAcc = [];
+            var routineTime ;
+            firebase.database().ref('/routine').once("value",snapshot=>{
+               snapshot.forEach(item => {
+                var temp = item.val();
+                console.log('for each')
+                if(temp.userID == user.uid && temp.name == 'leave routine'){
+                    console.log('in if')
+                    console.log("yes have user");
+                   routineAcc= temp.actionsID;
+                     routineTime = temp.time;
+                   console.log(temp.name);
+                }//end if 
+               });//end forEach
+       
+            });//end snapshot..
+            if (routineAcc.indexOf ('001') != -1){
+               this.click_togglebutton(5);
+            }
+            this.saveSpeechL();
+
+}
+if (transcript == "تحرير وضع العودة إلى المنزل"){
+          this.setState({
+                morning_toggle: false,
+                home_exit_toggle: false,
+                home_toggle: true,
+                evening_toggle: false,
+           
+            })
+            var routineAcc = [];
+            var routineTime ;
+            firebase.database().ref('/routine').once("value",snapshot=>{
+               snapshot.forEach(item => {
+                var temp = item.val();
+                console.log('for each')
+                if(temp.userID == user.uid && temp.name == 'come routine'){
+                    console.log('in if')
+                    console.log("yes have user");
+                   routineAcc= temp.actionsID;
+                     routineTime = temp.time;
+                   console.log(temp.name);
+                }//end if 
+               });//end forEach
+       
+            });//end snapshot..
+            if (routineAcc.indexOf ('001') != -1){
+               this.click_togglebutton(5);
+            }
+            this.saveSpeechC();
+
+}
+if(transcript == "تحرير الوضع المسائي"){
+       this.setState({
+                morning_toggle: false,
+                home_exit_toggle: false,
+                home_toggle: false,
+                evening_toggle: true,
+            })
+            var routineAcc = [];
+            var routineTime ;
+            firebase.database().ref('/routine').once("value",snapshot=>{
+               snapshot.forEach(item => {
+                var temp = item.val();
+                console.log('for each')
+                if(temp.userID == user.uid && temp.name == 'night routine'){
+                    console.log('in if')
+                    console.log("yes have user");
+                   routineAcc= temp.actionsID;
+                     routineTime = temp.time;
+                   console.log(temp.name);
+                   this.setState({
+                    timeText: "وقت النمط الذي قمت بتخزينه هو: " +routineTime
+                          })
+                }//end if 
+
+               });//end forEach
+             
+       
+            });//end snapshot..
+            if (routineAcc.indexOf ('001') != -1){
+                this.click_togglebutton(5);
+             }
+             thi.saveSpeechN();
+}
+async saveSpeechM (){
+    var routineArr [] ;
+    var hours =0;
+    var mins= -1 ;
+    var routineTime;
+    if(transcript == "تشغيل النور"){
+        routineArr.push("actionId:001");
+         this.click_togglebutton(5);
+    }
+      if(transcript == "إغلاق النور"){
+        routineArr.push("actionId :002");
+    }
+
+    if(transcipt == "الساعة الواحدة صباحاً"){
+        hours = 01
+        select_hour(0)
+    }
+     if(transcipt == "الساعة الثانية صباحاً"){
+        hours = 02
+        select_hour(1)
+    }
+   if(transcipt == "الساعة الثالثة صباحاً"){
+        hours = 03
+        select_hour(2)
+    }
+    if(transcipt == "الساعة الرابعة صباحاً"){
+        hours = 04
+        select_hour(3)
+    }
+     if(transcipt == "الساعة الخامسة صباحاً"){
+        hours = 05
+        select_hour(4)
+    }
+     if(transcipt == "الساعة السادسة صباحاً"){
+        hours = 06
+        select_hour(5)
+    }
+     if(transcipt == "الساعة السابعة صباحاً"){
+        hours = 07
+        select_hour(6)
+    }
+     if(transcipt == "الساعة الثامنة صباحاً"){
+        hours = 08
+        select_hour(7)
+    }
+      if(transcipt == "الساعة التاسعة صباحاً"){
+        hours = 09
+        select_hour(8)
+    }
+     if(transcipt == "الساعة العاشرة صباحاً"){
+        hours = 10
+        select_hour(9)
+    }
+    if(transcipt == "الساعة الحادية عشر صباحاً"){
+        hours = 11
+        select_hour(10)
+    }
+    if(transcipt == "الساعة الثانية عشر صباحاً"){
+        hours = 12
+        select_hour(11)
+    }
+    if(transcipt == "دقيقة"){
+        mins= 01
+        select_minute(1) 
+    }
+    if(transcipt == "دقيقتان"){
+        mins= 02
+        select_minute(2) 
+    }
+    if(transcipt == "ثلاث دقائق"){
+        mins= 03
+        select_minute(3) 
+    }
+    if(transcipt == "أربع دقائق"){
+        mins= 04
+        select_minute(4) 
+    }
+     if(transcipt == "خمس دقائق"){
+        mins= 05
+        select_minute(5) 
+    }
+  if(transcipt == "ست دقائق"){
+        mins= 06
+        select_minute(6) 
+    }
+     if(transcipt == "سبع دقائق"){
+        mins= 07
+        select_minute(7) 
+    }
+     if(transcipt == "ثمان دقائق"){
+        mins= 08
+        select_minute(8) 
+    }
+     if(transcipt == "تسع دقائق"){
+        mins= 09
+        select_minute(9) 
+    }
+    
+     if(transcipt == "عشر دقائق"){
+        mins= 10
+        select_minute(10) 
+    }
+     if(transcipt == "احدى عشر دقائق"){
+        mins= 11
+        select_minute(11) 
+    }
+     if(transcipt == "اثنا عشر دقائق"){
+        mins= 12
+        select_minute(12) 
+    }
+     if(transcipt == "ثلاث عشر دقائق"){
+        mins= 13
+        select_minute(13) 
+    }
+     if(transcipt == "اربعة عشر دقائق"){
+        mins= 14
+        select_minute(14) 
+    }
+     if(transcipt == "خمسة عشر دقائق"){
+        mins= 15
+        select_minute(15) 
+    }
+      if(transcipt == " ستة عشر دقائق"){
+        mins= 16
+        select_minute(16) 
+    }
+      if(transcipt == "سبعة عشر دقائق"){
+        mins= 17
+        select_minute(17) 
+    }
+      if(transcipt == "ثمانية عشر دقائق"){
+        mins= 18
+        select_minute(18) 
+    }
+      if(transcipt == "تسعة عشر دقائق"){
+        mins= 19
+        select_minute(19) 
+    }
+       if(transcipt == " عشرون دقائق"){
+        mins= 20
+        select_minute(20) 
+    }
+       if(transcipt == " واحد وعشرون دقائق"){
+        mins= 21
+        select_minute(21) 
+    }
+    if(transcipt == " اثنان وعشرون دقائق"){
+        mins= 22
+        select_minute(22) 
+    }
+    if(transcipt == " ثلاث وعشرون دقائق"){
+        mins= 23
+        select_minute(23) 
+    }
+    if(transcipt == " اربعة وعشرون دقائق"){
+        mins= 24
+        select_minute(24) 
+    }
+    if(transcipt == " خمسة وعشرون دقائق"){
+        mins= 25
+        select_minute(25) 
+    }
+    if(transcipt == " ستة وعشرون دقائق"){
+        mins= 26
+        select_minute(26) 
+    }
+    if(transcipt == " سبعة وعشرون دقائق"){
+        mins= 27
+        select_minute(27) 
+    }
+    if(transcipt == " ثمانية وعشرون دقائق"){
+        mins= 28
+        select_minute(28) 
+    }
+    if(transcipt == " تسعة وعشرون دقائق"){
+        mins= 29
+        select_minute(29) 
+    }
+    if(transcipt == "  ثلاثون دقائق"){
+        mins= 30
+        select_minute(30) 
+    }
+     if(transcipt == "  واحد وثلاثون دقائق"){
+        mins= 31
+        select_minute(31) 
+    }
+    if(transcipt == "  اثنان وثلاثون دقائق"){
+        mins= 32
+        select_minute(32) 
+    }
+    if(transcipt == "  ثلاث وثلاثون دقائق"){
+        mins= 33
+        select_minute(33) 
+    }
+    if(transcipt == "  اربعة وثلاثون دقائق"){
+        mins= 34
+        select_minute(34) 
+    }
+    if(transcipt == "  خمسة وثلاثون دقائق"){
+        mins= 35
+        select_minute(35) 
+    }
+    if(transcipt == "  ستة وثلاثون دقائق"){
+        mins= 36
+        select_minute(36) 
+    }
+    if(transcipt == "  سبعة وثلاثون دقائق"){
+        mins= 37
+        select_minute(37) 
+    }
+    if(transcipt == "   ثمانية وثلاثون دقائق"){
+        mins= 38
+        select_minute(38) 
+    }
+    if(transcipt == "  تسعة وثلاثون دقائق"){
+        mins= 39
+        select_minute(39) 
+    }
+    if(transcipt == "   اربعون دقائق"){
+        mins= 40
+        select_minute(40) 
+    }
+    if(transcipt == "  واحد واربعون دقائق"){
+        mins= 41
+        select_minute(41) 
+    }
+     if(transcipt == "  اثنان واربعون دقائق"){
+        mins= 42
+        select_minute(42) 
+    }
+     if(transcipt == "  ثلاث واربعون دقائق"){
+        mins= 43
+        select_minute(43) 
+    }
+     if(transcipt == "  اربعة واربعون دقائق"){
+        mins= 44
+        select_minute(44) 
+    }
+     if(transcipt == "  خمسة واربعون دقائق"){
+        mins= 45
+        select_minute(45) 
+    }
+     if(transcipt == "  ستة واربعون دقائق"){
+        mins= 46
+        select_minute(46) 
+    }
+     if(transcipt == "  سبعة واربعون دقائق"){
+        mins= 47
+        select_minute(47) 
+    }
+     if(transcipt == "  ثمانية واربعون دقائق"){
+        mins= 48
+        select_minute(48) 
+    }
+     if(transcipt == "  تسعة واربعون دقائق"){
+        mins= 49
+        select_minute(49) 
+    }
+     if(transcipt == "   خمسون دقائق"){
+        mins= 50
+        select_minute(50) 
+    }
+     if(transcipt == "  واحد وخمسون دقائق"){
+        mins= 51
+        select_minute(51) 
+    }
+      if(transcipt == "  اثنان وخمسون دقائق"){
+        mins= 52
+        select_minute(52) 
+    }
+      if(transcipt == "  ثلاث وخمسون دقائق"){
+        mins= 53
+        select_minute(53) 
+    }
+      if(transcipt == "  اربعة وخمسون دقائق"){
+        mins= 54
+        select_minute(54) 
+    }
+      if(transcipt == "  خمسة وخمسون دقائق"){
+        mins= 55
+        select_minute(55) 
+    }
+      if(transcipt == "  ستة وخمسون دقائق"){
+        mins= 56
+        select_minute(56) 
+    }
+      if(transcipt == "  سبعة وخمسون دقائق"){
+        mins= 57
+        select_minute(57) 
+    }
+      if(transcipt == "  ثمانية وخمسون دقائق"){
+        mins= 58
+        select_minute(58) 
+    }
+      if(transcipt == "  تسعة وخمسون دقائق"){
+        mins= 59
+        select_minute(59) 
+    }
+    if(transcipt == "حفظ"){
+ if(hours != 0 ){
+        if (mis != -1){
+            routineTime = ""+ hours+":"+mins;
+            routineArr.push("timeRout:"+routineTime);
+            this.saveMorningRoutine();
+        }
+        else {
+            routineTime= ""+hours+":"+"00";
+            routineArr.push("timeRout:"+routineTime);
+            this.saveMorningRoutine(routineArr);
+        }
+    }
+        else {
+         
+            Alert.alert("عذراً","لم تقم باختيار  الوقت");
+        }
+        if(routineArr.indexOf(actionId:001) == -1 &&routineArr.indexOf(actionId:002) == -1 ){
+            Alert.alert("عذراً","لم تقم باختيار اوامر للأجهزة");
+            
+        }
+
+    }
+    
+   
+
+    
+    
+}
+async saveSpeechN (){
+    var routineArr [] ;
+    var hours =0;
+    var mins= -1 ;
+    var routineTime;
+    if(transcript == "تشغيل النور"){
+        routineArr.push("actionId:001");
+         this.click_togglebutton(5);
+    }
+      if(transcript == "إغلاق النور"){
+        routineArr.push("actionId :002");
+    }
+
+    if(transcipt == "الساعة الواحدة مساء"){
+        hours = 13
+        select_hour(12)
+    }
+     if(transcipt == "الساعة الثانية مساء"){
+        hours = 14
+        select_hour(13)
+    }
+   if(transcipt == "الساعة الثالثة مساء"){
+        hours = 15
+        select_hour(14)
+    }
+    if(transcipt == "الساعة الرابعة مساء"){
+        hours = 16
+        select_hour(15)
+    }
+     if(transcipt == "الساعة الخامسة مساء"){
+        hours = 17
+        select_hour(16)
+    }
+     if(transcipt == "الساعة السادسة مساء"){
+        hours = 18
+        select_hour(17)
+    }
+     if(transcipt == "الساعة السابعة مساء"){
+        hours = 19
+        select_hour(18)
+    }
+     if(transcipt == "الساعة الثامنة مساء"){
+        hours = 20
+        select_hour(19)
+    }
+      if(transcipt == "الساعة التاسعة مساء"){
+        hours = 21
+        select_hour(20)
+    }
+     if(transcipt == "الساعة العاشرة مساء"){
+        hours = 22
+        select_hour(21)
+    }
+    if(transcipt == "الساعة الحادية عشر مساء"){
+        hours = 23
+        select_hour(22)
+    }
+    if(transcipt == "الساعة الثانية عشر مساء"){
+        hours = 24
+        select_hour(23)
+    }
+    if(transcipt == "دقيقة"){
+        mins= 01
+        select_minute(1) 
+    }
+    if(transcipt == "دقيقتان"){
+        mins= 02
+        select_minute(2) 
+    }
+    if(transcipt == "ثلاث دقائق"){
+        mins= 03
+        select_minute(3) 
+    }
+    if(transcipt == "أربع دقائق"){
+        mins= 04
+        select_minute(4) 
+    }
+     if(transcipt == "خمس دقائق"){
+        mins= 05
+        select_minute(5) 
+    }
+  if(transcipt == "ست دقائق"){
+        mins= 06
+        select_minute(6) 
+    }
+     if(transcipt == "سبع دقائق"){
+        mins= 07
+        select_minute(7) 
+    }
+     if(transcipt == "ثمان دقائق"){
+        mins= 08
+        select_minute(8) 
+    }
+     if(transcipt == "تسع دقائق"){
+        mins= 09
+        select_minute(9) 
+    }
+    
+     if(transcipt == "عشر دقائق"){
+        mins= 10
+        select_minute(10) 
+    }
+     if(transcipt == "احدى عشر دقائق"){
+        mins= 11
+        select_minute(11) 
+    }
+     if(transcipt == "اثنا عشر دقائق"){
+        mins= 12
+        select_minute(12) 
+    }
+     if(transcipt == "ثلاث عشر دقائق"){
+        mins= 13
+        select_minute(13) 
+    }
+     if(transcipt == "اربعة عشر دقائق"){
+        mins= 14
+        select_minute(14) 
+    }
+     if(transcipt == "خمسة عشر دقائق"){
+        mins= 15
+        select_minute(15) 
+    }
+      if(transcipt == " ستة عشر دقائق"){
+        mins= 16
+        select_minute(16) 
+    }
+      if(transcipt == "سبعة عشر دقائق"){
+        mins= 17
+        select_minute(17) 
+    }
+      if(transcipt == "ثمانية عشر دقائق"){
+        mins= 18
+        select_minute(18) 
+    }
+      if(transcipt == "تسعة عشر دقائق"){
+        mins= 19
+        select_minute(19) 
+    }
+       if(transcipt == " عشرون دقائق"){
+        mins= 20
+        select_minute(20) 
+    }
+       if(transcipt == " واحد وعشرون دقائق"){
+        mins= 21
+        select_minute(21) 
+    }
+    if(transcipt == " اثنان وعشرون دقائق"){
+        mins= 22
+        select_minute(22) 
+    }
+    if(transcipt == " ثلاث وعشرون دقائق"){
+        mins= 23
+        select_minute(23) 
+    }
+    if(transcipt == " اربعة وعشرون دقائق"){
+        mins= 24
+        select_minute(24) 
+    }
+    if(transcipt == " خمسة وعشرون دقائق"){
+        mins= 25
+        select_minute(25) 
+    }
+    if(transcipt == " ستة وعشرون دقائق"){
+        mins= 26
+        select_minute(26) 
+    }
+    if(transcipt == " سبعة وعشرون دقائق"){
+        mins= 27
+        select_minute(27) 
+    }
+    if(transcipt == " ثمانية وعشرون دقائق"){
+        mins= 28
+        select_minute(28) 
+    }
+    if(transcipt == " تسعة وعشرون دقائق"){
+        mins= 29
+        select_minute(29) 
+    }
+    if(transcipt == "  ثلاثون دقائق"){
+        mins= 30
+        select_minute(30) 
+    }
+     if(transcipt == "  واحد وثلاثون دقائق"){
+        mins= 31
+        select_minute(31) 
+    }
+    if(transcipt == "  اثنان وثلاثون دقائق"){
+        mins= 32
+        select_minute(32) 
+    }
+    if(transcipt == "  ثلاث وثلاثون دقائق"){
+        mins= 33
+        select_minute(33) 
+    }
+    if(transcipt == "  اربعة وثلاثون دقائق"){
+        mins= 34
+        select_minute(34) 
+    }
+    if(transcipt == "  خمسة وثلاثون دقائق"){
+        mins= 35
+        select_minute(35) 
+    }
+    if(transcipt == "  ستة وثلاثون دقائق"){
+        mins= 36
+        select_minute(36) 
+    }
+    if(transcipt == "  سبعة وثلاثون دقائق"){
+        mins= 37
+        select_minute(37) 
+    }
+    if(transcipt == "   ثمانية وثلاثون دقائق"){
+        mins= 38
+        select_minute(38) 
+    }
+    if(transcipt == "  تسعة وثلاثون دقائق"){
+        mins= 39
+        select_minute(39) 
+    }
+    if(transcipt == "   اربعون دقائق"){
+        mins= 40
+        select_minute(40) 
+    }
+    if(transcipt == "  واحد واربعون دقائق"){
+        mins= 41
+        select_minute(41) 
+    }
+     if(transcipt == "  اثنان واربعون دقائق"){
+        mins= 42
+        select_minute(42) 
+    }
+     if(transcipt == "  ثلاث واربعون دقائق"){
+        mins= 43
+        select_minute(43) 
+    }
+     if(transcipt == "  اربعة واربعون دقائق"){
+        mins= 44
+        select_minute(44) 
+    }
+     if(transcipt == "  خمسة واربعون دقائق"){
+        mins= 45
+        select_minute(45) 
+    }
+     if(transcipt == "  ستة واربعون دقائق"){
+        mins= 46
+        select_minute(46) 
+    }
+     if(transcipt == "  سبعة واربعون دقائق"){
+        mins= 47
+        select_minute(47) 
+    }
+     if(transcipt == "  ثمانية واربعون دقائق"){
+        mins= 48
+        select_minute(48) 
+    }
+     if(transcipt == "  تسعة واربعون دقائق"){
+        mins= 49
+        select_minute(49) 
+    }
+     if(transcipt == "   خمسون دقائق"){
+        mins= 50
+        select_minute(50) 
+    }
+     if(transcipt == "  واحد وخمسون دقائق"){
+        mins= 51
+        select_minute(51) 
+    }
+      if(transcipt == "  اثنان وخمسون دقائق"){
+        mins= 52
+        select_minute(52) 
+    }
+      if(transcipt == "  ثلاث وخمسون دقائق"){
+        mins= 53
+        select_minute(53) 
+    }
+      if(transcipt == "  اربعة وخمسون دقائق"){
+        mins= 54
+        select_minute(54) 
+    }
+      if(transcipt == "  خمسة وخمسون دقائق"){
+        mins= 55
+        select_minute(55) 
+    }
+      if(transcipt == "  ستة وخمسون دقائق"){
+        mins= 56
+        select_minute(56) 
+    }
+      if(transcipt == "  سبعة وخمسون دقائق"){
+        mins= 57
+        select_minute(57) 
+    }
+      if(transcipt == "  ثمانية وخمسون دقائق"){
+        mins= 58
+        select_minute(58) 
+    }
+      if(transcipt == "  تسعة وخمسون دقائق"){
+        mins= 59
+        select_minute(59) 
+    }
+    if(transcipt == "حفظ"){
+ if(hours != 0 ){
+        if (mis != -1){
+            routineTime = ""+ hours+":"+mins;
+            routineArr.push("timeRout:"+routineTime);
+            this.saveMorningRoutine();
+        }
+        else {
+            routineTime= ""+hours+":"+"00";
+            routineArr.push("timeRout:"+routineTime);
+            this.saveMorningRoutine(routineArr);
+        }
+    }
+        else {
+         
+            Alert.alert("عذراً","لم تقم باختيار  الوقت");
+        }
+        if(routineArr.indexOf(actionId:001) == -1 &&routineArr.indexOf(actionId:002) == -1 ){
+            Alert.alert("عذراً","لم تقم باختيار اوامر للأجهزة");
+            
+        }
+
+    }
+    
+   
+
+    
+    
+}
+async saveSpeechL (){
+    var routineArr [] ;
+    
+    
+    if(transcript == "تشغيل النور"){
+        routineArr.push("actionId:001");
+         this.click_togglebutton(5);
+    }
+      if(transcript == "إغلاق النور"){
+        routineArr.push("actionId :002");
+    }
+
+   
+    if(transcipt == "حفظ"){
+ 
+        if(routineArr.indexOf(actionId:001) == -1 &&routineArr.indexOf(actionId:002) == -1 ){
+           
+             Alert.alert("عذراً","لم تقم باختيار اوامر للأجهزة");
+            
+        }
+        else if (user.latitude == 0 || user.longitude == 0) {
+           Alert.alert("عذراً", " عليك تفعيل خاصية الموقع حتى يتم انشاء وضع الخروج");
+           
+        }
+
+        else {
+            this.saveLeaveRoutine (routineArr);
+        }
+    }
+    
+   
+
+    
+    
+}
+async saveSpeechC(){
+    var routineArr [] ;
+    
+    
+    if(transcript == "تشغيل النور"){
+        routineArr.push("actionId:001");
+         this.click_togglebutton(5);
+    }
+      if(transcript == "إغلاق النور"){
+        routineArr.push("actionId :002");
+    }
+
+   
+    if(transcipt == "حفظ"){
+ 
+        if(routineArr.indexOf(actionId:001) == -1 &&routineArr.indexOf(actionId:002) == -1 ){
+           
+             Alert.alert("عذراً","لم تقم باختيار اوامر للأجهزة");
+            
+        }
+        else if (user.latitude == 0 || user.longitude == 0) {
+           Alert.alert("عذراً", " عليك تفعيل خاصية الموقع حتى يتم انشاء وضع العودة");
+           
+        }
+
+        else {
+             this.saveComeRoutine (routineArr);
+        }
+    }
+    
+   
+
+    
+    
+}
+saveLeaveRoutine = (data) =>{
+    var idAcc ;
+    var timeRo ;
+     var routineName = 'leave routine';
+    var i;
+    for(i=0 ; i<data.length ; i++){
+        var temp = data[i];
+        var temp1 = temp.substring(0,9)
+        if(temp1 == "actionId:"){
+            idAcc = temp.substring(9);
+        }
+        
+    }
+     
+            var userRoutineArr = [];
+           
+              var user = firebase.auth().currentUser;
+                        firebase.database().ref('/routine').once("value",snapshot=>{
+                           snapshot.forEach(item => {
+                            var temp = item.val();
+                            if(temp.userID == user.uid){
+                                console.log("yes have user");
+                               userRoutineArr.push(temp.name);
+                               console.log(temp.name);
+                            }//end if 
+                           });//end forEach
+                   
+                       
+                     
+                       if(userRoutineArr.indexOf('come')!=-1){
+                           console.log("enter if check")
+                           firebase.database().ref('/routine').once("value" , (snapshot)=>{
+                               snapshot.forEach(item => {
+                                   
+                                var temp = item.val();
+                                console.log(temp);
+                                if(temp.userID == user.uid && temp.name == routineName){
+                                    var theId = item.key;
+                           
+                               
+                                firebase.database().ref('routine/'+theId).update(  {
+                                   name: routineName,
+                                  time: 'empty',
+                                   actionsID: idAcc,
+                                   day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                                   userID: user.uid,
+                                   status: 1,
+                     
+                                 }); 
+                                
+                              
+                             
+                                }//end if 
+                               });//end forEach
+                       
+                            
+                            
+                            });//end snapshot..
+                            
+            }
+            else{
+            firebase.database().ref('routine/').push(
+                {
+                  name: routineName,
+                  time: 'empty',
+                  actionsID: idAcc,
+                  day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                  userID: user.uid,
+                  status: 1,
+    
+                })//end set routine. 
+            
+            }  });//end snapshot..
+}
+
+saveComeRoutine = (data) =>{
+    var idAcc ;
+    var timeRo ;
+     var routineName = 'come routine';
+    var i;
+    for(i=0 ; i<data.length ; i++){
+        var temp = data[i];
+        var temp1 = temp.substring(0,9)
+        if(temp1 == "actionId:"){
+            idAcc = temp.substring(9);
+        }
+        
+    }
+     
+            var userRoutineArr = [];
+           
+              var user = firebase.auth().currentUser;
+                        firebase.database().ref('/routine').once("value",snapshot=>{
+                           snapshot.forEach(item => {
+                            var temp = item.val();
+                            if(temp.userID == user.uid){
+                                console.log("yes have user");
+                               userRoutineArr.push(temp.name);
+                               console.log(temp.name);
+                            }//end if 
+                           });//end forEach
+                   
+                       
+                     
+                       if(userRoutineArr.indexOf('come')!=-1){
+                           console.log("enter if check")
+                           firebase.database().ref('/routine').once("value" , (snapshot)=>{
+                               snapshot.forEach(item => {
+                                   
+                                var temp = item.val();
+                                console.log(temp);
+                                if(temp.userID == user.uid && temp.name == routineName){
+                                    var theId = item.key;
+                           
+                               
+                                firebase.database().ref('routine/'+theId).update(  {
+                                   name: routineName,
+                                  time: 'empty',
+                                   actionsID: idAcc,
+                                   day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                                   userID: user.uid,
+                                   status: 1,
+                     
+                                 }); 
+                                
+                              
+                             
+                                }//end if 
+                               });//end forEach
+                       
+                            
+                            
+                            });//end snapshot..
+                            
+            }
+            else{
+            firebase.database().ref('routine/').push(
+                {
+                  name: routineName,
+                  time: 'empty',
+                  actionsID: idAcc,
+                  day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                  userID: user.uid,
+                  status: 1,
+    
+                })//end set routine. 
+            
+            }  });//end snapshot..
+}
+saveMorningRoutine = (data)=>{
+     var user = firebase.auth().currentUser;
+    var idAcc ;
+    var timeRo ;
+    var routineName = 'morning routine';
+    var i;
+    for(i=0 ; i<data.length ; i++){
+        var temp = data[i];
+        var temp1 = temp.substring(0,9)
+        if(temp1 == "actionId:"){
+            idAcc = temp.substring(9);
+        }
+        else if(temp1 == "timeRout:"){
+            timeRo = temp.substring(9);
+        }
+    }
+      var userRoutineArr = [];
+             firebase.database().ref('/routine').once("value",snapshot=>{
+                snapshot.forEach(item => {
+                 var temp = item.val();
+                 if(temp.userID == user.uid){
+                     console.log("yes have user");
+                    userRoutineArr.push(temp.name);
+                    console.log(temp.name);
+                 }//end if 
+                });//end forEach
+        
+            
+          
+            if(userRoutineArr.indexOf('routineName')!=-1){
+                console.log("enter if check")
+                firebase.database().ref('/routine').once("value" , (snapshot)=>{
+                    snapshot.forEach(item => {
+                        
+                     var temp = item.val();
+                     console.log(temp);
+                     if(temp.userID == user.uid && temp.name == routineName){
+                         var theId = item.key;
+                
+                    
+                     firebase.database().ref('routine/'+theId).update(  {
+                        name: 'morning routine',
+                       time: timeRo,
+                        actionsID: idAcc,
+                        day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                        userID: user.uid,
+                        status: 1,
+          
+                      }); 
+                     
+                   
+                  
+                     }//end if 
+                    });//end forEach
+            
+                 });//end snapshot..
+                 }
+            else {
+                firebase.database().ref('routine/').push(
+                    {
+                      name: routineName,
+                      time: timeRo,
+                      actionsID: idAcc,
+                      day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                      userID: user.uid,
+                      status: 1,
+        
+                    })//end set routine.
+                    
+                   
+            } });//end snapshot..
+
+
+
+
+}
+saveNightRoutine = (data)=>{
+     var user = firebase.auth().currentUser;
+    var idAcc ;
+    var timeRo ;
+    var routineName = 'night routine';
+    var i;
+    for(i=0 ; i<data.length ; i++){
+        var temp = data[i];
+        var temp1 = temp.substring(0,9)
+        if(temp1 == "actionId:"){
+            idAcc = temp.substring(9);
+        }
+        else if(temp1 == "timeRout:"){
+            timeRo = temp.substring(9);
+        }
+    }
+      var userRoutineArr = [];
+             firebase.database().ref('/routine').once("value",snapshot=>{
+                snapshot.forEach(item => {
+                 var temp = item.val();
+                 if(temp.userID == user.uid){
+                     console.log("yes have user");
+                    userRoutineArr.push(temp.name);
+                    console.log(temp.name);
+                 }//end if 
+                });//end forEach
+        
+            
+          
+            if(userRoutineArr.indexOf('routineName')!=-1){
+                console.log("enter if check")
+                firebase.database().ref('/routine').once("value" , (snapshot)=>{
+                    snapshot.forEach(item => {
+                        
+                     var temp = item.val();
+                     console.log(temp);
+                     if(temp.userID == user.uid && temp.name == routineName){
+                         var theId = item.key;
+                
+                    
+                     firebase.database().ref('routine/'+theId).update(  {
+                        name: routineName
+                        ,
+                       time: timeRo,
+                        actionsID: idAcc,
+                        day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                        userID: user.uid,
+                        status: 1,
+          
+                      }); 
+                     
+                   
+                  
+                     }//end if 
+                    });//end forEach
+            
+                 });//end snapshot..
+                 }
+            else {
+                firebase.database().ref('routine/').push(
+                    {
+                      name: routineName,
+                      time: timeRo,
+                      actionsID: idAcc,
+                      day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                      userID: user.uid,
+                      status: 1,
+        
+                    })//end set routine.
+                    
+                   
+            } });//end snapshot..
+
+
+
+
+}
+*/
 
 // save button in line 394 
-BackgroundFetch.setMinimumIntervalAsync(60);
-const BACKGROUND_FETCH_TASK = 'background-fetch';
-const LAST_FETCH_DATE_KEY = 'background-fetch-date';
+// BackgroundFetch.setMinimumIntervalAsync(60);
+// const BACKGROUND_FETCH_TASK = 'background-fetch';
+// const LAST_FETCH_DATE_KEY = 'background-fetch-date';
 
 // Start Class : 
 
@@ -303,6 +1467,7 @@ const polygon=[
 return polygon
 
     }
+  
 
     
     handelSignOut =() =>{
@@ -364,7 +1529,7 @@ return polygon
         })
     }
 
-    release_button_action(index) {
+    export release_button_action(index) {
         this.setState({
             timeText:""
                   })
@@ -375,6 +1540,7 @@ return polygon
                 home_exit_toggle: false,
                 home_toggle: false,
                 evening_toggle: false,
+              
             })
            
                  
@@ -441,6 +1607,7 @@ return polygon
                 home_exit_toggle: false,
                 home_toggle: true,
                 evening_toggle: false,
+           
             })
             var routineAcc = [];
             var routineTime ;

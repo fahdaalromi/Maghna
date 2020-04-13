@@ -36,9 +36,67 @@ export default class instructionsScreen extends Component {
    
            
     let fileURL = '';    
-    const text = '  لِتَحْرِيْرْ اَلْأَنْمَاطْ، يَجِبْ عَلَيْكْ:  ،   قَوْلْ،  تَحْرِيْرْ اَلْأَنْمَاطْ اَلْحَيَاتِيَّة ،     ثُمَّ اخْتِيَارْ نَوْعْ النَّمَطْ،   وَمِنْ ثُمَّ تَحْدِيْدْ الأَجْهِزَهْ ،إِذَا كَانَ النَّمَطْ صَبَاحِيْ أَوْ مَسَائِيْ ، يَجِبْ عَلَيْكَ تَحْدِيْدْ الوَقْتْ ،       إِذَا كَانَ خُرُوْجْ أَوْ عَوْدَهْ،  يَجِبْ عَلَيْكَ حِفْظْ مَوْقِعْ المَنْزِلْ  ،   لِعَرْضْ التَّقْرِيْرْ يَجِبْ عَلَيْكْ:      ،  قَوْلْ ، التَّقْرِيْرْ" ،  يُمْكِنُكَ أَيْضًا عَرْضُهَا عَنْ طَرِيْقْ النَّقْرْ عَلَى خَانَةِ، التَّقَارِيْرْ" ،  لِعَرْضْ  الأَجْهِزَهْ الْمُتَّصِلَه، يَجِبْ عَلَيْكْ:،     قَوْلْ ، الأَجْهِزَهْ الْمُتَّصِلَهْ"  ،     يُمْكِنُكَ أَيْضًا عَرْضُهَا عَنْ طَرِيْقْ النَّقْرْ عَلَى خَانَةِ ، الأَجْهِزَهْ الْمُتَّصِلَهْ'
+    const text = '  لِتَحْرِيْرْ اَلْأَنْمَاطْ، يَجِبْ عَلَيْكْ:  ،   قَوْلْ،  تَحْرِيْرْ اَلْأَنْمَاطْ اَلْحَيَاتِيَّة ،     ثُمَّ اخْتِيَارْ نَوْعْ النَّمَطْ،   وَمِنْ ثُمَّ تَحْدِيْدْ الأَجْهِزَهْ ،إِذَا كَانَ النَّمَطْ صَبَاحِيْ أَوْ مَسَائِيْ ، يَجِبْ عَلَيْكَ تَحْدِيْدْ الوَقْتْ ،       إِذَا كَانَ خُرُوْجْ أَوْ عَوْدَهْ،  يَجِبْ عَلَيْكَ حِفْظْ مَوْقِعْ المَنْزِلْ  ،   لِعَرْضْ التَّقْرِيْرْ يَجِبْ عَلَيْكْ:      ،  قَوْلْ ، التَّقْرِيْرْ" ،  يُمْكِنُكَ أَيْضًا عَرْضُهَا عَنْ طَرِيْقْ النَّقْرْ عَلَى خَانَةِ، التَّقَارِيْرْ" ،  لِعَرْضْ  الأَجْهِزَهْ الْمُتَّصِلَه، يَجِبْ عَلَيْكْ:،     قَوْلْ ، الأَجْهِزَهْ الْمُتَّصِلَهْ"  ،     يُمْكِنُكَ أَيْضًا عَرْضُهَا عَنْ طَرِيْقْ النَّقْرْ عَلَى خَانَةِ ، الأَجْهِزَهْ الْمُتَّصِلَهْ'
           
     
+
+  }
+  handelSignOut =() =>{
+    var {navigation}=this.props;
+    console.log("logout method");
+    
+    console.log("inside");
+    try{
+      console.log(this.state);
+     firebase
+      .auth()
+      .signOut()
+      .then(function(){
+     navigation.navigate('WelcomeStackNavigator')
+      })
+      
+      .catch(error => console.log(error.message))
+      console.log("after"+this.state.email);
+      }catch(e){console.log(e.message)}
+      
+  };
+
+
+  startRecording = async () => {
+      console.log(recording)
+    const { status } = await Permissions.askAsync(Permissions.AUDIO_RECORDING)
+    if (status !== 'granted') return
+
+    this.setState({ isRecording: true })
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: true,
+      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+      playsInSilentModeIOS: true,
+      interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+      playThroughEarpieceAndroid: true,
+    })
+    const recording = new Audio.Recording()
+
+    try {
+      await recording.prepareToRecordAsync(recordingOptions)
+      await recording.startAsync()
+    } catch (error) {
+      console.log(error)
+      this.stopRecording()
+    }
+
+    this.recording = recording
+  }
+
+  stopRecording = async () => {
+    this.setState({ isRecording: false })
+    try {
+      await this.recording.stopAndUnloadAsync()
+    } catch (error) {
+      // noop
+    }
+  }
+
     axios.post(`http://45.32.251.50`,  {text} )
              .then(res => {
                 console.log("----------------------xxxx----instructions----------------"+res.data);
@@ -76,6 +134,7 @@ export default class instructionsScreen extends Component {
        
        //http://localhost/fiels/output-0.6839748394381258.mp3
          }
+>>>>>>> Reem
 
 
 
@@ -323,3 +382,4 @@ const styles = StyleSheet.create({
     color: '#fff',
   }
   });
+  
