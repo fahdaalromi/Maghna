@@ -300,13 +300,13 @@ handelSignOut =() =>{
     </View>
 
     <View style={styles.scontainer}>
-    <Text style={styles.colseText}>التكييف</Text>
+    <Text style={styles.NotConnText}>التكييف</Text>
     < Entypo style={{ right:190, bottom: 17}} name="air" size={55} color= {'grey'} />
     </View>
 
 
     <View style={styles.scontainer}>
-    <Text style={styles.colseText}>آلة القهوة</Text>
+    <Text style={styles.NotConnText}>آلة القهوة</Text>
     <MaterialCommunityIcons style={{ right:190, bottom: 17}} name="coffee-outline" size={55} color= {'grey'} />
     </View>
 

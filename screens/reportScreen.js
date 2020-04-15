@@ -27,10 +27,11 @@ export default class reportScreen extends Component {
     constructor(props) {
 
         super(props);
+        console.log(props);
         this.state = {
             show_shape: true,
-            profile_percent: 80,
-            profile_color: '#56b058',
+            profile_percent: 100,
+            profile_color: '#ff3126',
             curTime:0,
             // this screen I retrieve the value 
             amount:0,

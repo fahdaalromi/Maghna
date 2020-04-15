@@ -370,7 +370,7 @@ export default class SpeechToTextButton extends Component {
     this.analysis("001");
       axios
         .put(
-          "http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state",
+          "http://192.168.8.104/api/UFWVG8q5nDKl1Icqatr5Nwjx3G4aFQRxeJ8GsnZi/lights/1/state",
           { on: true }
         )
         .then((res) => res.json())
@@ -402,7 +402,7 @@ export default class SpeechToTextButton extends Component {
         });
       axios
         .put(
-          "http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state",
+          "http://192.168.8.104/api/UFWVG8q5nDKl1Icqatr5Nwjx3G4aFQRxeJ8GsnZi/lights/1/state",
           { on: false }
         )
         .then((res) => res.json())

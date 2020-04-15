@@ -39,7 +39,6 @@ const LAST_FETCH_DATE_KEY = 'background-fetch-date';
 
 // Start Class : 
 
-
 export default class RoutineScreen extends Component {
     
     constructor(props) {
@@ -954,6 +953,20 @@ return polygon
         this.setState({
             hours_array: hours_array
         })
+    }// end save action..
+      
+    select_hour(index) {
+        var hours_array = this.state.hours_array;
+        for(i = 0; i < hours_array.length; i ++) {
+            if(i == index) {
+                hours_array[i].clicked = true;
+            } else {
+                hours_array[i].clicked = false;
+            }
+        }
+        this.setState({
+            hours_array: hours_array
+        })
     }
 
     select_minute(index) {
@@ -1308,7 +1321,7 @@ return polygon
 
                         <View style={styles.smallContainer}>
                             <View style={{flexDirection: 'row'}} > 
-                                <AntDesign name="home" size={70} color="#2287ac" />
+                                <Ionicons name="md-home" size={70} color="#2287ac" />
                                 <Text style={styles.routineTitle}>
                                 وضع العودة 
                                 </Text>

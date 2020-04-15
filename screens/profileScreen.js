@@ -51,7 +51,6 @@ export default class profileScreen extends Component {
 
       const firebaseConfig = {
     
-
     apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
     authDomain: "maghnaapplication.firebaseapp.com",
     databaseURL: "https://maghnaapplication.firebaseio.com",
