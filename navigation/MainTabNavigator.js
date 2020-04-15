@@ -41,6 +41,7 @@ welcomeStack.path = '';
 
 const HomeStack = createStackNavigator(
   {
+   
     Home:HomeScreen,
     instructions:instructionsScreen,
   },
@@ -68,10 +69,10 @@ const ProfileStack = createStackNavigator(
 );
 
 ProfileStack.navigationOptions = {
-  tabBarLabel: ' الصفحة الشخصية',
+  tabBarLabel: ' ',
   
   tabBarIcon:
-    <FontAwesome5 name="user" size={24} color="#fff" />
+    <FontAwesome5 name="user" size={24} color="#4b9cb5" />
   
 };
 
@@ -144,9 +145,11 @@ reportStack.path = '';
 
 
 const tabNavigator = createBottomTabNavigator({
-  ProfileStack,
+
   RoutineStack,
   HomeStack,
+  ProfileStack,
+
   supdevicesStack,
   reportStack,
 }, 

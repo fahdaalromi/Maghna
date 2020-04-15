@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     },
     button:
     { marginTop:150,
-      marginLeft:85,
+      marginLeft:78,
      
       alignItems: 'center',
     justifyContent: 'center',
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
      button2:
      { 
       marginTop:10,
-      marginLeft:85,
+      marginLeft:78,
        alignItems: 'center',
      justifyContent: 'center',
        backgroundColor: 'white',

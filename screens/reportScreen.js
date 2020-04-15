@@ -21,15 +21,15 @@ import NavigationService from '../navigation/NavigationService';
 
 export default class reportScreen extends Component {   
 
-
+   
 
     constructor(props) {
 
         super(props);
         this.state = {
             show_shape: true,
-            profile_percent: 80,
-            profile_color: '#56b058',
+            profile_percent: 100,
+            profile_color: '#ff3126',
             curTime:0,
             // this screen I retrieve the value 
             amount:0,
@@ -285,6 +285,33 @@ export default class reportScreen extends Component {
                                 </View>
                                 <View style = {styles.component_text_view}>
                                     <Text style = {styles.contentText}> البوابة </Text>
+                                </View>
+                            </View>
+                            <View style = {styles.component_view}>
+                                <View style = {styles.component_bar_view}>
+                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 0]} style = {styles.component_bar} />
+                                    <Text style = {styles.bar_text}> ٠٪ </Text>
+                                </View>
+                                <View style = {styles.component_text_view}>
+                                    <Text style = {styles.contentText}> الانترنت </Text>
+                                </View>
+                            </View>
+                            <View style = {styles.component_view}>
+                                <View style = {styles.component_bar_view}>
+                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 0]} style = {styles.component_bar} />
+                                    <Text style = {styles.bar_text}> ٠٪ </Text>
+                                </View>
+                                <View style = {styles.component_text_view}>
+                                    <Text style = {styles.contentText}> التكييف </Text>
+                                </View>
+                            </View>
+                            <View style = {styles.component_view}>
+                                <View style = {styles.component_bar_view}>
+                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 0]} style = {styles.component_bar} />
+                                    <Text style = {styles.bar_text}> ٠٪ </Text>
+                                </View>
+                                <View style = {styles.component_text_view}>
+                                    <Text style = {styles.contentText}> اله القهوه </Text>
                                 </View>
                             </View>
 

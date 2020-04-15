@@ -5,20 +5,25 @@
  */
 import { combineReducers } from 'redux';
 import initialState from './initialState';
-import * as firebase from "firebase";
 import { Alert } from 'react-native';
+import firebase from '../constants/FireBase.js';
 
-async function updateHomeSwitches(state = initialState.homeSwitches, action) {
+
+
+updateHomeSwitches = async(state = initialState.homeSwitches, action) => {
     switch (action.type) {
       case 'TOGGLE':
         var tempState = JSON.parse(JSON.stringify(state));
-        tempState[action.index] = !tempState[action.index];
-        tempState[action.index] = await _toggleWithFirebaseUpdate(tempState[action.index],action.index);
-        return { ...tempState };
+        _toggleWithFirebaseUpdate(tempState[action.index],action.index).then((response) => {
+            tempState[action.index] = response;
+            return { ...tempState };
+        });
       case 'SET':
         var tempState = JSON.parse(JSON.stringify(state));
         tempState[action.index] = action.value;
         return { ...tempState };
+      case 'INITIAL':        
+        return state;
       default:
         return state;
     }
@@ -46,65 +51,68 @@ const _toggleWithFirebaseUpdate = async (toggleIndexValue,toggleIndex) =>
         alert: " لم تقم بإنشاء الوضع المسائي من قبل ، عليك أولاً إنشاؤه",
       },
     };
-    var theId;
-    var routineName = routineInfo[toggleIndex].name;
-    var user = firebase.auth().currentUser;
-    var userRoutineArr = [];
-    let returnToggleValue = toggleIndexValue;
-    if (toggleIndexValue) {
-      await firebase
-        .database()
-        .ref("/routine")
-        .once("value", (snapshot) => {
-          let alertDisplay = false;
-          snapshot.forEach((item) => {
-            var temp = item.val();
-            if (temp.userID == user.uid) {
-              userRoutineArr.push(temp.name);
-              console.log(temp.name);
-            } //end if
-            if (userRoutineArr.indexOf(routineName) != -1) {
-              theId = item.key;
-              firebase
-                .database()
-                .ref("routine/" + theId)
-                .update({
-                  status: 1,
-                });
-            } else {
-              if(!alertDisplay)
-              {
-                Alert.alert("عذراً", routineInfo[toggleIndex].alert);
-                alertDisplay = true;
-                returnToggleValue = false;
-              }
+
+   var request = new Promise((resolve, reject) => {
+
+      var theId;
+      var routineName = routineInfo[toggleIndex].name;
+      var user = firebase.auth().currentUser;
+      var  userRoutineArr =[];
+      let alertDisplay = false;
+      let returnToggleValue = !toggleIndexValue;
+      if (returnToggleValue){
+         firebase.database().ref('/routine').once("value",snapshot=>{
+            snapshot.forEach(item => {
+               var temp = item.val();
+               if(temp.userID == user.uid){
+                  
+                  userRoutineArr.push(temp.name);
+                  console.log(temp.name);
+               }//end if 
+               if(userRoutineArr.indexOf(routineName)!= -1){
+                  theId = item.key;
+                  firebase.database().ref('routine/'+theId).update(  {
+                     status: 1,
+
+                  }); 
+                  resolve(returnToggleValue);   
+               }     
+
+            });//end forEach
+            if (userRoutineArr.indexOf(routineName)== -1){
+            
+               if(!alertDisplay)
+               {
+                  Alert.alert("عذراً", routineInfo[toggleIndex].alert);
+                  alertDisplay = true;
+                  resolve(!returnToggleValue);
+               }            
             }
-          }); //end forEach
-        }); //end snapshot..
-    } else {
-      await firebase
-        .database()
-        .ref("/routine")
-        .once("value", (snapshot) => {
-          snapshot.forEach((item) => {
-            var temp = item.val();
-            if (temp.userID == user.uid) {
-              userRoutineArr.push(temp.name);
-              console.log(temp.name);
-            } //end if
-            if (userRoutineArr.indexOf(routineName) != -1) {
-              theId = item.key;
-              firebase
-                .database()
-                .ref("routine/" + theId)
-                .update({
-                  status: 0,
-                });
-            }
-          }); //end forEach
-        }); //end snapshot..
-    }
-    return returnToggleValue;
+         }); //end snapshot..
+
+      }
+      else {
+         firebase.database().ref('/routine').once("value",snapshot=>{
+            snapshot.forEach(item => {
+               var temp = item.val();
+               if(temp.userID == user.uid){
+                  
+               userRoutineArr.push(temp.name);
+               console.log(temp.name);
+               }//end if 
+               if(userRoutineArr.indexOf(routineName)!= -1){
+                  theId = item.key;
+                  firebase.database().ref('routine/'+theId).update(  {
+                     status: 0,
+                  }); 
+               }
+               resolve(returnToggleValue);
+            });//end forEach
+         }); //end snapshot..
+      }
+   });
+
+   return request;
 }
 
 export default combineReducers({

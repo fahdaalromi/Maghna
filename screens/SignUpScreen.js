@@ -179,13 +179,14 @@ handelSignUp =() =>{
     this.password.clear();
     this.email.clear();
     this.confPassword.clear();
-    Alert.alert("تم التسجيل بنجاح، تفقد بريدك الإلكترني")
+    Alert.alert("تم التسجيل بنجاح، تفقد بريدك الإلكتروني")
 
     })
   
   .catch((error) => {
 
     console.log(error.message)
+    Alert.alert("نعتذر، البريد الإلكتروني مسجل مسبقًا")
     this.setState({formErrorMsg: 'نعتذر، البريد الإلكتروني مسجل مسبقًا'})
     
   })

@@ -264,7 +264,7 @@ handelSignOut =() =>{
     return (
 
       
-
+// here we need to specify which to read. 
     <View style={{ width:'100%' , height:'100%', flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: '#F7FAFF'}}>
 
     <ImageBackground source={require('./otherhalf.png')} style={{ width:'100%' , height:'120%', flex: 1, justifyContent: "center", alignItems: "center"}}>
@@ -300,13 +300,13 @@ handelSignOut =() =>{
     </View>
 
     <View style={styles.scontainer}>
-    <Text style={styles.colseText}>التكييف</Text>
+    <Text style={styles.NotConnText}>التكييف</Text>
     < Entypo style={{ right:190, bottom: 17}} name="air" size={55} color= {'grey'} />
     </View>
 
 
     <View style={styles.scontainer}>
-    <Text style={styles.colseText}>آلة القهوة</Text>
+    <Text style={styles.NotConnText}>آلة القهوة</Text>
     <MaterialCommunityIcons style={{ right:190, bottom: 17}} name="coffee-outline" size={55} color= {'grey'} />
     </View>
 
