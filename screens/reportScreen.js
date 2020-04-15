@@ -21,6 +21,7 @@ import NavigationService from '../navigation/NavigationService';
 
 export default class reportScreen extends Component {   
 
+    //here only conditional rendering for lamb if amount = 0 and if not 
 
 
     constructor(props) {
@@ -40,6 +41,7 @@ export default class reportScreen extends Component {
     }
     
     async componentDidMount(){
+        // making sure that the speeches are not interleaved
 
         this._unsubscribe = this.props.navigation.addListener('willFocus',() => {
             this._calcuateConsumptionAndReport();
@@ -57,7 +59,7 @@ export default class reportScreen extends Component {
  
 
     getAudio () {  
-        // Read report
+        // Read report from calculate total consumption so if there is no consumption no reading
         let fileURL = '';    
         const text =  '  عزيزي المُسْتَخْدِم إجْمَالِي إسْتِهْلاكِكْ هُوَ ' +this.state.profile_percent +
         'بِالمِئَة مِن مُجْمَلِ فَاتُورَتِكَ المُدخَلهْ وَتَفْصِيْلْ الْإسْتِهْلاكْ هُوَ  الإنَارَه 100 بِالمِئَة التِّلْفَازْ صِفْرٌ بِالمِئَة البَّوابَهْ صِفْر  بِالمِئَة';
@@ -97,7 +99,7 @@ export default class reportScreen extends Component {
         if(this.state.profile_percent == 50){  
   
             let fileURL = '';    
-            const text =  'ِعزيزي المستخدم لقد استلكت ستون بالمئه من مجمل  فاتورتك المدخله';
+            const text =  'ِعزيزي المُسْتَخْدِم لَقَدْ إستَهْلَكْتْ خَمْسُوووون بِالمِئَةِ مِن مُجْمَلِ فَاتُورَتِكَ المُدخَل';
 
             axios.post(`http://45.32.251.50`,  {text} )
               .then(res => {
@@ -109,7 +111,7 @@ export default class reportScreen extends Component {
               })
          }
    
-         if(this.state.profile_percent == 79){  
+         if(this.state.profile_percent == 80){  
   
             let fileURL = '';    
             const text =  'ِعزيزي المُسْتَخْدِم لَقَدْ إستَهْلَكْتْ ثَمَانُووون بِالمِئَةِ مِن مُجْمَلِ فَاتُورَتِكَ المُدخَل';
@@ -259,6 +261,7 @@ export default class reportScreen extends Component {
                         <View style = {{width: '100%', alignItems: 'flex-end'}}>
                             <Text style={styles.routineTitle}> تفصيل الإستهلاك </Text>
                         </View>
+                     
                         <View style = {{width: '100%', borderRadius: 10, alignItems: 'center', padding: 15, paddingBottom: 0, backgroundColor: '#ffffff', marginTop: 10, marginBottom: 10,shadowOpacity: 0.1,opacity: 0.9,}}>
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
@@ -285,6 +288,33 @@ export default class reportScreen extends Component {
                                 </View>
                                 <View style = {styles.component_text_view}>
                                     <Text style = {styles.contentText}> البوابة </Text>
+                                </View>
+                            </View>
+                            <View style = {styles.component_view}>
+                                <View style = {styles.component_bar_view}>
+                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 0]} style = {styles.component_bar} />
+                                    <Text style = {styles.bar_text}> ٠٪ </Text>
+                                </View>
+                                <View style = {styles.component_text_view}>
+                                    <Text style = {styles.contentText}> الانترنت </Text>
+                                </View>
+                            </View>
+                            <View style = {styles.component_view}>
+                                <View style = {styles.component_bar_view}>
+                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 0]} style = {styles.component_bar} />
+                                    <Text style = {styles.bar_text}> ٠٪ </Text>
+                                </View>
+                                <View style = {styles.component_text_view}>
+                                    <Text style = {styles.contentText}> التكييف </Text>
+                                </View>
+                            </View>
+                            <View style = {styles.component_view}>
+                                <View style = {styles.component_bar_view}>
+                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 0]} style = {styles.component_bar} />
+                                    <Text style = {styles.bar_text}> ٠٪ </Text>
+                                </View>
+                                <View style = {styles.component_text_view}>
+                                    <Text style = {styles.contentText}> اله القهوه </Text>
                                 </View>
                             </View>
 

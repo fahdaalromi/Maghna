@@ -57,7 +57,6 @@ export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
-    
     return (
       <AppLoading
         startAsync={loadResourcesAsync}
@@ -66,8 +65,6 @@ export default function App(props) {
       />
     );
   } else {
-    const varible= <AppNavigator />;
-    console.log(varible)
     return (
       <Provider store={store}>
         <View style={styles.container}>
@@ -154,16 +151,4 @@ const styles = StyleSheet.create({
     //     shadowOpacity: 0.17,
     //     backgroundColor: '#fff',
   },
-  buttonContainer: {
-    height:45,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom:10,
-    width:250,
-    borderRadius:30,
-    shadowOpacity: 0.17,
-    backgroundColor: '#fff',
- 
-   },
 });

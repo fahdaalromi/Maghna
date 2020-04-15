@@ -24,6 +24,8 @@ async function updateHomeSwitches(state = initialState.homeSwitches, action) {
     }
 }
 
+
+
 const _toggleWithFirebaseUpdate = async (toggleIndexValue,toggleIndex) => 
 {
 

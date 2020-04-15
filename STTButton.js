@@ -8,6 +8,7 @@ import {
   Platform,
   AsyncStorage,
   Alert,
+  Image
 } from "react-native";
 import * as FileSystem from "expo-file-system";
 import * as Permissions from "expo-permissions";
@@ -44,19 +45,21 @@ const recordingOptions = {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 5,
-    backgroundColor: "#fff",
     alignItems: "center",
   },
-  button: {
-    backgroundColor: "#1e88e5",
-    paddingVertical: 5,
-    width: "150%",
-    alignItems: "center",
-    borderRadius: 5,
-    padding: 8,
-    marginTop: 5,
+  Indicator: {
+    alignSelf: 'center',
+    width: 150,
+    height: 150,
+    marginTop: 110,
   },
+  Indicator1: {
+    alignSelf: 'center',
+    width: 150,
+    height: 150,
+    marginTop: 110,
+  },
+
   text: {
     color: "#fff",
   },
@@ -123,13 +126,162 @@ export default class SpeechToTextButton extends Component {
       await this.resetRecording();
     }
   }
-  deleteRecordingFile = async () => {
-    try {
-      const info = await FileSystem.getInfoAsync(this.recording.getURI());
-      await FileSystem.deleteAsync(info.uri);
-    } catch (error) {
-      // console.log('There was an error deleting recorded file', error)
-    }
+  analysis = async (actionid) => {
+    //check if it is't the first command
+    console.log("before definition of flage");
+    var flag = false;
+    console.log("hiii");
+    await firebase
+      .database()
+      .ref("userActions/")
+      .once("value", async (snap) => {
+        console.log("iafter definition ");
+        await snap.forEach((child) => {
+          if (
+            child.val().userID === firebase.auth().currentUser.uid &&
+            child.val().ActionID == actionid &&
+            child.val().day === moment().format("dddd")
+          )
+            if (
+              child.val().time === new Date().getHours() ||
+              (new Date().getHours() === (child.val().time + 1) % 24 &&
+                new Date().getMinutes <= 10) ||
+              (new Date().getHours() === (child.val().time - 1 + 24) % 24 &&
+                new Date().getMinutes() >= 49)
+            ) {
+              var plus = parseInt(child.val().Repetition) + 1;
+              console.log("before first use");
+              flag = true;
+              console.log("before first use 2");
+              firebase
+                .database()
+                .ref("userActions/" + child.key)
+                .update({
+                  Repetition: plus,
+                })
+                .then(() => {
+                  console.log("inserted the update");
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            }
+        });
+      })
+      .finally(() => {
+        if (flag === false) this.insertUserAction();
+      });
+  };
+
+  insertUserAction = async () => {
+    console.log("inside inserUserAction");
+    var userActionKey = firebase.database().ref().child("userActions").push()
+      .key;
+    firebase
+      .database()
+      .ref("userActions/" + userActionKey)
+      .set({
+        userID: firebase.auth().currentUser.uid,
+        ActionID: "001",
+        time: new Date().getHours(),
+        day: moment().format("dddd"),
+        Repetition: "1",
+        inRoutine: "0",
+        insertedDate:
+          new Date().getFullYear() +
+          "/" +
+          new Date().getMonth() +
+          "/" +
+          new Date().getDate(),
+      })
+      .then(() => {
+        console.log("inserted");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  insertRoutine = async () => {
+    console.log("inside inserRoutine");
+    var routineKey = await firebase.database().ref().child("routine").push()
+      .key;
+    await firebase
+      .database()
+      .ref("userActions/")
+      .once("value", async (snap) => {
+        snap.forEach((child) => {
+          var date1 = new Date(
+            new Date().getFullYear() +
+              "/" +
+              new Date().getMonth() +
+              "/" +
+              new Date().getDate()
+          );
+          console.log("print date1" + date1);
+          var date2 = new Date(child.val().insertedDate);
+          var timeDiff = date1.getTime() - date2.getTime();
+          console.log("data1 get time " + date1.getTime());
+          console.log("data2 get time " + date2.getTime());
+          console.log("print timeDiff" + timeDiff);
+          var dayDiff = timeDiff / (1000 * 3600 * 24);
+          console.log("before if 19");
+          console.log("dayDiff" + dayDiff);
+          if (child.val().Repetition === 18)
+            if (dayDiff <= 30)
+              if (child.val().inRoutine === "0") {
+                firebase
+                  .database()
+                  .ref("userActions/" + child.key)
+                  .update({
+                    inRoutine: "1",
+                  });
+                console.log("inside if 18 ");
+                firebase
+                  .database()
+                  .ref("routine/" + routineKey)
+                  .set({
+                    name: "analysis",
+                    actionID: child.val().ActionID,
+                    userID: child.val().userID,
+                    day: child.val().day,
+                    time: child.val().time,
+                    timeinserted: child.val().insertedDate,
+                  });
+              }
+        });
+      });
+  };
+
+  checkData = async () => {
+    console.log("inside checkData  ");
+
+    firebase
+      .database()
+      .ref("routine/")
+      .once("value", (snap) => {
+        snap.forEach((child) => {
+          var date1 = new Date(
+            new Date().getFullYear() +
+              "/" +
+              new Date().getMonth() +
+              "/" +
+              new Date().getDate()
+          );
+          var date2 = new Date(child.val().timeinserted);
+          var timeDiff = date1.getTime() - date2.getTime();
+          console.log("check date data1" + date1);
+          console.log("check date data2" + date2);
+          console.log("check date timeDiff" + timeDiff);
+          dayDiff = timeDiff / (1000 * 3600 * 24);
+          if (dayDiff > 90) {
+            firebase
+              .database()
+              .ref("routine/" + child.key)
+              .remove();
+          }
+        });
+      });
   };
   // I need this
 
@@ -156,7 +308,7 @@ export default class SpeechToTextButton extends Component {
       });
 
       const { data } = await axios.post(
-        "http://localhost:3004/speech",
+        "http://35.184.93.99:3004/speech",
         formData,
         {
           headers: {
@@ -206,6 +358,16 @@ export default class SpeechToTextButton extends Component {
         1000
       );
 
+      firebase
+      .database()
+      .ref("mgnUsers/" + firebase.auth().currentUser.uid)
+      .once("value", (snap) => {
+        if (snap.val().isActive === true) {
+          this.analysis("001");
+        }
+      });
+
+    this.analysis("001");
       axios
         .put(
           "http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state",
@@ -230,7 +392,14 @@ export default class SpeechToTextButton extends Component {
       console.log("Hi");
 
       rnTimer.clearInterval("duration");
-
+      firebase
+        .database()
+        .ref("mgnUsers/" + firebase.auth().currentUser.uid)
+        .once("value", (snap) => {
+          if (snap.val().isActive === true) {
+            this.analysis("002");
+          }
+        });
       axios
         .put(
           "http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state",
@@ -254,7 +423,7 @@ export default class SpeechToTextButton extends Component {
     }
 
     if (transcript == "الانماط") {
-      NavigationService.navigate("routine");
+      NavigationService.navigate("Routine");
     }
 
     if (transcript == "رجوع") {
@@ -262,6 +431,9 @@ export default class SpeechToTextButton extends Component {
     }
     if (transcript == "التقارير") {
       NavigationService.navigate("report");
+    }
+    if(transcript == "الاجهزه المتصله"){
+      NavigationService.navigate("supdevices");
     }
     //starting from here all the methods and variables related to homescreen
     if (transcript == "تفعيل الوضع الصباحي") {
@@ -377,19 +549,18 @@ export default class SpeechToTextButton extends Component {
     return (
       <View style={styles.container}>
         {/* <Text>{this.state.curTime}</Text> */}
-        <TouchableOpacity
-          style={styles.button}
+
+        <View
+     
           onPressIn={this.startRecording}
           onPressOut={this.handleOnPressOut}
         >
-          {isFetching && <ActivityIndicator color="#ffffff" />}
-          {!isFetching && (
-            <Text style={styles.text}>
-              {isRecording ? "انا اسمعك فضلاً تحدث..." : "فهمت!"}
-            </Text>
-          )}
-        </TouchableOpacity>
-        <Text>{`${transcript}`}</Text>
+          
+          {isFetching &&    <Image source={require('./crop2.gif')} style={styles.Indicator} />
+}
+          {!isFetching &&  <Image source={require('./crop.gif')} style={styles.Indicator1} />}
+        </View>
+
       </View>
     );
   }
