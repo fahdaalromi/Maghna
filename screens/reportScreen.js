@@ -3,108 +3,228 @@ import React, { Component } from 'react';
 import {
   Platform,
     StyleSheet, Text, View, Image, Button, backgroundColor, Alert, border, WIDTH, TouchableHighlight, 
-    TouchableOpacity, ScrollView, ImageBackground,
+    TouchableOpacity, ScrollView, ImageBackground,AsyncStorage,ActivityIndicator
 } from 'react-native';
 import { FontAwesome,FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons} from "@expo/vector-icons";
-import { MonoText } from '../components/StyledText';
+import { MonoText } from '../components/StyledText'; 
 import {LinearGradient} from 'expo-linear-gradient';
 import { StackActions } from '@react-navigation/native';
 import { NavigationActions } from 'react-navigation';
-import ProgressCircle from 'react-native-progress-circle'
-import * as firebase from 'firebase';
+import ProgressCircle from 'react-native-progress-circle';
+import * as FileSystem from 'expo-file-system';
+import * as Permissions from 'expo-permissions';
+import axios from 'axios'
+import { Audio } from 'expo-av';
+import NavigationService from '../navigation/NavigationService';
 
 
-export default class reportScreen extends Component {
+
+export default class reportScreen extends Component {   
+
+    //here only conditional rendering for lamb if amount = 0 and if not 
+
 
     constructor(props) {
+
         super(props);
+        console.log(props);
         this.state = {
-            show_shape: false,
-            profile_percent: 60.6,
-            uID:'',
-            name:"",
-            email: "",
-            password: "",
-            confPassword: "",
-            errorMsg:null,
-            latitude:0,
-            longitude:0,
-            isActive:false,
+            show_shape: true,
+            profile_percent: 100,
+            profile_color: '#ff3126',
+            curTime:0,
+            // this screen I retrieve the value 
             amount:0,
-            changePassword:false,
+            show_click:true
+
         }
+
     }
-    UNSAFE_componentWillMount(){
-
-        const firebaseConfig = {
-      
-
-    apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
-    authDomain: "maghnaapplication.firebaseapp.com",
-    databaseURL: "https://maghnaapplication.firebaseio.com",
-    projectId: "maghnaapplication",
-    storageBucket: "maghnaapplication.appspot.com",
-    messagingSenderId: "244460583192",
-    appId: "1:244460583192:web:f650fa57532a682962c66d",
-
-
-/*
-apiKey: "AIzaSyBUBKLW6Wrk48NQ_TcgUerucTZFphw6l-c",
-authDomain: "maghna-62c55.firebaseapp.com",
-databaseURL: "https://maghna-62c55.firebaseio.com",
-projectId: "maghna-62c55",
-storageBucket: "maghna-62c55.appspot.com",
-messagingSenderId: "21464439338",
-appId: "1:21464439338:web:8c6bb486fb3673e5d14153",
-measurementId: "G-R3BQPCTCTM"
-     */
-        };
-      
-      
-        if (!firebase.apps.length) {
-          firebase.initializeApp(firebaseConfig);
-      }
-      
-      }
-
-      componentDidMount(){
-      
-        this.props.navigation.setParams({
-          headerLeft: (<TouchableOpacity onPress={this.handelSignOut}>
-             <SimpleLineIcons name="logout" size={24} color='white' style={{marginLeft:15}} />
-          </TouchableOpacity>)
-   })}
-
-   handelSignOut =() =>{
-    var {navigation}=this.props;
-    console.log("login method");
     
-    console.log("inside");
-    try{
-      console.log(this.state);
-     firebase
-      .auth()
-      .signOut()
-      .then(function(){
-     navigation.navigate('WelcomeStackNavigator')
-      })
-      
-      .catch(error => console.log(error.message))
+    async componentDidMount(){
+        // making sure that the speeches are not interleaved
+
+        this._unsubscribe = this.props.navigation.addListener('willFocus',() => {
+            this._calcuateConsumptionAndReport();
+        });
+
+        await this.wait(900000);
+        await this.sendSpeechNotification(); 
+    }
+
+    async  wait(ms) {  
+        return new Promise(resolve => {
+          setTimeout(resolve, ms);
+        });
+    } 
+ 
+
+    getAudio () {  
+        // Read report from calculate total consumption so if there is no consumption no reading
+        let fileURL = '';    
+        const text =  '  عزيزي المُسْتَخْدِم إجْمَالِي إسْتِهْلاكِكْ هُوَ ' +this.state.profile_percent +
+        'بِالمِئَة مِن مُجْمَلِ فَاتُورَتِكَ المُدخَلهْ وَتَفْصِيْلْ الْإسْتِهْلاكْ هُوَ  الإنَارَه 100 بِالمِئَة التِّلْفَازْ صِفْرٌ بِالمِئَة البَّوابَهْ صِفْر  بِالمِئَة';
+
+        axios.post(`http://45.32.251.50`,  {text} )
+          .then(res => {
+             console.log("----------------------xxxx--------------------------"+res.data);
+            fileURL = res.data;
+                console.log(fileURL);
+                this.playAudio(fileURL); 
+
+          })
+    }
+    
+    async playAudio(fileURL){
+        
+        await Audio.setAudioModeAsync({
+            interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+            playsInSilentModeIOS: true,
+            playsInSilentLockedModeIOS: true,
+            shouldDuckAndroid: true,
+            interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+            playThroughEarpieceAndroid: false,
+            staysActiveInBackground: true,
+        });
+
+        const playbackObject = await Audio.Sound.createAsync(
+            { uri: fileURL },
+            { shouldPlay: true }
+        );
+    
+    }
+
+    async sendSpeechNotification(){
+ 
+        // Send audio request 
+        if(this.state.profile_percent == 50){  
   
-      }catch(e){console.log(e.message)}
-      
-  };
+            let fileURL = '';    
+            const text =  'ِعزيزي المُسْتَخْدِم لَقَدْ إستَهْلَكْتْ خَمْسُوووون بِالمِئَةِ مِن مُجْمَلِ فَاتُورَتِكَ المُدخَل';
+
+            axios.post(`http://45.32.251.50`,  {text} )
+              .then(res => {
+                 console.log("----------------------xxxx--------------------------"+res.data);   
+                fileURL = res.data;
+       
+                    this.playAudio(fileURL); 
+    
+              })
+         }
+   
+         if(this.state.profile_percent == 80){  
+  
+            let fileURL = '';    
+            const text =  'ِعزيزي المُسْتَخْدِم لَقَدْ إستَهْلَكْتْ ثَمَانُووون بِالمِئَةِ مِن مُجْمَلِ فَاتُورَتِكَ المُدخَل';
+            axios.post(`http://45.32.251.50`,  {text} )
+              .then(res => {
+                 console.log("----------------------xxxx--------------------------"+res.data);   
+                fileURL = res.data;
+       
+                    this.playAudio(fileURL); 
+    
+              })
+         }
+
+
+         if(this.state.profile_percent == 100){  
+  
+            let fileURL = '';    
+            const text =  'ِعزيزي المُسْتَخْدِم لَقَدْ إستَهْلَكْتْ 100 بِالمِئَةِ مِن مُجْمَلِ فَاتُورَتِكَ المُدخَل';
+          
+            axios.post(`http://45.32.251.50`,  {text} )
+              .then(res => {
+                 console.log("----------------------xxxx--------------------------"+res.data);   
+                fileURL = res.data;
+       
+                    this.playAudio(fileURL); 
+    
+              })
+         }
+    }
+
+    _calcuateConsumptionAndReport = async() => {
+  
+        try {     
+
+            const curTime = await AsyncStorage.getItem('currentTime');
+                        
+            const billValue = await AsyncStorage.getItem('amount');
+           
+            const amount =  JSON.parse(billValue).value;
+         
+            if (curTime !== null && amount !==  0 ) {
+
+                let workingHours = amount/6 ;
+
+                let bill = 10
+                let totalConsuming;
+                let watts=40;
+
+                let kwh= watts*workingHours/1000;
+        
+                if(kwh > 6000){ 
+                    totalConsuming=kwh*0.3*100; 
+                }
+                if(kwh <= 6000){     
+                    totalConsuming=kwh*0.18*100; 
+                }
+        
+
+                totalConsuming = Math.floor(totalConsuming)
+                totalConsuming = (totalConsuming*100)/bill;
+                let profileColor = this.state.profile_color;
+
+                if(totalConsuming < 50){ 
+                    profileColor =  '#56b058';
+                }
+                if(totalConsuming  >=50 && totalConsuming  <80 ){ 
+                    profileColor =  '#fffb00';
+                }
+                if(totalConsuming  >=80 && totalConsuming  <100 ){ 
+                     profileColor =  '#f58f00';
+                }
+            
+                if(totalConsuming  >= 100 ){ 
+                    profileColor =  '#ff3126';
+                }
+
+                this.setState({profile_color : profileColor,profile_percent:totalConsuming},() => {
+                    this.getAudio();
+                }); 
+            }  
+            else
+            {
+                this.setState({show_shape:false});
+            }
+
+        } catch (error) { 
+            // Error retrieving data
+            this.setState({show_shape:false});
+        } 
+        
+    }
 
     open_profile() {
-        const navigateAction = NavigationActions.navigate({
-            routeName: 'profile',
-            action: NavigationActions.navigate({ routeName: 'profile' }), 
-        });
+
+        
+        NavigationService.navigate('profile');
     
-        this.props.navigation.dispatch(navigateAction);
+        // this.props.navigation.dispatch(navigateAction);
+    }  
+
+    componentWillUnMount(){
+        this._unsubscribe();
+   
     }
     
     render() {
+    
+        const {
+            profile_percent,
+            profile_color
+          } = this.state    
+
         return (
             <View style={styles.container}>
                 <ImageBackground source={require('./otherhalf.png')} style={{ width:'100%' , height:'150%', flex: 1, justifyContent: "center", alignItems: "center"}}>
@@ -114,11 +234,10 @@ measurementId: "G-R3BQPCTCTM"
                         </View>
                         {
 
-                        !this.state.show_shape &&
+                      !this.state.show_shape &&
                         <View style = {{width: '100%', borderRadius: 10, alignItems: 'center', padding: 15, backgroundColor: '#ffffff', marginTop: 10, marginBottom: 10,shadowOpacity: 0.1, opacity: 0.9,}}>
                             <Text style = {styles.contentText}> إذا كنت تريد تفعيل هذة الخاصية يرجى ملء خانة "الحد الإئتماني للفاتورة" </Text>
-                            <TouchableOpacity style = {styles.button_style} onPress = {() => this.open_profile(),
-                                                                                    () => this.setState({show_shape: true})}>
+                            <TouchableOpacity style = {styles.button_style} onPress = {() => this.open_profile()  }>
                                 <Text style = {styles.button_text}> أنقر هنا</Text>
                             </TouchableOpacity>
                         </View>
@@ -127,25 +246,28 @@ measurementId: "G-R3BQPCTCTM"
                             this.state.show_shape &&
                             <View style = {{width: '100%', borderRadius: 10, alignItems: 'center', padding: 15, backgroundColor: '#ffffff', marginTop: 10, marginBottom: 10,opacity: 0.9,}}>
                              <ProgressCircle
+                              
                                 percent={this.state.profile_percent}
                                  radius={60}
                                  borderWidth={14}
-                                color="#fae169"
-                                shadowColor="#ffffff"
-                               bgColor="#fff"
+                                color={this.state.profile_color}
+                                shadowColor="#ffffff" 
+                               bgColor="#fff" 
                                                     >
-                                 <Text style={{ fontSize: 16 , color: "#fae169" }}>{this.state.profile_percent}{"%"}</Text>
+                                 <Text style={{ fontSize: 16 , color: "#757575" }}>{this.state.profile_percent}{"%"}</Text>
                                 </ProgressCircle>
                                  </View>
                         }
+   
                         <View style = {{width: '100%', alignItems: 'flex-end'}}>
                             <Text style={styles.routineTitle}> تفصيل الإستهلاك </Text>
                         </View>
+                     
                         <View style = {{width: '100%', borderRadius: 10, alignItems: 'center', padding: 15, paddingBottom: 0, backgroundColor: '#ffffff', marginTop: 10, marginBottom: 10,shadowOpacity: 0.1,opacity: 0.9,}}>
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0.7, 0]} style = {styles.component_bar} />
-                                    <Text style = {styles.bar_text}> ٧٠٪ </Text>
+                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 1]} style = {styles.component_bar} />
+                                    <Text style = {styles.bar_text}> ١٠٠٪ </Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
                                     <Text style = {styles.contentText}> الإنارة </Text>
@@ -153,8 +275,8 @@ measurementId: "G-R3BQPCTCTM"
                             </View>
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0.2, 0]} style = {styles.component_bar} />
-                                    <Text style = {styles.bar_text}> ٢٠٪ </Text>
+                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 0]} style = {styles.component_bar} />
+                                    <Text style = {styles.bar_text}> ٠٪ </Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
                                     <Text style = {styles.contentText}> التلفاز </Text>
@@ -162,8 +284,8 @@ measurementId: "G-R3BQPCTCTM"
                             </View>
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0.1, 0]} style = {styles.component_bar} />
-                                    <Text style = {styles.bar_text}> ١٠٪ </Text>
+                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 0]} style = {styles.component_bar} />
+                                    <Text style = {styles.bar_text}> ٠٪ </Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
                                     <Text style = {styles.contentText}> البوابة </Text>
@@ -171,8 +293,17 @@ measurementId: "G-R3BQPCTCTM"
                             </View>
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0.05, 0]} style = {styles.component_bar} />
-                                    <Text style = {styles.bar_text}> ٥٪ </Text>
+                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 0]} style = {styles.component_bar} />
+                                    <Text style = {styles.bar_text}> ٠٪ </Text>
+                                </View>
+                                <View style = {styles.component_text_view}>
+                                    <Text style = {styles.contentText}> الانترنت </Text>
+                                </View>
+                            </View>
+                            <View style = {styles.component_view}>
+                                <View style = {styles.component_bar_view}>
+                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 0]} style = {styles.component_bar} />
+                                    <Text style = {styles.bar_text}> ٠٪ </Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
                                     <Text style = {styles.contentText}> التكييف </Text>
@@ -180,31 +311,16 @@ measurementId: "G-R3BQPCTCTM"
                             </View>
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0.01, 0]} style = {styles.component_bar} />
-                                    <Text style = {styles.bar_text}> ١٪ </Text>
+                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 0]} style = {styles.component_bar} />
+                                    <Text style = {styles.bar_text}> ٠٪ </Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
-                                    <Text style = {styles.contentText}> باب المنزل </Text>
+                                    <Text style = {styles.contentText}> اله القهوه </Text>
                                 </View>
                             </View>
-                            <View style = {styles.component_view}>
-                                <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0.3, 0]} style = {styles.component_bar} />
-                                    <Text style = {styles.bar_text}> ٣٠٪ </Text>
-                                </View>
-                                <View style = {styles.component_text_view}>
-                                    <Text style = {styles.contentText}> آلة القهوة </Text>
-                                </View>
-                            </View>
-                            <View style = {styles.component_view}>
-                                <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0.35, 0]} style = {styles.component_bar} />
-                                    <Text style = {styles.bar_text}> ٣٥٪ </Text>
-                                </View>
-                                <View style = {styles.component_text_view}>
-                                    <Text style = {styles.contentText}> جهاز الإنترنت </Text>
-                                </View>
-                            </View>
+
+                            {/* <STTButton/> */}
+
                         </View>
                         <View style = {{height: 30}}/>
                     </ScrollView>

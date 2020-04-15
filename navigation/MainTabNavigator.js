@@ -18,6 +18,7 @@ import WelcomeScreen from "../screens/WelcomeScreen";
 import {LinearGradient} from 'expo-linear-gradient';
 import locationPage from "../screens/locationPage";
 import routineSubPage from "../screens/routineSubPage";
+import STTButton from "../STTButton"
 
 I18nManager.forceRTL(false)
 
@@ -29,6 +30,7 @@ const config = Platform.select({
 
 const welcomeStack = createStackNavigator(
   {
+
     welcome:WelcomeScreen,
     SignIn: SignInScreen,
     SignUp:SignUpScreen,
@@ -44,6 +46,7 @@ const HomeStack = createStackNavigator(
    
     Home:HomeScreen,
     instructions:instructionsScreen,
+
   },
   config
 );
@@ -69,10 +72,10 @@ const ProfileStack = createStackNavigator(
 );
 
 ProfileStack.navigationOptions = {
-  tabBarLabel: ' الصفحة الشخصية',
+  tabBarLabel: ' ',
   
   tabBarIcon:
-    <FontAwesome5 name="user" size={24} color="#fff" />
+    <FontAwesome5 name="user" size={24} color="#4b9cb5" />
   
 };
 
@@ -145,9 +148,11 @@ reportStack.path = '';
 
 
 const tabNavigator = createBottomTabNavigator({
-  ProfileStack,
+
   RoutineStack,
   HomeStack,
+  ProfileStack,
+
   supdevicesStack,
   reportStack,
 }, 

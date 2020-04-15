@@ -261,11 +261,10 @@ const styles = StyleSheet.create({
     },
     logo: {
       alignSelf: 'center',
-      width: 0.6 * width,
-      height: 0.3 * height,
+      width: 300,
+      height: 0.29* height,
       marginTop: 30,
       marginBottom: 40,
-      
     },
     input: {
       alignSelf: 'center',
@@ -273,7 +272,7 @@ const styles = StyleSheet.create({
       //marginTop:20,
       shadowOpacity: 0.1,
       borderColor: '#7db4cb',
-      textAlign: 'right',
+      textAlign: 'center',
       borderWidth: 1,
       height: 46,
       width: 250,
@@ -308,10 +307,9 @@ const styles = StyleSheet.create({
     note: {
       marginBottom: 30,
       color: '#4398b9',
-      marginRight: 38,
       fontSize: 16,
       fontWeight: 'bold',
-      textAlign: 'right',
+      textAlign: 'center',
     },
     warning:{
       color: 'red',
