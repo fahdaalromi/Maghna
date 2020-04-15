@@ -105,13 +105,7 @@ export default class HomeScreen extends Component {
 
 
 
-  async  wait(ms) {
-    return new Promise(resolve => {
-      setTimeout(resolve, ms);
-    });
-  }
 
- 
   
   
    async componentDidMount(){
@@ -176,126 +170,6 @@ if(snap.val().isActive)
       console.log('There was an error deleting recorded file', error)
     }
   }
-
-  getTranscription = async () => { 
-    this.setState({ isFetching: true })
-    try {
-      const { uri } = await FileSystem.getInfoAsync(this.recording.getURI())
-
-      const formData = new FormData()
-      formData.append('file', {
-        uri,
-        type: Platform.OS === 'ios' ? 'audio/x-wav' : 'audio/m4a',
-        name: Platform.OS === 'ios' ? `${Date.now()}.wav` :`${Date.now()}.m4a`,
-      })
-
-      const { data } = await axios.post('http://localhost:3004/speech', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-
-      this.setState({ transcript: data.transcript })
-    } catch (error) {
-      console.log('There was an error reading file', error)
-      this.stopRecording()
-      this.resetRecording()
-    }
-
-    const {
-       transcript
-      } = this.state
-    this.setState({ isFetching: false })
-    if(    transcript == "تشغيل النور" ){
-
-      firebase.database().ref('mgnUsers/'+firebase.auth().currentUser.uid).once('value',(snap)=>{ 
-        if(snap.val().isActive===true)
-        {
-          this.analysis('001');
-        }
-        
-            })
-
-this.analysis('001');
-  axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
-  {'on':true} )
-.then(res => res.json())
-.then(res => {
-  console.log(res)
-}) 
-.catch(error => {console.log(error);
-})
-    }
-
-    if(    transcript == "اطفاء النور" ){
-
-      firebase.database().ref('mgnUsers/'+firebase.auth().currentUser.uid).once('value',(snap)=>{ 
-        if(snap.val().isActive===true)
-        {
-          this.analysis('002');
-        }
-        
-            })
-
-
-
-      axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
-      {'on':false} )
-    .then(res => res.json())
-    .then(res => {
-      console.log(res)
-    }) 
-    .catch(error => {console.log(error);
-    })
-        }
-
-        if(    transcript == "التعليمات" ){
-          this.props.navigation.navigate('instructions');
-            }
-
-  }
-  
- 
-  startRecording = async () => {
-      console.log(recording)
-    const { status } = await Permissions.askAsync(Permissions.AUDIO_RECORDING)
-    if (status !== 'granted') return
-
-    this.setState({ isRecording: true })
-    await Audio.setAudioModeAsync({
-      allowsRecordingIOS: true,
-      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
-      playsInSilentModeIOS: true,
-      interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
-      playThroughEarpieceAndroid: true,
-    })
-    const recording = new Audio.Recording()
-
-    try {
-      await recording.prepareToRecordAsync(recordingOptions)
-      await recording.startAsync()
-    } catch (error) {
-      console.log(error)
-      this.stopRecording()
-    }
-
-    this.recording = recording
-  }
-
-  stopRecording = async () => {
-    this.setState({ isRecording: false })
-    try {
-      await this.recording.stopAndUnloadAsync()
-    } catch (error) {
-      // noop
-    }
-  }
-
-  resetRecording = () => {
-    this.deleteRecordingFile();
-    this.recording = null
-  };
-
 
    analysis =  async  (actionid)=>{
 
