@@ -22,7 +22,7 @@ import * as firebase from 'firebase';
         longitude:0,
         isActive:false,
         amount:0,
-          
+
       }
   }
   // we have to put 2 1- for registered people  2- for thr unregisted people
@@ -46,23 +46,23 @@ import * as firebase from 'firebase';
       this.setState({
         uID : this.uID,
       latitude :snapshot.val().latitude,
-      latitude:snapshot.val().latitude
+      // latitude:snapshot.val().latitude
     });
     console.log(JSON.stringify(snapshot)) });
     }
     }
- 
+
     )}
 
 
      this.getCurrentPosition()
 
     }//end componentDidMount
-  
+
     UNSAFE_componentWillMount(){
-  
+
       const firebaseConfig = {
-  
+
 
     apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
     authDomain: "maghnaapplication.firebaseapp.com",
@@ -83,13 +83,13 @@ messagingSenderId: "21464439338",
 appId: "1:21464439338:web:8c6bb486fb3673e5d14153",
 measurementId: "G-R3BQPCTCTM"
 */
-     
+
       };
-  
+
       if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
     }
-  
+
 
     }
     sleep=(ms)=>{
@@ -110,7 +110,7 @@ measurementId: "G-R3BQPCTCTM"
           //end update
 
         setTimeout(()=>{Alert.alert(
-          'هل تريد تحديث موقعك ؟' , 
+          'هل تريد تحديث موقعك ؟' ,
           '',
           [
             {text:'إلغاء',
@@ -120,7 +120,7 @@ measurementId: "G-R3BQPCTCTM"
             },{text:'نعم',
 
             onPress:()=>{
-              
+
               if (this.state.uID!==''){
                 console.log("if");
                 firebase
@@ -129,7 +129,7 @@ measurementId: "G-R3BQPCTCTM"
                 .update({
                   latitude: lat,
                   longitude: long,
-                  
+
                })
                this.props.navigation.state.params.updateData(lat,long);
                console.log("if is done ");
@@ -138,7 +138,7 @@ measurementId: "G-R3BQPCTCTM"
                 console.log("else");
                 this.props.navigation.goBack()
                 this.props.navigation.state.params.updateData(lat,long);
-    
+
               }
 
               console.log("save is pressed")},
@@ -149,19 +149,19 @@ measurementId: "G-R3BQPCTCTM"
 
           ]
           );},5000);
-          
+
            console.log("latitude"+lat);
            console.log("state latitude"+this.state.latitude);
-           console.log("longitude"+long); 
-           console.log("state longitude"+this.state.longitude); 
-           
+           console.log("longitude"+long);
+           console.log("state longitude"+this.state.longitude);
+
           })
 
         setTimeout(()=>{this.props.navigation.goBack();},7000);
             }
-    
 
-  //for saving user location 
+
+  //for saving user location
   /*
   const [coordinates, setCoordinates] = useState({
     latitude: 24.76989911,
@@ -170,7 +170,7 @@ measurementId: "G-R3BQPCTCTM"
 
   setCoordinates({latitude:4567,longitude:45678})
   useEffect(() => {
-    
+
     Alert.alert('hello');
   },[]);
     */
@@ -206,7 +206,7 @@ measurementId: "G-R3BQPCTCTM"
 
 locationPage.navigationOptions = ({navigation})=> ({
 
- 
+
   headerTint:'#F7FAFF',
   headerTitle: ' الموقع',
 
@@ -222,7 +222,7 @@ locationPage.navigationOptions = ({navigation})=> ({
   headerStyle: {
     backgroundColor: '#8BC4D0',
     color:'white'
-    
+
  },
  headerTitleStyle: {
   color: '#fff'

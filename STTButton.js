@@ -1,23 +1,18 @@
 import React, { Component } from "react";
 import {
   StyleSheet,
-  Text,
   View,
-  TouchableOpacity,
-  ActivityIndicator,
   Platform,
   AsyncStorage,
-  Alert,
-  Image
+  Image, Button,Text
 } from "react-native";
 import * as FileSystem from "expo-file-system";
 import * as Permissions from "expo-permissions";
 import axios from "axios";
 import { Audio } from "expo-av";
-import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
 import NavigationService from "./navigation/NavigationService";
 import * as Helper from "./components/Helper";
+// import { Button } from "native-base";
 
 // Here I use this time, I open the package
 const rnTimer = require("react-native-timer");
@@ -129,7 +124,7 @@ export default class SpeechToTextButton extends Component {
   analysis = async (actionid) => {
     //check if it is't the first command
     console.log("before definition of flage");
-    var flag = false;
+    let flag = false;
     console.log("hiii");
     await firebase
       .database()
@@ -149,7 +144,7 @@ export default class SpeechToTextButton extends Component {
               (new Date().getHours() === (child.val().time - 1 + 24) % 24 &&
                 new Date().getMinutes() >= 49)
             ) {
-              var plus = parseInt(child.val().Repetition) + 1;
+              let plus = parseInt(child.val().Repetition) + 1;
               console.log("before first use");
               flag = true;
               console.log("before first use 2");
@@ -175,7 +170,7 @@ export default class SpeechToTextButton extends Component {
 
   insertUserAction = async () => {
     console.log("inside inserUserAction");
-    var userActionKey = firebase.database().ref().child("userActions").push()
+    let userActionKey = firebase.database().ref().child("userActions").push()
       .key;
     firebase
       .database()
@@ -204,14 +199,14 @@ export default class SpeechToTextButton extends Component {
 
   insertRoutine = async () => {
     console.log("inside inserRoutine");
-    var routineKey = await firebase.database().ref().child("routine").push()
+    let routineKey = await firebase.database().ref().child("routine").push()
       .key;
     await firebase
       .database()
       .ref("userActions/")
       .once("value", async (snap) => {
         snap.forEach((child) => {
-          var date1 = new Date(
+          let date1 = new Date(
             new Date().getFullYear() +
               "/" +
               new Date().getMonth() +
@@ -219,12 +214,12 @@ export default class SpeechToTextButton extends Component {
               new Date().getDate()
           );
           console.log("print date1" + date1);
-          var date2 = new Date(child.val().insertedDate);
-          var timeDiff = date1.getTime() - date2.getTime();
+          let date2 = new Date(child.val().insertedDate);
+          let timeDiff = date1.getTime() - date2.getTime();
           console.log("data1 get time " + date1.getTime());
           console.log("data2 get time " + date2.getTime());
           console.log("print timeDiff" + timeDiff);
-          var dayDiff = timeDiff / (1000 * 3600 * 24);
+          let dayDiff = timeDiff / (1000 * 3600 * 24);
           console.log("before if 19");
           console.log("dayDiff" + dayDiff);
           if (child.val().Repetition === 18)
@@ -261,15 +256,16 @@ export default class SpeechToTextButton extends Component {
       .ref("routine/")
       .once("value", (snap) => {
         snap.forEach((child) => {
-          var date1 = new Date(
+          let date1 = new Date(
             new Date().getFullYear() +
               "/" +
               new Date().getMonth() +
               "/" +
               new Date().getDate()
           );
-          var date2 = new Date(child.val().timeinserted);
-          var timeDiff = date1.getTime() - date2.getTime();
+          let date2 = new Date(child.val().timeinserted);
+          let timeDiff = date1.getTime() - date2.getTime();
+          let dayDiff;
           console.log("check date data1" + date1);
           console.log("check date data2" + date2);
           console.log("check date timeDiff" + timeDiff);
@@ -295,7 +291,7 @@ export default class SpeechToTextButton extends Component {
   };
 
   getTranscription = async () => {
-    
+
     this.setState({ isFetching: true });
     try {
       const { uri } = await FileSystem.getInfoAsync(this.recording.getURI());
@@ -435,10 +431,11 @@ export default class SpeechToTextButton extends Component {
     if(transcript == "الاجهزه المتصله"){
       NavigationService.navigate("supdevices");
     }
-    //starting from here all the methods and variables related to homescreen
+    //starting from here all the methods and letiables related to homescreen
     if (transcript == "تفعيل الوضع الصباحي") {
       //_onPress2()
-      this.props.store.dispatch({type:'TOGGLE',index:'toggle2'});
+      alert("Hi");
+      this.props.store.dispatch({type:'TOGGLE',index:'toggle3'});
 
     }
     if (transcript == "تفعيل الوضع المسائي") {
@@ -448,7 +445,7 @@ export default class SpeechToTextButton extends Component {
 
     if (transcript == "تفعيل وضع الخروج من المنزل") {
       //_onPress3()
-      this.props.store.dispatch({type:'TOGGLE',index:'toggle3'});
+      this.props.store.dispatch({type:'TOGGLE',index:'toggle2'});
     }
     if (transcript == "تفعيل وضع العوده الى المنزل") {
       //_onPress1()
@@ -457,7 +454,7 @@ export default class SpeechToTextButton extends Component {
 
     if (transcript == "إلغاء تفعيل الوضع الصباحي") {
       //toggle1 = false
-      this.props.store.dispatch({type:'SET',index:'toggle1',value:false});
+      this.props.store.dispatch({type:'SET',index:'toggle3',value:false});
     }
     if (transcript == "إلغاء تفعيل الوضع المسائي") {
       //toggle4 = false
@@ -466,7 +463,7 @@ export default class SpeechToTextButton extends Component {
 
     if (transcript == "إلغاء تفعيل وضع الخروج من المنزل") {
       //toggle3 = false
-      this.props.store.dispatch({type:'SET',index:'toggle3',value:false});
+      this.props.store.dispatch({type:'SET',index:'toggle2',value:false});
     }
     if (transcript == " إلغاء تفعيل وضع العوده الى المنزل") {
       //toggle1=false
@@ -545,17 +542,25 @@ export default class SpeechToTextButton extends Component {
 
   render() {
     const { isRecording, transcript, isFetching } = this.state;
-
+    const color_toggle = true;
     return (
       <View style={styles.container}>
-        {/* <Text>{this.state.curTime}</Text> */}
+        
+        <Button 
+          title = "click"
+          onPress = {() => {this.props.store.dispatch({type : 'TOGGLE', index : 'toggle3'})}}
+          color = 'red'
+
+          // write on press it appears 
+        />
 
         <View
-     
+
           onPressIn={this.startRecording}
           onPressOut={this.handleOnPressOut}
         >
-          
+
+
           {isFetching &&    <Image source={require('./crop2.gif')} style={styles.Indicator} />
 }
           {!isFetching &&  <Image source={require('./crop.gif')} style={styles.Indicator1} />}

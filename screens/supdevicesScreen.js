@@ -3,7 +3,7 @@ import * as WebBrowser from 'expo-web-browser';
 import React, { Component } from 'react';
 import {
   Platform,
-    StyleSheet, Text, View, Image, Button, backgroundColor, Alert, border, WIDTH, TouchableHighlight, 
+    StyleSheet, Text, View, Image, Button, backgroundColor, Alert, border, WIDTH, TouchableHighlight,
     TouchableOpacity, ScrollView, ImageBackground, AsyncStorage
 } from 'react-native';
 import { FontAwesome,FontAwesome5 ,AntDesign,Feather,MaterialCommunityIcons,SimpleLineIcons , Entypo} from "@expo/vector-icons";
@@ -13,10 +13,10 @@ import STTButton from '../STTButton'
 import axios from 'axios'
 import * as FileSystem from 'expo-file-system';
 import * as Permissions from 'expo-permissions';
-import firebase from 'firebase'; 
+import firebase from 'firebase';
 import { Audio } from 'expo-av';
 import * as Helper from "../components/Helper";
- 
+
 
 
 export default class  supdevicesScreen extends Component {
@@ -29,7 +29,7 @@ export default class  supdevicesScreen extends Component {
       email: "",
       password: "",
       confPassword: "",
-      errorMsg:null,
+      // errorMsg:null,
       latitude:0,
       longitude:0,
       isActive:false,
@@ -39,7 +39,7 @@ export default class  supdevicesScreen extends Component {
       passwordBorder:'#3E82A7',
       conPasswordBorder:'#3E82A7',
       emailBorder:'#3E82A7',
-    
+
       formErrorMsg:'',
       errorMsgVisibilty:'none',
       passError:'none',
@@ -49,29 +49,29 @@ export default class  supdevicesScreen extends Component {
       isLambOn : 'مغلقه' ,
    lambColor :'#2cb457',
       textColor: styles.openText
-    } 
+    }
 }
 
 
 
     componentDidMount(){
- 
+
       this._unsubscribe = this.props.navigation.addListener('willFocus',async() => {
-          
+
           await this.getAudio();
 
-          var lampStatus = await Helper.getLightStatus();     
+          var lampStatus = await Helper.getLightStatus();
 
           if(lampStatus==true)
           {
-            this.setState({lambColor :'#2cb457'}); 
+            this.setState({lambColor :'#2cb457'});
             this.setState({textColor :styles.openText});
           }
           else {
               this.setState({lambColor:'#6FA0AF'});
               this.setState({textColor:styles.colseText});
           }
-    
+
       });
 
       this.props.navigation.setParams({
@@ -79,30 +79,30 @@ export default class  supdevicesScreen extends Component {
             <SimpleLineIcons name="logout" size={24} color='white' style={{marginLeft:15}} />
           </TouchableOpacity>)
       })
-  
+
     }
- 
-    async getAudio () {  
+
+    async getAudio () {
       // Read report
-     
-       
-      let fileURL = '';    
+
+
+      let fileURL = '';
       const text =  ' الأجهزة المُتَّصِلَه ، الإنَارَهْ ، مُتَّصِلَه  ، التِّلْفَازْ ، غَيْر مُتَّصِل ، البَّوابَهْ غَيْر مُتَّصِلَهْ، الإنترنت غَيْر مُتَّصِل';
-       
-      
+
+
              axios.post(`http://45.32.251.50`,  {text} )
                .then(res => {
                   console.log("----------------------xxxx--------------------------"+res.data);
                  fileURL = res.data;
                      console.log(fileURL);
-           
+
                      this.playAudio(fileURL);
-     
+
                })
              }
              async playAudio(fileURL){
-             
-     
+
+
                await Audio.setAudioModeAsync({
                  interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
                 playsInSilentModeIOS: true,
@@ -112,22 +112,22 @@ export default class  supdevicesScreen extends Component {
                 playThroughEarpieceAndroid: false,
                 staysActiveInBackground: true,
               });
-        
-        
-        
-        
-           
+
+
+
+
+
               // OR
               const playbackObject = await Audio.Sound.createAsync(
                 { uri: fileURL },
                 { shouldPlay: true }
               );
-     
-               
-         
+
+
+
          //http://localhost/fiels/output-0.6839748394381258.mp3
            }
-     
+
 
 
 
@@ -137,66 +137,66 @@ export default class  supdevicesScreen extends Component {
     //   .then(res => res.json())
     //   .then(res => {
     //     console.log(res.state.on)
-    //   }) 
-      
+    //   })
+
     //   .catch(error => {console.log(error);
-      
+
     //   })
 
     //   if(res.state.on == true){
     //     isLambConnected = 'متصله',
-    //     isLambOn = 'مفتوحه' 
+    //     isLambOn = 'مفتوحه'
     //     lambColor = '#2cb457'
     //     textColor = styles.openText
-       
-    //     let fileURL = '';    
+
+    //     let fileURL = '';
     //     const text =  'الأجهزة المُتَّصِلَه ، الإنَارَهْ ، مُتَّصِلَه وَ مَفْتُوحَه ، التِّلْفَازْ ، غَيْر مُتَّصِل ومُغْلَق ، البَّوابَهْ غَيْر مُتَّصِلَه وَ مُغْلَقَهْ';
-       
+
     //            axios.post(`http://45.32.251.50`,  {text} )
     //              .then(res => {
     //                 console.log("----------------------xxxx--------------------------"+res.data);
     //                fileURL = res.data;
     //                    console.log(fileURL);
     //                    this.playAudio(fileURL);
-       
+
     //              })
     //   }
-      
+
 
     //   if(res.state.on == false){
     //     isLambConnected = 'متصله',
-    //     isLambOn = 'مغلقه' 
+    //     isLambOn = 'مغلقه'
     //     lambColor = '#6FA0AF'
     //     textColor = styles.colseText
 
-    //     let fileURL = '';    
+    //     let fileURL = '';
     //     const text =  ' الأجهزة المُتَّصِلَه ، الإنَارَهْ ، مُتَّصِلَه وَ مُغْلَقَهْ ، التِّلْفَازْ ، غَيْر مُتَّصِل ومُغْلَق ، البَّوابَهْ غَيْر مُتَّصِلَه وَ مُغْلَقَهْ';
-       
+
     //            axios.post(`http://45.32.251.50`,  {text} )
     //              .then(res => {
     //                 console.log("----------------------xxxx--------------------------"+res.data);
     //                fileURL = res.data;
     //                    console.log(fileURL);
     //                    this.playAudio(fileURL);
-       
+
     //              })
     //   }
 
     //   else {  isLambConnected = 'غير متصله',
-    //   isLambOn = 'مغلقه' 
+    //   isLambOn = 'مغلقه'
     //   lambColor = 'grey'
-    //   textColor = styles.NotConnText  
+    //   textColor = styles.NotConnText
 
-    //   let fileURL = '';    
+    //   let fileURL = '';
     //   const text =  'الأجهزة المُتَّصِلَه ، الإنَارَهْ ، غَيْر مُتَّصِلَه وَ مُغْلَقَهْ ، التِّلْفَازْ ، غَيْر مُتَّصِل ومُغْلَق ، البَّوابَهْ غَيْر مُتَّصِلَه وَ مُغْلَقَهْ';
-     
+
     //          axios.post(`http://45.32.251.50`,  {text} )
     //            .then(res => {
     //               console.log("----------------------xxxx--------------------------"+res.data);
     //              fileURL = res.data;
     //                  console.log(fileURL);
     //                  this.playAudio(fileURL);
-     
+
     //            })}
     // }
 
@@ -224,7 +224,7 @@ storageBucket: "maghna-62c55.appspot.com",
 messagingSenderId: "21464439338",
 appId: "1:21464439338:web:8c6bb486fb3673e5d14153",
 measurementId: "G-R3BQPCTCTM"
-  */   
+  */
   };
 
 
@@ -239,7 +239,7 @@ measurementId: "G-R3BQPCTCTM"
 handelSignOut =() =>{
   var {navigation}=this.props;
   console.log("login method");
-  
+
   console.log("inside");
   try{
     console.log(this.state);
@@ -249,11 +249,11 @@ handelSignOut =() =>{
     .then(function(){
    navigation.navigate('WelcomeStackNavigator')
     })
-    
+
     .catch(error => console.log(error.message))
 
     }catch(e){console.log(e.message)}
-    
+
 };
 
   componentWillUnmount(){
@@ -263,8 +263,8 @@ handelSignOut =() =>{
   render() {
     return (
 
-      
-// here we need to specify which to read. 
+
+// here we need to specify which to read.
     <View style={{ width:'100%' , height:'100%', flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: '#F7FAFF'}}>
 
     <ImageBackground source={require('./otherhalf.png')} style={{ width:'100%' , height:'120%', flex: 1, justifyContent: "center", alignItems: "center"}}>
@@ -272,27 +272,27 @@ handelSignOut =() =>{
     <ScrollView  style={styles.scrollView}>
 
     <View style={styles.scontainer}>
-    
+
     <Text style={this.state.textColor}>الإنارة</Text>
     <MaterialCommunityIcons style={{ right:190, bottom: 17}} name="lightbulb-on-outline" size={55} color= {this.state.lambColor} />
-   
+
     </View>
-    
-  
+
+
     <View style={styles.scontainer}>
     <Text style={styles.NotConnText}>التلفاز</Text>
 
     <FontAwesome style={{ right:190, bottom: 17}} name="tv" size={55} color= {'grey'} />
     </View>
-    
-    
+
+
     <View style={styles.scontainer}>
     <Text style={styles.NotConnText}>البوابة</Text>
- 
+
     <MaterialCommunityIcons style={{ right:190, bottom: 17}} name="garage" size={55} color= {'grey'} />
     </View>
-    
-    
+
+
     <View style={styles.scontainer}>
     <Text style={styles.NotConnText}>الانترنت</Text>
 
@@ -311,25 +311,25 @@ handelSignOut =() =>{
     </View>
 
     </ScrollView>
-    
-    </ImageBackground>
-    
-    
 
-    
+    </ImageBackground>
+
+
+
+
     </View>
     );
 }
-       
+
 }
 
-   
+
 
 
 supdevicesScreen.navigationOptions = ({navigation})=> ({
 
   headerTitle:  'الأجهزة المتصلة',
-  
+
  /* headerRight:()=>(
     <TouchableOpacity onPress={()=>{navigation.navigate('Home')}} style={{marginRight:15}}>
       <AntDesign name="right" size={24} color="#fff" />
@@ -340,7 +340,7 @@ supdevicesScreen.navigationOptions = ({navigation})=> ({
   headerStyle: {
     backgroundColor: '#8BC4D0',
     color:'white'
-    
+
  }
 ,
  headerTitleStyle: {
@@ -360,7 +360,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     },
-    
+
   getStartedText: {
     fontSize: 17,
     color: 'rgba(96,100,109, 1)',
@@ -395,8 +395,8 @@ const styles = StyleSheet.create({
    borderWidth:1,
    backgroundColor: "#3E82A7",
    //paddingBottom:10
-   
-    
+
+
   },
 
   scrollView: {
@@ -406,30 +406,30 @@ const styles = StyleSheet.create({
     fontSize:15,
   },
 
-  scontainer:{ 
-    fontSize:25, 
-    backgroundColor:'white', 
-    color: '#6FA0AF', 
-    justifyContent: 'center', 
-    width: 295, 
-    height: 90, 
-    left:8, 
+  scontainer:{
+    fontSize:25,
+    backgroundColor:'white',
+    color: '#6FA0AF',
+    justifyContent: 'center',
+    width: 295,
+    height: 90,
+    left:8,
     marginTop:20,
-    borderRadius: 25, 
-    marginHorizontal: 25, 
-    paddingLeft: 220, 
-    paddingRight:10, 
-    paddingBottom: 15, 
+    borderRadius: 25,
+    marginHorizontal: 25,
+    paddingLeft: 220,
+    paddingRight:10,
+    paddingBottom: 15,
     bottom: -40,
     shadowOpacity: 0.1,
     opacity: 0.9,
-    
+
   },
 
     colseText:{
       color: '#6FA0AF' ,
-      fontWeight: 'bold', 
-      fontSize:19, 
+      fontWeight: 'bold',
+      fontSize:19,
       top:37,
       width:200,
       marginLeft:-20,
@@ -437,30 +437,30 @@ const styles = StyleSheet.create({
 
       bottomText:{
         color: 'grey' ,
-        fontWeight: 'bold', 
-        fontSize:12, 
-        paddingTop:8, 
+        fontWeight: 'bold',
+        fontSize:12,
+        paddingTop:8,
         paddingRight:13,
         top:40,
-        width:80, 
+        width:80,
         marginLeft:-20,
-        
+
       },
 
       openText:
       {color: '#2cb457' ,
-      fontWeight: 'bold', 
-      fontSize:22, 
+      fontWeight: 'bold',
+      fontSize:22,
       top:37,
       //width:80,
-     
+
       marginLeft:-20,
 
     },
     NotConnText:{
       color: 'grey' ,
-      fontWeight: 'bold', 
-      fontSize:22,    
+      fontWeight: 'bold',
+      fontSize:22,
       top:37,
       marginLeft:-20,
     }

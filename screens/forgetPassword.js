@@ -25,8 +25,8 @@ constructor(props) {
         email: "",
         errorMsg:null,
     };
-    
-    
+
+
 }
 
 UNSAFE_componentWillMount(){
@@ -41,17 +41,6 @@ UNSAFE_componentWillMount(){
     messagingSenderId: "244460583192",
     appId: "1:244460583192:web:f650fa57532a682962c66d",
 
-
-/*
-      apiKey: "AIzaSyBUBKLW6Wrk48NQ_TcgUerucTZFphw6l-c",
-      authDomain: "maghna-62c55.firebaseapp.com",
-      databaseURL: "https://maghna-62c55.firebaseio.com",
-      projectId: "maghna-62c55",
-      storageBucket: "maghna-62c55.appspot.com",
-      messagingSenderId: "21464439338",
-      appId: "1:21464439338:web:8c6bb486fb3673e5d14153",
-      measurementId: "G-R3BQPCTCTM"
-  */   
   };
 
 
@@ -68,11 +57,11 @@ handelForgetPassword = () => {
     .auth()
     .sendPasswordResetEmail(this.state.email)
     .then(function() {
-    try { 
+    try {
     navigation.navigate('SignIn')}
     catch (e){console.log(e.message)}
     Alert.alert("فضلًا تفقد بريدك الإلكتروني");
-    
+
 
     })
     .catch((error) => {
@@ -93,30 +82,30 @@ handelForgetPassword = () => {
 
 }
 
-render(){  
+render(){
     return (
-  
+
   <View>
-  
+
   <View style={styles.container}>
-  
+
   <View style={{backgroundColor :"#3E82A7", height:"19%",width:"100%", justifyContent: 'center',
      alignItems: 'center'}}>
-  
+
      <Text style={styles.header}> استرجاع كلمة المرور </Text>
-  
+
      </View>
-  
+
   <ImageBackground source={require('../assets/images/halfBlue.png') } style={{ height:"100%",justifyContent: 'center',alignItems: 'center'}}>
-  
+
   <Text style={styles.perInfo}>──  فضلاً أدخل بريدك الإلكتروني ──</Text>
-  
+
   <View style={styles.smallContainer}>
-  
-  
-  
+
+
+
   <View style={styles.inputContainer}>
-  
+
   <TextInput style={styles.inputs}
   placeholder="البريد الإلكتروني"
   keyboardType="email-address"
@@ -124,10 +113,10 @@ render(){
   onChangeText={(text) => { this.setState({email: text}) }}
   />
   </View>
-  
-  
+
+
          <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={this.handelForgetPassword} >
-         <LinearGradient 
+         <LinearGradient
                               colors={['#1784ab', '#9dd1d9']} style={styles.gradient}
                               start={{ x: 0, y: 1 }}
                               end={{ x: 1, y: 1 }}
@@ -135,14 +124,14 @@ render(){
        <Text style={styles.signUpText}>  إرسال  </Text>
        </LinearGradient>
      </TouchableHighlight>
-  
-  
+
+
     </View>
   </ImageBackground>
     </View>
-  
+
     </View>
-  
+
   );
   }
 }
@@ -160,17 +149,17 @@ forgetPassword.navigationOptions = ({navigation})=> ({
   headerStyle: {
     backgroundColor: '#4b9cb5',
     color:'white'
-    
+
  },
  headerTitleStyle: {
   color: '#fff'
 }
-}  
+}
 );
 
 const styles = StyleSheet.create({
 
- 
+
   header:{
     marginTop:130,
     color: 'white',
@@ -207,7 +196,7 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    
+
     //flex: 1,
    justifyContent: 'center',
     alignItems: 'center',
@@ -218,7 +207,7 @@ const styles = StyleSheet.create({
    flex:1,
    width:'100%',
    height:'100%',
- 
+
   },
 
   inputContainer: {
@@ -245,9 +234,9 @@ const styles = StyleSheet.create({
       height:200,
       shadowOpacity: 0.1
 
-      
+
   },
- 
+
   perInfo:{
     color: '#9F9F9F',
     fontSize: 20,
@@ -264,7 +253,7 @@ const styles = StyleSheet.create({
       borderColor: '#EAEAEA',
       marginRight:20,
      //marginLeft:-50,
- 
+
   },
   firstContainer:{
   marginTop:40,
@@ -303,13 +292,6 @@ const styles = StyleSheet.create({
  marginRight:150,
  marginBottom:10,
  backgroundColor:'#3E82A7',
- //backgroundColor: this.sate.active?'#3E82A7':'red',
-   //height:45,
-   //flexDirection: 'row',
-   //justifyContent: 'center',
-   //alignItems: 'center',
-   //marginBottom:10,
-   //width:100,
    borderRadius:20,
   },
 
@@ -320,18 +302,16 @@ const styles = StyleSheet.create({
    alignItems:'center',
    justifyContent:'center',
    borderRadius:20,
-   //left:this.state.active ? 50 : 0 
-   //marginRight:150,
   },
 
   signupButton: {
    //backgroundColor: "#3E82A7",
-    
+
   },
 
   LocationButtonContainer:{
-  
-    height:45,
+
+    // height:45,
     //flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -345,19 +325,19 @@ const styles = StyleSheet.create({
     height:35,
 
    },
-  
+
    AddlocationButton: {
     backgroundColor: "#ffffff",
     marginTop:-10,
     marginBottom:15,
-  
+
   },
- 
+
   addLocationText:{
     color: '#6FA0AF',
     fontSize:15,
   },
- 
+
   signUpText: {
     color: 'white',
     fontSize:15,
@@ -368,7 +348,7 @@ const styles = StyleSheet.create({
    marginLeft:150,
    marginBottom:-200,
    marginTop:10,
-   
+
   },
 
   inline:{
@@ -377,8 +357,8 @@ const styles = StyleSheet.create({
    justifyContent:'center',
    //marginRight:50,
    //marginLeft:50,
-   
-   
+
+
   },
 
 });

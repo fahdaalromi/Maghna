@@ -27,8 +27,8 @@ export default class profileScreen extends Component {
           name:"",
           email: "",
           password: "",
-          confPassword: "", 
-          errorMsg:null,
+          confPassword: "",
+          // errorMsg:null,
           latitude:0,
           longitude:0,
           isActive:true,
@@ -38,7 +38,7 @@ export default class profileScreen extends Component {
           passwordBorder:'#3E82A7',
           conPasswordBorder:'#3E82A7',
           emailBorder:'#3E82A7',
-        
+
           formErrorMsg:'',
           errorMsgVisibilty:'none',
           passError:'none',
@@ -50,7 +50,7 @@ export default class profileScreen extends Component {
     UNSAFE_componentWillMount(){
 
       const firebaseConfig = {
-    
+
     apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
     authDomain: "maghnaapplication.firebaseapp.com",
     databaseURL: "https://maghnaapplication.firebaseio.com",
@@ -59,25 +59,25 @@ export default class profileScreen extends Component {
     messagingSenderId: "244460583192",
     appId: "1:244460583192:web:f650fa57532a682962c66d",
 
-     
+
       };
-    
-    
+
+
       if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
     }
-    
+
     }
-    //view and fetch updated data // this versio nis same as mine.>? it is but you may work on another pagrm any wat what are you lloking for ? 
+    //view and fetch updated data // this versio nis same as mine.>? it is but you may work on another pagrm any wat what are you lloking for ?
     // We had async wait all those removed ? y do u need it ? No . Let me work.
 
- 
+
     componentDidMount(){
-      // it is not being updated you see? 
+      // it is not being updated you see?
       // alert(this.state.amount)
-      
+
       this.props.navigation.setParams({
-        headerLeft: (<TouchableOpacity onPress={this.handelSignOut}> 
+        headerLeft: (<TouchableOpacity onPress={this.handelSignOut}>
            <SimpleLineIcons name="logout" size={24} color='white' style={{marginLeft:15}} />
         </TouchableOpacity>)
  })
@@ -87,15 +87,15 @@ export default class profileScreen extends Component {
       .auth()
       .onAuthStateChanged((user) => {
         if (user) {
-     
+
       var userId = firebase.auth().currentUser.uid;
       //this.state.uID=userId;
       this.setState({ uID:userId})
       console.log("user id "+userId)
       //console.log("user id "+uID)
-      
+
       var email = firebase.auth().currentUser.email;
-      
+
       console.log("user email" +email)
       //console.log(JSON.stringify(snapshot))
       firebase
@@ -117,7 +117,7 @@ export default class profileScreen extends Component {
         console.log("after sate " +this.state.uID+this.state.name+this.state.latitude+this.state.longitude)
       });
        }
-      }); 
+      });
 
       }//end view and fetch
 
@@ -133,7 +133,7 @@ export default class profileScreen extends Component {
           this.setState({emailBorder:'#3E82A7'})
         }
       }
-      
+
       identicalPass = (password) => {
         if (this.state.password !== this.state.confPassword){
           console.log("identical if ");
@@ -146,26 +146,26 @@ export default class profileScreen extends Component {
           console.log("identical else ");
           console.log("before set conf pass "+this.state.confPassword);
           this.setState({passError: 'none'})
-        // this.setState({errorMsgVisibilty: 'none'})   
+        // this.setState({errorMsgVisibilty: 'none'})
          this.setState({passwordBorder:'#3E82A7'})
          this.setState({conPasswordBorder:'#3E82A7'})
-         this.setState({conPassword:password}) 
+         this.setState({conPassword:password})
          console.log("after set conf pass "+this.state.confPassword);
         }
-        
-        }  
-      
+
+        }
+
 
         storeData = async () => {
-// here to store 
+// here to store
           try {
-   
+
             var billAmount = { 'value' : this.state.amount};
             await AsyncStorage.setItem('bill',60);
           } catch (error) {
 
-          } 
-    
+          }
+
         }
     editProfile = () => {
 
@@ -192,15 +192,15 @@ export default class profileScreen extends Component {
         return;
       }
 
-    // if the user wants to change his password  
-        //make sure the length is suitable 
+    // if the user wants to change his password
+        //make sure the length is suitable
       if (this.state.changePassword && this.state.password.length < 6 && this.state.password.length > 0) {
         console.log('short password');
         this.setState({formErrorMsg: 'يجب أن تكون كلمة المرور أكثر من ٦ خانات'})
         this.setState({errorMsgVisibilty: 'flex'})
         return;
       }
-        // make sure there are confirmation password 
+        // make sure there are confirmation password
       if (this.state.changePassword && this.state.confPassword=='') {
         console.log('confirm');
         this.setState({formErrorMsg: 'عفوًا أدخل كلمة مرور تأكيدية'})
@@ -220,7 +220,7 @@ export default class profileScreen extends Component {
 
           // store in local
         this._storeData();
-        
+
         var user = firebase.auth().currentUser;
         var uid;
        // var userId =  this.props.navigation.getParam('id', 'NO-ID');
@@ -252,7 +252,7 @@ export default class profileScreen extends Component {
               .ref('mgnUsers/'+ this.state.uID)
               .update({longitude : this.state.longitude,})
             }
-           
+
 /*
           if (this.state.name != ''){
             firebase.database()
@@ -261,17 +261,17 @@ export default class profileScreen extends Component {
           }*/
 // Here i store it in firebase it is easier to retrieve thaan solving this error what do u thinl ? No. It Please wait a bit. Trying to understand where ialert is from// Bcz we have nto not put any
           if (this.state.amount != 0){
-            firebase.database()      
+            firebase.database()
             .ref('mgnUsers/'+this.state.uID)
             .update({amount: this.state.amount})
           }
 
-          
+
             firebase.database()
             .ref('mgnUsers/'+this.state.uID)
             .update({isActive: this.state.isActive})
-          
- 
+
+
         }else {
           console.log("user changePassword val "+this.state.changePassword);
           console.log(this.state.password );
@@ -295,8 +295,8 @@ export default class profileScreen extends Component {
           .on('value', snapshot => {
             this.confPassword.clear();
             this.password.clear();
-             
-          
+
+
         })*/
         }
 /*
@@ -316,13 +316,13 @@ export default class profileScreen extends Component {
         this.setState({passwordBorder: '#3E82A7'})
         this.setState({conPasswordBorder: '#3E82A7'})
         Alert.alert('تم تحديث بياناتك بنجاح');
-        this.props.navigation.navigate('HomeStack'); 
+        this.props.navigation.navigate('HomeStack');
       }
 
       handelSignOut =() =>{
         var {navigation}=this.props;
         console.log("logout method");
-        
+
         console.log("inside");
         try{
           console.log(this.state);
@@ -332,25 +332,25 @@ export default class profileScreen extends Component {
           .then(function(){
          navigation.navigate('WelcomeStackNavigator')
           })
-          
+
           .catch(error => console.log(error.message))
           console.log("after"+this.state.email);
           }catch(e){console.log(e.message)}
-          
+
       };
 
-      updateData = (long,lat) => {  
+      updateData = (long,lat) => {
         //(data);
-          this.setState({      
+          this.setState({
             longitude:long,
             latitude:lat,
-      
+
           })
         console.log("udate: " + long +" "+lat);
         console.log("udate: " + this.state.longitude +" "+this.state.latitude);
           // some other stuff
         };
-    
+
     //navigation.navigate('SignIn')
 
     _storeData = async() => {
@@ -358,7 +358,7 @@ export default class profileScreen extends Component {
         value : this.state.amount
       }
       await AsyncStorage.setItem('amount',JSON.stringify(amount));
-    }   
+    }
 
     render() {
         return (
@@ -381,7 +381,7 @@ export default class profileScreen extends Component {
                         </View>
 
 
-                          
+
                             <Text style={styles.perInfo}>── المعلومات الشخصية ──</Text>
                                 <View style={[styles.inputContainer,{borderColor: this.state.nameBorders}]} >
                                     <TextInput style={styles.inputs}
@@ -412,7 +412,7 @@ export default class profileScreen extends Component {
                                 <Text style={styles.perInfo}>── تغيير كلمة المرور  ──</Text>
                                 <View style={[styles.inputContainer,{borderColor: this.state.passwordBorder}]}>
                                     <TextInput style={styles.inputs}
-                                        
+
                                         placeholder="كلمة المرور"
                                         secureTextEntry={true}
                                         textContentType="newPassword"
@@ -451,20 +451,20 @@ export default class profileScreen extends Component {
                                           this.setState({conPasswordBorder: '#3E82A7'})
                                           this.setState({passError: 'none'})
                                           this.setState({errorMsgVisibilty: 'none'})
-                                          
+
                                         } }
                                         onEndEditing={(confPassword) =>{this.identicalPass(confPassword)} }
                                     />
                                 </View>
-                                <Text style={styles.perInfo}>──── غيرها    ────</Text> 
+                                <Text style={styles.perInfo}>──── غيرها    ────</Text>
 
                                 <View style={styles.inputContainer}>
                                     <TextInput style={styles.inputs}
                                         placeholder="الحد الائتماني للفاتورة"
                                         keyboardType='numeric'
-                                        onChangeText={(text) => { 
-                                          this.setState({amount: text})   
-            
+                                        onChangeText={(text) => {
+                                          this.setState({amount: text})
+
                                           this.setState({errorMsgVisibilty:'none'})}}
                                         underlineColorAndroid='transparent'
                                         value={
@@ -472,7 +472,7 @@ export default class profileScreen extends Component {
                                          }
                                     />
                                 </View>
-                                <TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]} 
+                                <TouchableHighlight style={[styles.LocationButtonContainer, styles.AddlocationButton]}
                                 onPress={()=>{this.props.navigation.navigate('location', {id : this.state.uID,
                                                                                       updateData: this.updateData})}}  >
                                     <Text style={styles.addLocationText}> إضافة موقع</Text>
@@ -483,9 +483,9 @@ export default class profileScreen extends Component {
                                 </View>
 
                                 <View style={styles.AnalysisButtonContainer}>
-                              
+
                                 <FlipToggle
-                                
+
                                 alignSelf={'flex-end'}
                                 value={this.state.isActive}
                                 buttonWidth={75}
@@ -509,7 +509,7 @@ export default class profileScreen extends Component {
                                  .ref('mgnUsers/'+ this.state.uID)
                                   .update({isActive: this.state.isActive})*/
                                 }}
-                                
+
                                   />
 
                                 </View>
@@ -540,10 +540,10 @@ profileScreen.navigationOptions = ({navigation})=> ({
 //()=>{this.handelSignOut}
   headerLeft: navigation.state.params && navigation.state.params.headerLeft
  /* ()=>(
-    <TouchableOpacity onPress={()=>{        
+    <TouchableOpacity onPress={()=>{
       console.log("inside");
     try{
-      
+
      firebase
       .auth()
       .signOut()
@@ -552,7 +552,7 @@ profileScreen.navigationOptions = ({navigation})=> ({
       navigation.navigate('WelcomeStackNavigator')
       })
       .catch(error => console.log(error.message))
-      }catch(e){console.log(e.message)}}} 
+      }catch(e){console.log(e.message)}}}
                                   style={{marginLeft:15}}>
       <SimpleLineIcons name="logout" size={24} color='white' />
     </TouchableOpacity>
@@ -560,17 +560,17 @@ profileScreen.navigationOptions = ({navigation})=> ({
   headerStyle: {
     backgroundColor: '#8BC4D0',
     color:'white'
-    
+
  },
  headerTitleStyle: {
   color: '#fff'
 }
-    
+
 });
 
 const styles = StyleSheet.create({
 
- 
+
   header:{
     marginTop:150,
     marginLeft:130,
@@ -608,7 +608,7 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    
+
     //flex: 1,
    justifyContent: 'center',
     alignItems: 'center',
@@ -619,7 +619,7 @@ const styles = StyleSheet.create({
    flex:1,
    width:'100%',
    height:'100%',
- 
+
   },
 
   inputContainer: {
@@ -646,7 +646,7 @@ const styles = StyleSheet.create({
       shadowOpacity: 0.1,
       opacity: 0.9,
   },
- 
+
   perInfo:{
     color: '#3E82A7',
     fontSize: 20,
@@ -662,16 +662,16 @@ const styles = StyleSheet.create({
       borderColor: '#3E82A7',
       marginRight:20,
      //marginLeft:-50,
- 
+
   },
- 
+
   warning:{
     color: 'red',
     fontSize:12,
     marginBottom:10,
     textAlign:'center'
   },
- 
+
   buttonContainer: {
    height:45,
    flexDirection: 'row',
@@ -685,7 +685,7 @@ const styles = StyleSheet.create({
   },
 
   AnalysisButtonContainer:{
-    
+
    // height:45,
    // width:70,
  //borderWidth:1,
@@ -712,18 +712,18 @@ const styles = StyleSheet.create({
    alignItems:'center',
    justifyContent:'center',
    borderRadius:20,
-   //left:this.state.active ? 50 : 0 
+   //left:this.state.active ? 50 : 0
    //marginRight:150,
   },
 
   signupButton: {
    backgroundColor: "#3E82A7",
-    
+
   },
 
   LocationButtonContainer:{
-  
-   height:45,
+
+   // height:45,
    //flexDirection: 'row',
    justifyContent: 'center',
    alignItems: 'center',
@@ -735,19 +735,19 @@ const styles = StyleSheet.create({
    shadowOpacity: 0.14,
    height:35,
   },
- 
+
   AddlocationButton: {
    backgroundColor: "#ffffff",
    marginTop:-20,
    marginBottom:20,
- 
+
  },
- 
+
  addLocationText:{
    color: '#6FA0AF',
    fontSize:15,
  },
- 
+
   signUpText: {
     color: 'white',
     fontSize:15,
@@ -758,7 +758,7 @@ const styles = StyleSheet.create({
    marginLeft:150,
    marginBottom:-200,
    marginTop:10,
-   
+
   },
   subAnalysisText:{
     color: 'white',
@@ -771,8 +771,8 @@ const styles = StyleSheet.create({
    justifyContent:'center',
    //marginRight:50,
    //marginLeft:50,
-   
-   
+
+
   },
 
 });
