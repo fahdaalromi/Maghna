@@ -1593,15 +1593,15 @@ TaskManager.defineTask('locationTask', async ({ data, error }) => {
                     if(child.val().actionID==='001'){
 
                         console.log("the light must be turend on user entern")
-                     //   axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
-                     //   {'on':true} )
-                    // .then(res => res.json())
+                       axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
+                       {'on':true} )
+                     .then(res => res.json())
                       }
                       else {
                         console.log("the light must be turend off user entern")
-                     //   axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
-                     //   {'on':false} )
-                    //  .then(res => res.json())
+                       axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
+                        {'on':false} )
+                      .then(res => res.json())
                       }
                 }
 
