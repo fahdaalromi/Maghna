@@ -29,7 +29,7 @@ export default class SignUP extends Component{
   amount:0,
   isActive:true,
 
-  
+
   passwordBorder:'#3E82A7',
   conPasswordBorder:'#3E82A7',
   emailBorder:'#3E82A7',
@@ -64,7 +64,7 @@ messagingSenderId: "21464439338",
 appId: "1:21464439338:web:8c6bb486fb3673e5d14153",
 measurementId: "G-R3BQPCTCTM"
 */
-     
+
   };
 
 
@@ -112,7 +112,7 @@ identicalPass = (password) => {
    this.setState({passwordBorder:'#3E82A7'})
    this.setState({conPasswordBorder:'#3E82A7'})
   }
-  
+
   }
 
 
@@ -129,7 +129,7 @@ handelSignUp =() =>{
     this.setState({formErrorMsg: ' يجب أن تكون كلمة المرور أكثر من ٦ خانات'})
     this.setState({errorMsgVisibilty: 'flex'})
     this.setState({passwordBorder:'red'})
-   
+
     return;
   }
   /*
@@ -182,22 +182,22 @@ handelSignUp =() =>{
     Alert.alert("تم التسجيل بنجاح، تفقد بريدك الإلكتروني")
 
     })
-  
+
   .catch((error) => {
 
     console.log(error.message)
     Alert.alert("نعتذر، البريد الإلكتروني مسجل مسبقًا")
     this.setState({formErrorMsg: 'نعتذر، البريد الإلكتروني مسجل مسبقًا'})
-    
+
   })
 
     }catch(e){console.log(e.message)}
 
 };
 
-  updateData = (long,lat) => {  
+  updateData = (long,lat) => {
   //(data);
-    this.setState({      
+    this.setState({
       longitude:long,
       latitude:lat,
 
@@ -206,7 +206,7 @@ handelSignUp =() =>{
     // some other stuff
   };
 
-  render(){  
+  render(){
   return (
 
 <View>
@@ -239,7 +239,7 @@ handelSignUp =() =>{
 <View style={styles.firstContainer}>
 <View style={styles.inputContainer} style={styles.inputContainer} >
 
-<TextInput   style={[styles.input,{borderColor:this.state.nameBorder}]} 
+<TextInput   style={[styles.input,{borderColor:this.state.nameBorder}]}
 ref={input=>this.name=input}
 placeholder="أسم المستخدم"
 keyboardType="default"
@@ -259,12 +259,12 @@ autoCapitalize="none"
 </View>
 <View style={[styles.inputContainer , {borderColor: this.state.emailBorder}]}>
 
-<TextInput 
-  style={[styles.input,{borderColor:this.state.emailBorders}]} 
+<TextInput
+  style={[styles.input,{borderColor:this.state.emailBorders}]}
   ref={input=>this.email=input}
-  placeholder=" البريد الإلكتروني" 
-  onChangeText={(text) => { 
-    this.setState({email: text}) 
+  placeholder=" البريد الإلكتروني"
+  onChangeText={(text) => {
+    this.setState({email: text})
     this.setState({visibilty: 'none'})
     this.setState({emailBorders: '#7db4cb'})
     this.setState({passBorders: '#7db4cb'})}}
@@ -279,13 +279,13 @@ autoCapitalize="none"
 
 <View style={[styles.inputContainer, {borderColor: this.state.passwordBorder}]}>
 
-<TextInput   style={[styles.input,{borderColor:this.state.emailBorders}]} 
+<TextInput   style={[styles.input,{borderColor:this.state.emailBorders}]}
 ref={input=>this.password=input}
   placeholder="كلمة المرور"
   secureTextEntry={true}
   underlineColorAndroid='transparent'
-  onChangeText={(text) => { 
-    this.setState({password: text}) 
+  onChangeText={(text) => {
+    this.setState({password: text})
     this.setState({passwordBorder: '#3E82A7'})
   }}
   //onEndEditing={(password) =>{this.identicalPass(password)} }
@@ -294,13 +294,13 @@ ref={input=>this.password=input}
 </View>
 
 <View style={[styles.inputContainer,{borderColor: this.state.conPasswordBorder}]}>
-<TextInput   style={[styles.input,{borderColor:this.state.emailBorders}]} 
+<TextInput   style={[styles.input,{borderColor:this.state.emailBorders}]}
 ref={input=>this.confPassword=input}
 placeholder="تأكيد كلمة المرور"
 secureTextEntry={true}
 underlineColorAndroid='transparent'
-onChangeText={(text) => { 
-  this.setState({confPassword: text}) 
+onChangeText={(text) => {
+  this.setState({confPassword: text})
   this.setState({conPasswordBorder: '#3E82A7'})
   this.setState({errorMsgVisibilty: 'none'})
   }}
@@ -318,7 +318,7 @@ onChangeText={(text) => {
 
 
        <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={this.handelSignUp} >
-       <LinearGradient 
+       <LinearGradient
                             colors={['#1784ab', '#9dd1d9']} style={styles.gradient}
                             start={{ x: 0, y: 1 }}
                             end={{ x: 1, y: 1 }}
@@ -353,17 +353,17 @@ SignUP.navigationOptions = ({navigation})=> ({
   headerStyle: {
     backgroundColor: '#4b9cb5',
     color:'white'
-    
+
  },
  headerTitleStyle: {
   color: '#fff'
 }
-}  
+}
 );
 
 const styles = StyleSheet.create({
 
- 
+
   header:{
     marginTop:130,
     color: 'white',
@@ -400,7 +400,7 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    
+
     //flex: 1,
    justifyContent: 'center',
     alignItems: 'center',
@@ -411,7 +411,7 @@ const styles = StyleSheet.create({
    flex:1,
    width:'100%',
    height:'100%',
- 
+
   },
 
   inputContainer: {
@@ -438,9 +438,9 @@ const styles = StyleSheet.create({
       height:430,
       shadowOpacity: 0.1
 
-      
+
   },
- 
+
   perInfo:{
     color: '#9F9F9F',
     fontSize: 20,
@@ -455,7 +455,7 @@ const styles = StyleSheet.create({
     overflow:'visible',
       height:40,
       borderColor: '#EAEAEA',
- 
+
   },
 
   input: {
@@ -467,7 +467,7 @@ const styles = StyleSheet.create({
     width: 250,
   },
 
-  
+
   firstContainer:{
   marginTop:40,
   },
@@ -522,13 +522,13 @@ const styles = StyleSheet.create({
    alignItems:'center',
    justifyContent:'center',
    borderRadius:20,
-   //left:this.state.active ? 50 : 0 
+   //left:this.state.active ? 50 : 0
    //marginRight:150,
   },
 
   signupButton: {
    //backgroundColor: "#3E82A7",
-    
+
   },
 
   warning:{
@@ -539,8 +539,8 @@ const styles = StyleSheet.create({
   },
 
   LocationButtonContainer:{
-  
-    height:45,
+
+    // height:45,
     //flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -554,19 +554,19 @@ const styles = StyleSheet.create({
     height:35,
 
    },
-  
+
    AddlocationButton: {
     backgroundColor: "#ffffff",
     marginTop:-10,
     marginBottom:15,
-  
+
   },
- 
+
   addLocationText:{
     color: '#6FA0AF',
     fontSize:15,
   },
- 
+
   signUpText: {
     color: 'white',
     fontSize:15,
@@ -577,7 +577,7 @@ const styles = StyleSheet.create({
    marginLeft:150,
    marginBottom:-200,
    marginTop:10,
-   
+
   },
 
   inline:{
@@ -586,8 +586,8 @@ const styles = StyleSheet.create({
    justifyContent:'center',
    //marginRight:50,
    //marginLeft:50,
-   
-   
+
+
   },
 
 });
