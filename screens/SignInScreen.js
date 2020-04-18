@@ -132,7 +132,7 @@ measurementId: "G-R3BQPCTCTM"
           var username= this.username;
           //this.username = username
           if (!user.emailVerified){
-            Alert.alert("Please activate the email");
+            Alert.alert("فضلاً تفقد بريدك الالكتروني");
           }else{
             firebase.database().ref('mgnUsers/'+user.uid).on('value',
             async(snapshot)  => {
@@ -188,7 +188,7 @@ measurementId: "G-R3BQPCTCTM"
 
                     <TextInput style={[styles.input,{borderColor:this.state.emailBorders}]}
                     ref={input=>this.email=input}
-                    placeholder=" E-mail"
+                    placeholder=" البريد الالكتروني"
                     value={this.state.email}
                     onChangeText={(text) => {
                       this.setState({email: text})
@@ -200,7 +200,7 @@ measurementId: "G-R3BQPCTCTM"
 
                     <TextInput style={[styles.input,{borderColor:this.state.passBorders}]}
                      ref={input=>this.password=input}
-                    placeholder="password "
+                    placeholder="كلمه المرور "
                     secureTextEntry={true}
                     value={this.state.password}
                     onChangeText={(text) => {
@@ -216,11 +216,11 @@ measurementId: "G-R3BQPCTCTM"
                             start={{ x: 0, y: 1 }}
                             end={{ x: 1, y: 1 }}
                         >
-                            <Text style={styles.buttonText} >sign in</Text>
+                            <Text style={styles.buttonText} >تسجيل الدخول</Text>
                         </LinearGradient>
                     </Button>
                     <TouchableOpacity onPress={ () => {this.props.navigation.navigate('forgetPassword')}}>
-                    <Text style={styles.note} >did you forget your password?</Text>
+                    <Text style={styles.note} >هل نسيت كلمه المرور؟</Text>
                     </TouchableOpacity>
                 </View>
                 </View>
