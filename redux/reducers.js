@@ -5,19 +5,37 @@
  */
 import { combineReducers } from 'redux';
 import initialState from './initialState';
-import { Alert } from 'react-native';
-import firebase from '../constants/FireBase.js';
+// import { Alert } from 'react-native';
+// import firebase from '../constants/FireBase.js';
 
 
 
-const updateHomeSwitches = async(state = initialState.homeSwitches, action) => {
+const updateHomeSwitches = (state = initialState.homeSwitches, action) => {
+  // console.log("--------------------------------------------");
+  // console.log(initialState.homeSwitches);
+  // console.log('------------///////////');
+  // console.log(state);
+  // console.log('============');
+  // console.log(JSON.parse(JSON.stringify(state))
     switch (action.type) {
       case 'TOGGLE':
-        var tempState = JSON.parse(JSON.stringify(state));
-        _toggleWithFirebaseUpdate(tempState[action.index],action.index).then((response) => {
-            tempState[action.index] = response;
-            return { ...tempState };
-        });
+        // console.log("--------------------------------------------");
+        // console.log(state.then(res => {
+        //   console.log(res)
+        // }));
+        // var tempState = JSON.parse(JSON.stringify(state));
+        // console.log(tempState)
+        // _toggleWithFirebaseUpdate(tempState[action.index],action.index).then((response) => {
+        //   tempState[action.index] = response;
+        //   // let toggleState = state.toggle2 === undefined || Boolean(state.toggle2) === true ? true : false;
+        //   // console.log({ ...state, toggle2: !toggleState })
+        //   // console.log(state)
+        //   // return { ...state, toggle2: !toggleState };
+        //
+        // });
+
+        return {...state, toggle2: action.value};
+
       case 'SET':
         var tempState = JSON.parse(JSON.stringify(state));
         tempState[action.index] = action.value;
@@ -38,22 +56,21 @@ const _toggleWithFirebaseUpdate = async (toggleIndexValue,toggleIndex) =>
       toggle1: {
         name: "come routine",
         alert:
-          " لم تقم بإنشاء وضع العودة إلى المنزل من قبل ، عليك أولاً إنشاؤه",
-      },
-      toggle2: {
-        name: "leave routine",
-        alert: " لم تقم بإنشاء وضع الخروج من المنزل من قبل ، عليك أولاً إنشاؤه",
+          " You haven't created a homecoming mode before, you must first create it",
       },
       toggle3: {
+        name: "leave routine",
+        alert: " You haven't created an exit home mode before, you first have to create it",
+      },
+      toggle2: {
         name: "morning routine",
-        alert: " لم تقم بإنشاء الوضع الصباحي من قبل ، عليك أولاً إنشاؤه",
+        alert: " You haven't created Morning Mode before, you must first create it",
       },
       toggle4: {
         name: "night routine",
-        alert: " لم تقم بإنشاء الوضع المسائي من قبل ، عليك أولاً إنشاؤه",
+        alert: " You haven't created evening mode before, you have to first create it",
       },
     };
-
    let request = new Promise((resolve, reject) => {
 
       let theId;
@@ -63,24 +80,25 @@ const _toggleWithFirebaseUpdate = async (toggleIndexValue,toggleIndex) =>
       let alertDisplay = false;
       let returnToggleValue = !toggleIndexValue;
       if (returnToggleValue){
-         firebase.database().ref('/routine').once("value",snapshot=>{
+         firebase.database().ref('/routine').on("value",snapshot=>{
             snapshot.forEach(item => {
                let temp = item.val();
                if(temp.userID == user.uid){
 
                   userRoutineArr.push(temp.name);
-                  console.log(temp.name);
                }//end if
                if(userRoutineArr.indexOf(routineName)!= -1){
                   theId = item.key;
-                  firebase.database().ref('routine/' + theId).update(  {
+                  firebase.database().ref('routine/'+theId).update(  {
                      status: 1,
+
                   });
                   resolve(returnToggleValue);
                }
 
             });//end forEach
             if (userRoutineArr.indexOf(routineName)== -1){
+
                if(!alertDisplay)
                {
                   Alert.alert("عذراً", routineInfo[toggleIndex].alert);
@@ -92,13 +110,12 @@ const _toggleWithFirebaseUpdate = async (toggleIndexValue,toggleIndex) =>
 
       }
       else {
-         firebase.database().ref('/routine').once("value",snapshot=>{
+         firebase.database().ref('/routine').on("value",snapshot=>{
             snapshot.forEach(item => {
                let temp = item.val();
                if(temp.userID == user.uid){
 
                userRoutineArr.push(temp.name);
-               console.log(temp.name);
                }//end if
                if(userRoutineArr.indexOf(routineName)!= -1){
                   theId = item.key;
@@ -106,7 +123,7 @@ const _toggleWithFirebaseUpdate = async (toggleIndexValue,toggleIndex) =>
                      status: 0,
                   });
                }
-               resolve(returnToggleValue);
+              resolve(returnToggleValue);
             });//end forEach
          }); //end snapshot..
       }

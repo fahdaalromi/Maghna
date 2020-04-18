@@ -1,5 +1,4 @@
 import React from 'react';
-import { Platform ,I18nManager} from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from "react-navigation";
 

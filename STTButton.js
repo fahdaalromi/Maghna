@@ -4,7 +4,7 @@ import {
   View,
   Platform,
   AsyncStorage,
-  Image, Button,Text
+  Image
 } from "react-native";
 import * as FileSystem from "expo-file-system";
 import * as Permissions from "expo-permissions";
@@ -12,10 +12,15 @@ import axios from "axios";
 import { Audio } from "expo-av";
 import NavigationService from "./navigation/NavigationService";
 import * as Helper from "./components/Helper";
-// import { Button } from "native-base";
-
+import * as firebase from "firebase";
+import {Button} from "react-native-elements";
+import { connect } from 'react-redux';
 // Here I use this time, I open the package
 const rnTimer = require("react-native-timer");
+
+
+import { Alert } from 'react-native';
+import firebaseInitial from './constants/FireBase.js';
 
 const recordingOptions = {
   android: {
@@ -41,6 +46,7 @@ const recordingOptions = {
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
+    flexDirection : 'row'
   },
   Indicator: {
     alignSelf: 'center',
@@ -60,7 +66,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class SpeechToTextButton extends Component {
+class SpeechToTextButton extends Component {
   constructor(props) {
     super(props);
     this.recording = null;
@@ -115,13 +121,13 @@ export default class SpeechToTextButton extends Component {
   async componentDidMount() {
     while (true) {
       await this.startRecording();
-      await this.wait(5000);
+      await this.wait(3000);
       await this.stopRecording();
       await this.getTranscription();
       await this.resetRecording();
     }
   }
-  analysis = async (actionid) => {
+  analysis = async (actionid) => {c
     //check if it is't the first command
     console.log("before definition of flage");
     let flag = false;
@@ -332,6 +338,7 @@ export default class SpeechToTextButton extends Component {
       });
     }
 
+
     if (transcript == "تشغيل النور") {
       // did this part linked because this is the trigger to the change of state
       this.setState({ isOn: true });
@@ -410,18 +417,22 @@ export default class SpeechToTextButton extends Component {
         });
     }
 
+
     if (transcript == "التعليمات") {
       NavigationService.navigate("instructions");
     }
 
+  
     if (transcript == "الصفحه الشخصيه") {
       NavigationService.navigate("profile");
     }
+
 
     if (transcript == "الانماط") {
       NavigationService.navigate("Routine");
     }
 
+   
     if (transcript == "رجوع") {
       NavigationService.navigate("Home");
     }
@@ -431,12 +442,25 @@ export default class SpeechToTextButton extends Component {
     if(transcript == "الاجهزه المتصله"){
       NavigationService.navigate("supdevices");
     }
-    //starting from here all the methods and letiables related to homescreen
+    //starting from here all the methods and variables related to homescreen
     if (transcript == "تفعيل الوضع الصباحي") {
       //_onPress2()
-      alert("Hi");
-      this.props.store.dispatch({type:'TOGGLE',index:'toggle3'});
 
+// LEt say hi for test ok ? 
+// Here after this executed it sticks and hanging like an infinite loop 
+// this.props.store.dispatch({type:'TOGGLE',index:'toggle3'});
+
+this.click_btn();
+alert("Hello in if statement");
+
+      //after this statement is not executing ! 
+      alert("Hello Ending");
+//it is because of redux call
+// So redux end execution ? sure
+//How to solve this ?I don't know the reason//anyway, If I click the new button, the morning button works,. right?
+// it works with voice but stops the whole function! 
+// after the redux call 
+//:((((( This is the main thing 
     }
     if (transcript == "تفعيل الوضع المسائي") {
       //_onPress4()
@@ -454,7 +478,7 @@ export default class SpeechToTextButton extends Component {
 
     if (transcript == "إلغاء تفعيل الوضع الصباحي") {
       //toggle1 = false
-      this.props.store.dispatch({type:'SET',index:'toggle3',value:false});
+      this.props.store.dispatch({type:'SET',index:'toggle2',value:false});
     }
     if (transcript == "إلغاء تفعيل الوضع المسائي") {
       //toggle4 = false
@@ -463,7 +487,7 @@ export default class SpeechToTextButton extends Component {
 
     if (transcript == "إلغاء تفعيل وضع الخروج من المنزل") {
       //toggle3 = false
-      this.props.store.dispatch({type:'SET',index:'toggle2',value:false});
+      this.props.store.dispatch({type:'SET',index:'toggle3',value:false});
     }
     if (transcript == " إلغاء تفعيل وضع العوده الى المنزل") {
       //toggle1=false
@@ -473,29 +497,29 @@ export default class SpeechToTextButton extends Component {
     // Starting from here related to routineScreen
     //
     //
-    if (transcript == "الوضع الصباحي") {
+    if (transcript == "Morning situation") {
       //this.release_button_action(0);
     }
-    if (transcript == "الوقت") {
+    if (transcript == "Time") {
       //this.setState({date_picker_display:true});
     }
-    if (transcript == "إلغاء") {
+    if (transcript == "Cancellation") {
       //this.setState({date_picker_display: false});
       //this.init_hourminute_array()
     }
-    if (transcript == "تشغيل المكيف") {
+    if (transcript == "Turn on the AC") {
       //click_togglebutton(0)
     }
-    if (transcript == "دقيقه") {
+    if (transcript == "minute") {
       //select_minute(0)
     }
-    if (transcript == "الساعه الواحده صباحاً ") {
+    if (transcript == "It is one o'clock in the morning ") {
       // this.select_hour(0)
     }
-    if (transcript == "حفظ الوقت ") {
+    if (transcript == "saving time ") {
       // this.setState({date_picker_display: false})
     }
-    if (transcript == "حفظ الوضع الصباحي ") {
+    if (transcript == "Morning mode saved ") {
       // this.save_button_action(0)
     }
   };
@@ -540,33 +564,124 @@ export default class SpeechToTextButton extends Component {
     this.recording = null;
   };
 
+  click_btn = async () => {
+    alert("hi");
+
+    let routineInfo = {
+      toggle1: {
+        name: "come routine",
+        alert:
+          " You haven't created a homecoming mode before, you must first create it",
+      },
+      toggle3: {
+        name: "leave routine",
+        alert: " You haven't created an exit home mode before, you first have to create it",
+      },
+      toggle2: {
+        name: "morning routine",
+        alert: " You haven't creatited Morning Mode before, you must first create it",
+      },
+      toggle4: {
+        name: "night routine",
+        alert: " You haven't created evening mode before, you have to first create it",
+      },
+    };
+    const toggleIndex = 'toggle2';
+    const toggleIndexValue = this.props.toggle2;
+    this.props.dispatch({type : 'TOGGLE', index : 'toggle2', value: !toggleIndexValue });
+
+    // new Promise((resolve, reject) => {
+    //
+    //   let theId;
+    //   let routineName = routineInfo[toggleIndex].name;
+    //   let user = firebaseInitial.auth().currentUser;
+    //   let  userRoutineArr =[];
+    //   let alertDisplay = false;
+    //   let returnToggleValue = !toggleIndexValue;
+    //   if (returnToggleValue){
+    //     firebaseInitial.database().ref('/routine').on("value",snapshot=>{
+    //       snapshot.forEach(item => {
+    //         let temp = item.val();
+    //         if(temp.userID == user.uid){
+    //
+    //           userRoutineArr.push(temp.name);
+    //         }//end if
+    //         if(userRoutineArr.indexOf(routineName)!= -1){
+    //           theId = item.key;
+    //           firebaseInitial.database().ref('routine/'+theId).update(  {
+    //             status: 1,
+    //
+    //           });
+    //           resolve(returnToggleValue);
+    //         }
+    //
+    //       });//end forEach
+    //       if (userRoutineArr.indexOf(routineName)== -1){
+    //
+    //         if(!alertDisplay)
+    //         {
+    //           Alert.alert("عذراً", routineInfo[toggleIndex].alert);
+    //           alertDisplay = true;
+    //           resolve(!returnToggleValue);
+    //         }
+    //       }
+    //     }); //end snapshot..
+    //
+    //   }
+    //   else {
+    //     firebaseInitial.database().ref('/routine').on("value",snapshot=>{
+    //       snapshot.forEach(item => {
+    //         let temp = item.val();
+    //         if(temp.userID == user.uid){
+    //
+    //           userRoutineArr.push(temp.name);
+    //         }//end if
+    //         if(userRoutineArr.indexOf(routineName)!= -1){
+    //           theId = item.key;
+    //           firebaseInitial.database().ref('routine/'+theId).update(  {
+    //             status: 0,
+    //           });
+    //         }
+    //         resolve(returnToggleValue);
+    //       });//end forEach
+    //     }); //end snapshot..
+    //   }
+    // }).then((response) => {
+    //   console.log(response)
+    //   this.props.dispatch({type : 'TOGGLE', index : 'toggle2', value: response});
+    // });
+
+  }
+
   render() {
     const { isRecording, transcript, isFetching } = this.state;
-    const color_toggle = true;
+
     return (
       <View style={styles.container}>
-        
-        {/* <Button 
-          title = "click"
-          onPress = {() => {this.props.store.dispatch({type : 'TOGGLE', index : 'toggle3'})}}
-          color = 'red'
 
-          // write on press it appears 
+
+        {/* <Button
+          title="click"
+          onPress={() => {this.click_btn()}}
         /> */}
-
         <View
-
           onPressIn={this.startRecording}
-          onPressOut={this.handleOnPressOut}
+          // onPressOut={this.handleOnPressOut}
         >
 
-
-          {isFetching &&    <Image source={require('./crop2.gif')} style={styles.Indicator} />
-}
+          {isFetching &&    <Image source={require('./crop2.gif')} style={styles.Indicator} />}
           {!isFetching &&  <Image source={require('./crop.gif')} style={styles.Indicator1} />}
         </View>
-
       </View>
     );
   }
 }
+
+function mapStateToProps (store) {
+  return {
+    toggle2: store.homeSwitches.toggle2
+  }
+}
+
+export default connect(mapStateToProps)(SpeechToTextButton);
+// export default SpeechToTextButton;

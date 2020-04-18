@@ -6,7 +6,7 @@ const initialState = {
         'toggle1': false,
         'toggle2': false,
         'toggle3': false,
-        'toggle4': false
+        'toggle4': false,
     }
 }
 

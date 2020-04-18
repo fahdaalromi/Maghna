@@ -1,7 +1,6 @@
 import { createBrowserApp } from '@react-navigation/web';
 import { createSwitchNavigator } from 'react-navigation';
 import * as React from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
 
 
 import MainTabNavigator from './MainTabNavigator';

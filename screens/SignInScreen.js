@@ -26,13 +26,13 @@ export default class SignIn extends Component {
     super(props);
     this.state = {
       username:'',
-      email: '' ,
-      password: '',
+      email: 'happysmile4015@mail.ru' ,
+      password: '123123',
       errorMessage: null,
       visibilty: 'none',
       emailBorders:'#7db4cb',
       passBorders:'#7db4cb',
-        
+
     }
 }
 
@@ -61,7 +61,7 @@ messagingSenderId: "21464439338",
 appId: "1:21464439338:web:8c6bb486fb3673e5d14153",
 measurementId: "G-R3BQPCTCTM"
 */
-     
+
     };
 
     if (!firebase.apps.length) {
@@ -132,9 +132,9 @@ measurementId: "G-R3BQPCTCTM"
           var username= this.username;
           //this.username = username
           if (!user.emailVerified){
-            Alert.alert("يرجى تفعيل البريد الإلكتروني");
+            Alert.alert("Please activate the email");
           }else{
-            firebase.database().ref('mgnUsers/'+user.uid).on('value', 
+            firebase.database().ref('mgnUsers/'+user.uid).on('value',
             async(snapshot)  => {
               this.email.clear();
               this.password.clear();
@@ -171,7 +171,7 @@ measurementId: "G-R3BQPCTCTM"
         const { navigation }  = this.props;
         navigation.navigate(route);
       }*/
-      
+
   render() {
     return (
         <ScrollView
@@ -186,40 +186,41 @@ measurementId: "G-R3BQPCTCTM"
                     <Text style={[styles.fontStyle,styles.warning, {display: this.state.visibilty}]}> البريد الإلكتروني أو كلمة المرور غير صحيحة </Text>
                     </View>
 
-                    <TextInput style={[styles.input,{borderColor:this.state.emailBorders}]} 
+                    <TextInput style={[styles.input,{borderColor:this.state.emailBorders}]}
                     ref={input=>this.email=input}
-                    placeholder=" البريد الإلكتروني" 
-                    onChangeText={(text) => { 
-                      this.setState({email: text}) 
+                    placeholder=" E-mail"
+                    value={this.state.email}
+                    onChangeText={(text) => {
+                      this.setState({email: text})
                       this.setState({visibilty: 'none'})
                       this.setState({emailBorders: '#7db4cb'})
                       this.setState({passBorders: '#7db4cb'})}}
                     keyboardType="email-address"
                     autoCapitalize="none"/>
 
-                    <TextInput style={[styles.input,{borderColor:this.state.passBorders}]} 
+                    <TextInput style={[styles.input,{borderColor:this.state.passBorders}]}
                      ref={input=>this.password=input}
-                    placeholder="كلمة المرور " 
+                    placeholder="password "
                     secureTextEntry={true}
                     value={this.state.password}
-                    onChangeText={(text) => { 
-                      this.setState({password: text}) 
+                    onChangeText={(text) => {
+                      this.setState({password: text})
                       this.setState({visibilty: 'none'})
                       this.setState({emailBorders: '#7db4cb'})
                       this.setState({passBorders: '#7db4cb'})}}/>
 
 
                     <Button style={styles.button} onPress={this.handleLogin}  /*onPress={() => this.props.navigation.navigate('HomeStack', {name: 'Jane'})}*/>
-                        <LinearGradient 
+                        <LinearGradient
                             colors={['#1784ab', '#9dd1d9']} style={styles.gradient}
                             start={{ x: 0, y: 1 }}
                             end={{ x: 1, y: 1 }}
                         >
-                            <Text style={styles.buttonText} >تسجيل الدخول </Text>
+                            <Text style={styles.buttonText} >sign in</Text>
                         </LinearGradient>
                     </Button>
                     <TouchableOpacity onPress={ () => {this.props.navigation.navigate('forgetPassword')}}>
-                    <Text style={styles.note} >هل نسيت كلمة المرور؟</Text>
+                    <Text style={styles.note} >did you forget your password?</Text>
                     </TouchableOpacity>
                 </View>
                 </View>
