@@ -115,7 +115,7 @@ export default class SpeechToTextButton extends Component {
   async componentDidMount() {
     while (true) {
       await this.startRecording();
-      await this.wait(3000);
+      await this.wait(5000);
       await this.stopRecording();
       await this.getTranscription();
       await this.resetRecording();
@@ -546,13 +546,13 @@ export default class SpeechToTextButton extends Component {
     return (
       <View style={styles.container}>
         
-        <Button 
+        {/* <Button 
           title = "click"
           onPress = {() => {this.props.store.dispatch({type : 'TOGGLE', index : 'toggle3'})}}
           color = 'red'
 
           // write on press it appears 
-        />
+        /> */}
 
         <View
 
