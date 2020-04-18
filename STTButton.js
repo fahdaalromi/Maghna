@@ -546,15 +546,15 @@ export default class SpeechToTextButton extends Component {
     return (
       <View style={styles.container}>
         
-        <Button 
-          title = "click"
-          onPress = {() => {this.props.store.dispatch({type : 'TOGGLE', index : 'toggle3'})}}
+      { /* <Button 
+         title = "click"
+         onPress = {() => {this.props.store.dispatch({type : 'TOGGLE', index : 'toggle3'})}}
           color = 'red'
 
-          // write on press it appears 
-        />
+           write on press it appears 
+      />*/}
 
-        <View
+       <View
 
           onPressIn={this.startRecording}
           onPressOut={this.handleOnPressOut}
