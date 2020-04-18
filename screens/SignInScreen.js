@@ -26,8 +26,8 @@ export default class SignIn extends Component {
     super(props);
     this.state = {
       username:'',
-      email: 'happysmile4015@mail.ru' ,
-      password: '123123',
+      email: 'swereem@gmail.com' ,
+      password: '123456',
       errorMessage: null,
       visibilty: 'none',
       emailBorders:'#7db4cb',
