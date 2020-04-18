@@ -115,7 +115,7 @@ export default class SpeechToTextButton extends Component {
   async componentDidMount() {
     while (true) {
       await this.startRecording();
-      await this.wait(3000);
+      await this.wait(5000);
       await this.stopRecording();
       await this.getTranscription();
       await this.resetRecording();
