@@ -265,11 +265,19 @@ export default class reportScreen extends Component {
                         <View style = {{width: '100%', borderRadius: 10, alignItems: 'center', padding: 15, paddingBottom: 0, backgroundColor: '#ffffff', marginTop: 10, marginBottom: 10,shadowOpacity: 0.1,opacity: 0.9,}}>
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 1]} style = {styles.component_bar} />
                                    
+                                {this.state.show_shape &&
+                                <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 1]} style = {styles.component_bar} />
+                                }
                                {this.state.show_shape &&
+                               
                                    <Text style = {styles.bar_text}> 100% </Text>
                                }
+                               
+
+                                                               {!this.state.show_shape &&
+                                <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 0]} style = {styles.component_bar} />
+                                }
 
                                {!this.state.show_shape &&
                                    <Text style = {styles.bar_text}> 0% </Text>
