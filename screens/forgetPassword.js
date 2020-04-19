@@ -41,6 +41,17 @@ UNSAFE_componentWillMount(){
     messagingSenderId: "244460583192",
     appId: "1:244460583192:web:f650fa57532a682962c66d",
 
+
+/*
+      apiKey: "AIzaSyBUBKLW6Wrk48NQ_TcgUerucTZFphw6l-c",
+      authDomain: "maghna-62c55.firebaseapp.com",
+      databaseURL: "https://maghna-62c55.firebaseio.com",
+      projectId: "maghna-62c55",
+      storageBucket: "maghna-62c55.appspot.com",
+      messagingSenderId: "21464439338",
+      appId: "1:21464439338:web:8c6bb486fb3673e5d14153",
+      measurementId: "G-R3BQPCTCTM"
+  */
   };
 
 
@@ -292,6 +303,13 @@ const styles = StyleSheet.create({
  marginRight:150,
  marginBottom:10,
  backgroundColor:'#3E82A7',
+ //backgroundColor: this.sate.active?'#3E82A7':'red',
+   //height:45,
+   //flexDirection: 'row',
+   //justifyContent: 'center',
+   //alignItems: 'center',
+   //marginBottom:10,
+   //width:100,
    borderRadius:20,
   },
 
@@ -302,6 +320,8 @@ const styles = StyleSheet.create({
    alignItems:'center',
    justifyContent:'center',
    borderRadius:20,
+   //left:this.state.active ? 50 : 0
+   //marginRight:150,
   },
 
   signupButton: {

@@ -97,8 +97,8 @@ export default function App(props) {
                 right: 20,
               }}
             >
-              <View style={[styles.buttonContainer]}>
-                <STTButton store={store} />
+              <View style={[styles.buttonContainer]} store={store} >
+                <STTButton />
               </View>
             </View>
           )}
