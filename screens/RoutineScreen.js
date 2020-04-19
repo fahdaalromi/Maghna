@@ -31,6 +31,1265 @@ import IntentLauncherAndroid from 'expo';
 import * as BackgroundFetch from 'expo-background-fetch';
 // End import .. 
 
+/* This is rania solution : 
+if(transcript == "تحرير الوضع الصباحي"){
+    this.setState({
+            timeText:""
+                  })
+        var user = firebase.auth().currentUser;
+                this.setState({
+                morning_toggle: true,
+                home_exit_toggle: false,
+                home_toggle: false,
+                evening_toggle: false,
+            })
+           
+                 
+            var routineAcc  ;
+            var routineTime ;
+            firebase.database().ref('/routine').once("value",snapshot=>{
+               snapshot.forEach(item => {
+                var temp = item.val();
+                console.log('for each')
+                if(temp.userID == user.uid && temp.name == 'morning routine'){
+                    console.log('in if')
+                    console.log("yes have user");
+                  
+                   routineAcc= temp.actionsID[0];
+                   console.log(routineAcc)
+                   this.setState({
+                       acc:routineAcc,
+                   })
+                     routineTime = temp.time;
+                   console.log(temp.name);
+                   console.log(routineTime);
+                   this.setState({
+                    timeText: "وقت النمط الذي قمت بتخزينه هو: " +routineTime
+                          })
+                }//end if 
+               });//end forEach
+               if (routineAcc =='001'){
+  
+                console.log('true123')
+               this.click_togglebutton(5)
+               
+            } 
+        
+            });//end snapshot..
+            this.saveSpeechM();
+           
+}
+if(transcript == "تحرير وضع الخروج من المنزل"){
+          this.setState({
+                morning_toggle: false,
+                home_exit_toggle: true,
+                home_toggle: false,
+                evening_toggle: false,
+            })
+            var routineAcc ;
+            var routineTime ;
+            firebase.database().ref('/routine').once("value",snapshot=>{
+               snapshot.forEach(item => {
+                var temp = item.val();
+                console.log('for each')
+                if(temp.userID == user.uid && temp.name == 'leave routine'){
+                    console.log('in if')
+                    console.log("yes have user");
+                   routineAcc= temp.actionsID[0];
+                     routineTime = temp.time;
+                   console.log(temp.name);
+                }//end if 
+               });//end forEach
+               if (routineAcc =='001'){
+  
+                console.log('true123')
+               this.click_togglebutton(5)
+               
+            } 
+       
+            });//end snapshot..
+            
+            this.saveSpeechL();
+}
+if (transcript == "تحرير وضع العودة إلى المنزل"){
+          this.setState({
+                morning_toggle: false,
+                home_exit_toggle: false,
+                home_toggle: true,
+                evening_toggle: false,
+            })
+            var routineAcc ;
+            var routineTime ;
+            firebase.database().ref('/routine').once("value",snapshot=>{
+               snapshot.forEach(item => {
+                var temp = item.val();
+                console.log('for each')
+                if(temp.userID == user.uid && temp.name == 'come routine'){
+                    console.log('in if')
+                    console.log("yes have user");
+                   routineAcc= temp.actionsID[0];
+                     routineTime = temp.time;
+                   console.log(temp.name);
+                }//end if 
+               });//end forEach
+               if (routineAcc =='001'){
+  
+                console.log('true123')
+               this.click_togglebutton(5)
+               
+            } 
+            });//end snapshot..
+            this.saveSpeechC();
+}
+if(transcript == "تحرير الوضع المسائي"){
+       this.setState({
+                morning_toggle: false,
+                home_exit_toggle: false,
+                home_toggle: false,
+                evening_toggle: true,
+            })
+            var routineAcc ;
+            var routineTime ;
+            firebase.database().ref('/routine').once("value",snapshot=>{
+               snapshot.forEach(item => {
+                var temp = item.val();
+                console.log('for each')
+                if(temp.userID == user.uid && temp.name == 'night routine'){
+                    console.log('in if')
+                    console.log("yes have user");
+                   routineAcc= temp.actionsID[0];
+                     routineTime = temp.time;
+                   console.log(temp.name);
+                   this.setState({
+                    timeText: "وقت النمط الذي قمت بتخزينه هو: " +routineTime
+                          })
+                }//end if 
+             
+               });//end forEach
+             
+               if (routineAcc =='001'){
+  
+                console.log('true123')
+               this.click_togglebutton(5)
+               
+            } 
+            });//end snapshot..
+          
+             this.saveSpeechN();
+}
+async saveSpeechM (){
+    var routineArr [] ;
+    var hours =0;
+    var mins= -1 ;
+    var routineTime;
+    if(transcript == "تشغيل النور"){
+        routineArr.push("actionId:001");
+         this.click_togglebutton(5);
+    }
+      if(transcript == "إغلاق النور"){
+        routineArr.push("actionId :002");
+    }
+    if(transcipt == "الساعة الواحدة صباحاً"){
+        hours = 01
+        select_hour(0)
+    }
+     if(transcipt == "الساعة الثانية صباحاً"){
+        hours = 02
+        select_hour(1)
+    }
+   if(transcipt == "الساعة الثالثة صباحاً"){
+        hours = 03
+        select_hour(2)
+    }
+    if(transcipt == "الساعة الرابعة صباحاً"){
+        hours = 04
+        select_hour(3)
+    }
+     if(transcipt == "الساعة الخامسة صباحاً"){
+        hours = 05
+        select_hour(4)
+    }
+     if(transcipt == "الساعة السادسة صباحاً"){
+        hours = 06
+        select_hour(5)
+    }
+     if(transcipt == "الساعة السابعة صباحاً"){
+        hours = 07
+        select_hour(6)
+    }
+     if(transcipt == "الساعة الثامنة صباحاً"){
+        hours = 08
+        select_hour(7)
+    }
+      if(transcipt == "الساعة التاسعة صباحاً"){
+        hours = 09
+        select_hour(8)
+    }
+     if(transcipt == "الساعة العاشرة صباحاً"){
+        hours = 10
+        select_hour(9)
+    }
+    if(transcipt == "الساعة الحادية عشر صباحاً"){
+        hours = 11
+        select_hour(10)
+    }
+    if(transcipt == "الساعة الثانية عشر صباحاً"){
+        hours = 12
+        select_hour(11)
+    }
+    if(transcipt == "دقيقة"){
+        mins= 01
+        select_minute(1) 
+    }
+    if(transcipt == "دقيقتان"){
+        mins= 02
+        select_minute(2) 
+    }
+    if(transcipt == "ثلاث دقائق"){
+        mins= 03
+        select_minute(3) 
+    }
+    if(transcipt == "أربع دقائق"){
+        mins= 04
+        select_minute(4) 
+    }
+     if(transcipt == "خمس دقائق"){
+        mins= 05
+        select_minute(5) 
+    }
+  if(transcipt == "ست دقائق"){
+        mins= 06
+        select_minute(6) 
+    }
+     if(transcipt == "سبع دقائق"){
+        mins= 07
+        select_minute(7) 
+    }
+     if(transcipt == "ثمان دقائق"){
+        mins= 08
+        select_minute(8) 
+    }
+     if(transcipt == "تسع دقائق"){
+        mins= 09
+        select_minute(9) 
+    }
+    
+     if(transcipt == "عشر دقائق"){
+        mins= 10
+        select_minute(10) 
+    }
+     if(transcipt == "احدى عشر دقائق"){
+        mins= 11
+        select_minute(11) 
+    }
+     if(transcipt == "اثنا عشر دقائق"){
+        mins= 12
+        select_minute(12) 
+    }
+     if(transcipt == "ثلاث عشر دقائق"){
+        mins= 13
+        select_minute(13) 
+    }
+     if(transcipt == "اربعة عشر دقائق"){
+        mins= 14
+        select_minute(14) 
+    }
+     if(transcipt == "خمسة عشر دقائق"){
+        mins= 15
+        select_minute(15) 
+    }
+      if(transcipt == " ستة عشر دقائق"){
+        mins= 16
+        select_minute(16) 
+    }
+      if(transcipt == "سبعة عشر دقائق"){
+        mins= 17
+        select_minute(17) 
+    }
+      if(transcipt == "ثمانية عشر دقائق"){
+        mins= 18
+        select_minute(18) 
+    }
+      if(transcipt == "تسعة عشر دقائق"){
+        mins= 19
+        select_minute(19) 
+    }
+       if(transcipt == " عشرون دقائق"){
+        mins= 20
+        select_minute(20) 
+    }
+       if(transcipt == " واحد وعشرون دقائق"){
+        mins= 21
+        select_minute(21) 
+    }
+    if(transcipt == " اثنان وعشرون دقائق"){
+        mins= 22
+        select_minute(22) 
+    }
+    if(transcipt == " ثلاث وعشرون دقائق"){
+        mins= 23
+        select_minute(23) 
+    }
+    if(transcipt == " اربعة وعشرون دقائق"){
+        mins= 24
+        select_minute(24) 
+    }
+    if(transcipt == " خمسة وعشرون دقائق"){
+        mins= 25
+        select_minute(25) 
+    }
+    if(transcipt == " ستة وعشرون دقائق"){
+        mins= 26
+        select_minute(26) 
+    }
+    if(transcipt == " سبعة وعشرون دقائق"){
+        mins= 27
+        select_minute(27) 
+    }
+    if(transcipt == " ثمانية وعشرون دقائق"){
+        mins= 28
+        select_minute(28) 
+    }
+    if(transcipt == " تسعة وعشرون دقائق"){
+        mins= 29
+        select_minute(29) 
+    }
+    if(transcipt == "  ثلاثون دقائق"){
+        mins= 30
+        select_minute(30) 
+    }
+     if(transcipt == "  واحد وثلاثون دقائق"){
+        mins= 31
+        select_minute(31) 
+    }
+    if(transcipt == "  اثنان وثلاثون دقائق"){
+        mins= 32
+        select_minute(32) 
+    }
+    if(transcipt == "  ثلاث وثلاثون دقائق"){
+        mins= 33
+        select_minute(33) 
+    }
+    if(transcipt == "  اربعة وثلاثون دقائق"){
+        mins= 34
+        select_minute(34) 
+    }
+    if(transcipt == "  خمسة وثلاثون دقائق"){
+        mins= 35
+        select_minute(35) 
+    }
+    if(transcipt == "  ستة وثلاثون دقائق"){
+        mins= 36
+        select_minute(36) 
+    }
+    if(transcipt == "  سبعة وثلاثون دقائق"){
+        mins= 37
+        select_minute(37) 
+    }
+    if(transcipt == "   ثمانية وثلاثون دقائق"){
+        mins= 38
+        select_minute(38) 
+    }
+    if(transcipt == "  تسعة وثلاثون دقائق"){
+        mins= 39
+        select_minute(39) 
+    }
+    if(transcipt == "   اربعون دقائق"){
+        mins= 40
+        select_minute(40) 
+    }
+    if(transcipt == "  واحد واربعون دقائق"){
+        mins= 41
+        select_minute(41) 
+    }
+     if(transcipt == "  اثنان واربعون دقائق"){
+        mins= 42
+        select_minute(42) 
+    }
+     if(transcipt == "  ثلاث واربعون دقائق"){
+        mins= 43
+        select_minute(43) 
+    }
+     if(transcipt == "  اربعة واربعون دقائق"){
+        mins= 44
+        select_minute(44) 
+    }
+     if(transcipt == "  خمسة واربعون دقائق"){
+        mins= 45
+        select_minute(45) 
+    }
+     if(transcipt == "  ستة واربعون دقائق"){
+        mins= 46
+        select_minute(46) 
+    }
+     if(transcipt == "  سبعة واربعون دقائق"){
+        mins= 47
+        select_minute(47) 
+    }
+     if(transcipt == "  ثمانية واربعون دقائق"){
+        mins= 48
+        select_minute(48) 
+    }
+     if(transcipt == "  تسعة واربعون دقائق"){
+        mins= 49
+        select_minute(49) 
+    }
+     if(transcipt == "   خمسون دقائق"){
+        mins= 50
+        select_minute(50) 
+    }
+     if(transcipt == "  واحد وخمسون دقائق"){
+        mins= 51
+        select_minute(51) 
+    }
+      if(transcipt == "  اثنان وخمسون دقائق"){
+        mins= 52
+        select_minute(52) 
+    }
+      if(transcipt == "  ثلاث وخمسون دقائق"){
+        mins= 53
+        select_minute(53) 
+    }
+      if(transcipt == "  اربعة وخمسون دقائق"){
+        mins= 54
+        select_minute(54) 
+    }
+      if(transcipt == "  خمسة وخمسون دقائق"){
+        mins= 55
+        select_minute(55) 
+    }
+      if(transcipt == "  ستة وخمسون دقائق"){
+        mins= 56
+        select_minute(56) 
+    }
+      if(transcipt == "  سبعة وخمسون دقائق"){
+        mins= 57
+        select_minute(57) 
+    }
+      if(transcipt == "  ثمانية وخمسون دقائق"){
+        mins= 58
+        select_minute(58) 
+    }
+      if(transcipt == "  تسعة وخمسون دقائق"){
+        mins= 59
+        select_minute(59) 
+    }
+    if(transcipt == "حفظ"){
+ if(hours != 0 ){
+        if (mis != -1){
+            routineTime = ""+ hours+":"+mins;
+            routineArr.push("timeRout:"+routineTime);
+            this.saveMorningRoutine();
+        }
+        else {
+            routineTime= ""+hours+":"+"00";
+            routineArr.push("timeRout:"+routineTime);
+            this.saveMorningRoutine(routineArr);
+        }
+    }
+        else {
+         
+           this.setState({
+                info:"عذراً، عليك اختيار وقت للوضع أولاً",
+              notTrue:true
+            })
+              this.showModal();
+           return;
+
+        }
+        if(routineArr.indexOf(actionId:001) == -1 &&routineArr.indexOf(actionId:002) == -1 ){
+               this.setState({
+                info:"عذراً، لم تقم باختيار اوامر للأجهرةً",
+              notTrue:true
+            })
+              this.showModal();
+           return;
+            
+        }
+    }
+    
+   
+    
+    
+}
+async saveSpeechN (){
+    var routineArr [] ;
+    var hours =0;
+    var mins= -1 ;
+    var routineTime;
+    if(transcript == "تشغيل النور"){
+        routineArr.push("actionId:001");
+         this.click_togglebutton(5);
+    }
+      if(transcript == "إغلاق النور"){
+        routineArr.push("actionId :002");
+    }
+    if(transcipt == "الساعة الواحدة مساء"){
+        hours = 13
+        select_hour(12)
+    }
+     if(transcipt == "الساعة الثانية مساء"){
+        hours = 14
+        select_hour(13)
+    }
+   if(transcipt == "الساعة الثالثة مساء"){
+        hours = 15
+        select_hour(14)
+    }
+    if(transcipt == "الساعة الرابعة مساء"){
+        hours = 16
+        select_hour(15)
+    }
+     if(transcipt == "الساعة الخامسة مساء"){
+        hours = 17
+        select_hour(16)
+    }
+     if(transcipt == "الساعة السادسة مساء"){
+        hours = 18
+        select_hour(17)
+    }
+     if(transcipt == "الساعة السابعة مساء"){
+        hours = 19
+        select_hour(18)
+    }
+     if(transcipt == "الساعة الثامنة مساء"){
+        hours = 20
+        select_hour(19)
+    }
+      if(transcipt == "الساعة التاسعة مساء"){
+        hours = 21
+        select_hour(20)
+    }
+     if(transcipt == "الساعة العاشرة مساء"){
+        hours = 22
+        select_hour(21)
+    }
+    if(transcipt == "الساعة الحادية عشر مساء"){
+        hours = 23
+        select_hour(22)
+    }
+    if(transcipt == "الساعة الثانية عشر مساء"){
+        hours = 24
+        select_hour(23)
+    }
+    if(transcipt == "دقيقة"){
+        mins= 01
+        select_minute(1) 
+    }
+    if(transcipt == "دقيقتان"){
+        mins= 02
+        select_minute(2) 
+    }
+    if(transcipt == "ثلاث دقائق"){
+        mins= 03
+        select_minute(3) 
+    }
+    if(transcipt == "أربع دقائق"){
+        mins= 04
+        select_minute(4) 
+    }
+     if(transcipt == "خمس دقائق"){
+        mins= 05
+        select_minute(5) 
+    }
+  if(transcipt == "ست دقائق"){
+        mins= 06
+        select_minute(6) 
+    }
+     if(transcipt == "سبع دقائق"){
+        mins= 07
+        select_minute(7) 
+    }
+     if(transcipt == "ثمان دقائق"){
+        mins= 08
+        select_minute(8) 
+    }
+     if(transcipt == "تسع دقائق"){
+        mins= 09
+        select_minute(9) 
+    }
+    
+     if(transcipt == "عشر دقائق"){
+        mins= 10
+        select_minute(10) 
+    }
+     if(transcipt == "احدى عشر دقائق"){
+        mins= 11
+        select_minute(11) 
+    }
+     if(transcipt == "اثنا عشر دقائق"){
+        mins= 12
+        select_minute(12) 
+    }
+     if(transcipt == "ثلاث عشر دقائق"){
+        mins= 13
+        select_minute(13) 
+    }
+     if(transcipt == "اربعة عشر دقائق"){
+        mins= 14
+        select_minute(14) 
+    }
+     if(transcipt == "خمسة عشر دقائق"){
+        mins= 15
+        select_minute(15) 
+    }
+      if(transcipt == " ستة عشر دقائق"){
+        mins= 16
+        select_minute(16) 
+    }
+      if(transcipt == "سبعة عشر دقائق"){
+        mins= 17
+        select_minute(17) 
+    }
+      if(transcipt == "ثمانية عشر دقائق"){
+        mins= 18
+        select_minute(18) 
+    }
+      if(transcipt == "تسعة عشر دقائق"){
+        mins= 19
+        select_minute(19) 
+    }
+       if(transcipt == " عشرون دقائق"){
+        mins= 20
+        select_minute(20) 
+    }
+       if(transcipt == " واحد وعشرون دقائق"){
+        mins= 21
+        select_minute(21) 
+    }
+    if(transcipt == " اثنان وعشرون دقائق"){
+        mins= 22
+        select_minute(22) 
+    }
+    if(transcipt == " ثلاث وعشرون دقائق"){
+        mins= 23
+        select_minute(23) 
+    }
+    if(transcipt == " اربعة وعشرون دقائق"){
+        mins= 24
+        select_minute(24) 
+    }
+    if(transcipt == " خمسة وعشرون دقائق"){
+        mins= 25
+        select_minute(25) 
+    }
+    if(transcipt == " ستة وعشرون دقائق"){
+        mins= 26
+        select_minute(26) 
+    }
+    if(transcipt == " سبعة وعشرون دقائق"){
+        mins= 27
+        select_minute(27) 
+    }
+    if(transcipt == " ثمانية وعشرون دقائق"){
+        mins= 28
+        select_minute(28) 
+    }
+    if(transcipt == " تسعة وعشرون دقائق"){
+        mins= 29
+        select_minute(29) 
+    }
+    if(transcipt == "  ثلاثون دقائق"){
+        mins= 30
+        select_minute(30) 
+    }
+     if(transcipt == "  واحد وثلاثون دقائق"){
+        mins= 31
+        select_minute(31) 
+    }
+    if(transcipt == "  اثنان وثلاثون دقائق"){
+        mins= 32
+        select_minute(32) 
+    }
+    if(transcipt == "  ثلاث وثلاثون دقائق"){
+        mins= 33
+        select_minute(33) 
+    }
+    if(transcipt == "  اربعة وثلاثون دقائق"){
+        mins= 34
+        select_minute(34) 
+    }
+    if(transcipt == "  خمسة وثلاثون دقائق"){
+        mins= 35
+        select_minute(35) 
+    }
+    if(transcipt == "  ستة وثلاثون دقائق"){
+        mins= 36
+        select_minute(36) 
+    }
+    if(transcipt == "  سبعة وثلاثون دقائق"){
+        mins= 37
+        select_minute(37) 
+    }
+    if(transcipt == "   ثمانية وثلاثون دقائق"){
+        mins= 38
+        select_minute(38) 
+    }
+    if(transcipt == "  تسعة وثلاثون دقائق"){
+        mins= 39
+        select_minute(39) 
+    }
+    if(transcipt == "   اربعون دقائق"){
+        mins= 40
+        select_minute(40) 
+    }
+    if(transcipt == "  واحد واربعون دقائق"){
+        mins= 41
+        select_minute(41) 
+    }
+     if(transcipt == "  اثنان واربعون دقائق"){
+        mins= 42
+        select_minute(42) 
+    }
+     if(transcipt == "  ثلاث واربعون دقائق"){
+        mins= 43
+        select_minute(43) 
+    }
+     if(transcipt == "  اربعة واربعون دقائق"){
+        mins= 44
+        select_minute(44) 
+    }
+     if(transcipt == "  خمسة واربعون دقائق"){
+        mins= 45
+        select_minute(45) 
+    }
+     if(transcipt == "  ستة واربعون دقائق"){
+        mins= 46
+        select_minute(46) 
+    }
+     if(transcipt == "  سبعة واربعون دقائق"){
+        mins= 47
+        select_minute(47) 
+    }
+     if(transcipt == "  ثمانية واربعون دقائق"){
+        mins= 48
+        select_minute(48) 
+    }
+     if(transcipt == "  تسعة واربعون دقائق"){
+        mins= 49
+        select_minute(49) 
+    }
+     if(transcipt == "   خمسون دقائق"){
+        mins= 50
+        select_minute(50) 
+    }
+     if(transcipt == "  واحد وخمسون دقائق"){
+        mins= 51
+        select_minute(51) 
+    }
+      if(transcipt == "  اثنان وخمسون دقائق"){
+        mins= 52
+        select_minute(52) 
+    }
+      if(transcipt == "  ثلاث وخمسون دقائق"){
+        mins= 53
+        select_minute(53) 
+    }
+      if(transcipt == "  اربعة وخمسون دقائق"){
+        mins= 54
+        select_minute(54) 
+    }
+      if(transcipt == "  خمسة وخمسون دقائق"){
+        mins= 55
+        select_minute(55) 
+    }
+      if(transcipt == "  ستة وخمسون دقائق"){
+        mins= 56
+        select_minute(56) 
+    }
+      if(transcipt == "  سبعة وخمسون دقائق"){
+        mins= 57
+        select_minute(57) 
+    }
+      if(transcipt == "  ثمانية وخمسون دقائق"){
+        mins= 58
+        select_minute(58) 
+    }
+      if(transcipt == "  تسعة وخمسون دقائق"){
+        mins= 59
+        select_minute(59) 
+    }
+    if(transcipt == "حفظ"){
+
+ if(hours != 0 ){
+        if (mis != -1){
+            routineTime = ""+ hours+":"+mins;
+            routineArr.push("timeRout:"+routineTime);
+            this.saveMorningRoutine();
+        }
+        else {
+            routineTime= ""+hours+":"+"00";
+            routineArr.push("timeRout:"+routineTime);
+            this.saveMorningRoutine(routineArr);
+        }
+    }
+        else {
+         
+              this.setState({
+                info:"عذراً، عليك اختيار وقت للوضع أولاً",
+              notTrue:true
+            })
+              this.showModal();
+           return;
+        }
+        if(routineArr.indexOf(actionId:001) == -1 &&routineArr.indexOf(actionId:002) == -1 ){
+
+                 this.setState({
+                info:"عذراً، لم تقم باختيار اوامر للأجهرةً",
+              notTrue:true
+            })
+              this.showModal();
+           return;
+            
+            
+        }
+    }
+    
+   
+    
+    
+}
+async saveSpeechL (){
+    var routineArr [] ;
+    
+    
+    if(transcript == "تشغيل النور"){
+        routineArr.push("actionId:001");
+         this.click_togglebutton(5);
+    }
+      if(transcript == "إغلاق النور"){
+        routineArr.push("actionId :002");
+    }
+   
+    if(transcipt == "حفظ"){
+ 
+        if(routineArr.indexOf(actionId:001) == -1 &&routineArr.indexOf(actionId:002) == -1 ){
+           
+               this.setState({
+                info:"عذراً، لم تقم باختيار اوامر للأجهرةً",
+              notTrue:true
+            })
+              this.showModal();
+           return;
+            
+        }
+         if (user.latitude == 0 || user.longitude == 0) {
+          
+                 this.setState({
+                info:"عذراً،عليك تفعيل خاصية الموقع حتى يتم انشاء وضع الخروج",
+              notTrue:true
+            })
+              this.showModal();
+           return;
+           
+        }
+        else {
+            this.saveLeaveRoutine (routineArr);
+        }
+    }
+    
+   
+    
+    
+}
+async saveSpeechC(){
+    var routineArr [] ;
+    
+    
+    if(transcript == "تشغيل النور"){
+        routineArr.push("actionId:001");
+         this.click_togglebutton(5);
+    }
+      if(transcript == "إغلاق النور"){
+        routineArr.push("actionId :002");
+    }
+   
+    if(transcipt == "حفظ"){
+ 
+        if(routineArr.indexOf(actionId:001) == -1 &&routineArr.indexOf(actionId:002) == -1 ){
+           
+                this.setState({
+                info:"عذراً، لم تقم باختيار اوامر للأجهرةً",
+              notTrue:true
+            })
+              this.showModal();
+           return;
+            
+        }
+        else if (user.latitude == 0 || user.longitude == 0) {
+         
+                  this.setState({
+                info:"عذراً،عليك تفعيل خاصية الموقع حتى يتم انشاء وضع العودة",
+              notTrue:true
+            })
+              this.showModal();
+           return;
+           
+        }
+        else {
+             this.saveComeRoutine (routineArr);
+        }
+    }
+    
+   
+    
+    
+}
+saveLeaveRoutine = (data) =>{
+    var idAcc ;
+    var timeRo ;
+     var routineName = 'leave routine';
+    var i;
+    for(i=0 ; i<data.length ; i++){
+        var temp = data[i];
+        var temp1 = temp.substring(0,9)
+        if(temp1 == "actionId:"){
+            idAcc = temp.substring(9);
+        }
+        
+    }
+     
+            var userRoutineArr = [];
+           
+              var user = firebase.auth().currentUser;
+                        firebase.database().ref('/routine').once("value",snapshot=>{
+                           snapshot.forEach(item => {
+                            var temp = item.val();
+                            if(temp.userID == user.uid){
+                                console.log("yes have user");
+                               userRoutineArr.push(temp.name);
+                               console.log(temp.name);
+                            }//end if 
+                           });//end forEach
+                   
+                       
+                     
+                       if(userRoutineArr.indexOf('come')!=-1){
+                           console.log("enter if check")
+                           firebase.database().ref('/routine').once("value" , (snapshot)=>{
+                               snapshot.forEach(item => {
+                                   
+                                var temp = item.val();
+                                console.log(temp);
+                                if(temp.userID == user.uid && temp.name == routineName){
+                                    var theId = item.key;
+                           
+                               
+                                firebase.database().ref('routine/'+theId).update(  {
+                                   name: routineName,
+                                  time: 'empty',
+                                   actionsID: idAcc,
+                                   day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                                   userID: user.uid,
+                                   status: 1,
+                     
+                                 }); 
+                                
+                              
+                             
+                                }//end if 
+                               });//end forEach
+                       
+                            
+                            
+                            });//end snapshot..
+                            
+            }
+            else{
+            firebase.database().ref('routine/').push(
+                {
+                  name: routineName,
+                  time: 'empty',
+                  actionsID: idAcc,
+                  day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                  userID: user.uid,
+                  status: 1,
+    
+                })//end set routine. 
+            
+            }  });//end snapshot..
+              this.setState({
+                info:" تم حفظ الوضع" 
+                clear:true
+        
+            })
+            this.showSaveModal();
+                   this.setState({
+                    morning_toggle: false,
+                    home_exit_toggle: false,
+                    home_toggle: false,
+                    evening_toggle: false,})  
+                    for(i=0;i<6;i++){
+                        this.state.toggle_button_array[i].clicked==false
+                    } }
+}
+saveComeRoutine = (data) =>{
+    var idAcc ;
+    var timeRo ;
+     var routineName = 'come routine';
+    var i;
+    for(i=0 ; i<data.length ; i++){
+        var temp = data[i];
+        var temp1 = temp.substring(0,9)
+        if(temp1 == "actionId:"){
+            idAcc = temp.substring(9);
+        }
+        
+    }
+     
+            var userRoutineArr = [];
+           
+              var user = firebase.auth().currentUser;
+                        firebase.database().ref('/routine').once("value",snapshot=>{
+                           snapshot.forEach(item => {
+                            var temp = item.val();
+                            if(temp.userID == user.uid){
+                                console.log("yes have user");
+                               userRoutineArr.push(temp.name);
+                               console.log(temp.name);
+                            }//end if 
+                           });//end forEach
+                   
+                       
+                     
+                       if(userRoutineArr.indexOf('come')!=-1){
+                           console.log("enter if check")
+                           firebase.database().ref('/routine').once("value" , (snapshot)=>{
+                               snapshot.forEach(item => {
+                                   
+                                var temp = item.val();
+                                console.log(temp);
+                                if(temp.userID == user.uid && temp.name == routineName){
+                                    var theId = item.key;
+                           
+                               
+                                firebase.database().ref('routine/'+theId).update(  {
+                                   name: routineName,
+                                  time: 'empty',
+                                   actionsID: idAcc,
+                                   day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                                   userID: user.uid,
+                                   status: 1,
+                     
+                                 }); 
+                                
+                              
+                             
+                                }//end if 
+                               });//end forEach
+                       
+                            
+                            
+                            });//end snapshot..
+                            
+            }
+            else{
+            firebase.database().ref('routine/').push(
+                {
+                  name: routineName,
+                  time: 'empty',
+                  actionsID: idAcc,
+                  day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                  userID: user.uid,
+                  status: 1,
+    
+                })//end set routine. 
+            
+            }  });//end snapshot..
+                this.setState({
+                info:" تم حفظ الوضع" 
+                clear:true
+        
+            })
+            this.showSaveModal();
+                   this.setState({
+                    morning_toggle: false,
+                    home_exit_toggle: false,
+                    home_toggle: false,
+                    evening_toggle: false,})  
+                    for(i=0;i<6;i++){
+                        this.state.toggle_button_array[i].clicked==false
+                    } }
+}
+}
+saveMorningRoutine = (data)=>{
+     var user = firebase.auth().currentUser;
+    var idAcc ;
+    var timeRo ;
+    var routineName = 'morning routine';
+    var i;
+    for(i=0 ; i<data.length ; i++){
+        var temp = data[i];
+        var temp1 = temp.substring(0,9)
+        if(temp1 == "actionId:"){
+            idAcc = temp.substring(9);
+        }
+        else if(temp1 == "timeRout:"){
+            timeRo = temp.substring(9);
+        }
+    }
+      var userRoutineArr = [];
+             firebase.database().ref('/routine').once("value",snapshot=>{
+                snapshot.forEach(item => {
+                 var temp = item.val();
+                 if(temp.userID == user.uid){
+                     console.log("yes have user");
+                    userRoutineArr.push(temp.name);
+                    console.log(temp.name);
+                 }//end if 
+                });//end forEach
+        
+            
+          
+            if(userRoutineArr.indexOf('routineName')!=-1){
+                console.log("enter if check")
+                firebase.database().ref('/routine').once("value" , (snapshot)=>{
+                    snapshot.forEach(item => {
+                        
+                     var temp = item.val();
+                     console.log(temp);
+                     if(temp.userID == user.uid && temp.name == routineName){
+                         var theId = item.key;
+                
+                    
+                     firebase.database().ref('routine/'+theId).update(  {
+                        name: 'morning routine',
+                       time: timeRo,
+                        actionsID: idAcc,
+                        day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                        userID: user.uid,
+                        status: 1,
+          
+                      }); 
+                     
+                   
+                  
+                     }//end if 
+                    });//end forEach
+            
+                 });//end snapshot..
+                 }
+            else {
+                firebase.database().ref('routine/').push(
+                    {
+                      name: routineName,
+                      time: timeRo,
+                      actionsID: idAcc,
+                      day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                      userID: user.uid,
+                      status: 1,
+        
+                    })//end set routine.
+                    
+                   
+            } });//end snapshot..
+                this.setState({
+                info:" تم حفظ الوضع" 
+                clear:true
+        
+            })
+            this.showSaveModal();
+                   this.setState({
+                    morning_toggle: false,
+                    home_exit_toggle: false,
+                    home_toggle: false,
+                    evening_toggle: false,})  
+                    for(i=0;i<6;i++){
+                        this.state.toggle_button_array[i].clicked==false
+                    } }
+}
+}
+saveNightRoutine = (data)=>{
+     var user = firebase.auth().currentUser;
+    var idAcc ;
+    var timeRo ;
+    var routineName = 'night routine';
+    var i;
+    for(i=0 ; i<data.length ; i++){
+        var temp = data[i];
+        var temp1 = temp.substring(0,9)
+        if(temp1 == "actionId:"){
+            idAcc = temp.substring(9);
+        }
+        else if(temp1 == "timeRout:"){
+            timeRo = temp.substring(9);
+        }
+    }
+      var userRoutineArr = [];
+             firebase.database().ref('/routine').once("value",snapshot=>{
+                snapshot.forEach(item => {
+                 var temp = item.val();
+                 if(temp.userID == user.uid){
+                     console.log("yes have user");
+                    userRoutineArr.push(temp.name);
+                    console.log(temp.name);
+                 }//end if 
+                });//end forEach
+        
+            
+          
+            if(userRoutineArr.indexOf('routineName')!=-1){
+                console.log("enter if check")
+                firebase.database().ref('/routine').once("value" , (snapshot)=>{
+                    snapshot.forEach(item => {
+                        
+                     var temp = item.val();
+                     console.log(temp);
+                     if(temp.userID == user.uid && temp.name == routineName){
+                         var theId = item.key;
+                
+                    
+                     firebase.database().ref('routine/'+theId).update(  {
+                        name: routineName
+                        ,
+                       time: timeRo,
+                        actionsID: idAcc,
+                        day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                        userID: user.uid,
+                        status: 1,
+          
+                      }); 
+                     
+                   
+                  
+                     }//end if 
+                    });//end forEach
+            
+                 });//end snapshot..
+                 }
+            else {
+                firebase.database().ref('routine/').push(
+                    {
+                      name: routineName,
+                      time: timeRo,
+                      actionsID: idAcc,
+                      day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                      userID: user.uid,
+                      status: 1,
+        
+                    })//end set routine.
+                    
+                   
+            } });//end snapshot..
+                this.setState({
+                info:" تم حفظ الوضع" 
+                clear:true
+        
+            })
+            this.showSaveModal();
+                   this.setState({
+                    morning_toggle: false,
+                    home_exit_toggle: false,
+                    home_toggle: false,
+                    evening_toggle: false,})  
+                    for(i=0;i<6;i++){
+                        this.state.toggle_button_array[i].clicked==false
+                    } }
+}
+}
+*/
+
+
 
 // save button in line 394 
 BackgroundFetch.setMinimumIntervalAsync(60);
@@ -58,6 +1317,12 @@ export default class RoutineScreen extends Component {
           changePassword:false,
           timeText : "" ,
           isSelectTime: false,
+          modalVisible:false,
+          info:"",
+          notTrue:false,
+          clear:false,
+          saveModal:false,
+          acc:'',
     
           passwordBorder:'#3E82A7',
           conPasswordBorder:'#3E82A7',
@@ -80,8 +1345,8 @@ export default class RoutineScreen extends Component {
               { image: require('../assets/images/222.png'), clicked: false },
               { image: require('../assets/images/222.png'), clicked: false },
               { image: require('../assets/images/222.png'), clicked: false },
-              { image: require('../assets/images/222.png'), clicked: false },
               { image: require('../assets/images/222.png'), clicked: false }
+              
           ],
           devices_array: [
               { Text: " التكييف", clicked: false },
@@ -115,6 +1380,36 @@ export default class RoutineScreen extends Component {
           this.checkStatusAsync();
         }
       }; // end handleAppStateChange..
+      showModal = () => {
+          console.log('showModal')
+        this.setState({
+        
+            
+          modalVisible: true
+        });
+      
+        setTimeout(() => {
+            this.setState({
+              modalVisible: false,
+              saveModal:false
+            })
+            }, 3000);
+        }
+        showSaveModal = () => {
+            console.log('showModal')
+          this.setState({
+          
+              
+            saveModal: true
+          });
+          setTimeout(() => {
+            this.setState({
+             
+              saveModal:false
+            })
+            }, 3000);
+        }
+      
     componentWillUnmount(){
         this.checkStatusAsync();
         AppState.removeEventListener('change',this.handleAppStateChange)  ;
@@ -377,7 +1672,7 @@ return polygon
             })
            
                  
-            var routineAcc = [];
+            var routineAcc  ;
             var routineTime ;
             firebase.database().ref('/routine').once("value",snapshot=>{
                snapshot.forEach(item => {
@@ -386,7 +1681,12 @@ return polygon
                 if(temp.userID == user.uid && temp.name == 'morning routine'){
                     console.log('in if')
                     console.log("yes have user");
-                   routineAcc= temp.actionsID;
+                  
+                   routineAcc= temp.actionsID[0];
+                   console.log(routineAcc)
+                   this.setState({
+                       acc:routineAcc,
+                   })
                      routineTime = temp.time;
                    console.log(temp.name);
                    console.log(routineTime);
@@ -395,14 +1695,18 @@ return polygon
                           })
                 }//end if 
                });//end forEach
+               if (routineAcc =='001'){
+  
+                console.log('true123')
+               this.click_togglebutton(5)
+               
+            } 
         
             });//end snapshot..
+            console.log('1234')
+            console.log(routineAcc + 'out')
+            console.log('this' + this.state.acc)
             
-            if (routineAcc.indexOf ('001') != -1){
-  
-               this.click_togglebutton(5);
-               
-            }
            
          
             
@@ -414,7 +1718,7 @@ return polygon
                 home_toggle: false,
                 evening_toggle: false,
             })
-            var routineAcc = [];
+            var routineAcc ;
             var routineTime ;
             firebase.database().ref('/routine').once("value",snapshot=>{
                snapshot.forEach(item => {
@@ -423,16 +1727,20 @@ return polygon
                 if(temp.userID == user.uid && temp.name == 'leave routine'){
                     console.log('in if')
                     console.log("yes have user");
-                   routineAcc= temp.actionsID;
+                   routineAcc= temp.actionsID[0];
                      routineTime = temp.time;
                    console.log(temp.name);
                 }//end if 
                });//end forEach
+               if (routineAcc =='001'){
+  
+                console.log('true123')
+               this.click_togglebutton(5)
+               
+            } 
        
             });//end snapshot..
-            if (routineAcc.indexOf ('001') != -1){
-               this.click_togglebutton(5);
-            }
+            
             
         } else if(index == 2) {
             this.setState({
@@ -441,7 +1749,7 @@ return polygon
                 home_toggle: true,
                 evening_toggle: false,
             })
-            var routineAcc = [];
+            var routineAcc ;
             var routineTime ;
             firebase.database().ref('/routine').once("value",snapshot=>{
                snapshot.forEach(item => {
@@ -450,16 +1758,19 @@ return polygon
                 if(temp.userID == user.uid && temp.name == 'come routine'){
                     console.log('in if')
                     console.log("yes have user");
-                   routineAcc= temp.actionsID;
+                   routineAcc= temp.actionsID[0];
                      routineTime = temp.time;
                    console.log(temp.name);
                 }//end if 
                });//end forEach
-       
+               if (routineAcc =='001'){
+  
+                console.log('true123')
+               this.click_togglebutton(5)
+               
+            } 
             });//end snapshot..
-            if (routineAcc.indexOf ('001') != -1){
-               this.click_togglebutton(5);
-            }
+           
             
         } else if(index == 3) {
             this.setState({
@@ -468,7 +1779,7 @@ return polygon
                 home_toggle: false,
                 evening_toggle: true,
             })
-            var routineAcc = [];
+            var routineAcc ;
             var routineTime ;
             firebase.database().ref('/routine').once("value",snapshot=>{
                snapshot.forEach(item => {
@@ -477,21 +1788,24 @@ return polygon
                 if(temp.userID == user.uid && temp.name == 'night routine'){
                     console.log('in if')
                     console.log("yes have user");
-                   routineAcc= temp.actionsID;
+                   routineAcc= temp.actionsID[0];
                      routineTime = temp.time;
                    console.log(temp.name);
                    this.setState({
                     timeText: "وقت النمط الذي قمت بتخزينه هو: " +routineTime
                           })
                 }//end if 
-
+             
                });//end forEach
              
-       
+               if (routineAcc =='001'){
+  
+                console.log('true123')
+               this.click_togglebutton(5)
+               
+            } 
             });//end snapshot..
-            if (routineAcc.indexOf ('001') != -1){
-                this.click_togglebutton(5);
-             }
+          
             
         }
     }
@@ -550,7 +1864,7 @@ return polygon
      lat= snap.val().latitude;
      lng= snap.val().longitude;})
 
-     
+    
 
         //var routineTable =  firebase.database().ref('routine/'); 
      // this.setActionTable();
@@ -558,8 +1872,22 @@ return polygon
         if(this.state.morning_toggle&&index==0) {
             flagH = false ;
             routineName = "morning routine";
-            tmp_str += " الذي يحتوي على الأوامر الآتية:\n";
+   
             disRoutine = "الوضع الصباحي";
+        if(this.state.toggle_button_array[0].clicked||this.state.toggle_button_array[1].clicked||
+            this.state.toggle_button_array[2].clicked||this.state.toggle_button_array[3].clicked||
+            this.state.toggle_button_array[4].clicked){
+            console.log('is it door');
+          this.setState({
+              info:"الأجهزة غير مدعومة بعد ، الإنارة فقط مدعومة",
+            notTrue:true
+          })
+            this.showModal();
+            for(i=0 ; i<5;i++){
+                this.state.toggle_button_array[i].clicked=false
+            }
+            return;
+        }
             for(i =0;i<this.state.toggle_button_array.length;i++){
                 if (this.state.toggle_button_array[i].clicked){
                     var ac = i+1;
@@ -593,7 +1921,11 @@ return polygon
           
         }
         if (!this.state.isSelectTime){
-            Alert.alert("عذراً", " عليك اختيار وقت للوضع أولاً");
+            this.setState({
+                info:"عذراً، عليك اختيار وقت للوضع أولاً",
+              notTrue:true
+            })
+              this.showModal();
            return;
         }
         //test it 
@@ -610,11 +1942,28 @@ return polygon
           
              console.log((lat === 0 && lng===0) + "have error");
              if(lat === 0 && lng===0){
-                Alert.alert("عذراً", " عليك تفعيل خاصية الموقع حتى يتم انشاء وضع الخروج");
+                this.setState({
+                    info:"عذراً، عليك تفعيل خاصية الموقع حتى يتم انشاء وضع الخروج",
+                  notTrue:true
+                })
+                  this.showModal();
              }// end if check location
              else {
+                if(this.state.toggle_button_array[0].clicked||this.state.toggle_button_array[1].clicked||
+                    this.state.toggle_button_array[2].clicked||this.state.toggle_button_array[3].clicked||
+                    this.state.toggle_button_array[4].clicked){
+                    console.log('is it door');
+                  this.setState({
+                      info:"الأجهزة غير مدعومة بعد ، الإنارة فقط مدعومة"
+                  })
+                  for(i=0 ; i<5;i++){
+                    this.state.toggle_button_array[i].clicked=false
+                }
+                    this.showModal();
+                    return;
+                }
             routineName="leave routine";
-            tmp_str += " الذي يحتوي على الأوامر الآتية:\n";
+           
              disRoutine = "وضع الخروج";
              flag = true
              routineTime = "empty"
@@ -642,13 +1991,30 @@ return polygon
         }// end if for leave routine
          else if(this.state.home_toggle&&index==2) {
             if(lat === 0 && lng===0){
-                Alert.alert("عذراً", " عليك تفعيل خاصية الموقع حتى يتم انشاء وضع العودة");
+               
+                this.setState({
+                    info:"عذراً، عليك تفعيل خاصية الموقع حتى يتم انشاء وضع العودة",
+                  notTrue:true
+                })
+                  this.showModal();
              }
              else {
-                
+                if(this.state.toggle_button_array[0].clicked||this.state.toggle_button_array[1].clicked||
+                    this.state.toggle_button_array[2].clicked||this.state.toggle_button_array[3].clicked||
+                    this.state.toggle_button_array[4].clicked){
+                    console.log('is it door');
+                  this.setState({
+                      info:"الأجهزة غير مدعومة بعد ، الإنارة فقط مدعومة"
+                  })
+                    this.showModal();
+                    for(i=0 ; i<5;i++){
+                        this.state.toggle_button_array[i].clicked=false
+                    }
+                    return;
+                }
              
             routineName="come routine";
-            tmp_str += " الذي يحتوي على الأوامر الآتية:\n";
+          
             disRoutine="وضع العودة";
             routineTime = "empty"
             flag =true
@@ -675,9 +2041,22 @@ return polygon
     }//end if for set info of come routine.
         }//end if for come routine
          else if(this.state.evening_toggle&&index==3) {
+            if(this.state.toggle_button_array[0].clicked||this.state.toggle_button_array[1].clicked||
+                this.state.toggle_button_array[2].clicked||this.state.toggle_button_array[3].clicked||
+                this.state.toggle_button_array[4].clicked){
+                console.log('is it door');
+              this.setState({
+                  info:"الأجهزة غير مدعومة بعد ، الإنارة فقط مدعومة"
+              })
+                this.showModal();
+                for(i=0 ; i<5;i++){
+                    this.state.toggle_button_array[i].clicked=false
+                }
+                return;
+            }
             flagH=false;
             routineName="night routine";
-            tmp_str += " الذي يحتوي على الأوامر الآتية:\n";
+           
             disRoutine="الوضع المسائي";
             for(i =0;i<this.state.toggle_button_array.length;i++){
                 if (this.state.toggle_button_array[i].clicked){
@@ -710,7 +2089,11 @@ return polygon
           
         }
         if (!this.state.isSelectTime){
-            Alert.alert("عذراً", " عليك اختيار وقت للوضع أولاً");
+            this.setState({
+                info:"عذراً، عليك اختيار وقت للوضع أولاً",
+              notTrue:true
+            })
+              this.showModal();
            return;
         }
         //test it 
@@ -722,50 +2105,13 @@ return polygon
             }
         }
         }//end if for night routine
-        for(i = 0; i < this.state.toggle_button_array.length; i ++) {
-            if(this.state.toggle_button_array[i].clicked) {
-                switch(i){
-                    case 0 : tmp_str+= "- تشغيل المكيف \n"
-                    break;
-                    case 1: tmp_str+= "- تشغيل آلة القهوة \n"
-                    break;
-                    case 2: tmp_str+= "- فتح الباب \n"
-                    break;
-                    case 3: tmp_str+="- تشغيل التلفاز \n"
-                    break;
-                    case 4: tmp_str+="- فتح البوابة \n "
-                    break;
-                    case 5: tmp_str+= "-تشغيل النور \n"
-                    break;
-                    case 6:  tmp_str+= "- تشغيل الإنترنت \n"
-                    break;
-                   
-                }}
-                 
-                 else {
-                    switch(i){
-             case 0 : tmp_str+= "- إطفاء المكيف \n"
-             break;
-             case 1: tmp_str+= "- إطفاء القهوة \n"
-             break;
-             case 2: tmp_str+= "- إغلاق الباب \n"
-             break;
-             case 3: tmp_str+="- إطفاء التلفاز \n"
-             break;
-             case 4: tmp_str+="- إغلاق البوابة \n "
-             break;
-             case 5: tmp_str+= "-إطفاء النور \n"
-             break;
-             case 6:  tmp_str+= "- إطفاء الإنترنت \n"
-             break; 
-                 }}
-              
-              
-            } // print routine info 
+       
    
          if (( routineName == "morning routine" || routineName == "night routine" )){
+          
              console.log("in if save")
              var userRoutineArr = [];
+             var trueSave=false;
              firebase.database().ref('/routine').once("value",snapshot=>{
                 snapshot.forEach(item => {
                  var temp = item.val();
@@ -819,16 +2165,29 @@ return polygon
                     })//end set routine.
                     
                    
-            } });//end snapshot..
+            }
+         
+       });//end snapshot..
       
-            tmp_str +=  " وقت النمط هو :" + routineTime + '\n';
-            Alert.alert("تم حفظ نمط "+disRoutine, tmp_str);
-            this.setState({
-                morning_toggle: false,
-                home_exit_toggle: false,
-                home_toggle: false,
-                evening_toggle: false,}) 
-         }//end set morning or night routine.
+         
+       this.setState({
+        info:"تم حفظ  " + disRoutine,
+        clear:true
+
+    })
+    this.showSaveModal();
+           this.setState({
+            morning_toggle: false,
+            home_exit_toggle: false,
+            home_toggle: false,
+            evening_toggle: false,})  
+            for(i=0;i<6;i++){
+                this.state.toggle_button_array[i].clicked==false
+            }
+      
+           
+       
+     }//end set morning or night routine.
       else if(routineName == "leave routine" || routineName == "come routine" 
                     && user.longitude != 0 && user.latitude !=0 ){
                         var userRoutineArr = [];
@@ -888,12 +2247,20 @@ return polygon
                 })//end set routine. 
             
             }  });//end snapshot..
-            Alert.alert("تم حفظ نمط "+disRoutine, tmp_str);
             this.setState({
-            morning_toggle: false,
-            home_exit_toggle: false,
-            home_toggle: false,
-            evening_toggle: false,})  }
+                info:"تم حفظ  " + disRoutine,
+                clear:true
+        
+            })
+            this.showSaveModal();
+                   this.setState({
+                    morning_toggle: false,
+                    home_exit_toggle: false,
+                    home_toggle: false,
+                    evening_toggle: false,})  
+                    for(i=0;i<6;i++){
+                        this.state.toggle_button_array[i].clicked==false
+                    } }
       
         console.log("save routine");
         
@@ -1012,9 +2379,12 @@ return polygon
     
     render() {
         return (
-        
+
+
+                 
+      
             <View style={styles.container}>
-               
+       
 
                
                 <Modal animationType="slide"
@@ -1155,15 +2525,7 @@ return polygon
                                             {'white'}
                                             />
                                     }
-                                    {
-                                        (index == 6) &&
-                                        < Entypo
-                                            name="air"
-                                            size={40}
-                                            color=
-                                            {'#8abbc6'}
-                                        />
-                                    }
+                                  
 
                                     </TouchableOpacity>
                                     
@@ -1176,11 +2538,25 @@ return polygon
                                 <View style = {{width: '100%', flexDirection: 'row', justifyContent: 'space-around'}}>
                                     <TouchableHighlight style={[styles.buttonContainer, styles.sTButton,{color: '#8abbc6',}]} onPress={() => this.save_button_action(0)} >
                                         <Text style={styles.signUpText,{color: '#8abbc6',}}> حفظ </Text>
+                                           
                                     </TouchableHighlight>
                                     <TouchableHighlight style={[styles.buttonContainer, styles.sTButton]} onPress={() => this.setState({date_picker_display: true})} >
                                         <Text style={styles.signUpText}> المؤقت </Text>
                                     </TouchableHighlight>
                                 </View>
+                                <Modal
+                               animationType="slide"
+                                 transparent={true}
+                                 visible={this.state.modalVisible}
+                                 onRequestClose={() => {
+                                    console.log('Modal has been closed.');}}>
+                                   
+                                <View style={styles.centeredView}>
+                              <View style={styles.modalView}>
+                                 <Text style={styles.modelStyle}>{this.state.info}</Text>
+                             </View>
+                              </View>
+                                    </Modal>
                             </View>
                         }
                         {
@@ -1275,15 +2651,7 @@ return polygon
                                             {'white'}
                                             />
                                     }
-                                    {
-                                        (index == 6) &&
-                                        < Entypo
-                                            name="air"
-                                            size={40}
-                                            color=
-                                            {'#8abbc6'}
-                                        />
-                                    }
+                                   
 
                                     </TouchableOpacity>
                                     )
@@ -1297,6 +2665,19 @@ return polygon
                                         <Text style={styles.signUpText}> المؤقت </Text>
                                     </TouchableHighlight> */}
                                 </View>
+                                <Modal
+                               animationType="slide"
+                                 transparent={true}
+                                 visible={this.state.modalVisible}
+                                 onRequestClose={() => {
+                                    console.log('Modal has been closed.');}}>
+                                   
+                                <View style={styles.centeredView}>
+                              <View style={styles.modalView}>
+                                 <Text style={styles.modelStyle}>{this.state.info}</Text>
+                             </View>
+                              </View>
+                                    </Modal>
                             </View>
                         }
                         {
@@ -1399,6 +2780,19 @@ return polygon
                                         <Text style={styles.signUpText}> المؤقت </Text>
                                     </TouchableHighlight> */}
                                 </View>
+                                <Modal
+                               animationType="slide"
+                                 transparent={true}
+                                 visible={this.state.modalVisible}
+                                 onRequestClose={() => {
+                                    console.log('Modal has been closed.');}}>
+                                   
+                                <View style={styles.centeredView}>
+                              <View style={styles.modalView}>
+                                 <Text style={styles.modelStyle}>{this.state.info}</Text>
+                             </View>
+                              </View>
+                                    </Modal>
                             </View>
                         }
                         
@@ -1514,6 +2908,19 @@ return polygon
                                         <Text style={styles.signUpText}> المؤقت </Text>
                                     </TouchableHighlight>
                                 </View>
+                                <Modal
+                               animationType="slide"
+                                 transparent={true}
+                                 visible={this.state.modalVisible}
+                                 onRequestClose={() => {
+                                    console.log('Modal has been closed.');}}>
+                                   
+                                <View style={styles.centeredView}>
+                              <View style={styles.modalView}>
+                                 <Text style={styles.modelStyle}>{this.state.info}</Text>
+                             </View>
+                              </View>
+                                    </Modal>
                             </View>
                         }
                         {
@@ -1538,12 +2945,27 @@ return polygon
                     </Root>
                     </ScrollView>
                 </ImageBackground>
-               
+        
+                <Modal
+                               animationType="slide"
+                                 transparent={true}
+                                 visible={this.state.saveModal}
+                                 onRequestClose={() => {
+                                    console.log('Modal has been closed.');}}>
+                                   
+                                <View style={styles.centeredView}>
+                              <View style={styles.modalView}>
+                                 <Text style={styles.modelStyle}>{this.state.info}</Text>
+                             </View>
+                              </View>
+                                    </Modal>
             </View>
-            
+          
+       
         
 
         );
+        
     }
 
 
@@ -1649,6 +3071,29 @@ RoutineScreen.navigationOptions = ({navigation})=> ({
 
 
 const styles = StyleSheet.create({
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+      },
+      modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
+      },
+     
+    
   container: {
     
     //flex: 1,
@@ -1670,6 +3115,16 @@ const styles = StyleSheet.create({
     color: '#2287ac',
     marginLeft:80,
     marginBottom:10,
+    
+  },
+  modelStyle: {
+    fontSize: 16,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    color: '#8abbc6',
+    marginLeft:10,
+    
+    marginBottom:20,
     
   },
   routineTimeStyle: {
