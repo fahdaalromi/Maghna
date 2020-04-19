@@ -155,7 +155,7 @@ export default class reportScreen extends Component {
          
             if (curTime !== null && amount !==  0 ) {
 
-                let workingHours = amount/6 ;
+                let workingHours = curTime*1000000 ;
 
                 let bill = 10
                 let totalConsuming;
@@ -191,6 +191,7 @@ export default class reportScreen extends Component {
 
                 this.setState({profile_color : profileColor,profile_percent:totalConsuming},() => {
                     this.getAudio();
+                    this.setState({show_shape:true});
                 }); 
             }  
             else
@@ -267,7 +268,15 @@ export default class reportScreen extends Component {
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
                                     <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 1]} style = {styles.component_bar} />
-                                    <Text style = {styles.bar_text}> ١٠٠٪ </Text>
+                                   
+                               {this.state.show_shape &&
+                                   <Text style = {styles.bar_text}> ١٠٠٪ </Text>
+                               }
+
+                               {!this.state.show_shape &&
+                                   <Text style = {styles.bar_text}> ٠٪ </Text>
+                              }
+
                                 </View>
                                 <View style = {styles.component_text_view}>
                                     <Text style = {styles.contentText}> الإنارة </Text>
