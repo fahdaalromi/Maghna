@@ -18,7 +18,6 @@ import { Audio } from 'expo-av';
 import NavigationService from '../navigation/NavigationService';
 
 
-
 export default class reportScreen extends Component {   
 
     //here only conditional rendering for lamb if amount = 0 and if not 

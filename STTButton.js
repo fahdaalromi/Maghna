@@ -16,6 +16,9 @@ import * as firebase from "firebase";
 import {Button} from "react-native-elements";
 import { connect } from 'react-redux';
 // Here I use this time, I open the package
+
+
+
 const rnTimer = require("react-native-timer");
 
 
@@ -127,7 +130,7 @@ class SpeechToTextButton extends Component {
       await this.resetRecording();
     }
   }
-  analysis = async (actionid) => {c
+  analysis = async (actionid) => {
     //check if it is't the first command
     console.log("before definition of flage");
     let flag = false;
