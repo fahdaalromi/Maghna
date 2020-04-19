@@ -566,7 +566,6 @@ alert("Hello in if statement");
 
   click_btn = async () => {
     alert("hi");
-
     let routineInfo = {
       toggle1: {
         name: "come routine",
