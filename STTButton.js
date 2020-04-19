@@ -53,14 +53,14 @@ const styles = StyleSheet.create({
   },
   Indicator: {
     alignSelf: 'center',
-    width: 150,
-    height: 150,
+    width: 110,
+    height: 110,
     marginTop: 110,
   },
   Indicator1: {
     alignSelf: 'center',
-    width: 150,
-    height: 150,
+    width: 110,
+    height: 110,
     marginTop: 110,
   },
 
