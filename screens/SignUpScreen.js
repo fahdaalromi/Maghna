@@ -125,8 +125,15 @@ handelSignUp =() =>{
   }
 
 
-  if (this.state.password.length < 6) {
-    this.setState({formErrorMsg: ' يجب أن تكون كلمة المرور أكثر من ٦ خانات'})
+  if (this.state.password.length < 8) {
+    this.setState({formErrorMsg: ' يجب أن تكون كلمة المرور أكثر من ٨ خانات'})
+    this.setState({errorMsgVisibilty: 'flex'})
+    this.setState({passwordBorder:'red'})
+
+    return;
+  }
+  if (this.state.password.length > 20) {
+    this.setState({formErrorMsg: ' يجب أن تكون كلمة المرور أقل من ٢٠ خانة'})
     this.setState({errorMsgVisibilty: 'flex'})
     this.setState({passwordBorder:'red'})
 
