@@ -29,6 +29,7 @@ import IntentLauncherAndroid from 'expo';
 //import Modal from 'react-native-modal';
 
 import * as BackgroundFetch from 'expo-background-fetch';
+
 // End import .. 
 
 /* This is rania solution : 
@@ -2184,6 +2185,9 @@ return polygon
            
        
      }//end set morning or night routine.
+
+
+     //Leave come Firebase
       else if(routineName == "leave routine" || routineName == "come routine" 
                     && user.longitude != 0 && user.latitude !=0 ){
                         var userRoutineArr = [];
@@ -2209,7 +2213,7 @@ return polygon
                                 if(temp.userID == user.uid && temp.name == routineName){
                                     var theId = item.key;
                            
-                               
+                               //Morning and night firebase
                                 firebase.database().ref('routine/'+theId).update(  {
                                    name: routineName,
                                   time: routineTime,
