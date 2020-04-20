@@ -48,7 +48,9 @@ export default class  supdevicesScreen extends Component {
       isLambConnected :'غير متصله',
       isLambOn : 'مغلقه' ,
    lambColor :'#2cb457',
-      textColor: styles.openText
+      textColor: styles.openText,
+      read : false,
+      playbackInstance: null,
     }
 }
 
@@ -64,9 +66,9 @@ export default class  supdevicesScreen extends Component {
 
           if(lampStatus==true)
           {
+            this.getAudio();
             this.setState({lambColor :'#2cb457'});
             this.setState({textColor :styles.openText});
-            await this.getAudio();
           }
           else {
               this.setState({lambColor:'#6FA0AF'});
@@ -119,7 +121,7 @@ export default class  supdevicesScreen extends Component {
 
 
               // OR
-              const playbackObject = await Audio.Sound.createAsync(
+              const playbackInstance = await Audio.Sound.createAsync(
                 { uri: fileURL },
                 { shouldPlay: true }
               );
@@ -257,11 +259,16 @@ handelSignOut =() =>{
 
 };
 
-  componentWillUnmount(){
-    this._unsubscribe();
-  }
+  // async componentWillUnmount(){
+  //   this._unsubscribe();
+  //   const { playbackInstance } = this.state;
+  //   await playbackInstance.pauseAsync();
+  // }
 
   render() {
+
+
+
     return (
 
 

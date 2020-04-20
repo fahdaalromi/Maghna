@@ -28,9 +28,19 @@ import { Audio } from 'expo-av';
 
 
 export default class instructionsScreen extends Component {
-    
-  async componentDidMount(){await this.getAudio();}
 
+
+  async componentDidMount(){
+    const content = await AsyncStorage.getItem('TTSInstruction');
+    //This variable I use to play if it true play if false don't 
+    this.setState({read:content});
+    console.log(this.state.read);
+  }
+
+
+  //This is the method for playing the audio 
+
+  //Get for getting url 
   async getAudio () {  
     // Read report
    
@@ -49,6 +59,8 @@ export default class instructionsScreen extends Component {
    
              })
            }
+
+
            async playAudio(fileURL){
            
    
@@ -114,6 +126,7 @@ static navigationOptions = ({navigation})=> ({
           isFetching: false,
           isRecording: false,
           transcript: '',
+          read : false
         }
         
     }
@@ -122,13 +135,15 @@ static navigationOptions = ({navigation})=> ({
     render() {
 
         const {
-            isRecording, transcript, isFetching,
+            isRecording, transcript, isFetching,read
+
           } = this.state
 
-        
+        if(read == true)
+        this.getAudio();
         
         return (
-           
+   
   <View style={styles.container}>
   
   <ImageBackground source={require('../assets/images/infobackground.png')} style={styles.bg_container}>
@@ -198,31 +213,6 @@ static navigationOptions = ({navigation})=> ({
     
 }
 
-// HomeScreen.navigationOptions = ({navigation})=> ({
-
-//   headerTint:'#F7FAFF',
-//   headerTitle: 'الصفحة الرئيسية',
-//   headerRight:()=>(
-//     <TouchableOpacity onPress={()=>{navigation.navigate('instructions')}} style={{marginRight:15}}>
-//       <MaterialCommunityIcons name="settings-outline" size={24} color="#CDCCCE" />
-//     </TouchableOpacity>
-
-//   ),
-//   headerLeft:()=>(
-//     <TouchableOpacity onPress={()=>{navigation.navigate('')}} style={{marginLeft:15}}>
-//       <SimpleLineIcons name="logout" size={24} color="#CDCCCE" />
-//     </TouchableOpacity>
-//   ),
-    
-// });
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     paddingTop: 15,
-//     backgroundColor: '#fff',
-//   },
-// });
 
 const styles = StyleSheet.create({
   container: {
