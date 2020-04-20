@@ -58,7 +58,7 @@ export default class  supdevicesScreen extends Component {
 
       this._unsubscribe = this.props.navigation.addListener('willFocus',async() => {
 
-          await this.getAudio();
+ 
 
           var lampStatus = await Helper.getLightStatus();
 
@@ -66,6 +66,7 @@ export default class  supdevicesScreen extends Component {
           {
             this.setState({lambColor :'#2cb457'});
             this.setState({textColor :styles.openText});
+            await this.getAudio();
           }
           else {
               this.setState({lambColor:'#6FA0AF'});
@@ -87,7 +88,7 @@ export default class  supdevicesScreen extends Component {
 
 
       let fileURL = '';
-      const text =  ' الأجهزة المُتَّصِلَه ، الإنَارَهْ ، مُتَّصِلَه  ، التِّلْفَازْ ، غَيْر مُتَّصِل ، البَّوابَهْ غَيْر مُتَّصِلَهْ، الإنترنت غَيْر مُتَّصِل';
+      const text =  ' الأجهزة المُتَّصِلَه ، الإنَارَهْ ، مُتَّصِلَه ';
 
 
              axios.post(`http://45.32.251.50`,  {text} )

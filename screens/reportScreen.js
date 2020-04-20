@@ -18,11 +18,9 @@ import { Audio } from 'expo-av';
 import NavigationService from '../navigation/NavigationService';
 
 
-
 export default class reportScreen extends Component {   
 
     //here only conditional rendering for lamb if amount = 0 and if not 
-
 
     constructor(props) {
 
@@ -30,7 +28,7 @@ export default class reportScreen extends Component {
         console.log(props);
         this.state = {
             show_shape: true,
-            profile_percent: 100,
+            profile_percent:100,
             profile_color: '#ff3126',
             curTime:0,
             // this screen I retrieve the value 
@@ -155,7 +153,7 @@ export default class reportScreen extends Component {
          
             if (curTime !== null && amount !==  0 ) {
 
-                let workingHours = amount/6 ;
+                let workingHours = curTime*1000000 ;
 
                 let bill = 10
                 let totalConsuming;
@@ -191,6 +189,7 @@ export default class reportScreen extends Component {
 
                 this.setState({profile_color : profileColor,profile_percent:totalConsuming},() => {
                     this.getAudio();
+                    this.setState({show_shape:true});
                 }); 
             }  
             else
@@ -266,8 +265,24 @@ export default class reportScreen extends Component {
                         <View style = {{width: '100%', borderRadius: 10, alignItems: 'center', padding: 15, paddingBottom: 0, backgroundColor: '#ffffff', marginTop: 10, marginBottom: 10,shadowOpacity: 0.1,opacity: 0.9,}}>
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
-                                    <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 1]} style = {styles.component_bar} />
-                                    <Text style = {styles.bar_text}> ١٠٠٪ </Text>
+                                   
+                                {this.state.show_shape &&
+                                <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 1]} style = {styles.component_bar} />
+                                }
+                               {this.state.show_shape &&
+                               
+                                   <Text style = {styles.bar_text}> 100% </Text>
+                               }
+                               
+
+                                                               {!this.state.show_shape &&
+                                <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 0]} style = {styles.component_bar} />
+                                }
+
+                               {!this.state.show_shape &&
+                                   <Text style = {styles.bar_text}> 0% </Text>
+                              }
+
                                 </View>
                                 <View style = {styles.component_text_view}>
                                     <Text style = {styles.contentText}> الإنارة </Text>
@@ -276,7 +291,7 @@ export default class reportScreen extends Component {
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
                                     <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 0]} style = {styles.component_bar} />
-                                    <Text style = {styles.bar_text}> ٠٪ </Text>
+                                    <Text style = {styles.bar_text}> 0% </Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
                                     <Text style = {styles.contentText}> التلفاز </Text>
@@ -285,7 +300,7 @@ export default class reportScreen extends Component {
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
                                     <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 0]} style = {styles.component_bar} />
-                                    <Text style = {styles.bar_text}> ٠٪ </Text>
+                                    <Text style = {styles.bar_text}> 0% </Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
                                     <Text style = {styles.contentText}> البوابة </Text>
@@ -294,7 +309,7 @@ export default class reportScreen extends Component {
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
                                     <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 0]} style = {styles.component_bar} />
-                                    <Text style = {styles.bar_text}> ٠٪ </Text>
+                                    <Text style = {styles.bar_text}> 0% </Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
                                     <Text style = {styles.contentText}> الانترنت </Text>
@@ -303,7 +318,7 @@ export default class reportScreen extends Component {
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
                                     <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 0]} style = {styles.component_bar} />
-                                    <Text style = {styles.bar_text}> ٠٪ </Text>
+                                    <Text style = {styles.bar_text}> 0%</Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
                                     <Text style = {styles.contentText}> التكييف </Text>
@@ -312,7 +327,7 @@ export default class reportScreen extends Component {
                             <View style = {styles.component_view}>
                                 <View style = {styles.component_bar_view}>
                                     <LinearGradient colors = {['#8abbc6', '#ffffff']} start = {[0, 0]} end = {[0, 0]} style = {styles.component_bar} />
-                                    <Text style = {styles.bar_text}> ٠٪ </Text>
+                                    <Text style = {styles.bar_text}> 0%</Text>
                                 </View>
                                 <View style = {styles.component_text_view}>
                                     <Text style = {styles.contentText}> اله القهوه </Text>
