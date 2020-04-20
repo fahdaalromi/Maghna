@@ -33,7 +33,7 @@ export default class SignUP extends Component{
   passwordBorder:'#3E82A7',
   conPasswordBorder:'#3E82A7',
   emailBorder:'#3E82A7',
-  nameBorder: 'red',
+  nameBorder: '#3E82A7',
   formErrorMsg:'',
   errorMsgVisibilty:'none',
   passError:'none',
@@ -81,12 +81,39 @@ validateEmail = (email) => {
   this.setState({emailBorder:'red'})
     }
   else {
-    this.setState({emailBorder:'#3E82A7'})
+    this.setState({emailBorder:'#91b804'})
   }
 }
 
+/*validateName = (name) => {
+
+  let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+  if(reg.test(this.state.name)== true)
+  {
+  this.setState({nameBorder:'red'})
+  this.setState({formErrorMsg: 'اسم المستخدم يحتوي على غير مقبولة'})
+  this.setState({errorMsgVisibilty: 'flex'})
+    }
+  else {
+    this.setState({nameBorder:'#3E82A7'})
+  }
+}*/
+
 
 validateUser = (name) => {
+
+  let  format =/^[A-Za-z0-9 ]+$/;
+
+  if(format.test(this.state.name)==false)
+  {
+  this.setState({nameBorder:'red'})
+  this.setState({formErrorMsg: 'اسم المستخدم يحتوي على خانات غير مقبولة'})
+  this.setState({errorMsgVisibilty: 'flex'})
+    }
+  else {
+    this.setState({nameBorder:'#3E82A7'})
+    this.setState({errorMsgVisibilty: 'none'})
+  }
 
   if(this.state.name == "")
   {
@@ -125,13 +152,30 @@ handelSignUp =() =>{
   }
 
 
-  if (this.state.password.length < 6) {
-    this.setState({formErrorMsg: ' يجب أن تكون كلمة المرور أكثر من ٦ خانات'})
+  if (this.state.password.length < 8) {
+    this.setState({formErrorMsg: ' يجب أن تكون كلمة المرور أكثر من ٨ خانات'})
     this.setState({errorMsgVisibilty: 'flex'})
     this.setState({passwordBorder:'red'})
 
     return;
   }
+
+  if (this.state.password.length > 20) {
+    this.setState({formErrorMsg: ' يجب أن تكون كلمة المرور أقل من ٢٠ خانة'})
+    this.setState({errorMsgVisibilty: 'flex'})
+    this.setState({passwordBorder:'red'})
+
+    return;
+  }
+
+  if (this.state.name.length > 20) {
+    this.setState({formErrorMsg: ' يجب أن يكون اسم المستخدم أقل من ٢٠ خانة'})
+    this.setState({errorMsgVisibilty: 'flex'})
+    this.setState({nameBorder:'red'})
+
+    return;
+  }
+
   /*
   if (this.state.password!=this.state.confpassword){
 
@@ -237,7 +281,7 @@ handelSignUp =() =>{
 </View>
 
 <View style={styles.firstContainer}>
-<View style={styles.inputContainer} style={styles.inputContainer} >
+<View style={[styles.inputContainer, {borderColor: this.state.nameBorder}]} >
 
 <TextInput   style={[styles.input,{borderColor:this.state.nameBorder}]}
 ref={input=>this.name=input}
@@ -249,8 +293,6 @@ this.setState({visibilty: 'none'})
 this.setState({nameBorder: 'red'})
 this.setState({passBorders: '#7db4cb'})}
 }
-
-
 onEndEditing={(name) => this.validateUser(name)}
 value={this.state.name}
 autoCapitalize="none"
