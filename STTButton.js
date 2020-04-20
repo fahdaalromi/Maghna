@@ -15,6 +15,7 @@ import * as Helper from "./components/Helper";
 import * as firebase from "firebase";
 import {Button} from "react-native-elements";
 import { connect } from 'react-redux';
+import moment from "moment";
 // Here I use this time, I open the package
 
 
@@ -73,6 +74,7 @@ class SpeechToTextButton extends Component {
   constructor(props) {
     super(props);
     this.recording = null;
+    routineArr=[];
 
     this.state = {
       isFetching: false,
@@ -82,7 +84,8 @@ class SpeechToTextButton extends Component {
       //this variable here in STTButton I use to store the duration in seconds in
       curTime: 0,
       isOn: true,
-      routineArr:[],
+      
+      info:"",
 
     };
 
@@ -124,14 +127,26 @@ class SpeechToTextButton extends Component {
   }
 
   async componentDidMount() {
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyCsKoPxvbEp7rAol5m-v3nvgF9t8gUDdNc",
+      authDomain: "maghnatest.firebaseapp.com",
+      databaseURL: "https://maghnatest.firebaseio.com",
+      projectId: "maghnatest",
+      storageBucket: "maghnatest.appspot.com",
+      messagingSenderId: "769071221745",
+      appId: "1:769071221745:web:1f0708d203330948655250" ,
+    };
     while (true) {
       await this.startRecording();
       await this.wait(3000);
       await this.stopRecording();
-      await this.getTranscription();
+      await this.gettranscription();
       await this.resetRecording();
     }
   }
+ 
+
   analysis = async (actionid) => {
     //check if it is't the first command
     console.log("before definition of flage");
@@ -301,7 +316,7 @@ class SpeechToTextButton extends Component {
     }
   };
 
-  getTranscription = async () => {
+  gettranscription = async () => {
 
     this.setState({ isFetching: true });
     try {
@@ -530,6 +545,7 @@ alert("Hello in if statement");
 
     if(transcript == "الوضع الصباحي" ){
       routineArr.push('morning routine');
+      console.log(" mmmmmoooorrrning");
   }
 
   if(transcript == "الوضع المسائي" ){
@@ -548,6 +564,7 @@ if(transcript == "وضع العوده" ){
   if(transcript == "تشغيل النور")
 {
   routineArr.push('turnOnLight');
+  console.log("llllliiighhhttt");
 }
  
 if(transcript == "إغلاق النور")
@@ -848,6 +865,7 @@ if(transcipt == "واحد واربعون دقيقة"){
 if(transcript == "حفظ")
 {
   routineArr.push('save');
+  console.log("sssaaaaavvveee");
   this.routineSpeechValidate();
 
 }
@@ -856,56 +874,351 @@ if(transcript == "حفظ")
 
 
   async routineSpeechValidate(){
-    if (routineArr.length == 5 ){
+    
     if(routineArr[0]==='morning routine')
     {
+      if (routineArr.length == 5 ){
         if(routineArr[1]==='turnOffLight' ||routineArr[1]==='turnOnLight'  )
         {
              if(routineArr[4]==='save'){
-                /// I will call morning routine  
+             this.save_button_action(0);
+
              }
           
         }
+        else{
+           // here alerat with aduio " عذرا، اتبع نفس الطريقة التي بالتعليمات"  
+
+        }
+      }
+      else{
+       // here alerat with aduio " عذرا، اتبع نفس الطريقة التي بالتعليمات" 
+      }
     }
 
     if(routineArr[0]==='night routine')
     {
+      if (routineArr.length == 5 ){
         if(routineArr[1]==='turnOffLight' ||routineArr[1]==='turnOnLight'  )
         {
           if(routineArr[4]==='save'){
-                /// I will call night routine  
+            this.save_button_action(3);
              }
           
         }
+        else{
+          // here alerat with aduio " عذرا، اتبع نفس الطريقة التي بالتعليمات" 
+        }
+    }
+    else{
+      // here alerat with aduio " عذرا، اتبع نفس الطريقة التي بالتعليمات" 
     }
   }
-  if (routineArr.length == 3 ){
+  
+  else
+  
     if(routineArr[0]==='leave routine')
     {
+      if (routineArr.length == 3 ){
+
         if(routineArr[1]==='turnOffLight' ||routineArr[1]==='turnOnLight'  )
         {
              if(routineArr[2]==='0'){
-                /// I will call morning routine  
+              this.save_button_action(1);
              }
           
         }
+        else{
+          // here alerat with aduio " عذرا، اتبع نفس الطريقة التي بالتعليمات" 
+        }
+      }
+      else{
+        // here alerat with aduio " عذرا، اتبع نفس الطريقة التي بالتعليمات" 
+      }
     }
 
     if(routineArr[0]==='back routine')
     {
+      if (routineArr.length == 3 ){
         if(routineArr[1]==='turnOffLight' ||routineArr[1]==='turnOnLight'  )
         {
              if(routineArr[2]==='0'){
-                /// I will call night routine  
+              this.save_button_action(2);
              }
           
         }
+        else{
+                  // here alerat with aduio " عذرا، اتبع نفس الطريقة التي بالتعليمات" 
+
+        }
+      }
+      else {
+                // here alerat with aduio " عذرا، اتبع نفس الطريقة التي بالتعليمات" 
+
+      }
     }
 
-  }
+  
+  
 
 
 }
+
+save_button_action(index) {
+  var lat , lng , i;
+ 
+  var user = firebase.auth().currentUser;
+  console.log(user.uid)
+  var routineName,routineTime , disRoutine
+  var tmp_str = "" ;
+  var actions = [];
+  var i ,j;
+  var flag = false
+  var flagH = false ;
+  firebase.database().ref('mgnUsers/'+firebase.auth().currentUser.uid).once('value',(snap)=>{ 
+  
+   lat= snap.val().latitude;
+   lng= snap.val().longitude;})
+
+  
+
+      //var routineTable =  firebase.database().ref('routine/'); 
+   // this.setActionTable();
+      
+      if(index==0) {
+          flagH = false ;
+          routineName = "morning routine";
+ 
+          disRoutine = "الوضع الصباحي";
+
+          if(routineArr[1]==='turnOffLight'){
+            actions.push("001");
+          }
+          else{
+            actions.push("002");
+          }
+          routineTime = routineArr[2]+":"+routineArr[3];
+  
+   
+  
+      }// end if for morning routine
+       else if(index==1) {
+        
+           
+           if(lat === 0 && lng===0){
+            
+                //here alerat with aduio "عذراً، عليك تفعيل خاصية الموقع حتى يتم انشاء وضع الخروج",
+                
+           }// end if check location
+           else {
+           
+          routineName="leave routine";
+         
+           disRoutine = "وضع الخروج";
+           flag = true
+           routineTime = "empty"
+           // check location
+         
+          
+                  if(routineArr[1]==='turnOffLight'){
+                    actions.push("001");
+                  }
+                  else{
+                    actions.push("002");
+                  }
+      }//end loop
+
+      }// end if for leave routine
+       else if(index==2) {
+          if(lat === 0 && lng===0){
+             
+            
+               //here alerat with aduio "عذراً، عليك تفعيل خاصية الموقع حتى يتم انشاء وضع العودة",
+           }
+           else {
+            
+           
+          routineName="come routine";
+        
+          disRoutine="وضع العودة";
+          routineTime = "empty"
+          flag =true
+          // set If cindition for check location
+          
+                  if(routineArr[1]==='turnOffLight'){
+                    actions.push("001");
+                  }
+                  else{
+                    actions.push("002");
+                  }
+      }//end loop
+  
+      }//end if for come routine
+       else if(index==3) {
+        
+          flagH=false;
+          routineName="night routine";
+         
+          disRoutine="الوضع المسائي";
+
+          if(routineArr[1]==='turnOffLight'){
+            actions.push("001");
+          }
+          else{
+            actions.push("002");
+          }
+
+          routineTime = routineArr[2]+":"+routineArr[3];
+
+  
+    
+      }//end if for night routine
+     
+ 
+       if (( routineName == "morning routine" || routineName == "night routine" )){
+        
+           console.log("in if save")
+           var userRoutineArr = [];
+           var trueSave=false;
+           firebase.database().ref('/routine').once("value",snapshot=>{
+              snapshot.forEach(item => {
+               var temp = item.val();
+               if(temp.userID == user.uid){
+                   console.log("yes have user");
+                  userRoutineArr.push(temp.name);
+                  console.log(temp.name);
+               }//end if 
+              });//end forEach
+      
+          
+        
+          if(userRoutineArr.indexOf(routineName)!=-1){
+              console.log("enter if check")
+              firebase.database().ref('/routine').once("value" , (snapshot)=>{
+                  snapshot.forEach(item => {
+                      
+                   var temp = item.val();
+                   console.log(temp);
+                   if(temp.userID == user.uid && temp.name == routineName){
+                       var theId = item.key;
+              
+                  
+                   firebase.database().ref('routine/'+theId).update(  {
+                      name: routineName,
+                     time: routineTime,
+                      actionsID: actions,
+                      day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                      userID: user.uid,
+                      status: 1,
+        
+                    }); 
+                   
+                 
+                
+                   }//end if 
+                  });//end forEach
+          
+               });//end snapshot..
+               }
+          else {
+              firebase.database().ref('routine/').push(
+                  {
+                    name: routineName,
+                    time: routineTime,
+                    actionsID: actions,
+                    day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                    userID: user.uid,
+                    status: 1,
+      
+                  })//end set routine.
+                  
+                 
+          }
+       
+     });//end snapshot..
+    
+       
+  
+  //here alerat with aduio "تم حفظ  " + disRoutine
+ 
+       
+    
+         
+     
+   }//end set morning or night routine.
+
+
+   //Leave come Firebase
+    else if(routineName == "leave routine" || routineName == "come routine" 
+                  && user.longitude != 0 && user.latitude !=0 ){
+                      var userRoutineArr = [];
+                      firebase.database().ref('/routine').once("value",snapshot=>{
+                         snapshot.forEach(item => {
+                          var temp = item.val();
+                          if(temp.userID == user.uid){
+                              console.log("yes have user");
+                             userRoutineArr.push(temp.name);
+                             console.log(temp.name);
+                          }//end if 
+                         });//end forEach
+                 
+                     
+                   
+                     if(userRoutineArr.indexOf(routineName)!=-1){
+                         console.log("enter if check")
+                         firebase.database().ref('/routine').once("value" , (snapshot)=>{
+                             snapshot.forEach(item => {
+                                 
+                              var temp = item.val();
+                              console.log(temp);
+                              if(temp.userID == user.uid && temp.name == routineName){
+                                  var theId = item.key;
+                         
+                             //Morning and night firebase
+                              firebase.database().ref('routine/'+theId).update(  {
+                                 name: routineName,
+                                time: routineTime,
+                                 actionsID: actions,
+                                 day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                                 userID: user.uid,
+                                 status: 1,
+                   
+                               }); 
+                              
+                            
+                           
+                              }//end if 
+                             });//end forEach
+                     
+                          
+                          
+                          });//end snapshot..
+                          
+          }
+          else{
+          firebase.database().ref('routine/').push(
+              {
+                name: routineName,
+                time: routineTime,
+                actionsID: actions,
+                day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                userID: user.uid,
+                status: 1,
+  
+              })//end set routine. 
+          
+          }  });//end snapshot..
+        
+         // here alerat with aduio "تم حفظ  " + disRoutine
+         
+    
+      console.log("save routine");
+      
+
+     
+  }
+}
+
 
   startRecording = async () => {
     // console.log(recording)
@@ -972,66 +1285,7 @@ if(transcript == "حفظ")
     const toggleIndexValue = this.props.toggle2;
     this.props.dispatch({type : 'TOGGLE', index : 'toggle2', value: !toggleIndexValue });
 
-    // new Promise((resolve, reject) => {
-    //
-    //   let theId;
-    //   let routineName = routineInfo[toggleIndex].name;
-    //   let user = firebaseInitial.auth().currentUser;
-    //   let  userRoutineArr =[];
-    //   let alertDisplay = false;
-    //   let returnToggleValue = !toggleIndexValue;
-    //   if (returnToggleValue){
-    //     firebaseInitial.database().ref('/routine').on("value",snapshot=>{
-    //       snapshot.forEach(item => {
-    //         let temp = item.val();
-    //         if(temp.userID == user.uid){
-    //
-    //           userRoutineArr.push(temp.name);
-    //         }//end if
-    //         if(userRoutineArr.indexOf(routineName)!= -1){
-    //           theId = item.key;
-    //           firebaseInitial.database().ref('routine/'+theId).update(  {
-    //             status: 1,
-    //
-    //           });
-    //           resolve(returnToggleValue);
-    //         }
-    //
-    //       });//end forEach
-    //       if (userRoutineArr.indexOf(routineName)== -1){
-    //
-    //         if(!alertDisplay)
-    //         {
-    //           Alert.alert("عذراً", routineInfo[toggleIndex].alert);
-    //           alertDisplay = true;
-    //           resolve(!returnToggleValue);
-    //         }
-    //       }
-    //     }); //end snapshot..
-    //
-    //   }
-    //   else {
-    //     firebaseInitial.database().ref('/routine').on("value",snapshot=>{
-    //       snapshot.forEach(item => {
-    //         let temp = item.val();
-    //         if(temp.userID == user.uid){
-    //
-    //           userRoutineArr.push(temp.name);
-    //         }//end if
-    //         if(userRoutineArr.indexOf(routineName)!= -1){
-    //           theId = item.key;
-    //           firebaseInitial.database().ref('routine/'+theId).update(  {
-    //             status: 0,
-    //           });
-    //         }
-    //         resolve(returnToggleValue);
-    //       });//end forEach
-    //     }); //end snapshot..
-    //   }
-    // }).then((response) => {
-    //   console.log(response)
-    //   this.props.dispatch({type : 'TOGGLE', index : 'toggle2', value: response});
-    // });
+    
 
   }
 
