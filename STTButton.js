@@ -991,7 +991,7 @@ save_button_action(index) {
  
           disRoutine = "الوضع الصباحي";
 
-          if(routineArr[1]==='turnOffLight'){
+          if(routineArr[1]==='turnOnLight'){
             actions.push("001");
           }
           else{
@@ -1020,7 +1020,7 @@ save_button_action(index) {
            // check location
          
           
-                  if(routineArr[1]==='turnOffLight'){
+                  if(routineArr[1]==='turnOnLight'){
                     actions.push("001");
                   }
                   else{
@@ -1045,12 +1045,12 @@ save_button_action(index) {
           flag =true
           // set If cindition for check location
           
-                  if(routineArr[1]==='turnOffLight'){
-                    actions.push("001");
-                  }
-                  else{
-                    actions.push("002");
-                  }
+          if(routineArr[1]==='turnOnLight'){
+            actions.push("001");
+          }
+          else{
+            actions.push("002");
+          }
       }//end loop
   
       }//end if for come routine
@@ -1061,7 +1061,7 @@ save_button_action(index) {
          
           disRoutine="الوضع المسائي";
 
-          if(routineArr[1]==='turnOffLight'){
+          if(routineArr[1]==='turnOnLight'){
             actions.push("001");
           }
           else{
