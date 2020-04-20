@@ -15,6 +15,7 @@ import * as Helper from "./components/Helper";
 import * as firebase from "firebase";
 import {Button} from "react-native-elements";
 import { connect } from 'react-redux';
+import moment from "moment";
 // Here I use this time, I open the package
 
 
@@ -73,6 +74,7 @@ class SpeechToTextButton extends Component {
   constructor(props) {
     super(props);
     this.recording = null;
+    routineArr=[];
 
     this.state = {
       isFetching: false,
@@ -82,7 +84,8 @@ class SpeechToTextButton extends Component {
       //this variable here in STTButton I use to store the duration in seconds in
       curTime: 0,
       isOn: true,
-      routineArr:[],
+      
+      info:"",
 
     };
 
@@ -124,14 +127,26 @@ class SpeechToTextButton extends Component {
   }
 
   async componentDidMount() {
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyCsKoPxvbEp7rAol5m-v3nvgF9t8gUDdNc",
+      authDomain: "maghnatest.firebaseapp.com",
+      databaseURL: "https://maghnatest.firebaseio.com",
+      projectId: "maghnatest",
+      storageBucket: "maghnatest.appspot.com",
+      messagingSenderId: "769071221745",
+      appId: "1:769071221745:web:1f0708d203330948655250" ,
+    };
     while (true) {
       await this.startRecording();
       await this.wait(3000);
       await this.stopRecording();
-      await this.getTranscription();
+      await this.gettranscription();
       await this.resetRecording();
     }
   }
+ 
+
   analysis = async (actionid) => {
     //check if it is't the first command
     console.log("before definition of flage");
@@ -301,7 +316,7 @@ class SpeechToTextButton extends Component {
     }
   };
 
-  getTranscription = async () => {
+  gettranscription = async () => {
 
     this.setState({ isFetching: true });
     try {
@@ -530,6 +545,7 @@ alert("Hello in if statement");
 
     if(transcript == "الوضع الصباحي" ){
       routineArr.push('morning routine');
+      console.log(" mmmmmoooorrrning");
   }
 
   if(transcript == "الوضع المسائي" ){
@@ -548,6 +564,7 @@ if(transcript == "وضع العوده" ){
   if(transcript == "تشغيل النور")
 {
   routineArr.push('turnOnLight');
+  console.log("llllliiighhhttt");
 }
  
 if(transcript == "إغلاق النور")
@@ -557,297 +574,300 @@ if(transcript == "إغلاق النور")
   }
 
   if (routineArr.length == 2 ){
-  if(transcipt == "الساعة الواحدة صباحاً"){
-    hours = 01
-    routineArr.push(0)
+  if(transcript == "الواحده"){
+   
+    routineArr.push(0);
+    console.log("oooonnneeee");
 }
- if(transcipt == "الساعة الثانية صباحاً"){
-    hours = 02
+ if(transcript == "الساعة الثانية صباحاً"){
+   
     routineArr.push(1)
 }
-if(transcipt == "الساعة الثالثة صباحاً"){
-    hours = 03
+if(transcript == "الساعة الثالثة صباحاً"){
+  
     routineArr.push(2)
 }
-if(transcipt == "الساعة الرابعة صباحاً"){
-    hours = 04
+if(transcript == "الساعة الرابعة صباحاً"){
+   
     routineArr.push(3)
 }
- if(transcipt == "الساعة الخامسة صباحاً"){
-    hours = 05
+ if(transcript == "الساعة الخامسة صباحاً"){
+   
     routineArr.push(4)
 }
- if(transcipt == "الساعة السادسة صباحاً"){
-    hours = 06
+ if(transcript == "الساعة السادسة صباحاً"){
+   
     routineArr.push(5)
 }
- if(transcipt == "الساعة السابعة صباحاً"){
-    hours = 07
+ if(transcript == "الساعة السابعة صباحاً"){
+   
     routineArr.push(6)
 }
- if(transcipt == "الساعة الثامنة صباحاً"){
-    hours = 08
+ if(transcript == "الساعة الثامنة صباحاً"){
+   
     routineArr.push(7)
 }
-  if(transcipt == "الساعة التاسعة صباحاً"){
-    hours = 09
+  if(transcript == "الساعة التاسعة صباحاً"){
+   
     routineArr.push(8)
 }
- if(transcipt == "الساعة العاشرة صباحاً"){
-    hours = 10
+ if(transcript == "الساعة العاشرة صباحاً"){
+   
     routineArr.push(9)
 }
-if(transcipt == "الساعة الحادية عشر صباحاً"){
-    hours = 11
+if(transcript == "الساعة الحادية عشر صباحاً"){
+   
     routineArr.push(10)
 }
-if(transcipt == "الساعة الثانية عشر صباحاً"){
-    hours = 12
+if(transcript== "الساعة الثانية عشر صباحاً"){
+  
     routineArr.push(11)
 }}
 
 if(routineArr.length ==  3){
-if(transcipt == "دقيقة"){
-    mins= 01
+if(transcript == "دقيقة"){
+   
    routineArr.push(1) 
 }
-if(transcipt == "دقيقتان"){
-    mins= 02
-   routineArr.push(2) 
+if(transcript == "دقيقتان"){
+   
+   routineArr.push(2) ;
+   console.log("twwwwoooo");
 }
-if(transcipt == "ثلاث دقائق"){
-    mins= 03
+if(transcript == "ثلاث دقائق"){
+   
    routineArr.push(3) 
 }
-if(transcipt == "أربع دقائق"){
-    mins= 04
+if(transcript == "أربع دقائق"){
+   
    routineArr.push(4) 
 }
- if(transcipt == "خمس دقائق"){
-    mins= 05
+ if(transcript == "خمس دقائق"){
+   
    routineArr.push(5) 
 }
-if(transcipt == "ست دقائق"){
-    mins= 06
+if(transcript == "ست دقائق"){
+   
    routineArr.push(6) 
 }
- if(transcipt == "سبع دقائق"){
-    mins= 07
+ if(transcript == "سبع دقائق"){
+   
    routineArr.push(7) 
 }
- if(transcipt == "ثمان دقائق"){
-    mins= 08
+ if(transcript == "ثمان دقائق"){
+  
    routineArr.push(8) 
 }
- if(transcipt == "تسع دقائق"){
-    mins= 09
+ if(transcript == "تسع دقائق"){
+  
    routineArr.push(9) 
 }
 
- if(transcipt == "عشر دقائق"){
-    mins= 10
+ if(transcript == "عشر دقائق"){
+   
    routineArr.push(10) 
 }
- if(transcipt == "احدى عشر دقيقة"){
-    mins= 11
+ if(transcript == "احدى عشر دقيقة"){
+  
    routineArr.push(11) 
 }
- if(transcipt == "اثنا عشر دقيقة"){
-    mins= 12
+ if(transcript == "اثنا عشر دقيقة"){
+   
    routineArr.push(12) 
 }
- if(transcipt == "ثلاث عشر دقيقة"){
-    mins= 13
+ if(transcript == "ثلاث عشر دقيقة"){
+   
    routineArr.push(13) 
 }
- if(transcipt == "اربعة عشر دقيقة"){
-    mins= 14
+ if(transcript == "اربعة عشر دقيقة"){
+  
    routineArr.push(14) 
 }
- if(transcipt == "خمسة عشر دقيقة"){
-    mins= 15
+ if(transcript == "خمسة عشر دقيقة"){
+   
    routineArr.push(15) 
 }
-  if(transcipt == " ستة عشر دقيقة"){
-    mins= 16
+  if(transcript == " ستة عشر دقيقة"){
+   
    routineArr.push(16) 
 }
-  if(transcipt == "سبعة عشر دقيقة"){
-    mins= 17
+  if(transcript == "سبعة عشر دقيقة"){
+   
    routineArr.push(17) 
 }
-  if(transcipt == "ثمانية عشر دقيقة"){
-    mins= 18
+  if(transcript == "ثمانية عشر دقيقة"){
+   
    routineArr.push(18) 
 }
-  if(transcipt == "تسعة عشر دقيقة"){
-    mins= 19
+  if(transcript == "تسعة عشر دقيقة"){
+  
    routineArr.push(19) 
 }
-   if(transcipt == " عشرون دقيقة"){
-    mins= 20
+   if(transcript == " عشرون دقيقة"){
+   
    routineArr.push(20) 
 }
-   if(transcipt == " واحد وعشرون دقيقة"){
-    mins= 21
+   if(transcript == " واحد وعشرون دقيقة"){
+   
    routineArr.push(21) 
 }
-if(transcipt == " اثنان وعشرون دقيقة"){
-    mins= 22
+if(transcript == " اثنان وعشرون دقيقة"){
+   
    routineArr.push(22) 
 }
-if(transcipt == " ثلاث وعشرون دقيقة"){
-    mins= 23
+if(transcript == " ثلاث وعشرون دقيقة"){
+   
    routineArr.push(23) 
 }
-if(transcipt == " اربعة وعشرون دقيقة"){
-    mins= 24
+if(transcript == " اربعة وعشرون دقيقة"){
+  
    routineArr.push(24) 
 }
-if(transcipt == " خمسة وعشرون دقيقة"){
-    mins= 25
+if(transcript == " خمسة وعشرون دقيقة"){
+   
    routineArr.push(25) 
 }
-if(transcipt == " ستة وعشرون دقيقة"){
-    mins= 26
+if(transcript == " ستة وعشرون دقيقة"){
+  
    routineArr.push(26) 
 }
-if(transcipt == " سبعة وعشرون دقيقة"){
-    mins= 27
+if(transcript == " سبعة وعشرون دقيقة"){
+   
    routineArr.push(27) 
 }
-if(transcipt == "ثمانية وعشرون دقيقة"){
-    mins= 28
+if(transcript == "ثمانية وعشرون دقيقة"){
+   
    routineArr.push(28) 
 }
-if(transcipt == "تسعة وعشرون دقيقة"){
-    mins= 29
+if(transcript == "تسعة وعشرون دقيقة"){
+   
    routineArr.push(29) 
 }
-if(transcipt == "ثلاثون دقيقة"){
-    mins= 30
+if(transcript == "ثلاثون دقيقة"){
+  
    routineArr.push(30) 
 }
- if(transcipt == "واحد وثلاثون دقيقة"){
-    mins= 31
+ if(transcript == "واحد وثلاثون دقيقة"){
+
    routineArr.push(31) 
 }
-if(transcipt == "اثنان وثلاثون دقيقة"){
-    mins= 32
+if(transcript == "اثنان وثلاثون دقيقة"){
+  
    routineArr.push(32) 
 }
-if(transcipt == "ثلاث وثلاثون دقيقة"){
-    mins= 33
+if(transcript == "ثلاث وثلاثون دقيقة"){
+   
    routineArr.push(33) 
 }
-if(transcipt == "اربعة وثلاثون دقيقة"){
-    mins= 34
+if(transcript == "اربعة وثلاثون دقيقة"){
+  
    routineArr.push(34) 
 }
-if(transcipt == "خمسة وثلاثون دقيقة"){
-    mins= 35
+if(transcript == "خمسة وثلاثون دقيقة"){
+   
    routineArr.push(35) 
 }
-if(transcipt == "ستة وثلاثون دقيقة"){
-    mins= 36
+if(transcript == "ستة وثلاثون دقيقة"){
+  
    routineArr.push(36) 
 }
-if(transcipt == "سبعة وثلاثون دقيقة"){
-    mins= 37
+if(transcript == "سبعة وثلاثون دقيقة"){
+   
    routineArr.push(37) 
 }
-if(transcipt == "ثمانية وثلاثون دقيقة"){
-    mins= 38
+if(transcript == "ثمانية وثلاثون دقيقة"){
+  
    routineArr.push(38) 
 }
-if(transcipt == "تسعة وثلاثون دقيقة"){
-    mins= 39
+if(transcript == "تسعة وثلاثون دقيقة"){
+  
    routineArr.push(39) 
 }
-if(transcipt == "اربعون دقيقة"){
-    mins= 40
+if(transcript == "اربعون دقيقة"){
+    
    routineArr.push(40) 
 }
-if(transcipt == "واحد واربعون دقيقة"){
-    mins= 41
+if(transcript == "واحد واربعون دقيقة"){
+   
    routineArr.push(41) 
 }
- if(transcipt == "اثنان واربعون دقيقة"){
-    mins= 42
+ if(transcript == "اثنان واربعون دقيقة"){
+   
    routineArr.push(42) 
 }
- if(transcipt == "ثلاث واربعون دقيقة"){
-    mins= 43
+ if(transcript == "ثلاث واربعون دقيقة"){
+   
    routineArr.push(43) 
 }
- if(transcipt == "اربعة واربعون دقيقة"){
-    mins= 44
+ if(transcript == "اربعة واربعون دقيقة"){
+   
    routineArr.push(44) 
 }
- if(transcipt == "خمسة واربعون دقيقة"){
-    mins= 45
+ if(transcript == "خمسة واربعون دقيقة"){
+   
    routineArr.push(45) 
 }
- if(transcipt == "ستة واربعون دقيقة"){
-    mins= 46
+ if(transcript == "ستة واربعون دقيقة"){
+  
    routineArr.push(46) 
 }
- if(transcipt == "سبعة واربعون دقيقة"){
-    mins= 47
+ if(transcript == "سبعة واربعون دقيقة"){
+    
    routineArr.push(47) 
 }
- if(transcipt == "ثمانية واربعون دقيقة"){
-    mins= 48
+ if(transcript == "ثمانية واربعون دقيقة"){
+    
    routineArr.push(48) 
 }
- if(transcipt == "تسعة واربعون دقيقة"){
-    mins= 49
+ if(transcript == "تسعة واربعون دقيقة"){
+    
    routineArr.push(49) 
 }
- if(transcipt == "خمسون دقيقة"){
-    mins= 50
+ if(transcript == "خمسون دقيقة"){
+   
    routineArr.push(50) 
 }
- if(transcipt == "واحد وخمسون دقيقة"){
-    mins= 51
+ if(transcript == "واحد وخمسون دقيقة"){
+  
    routineArr.push(51) 
 }
-  if(transcipt == "اثنان وخمسون دقيقة"){
-    mins= 52
+  if(transcript == "اثنان وخمسون دقيقة"){
+   
    routineArr.push(52) 
 }
-  if(transcipt == "ثلاث وخمسون دقيقة"){
-    mins= 53
+  if(transcript == "ثلاث وخمسون دقيقة"){
+  
    routineArr.push(53) 
 }
-  if(transcipt == "اربعة وخمسون دقيقة"){
-    mins= 54
+  if(transcript == "اربعة وخمسون دقيقة"){
+   
    routineArr.push(54) 
 }
-  if(transcipt == "خمسة وخمسون دقيقة"){
-    mins= 55
+  if(transcript == "خمسة وخمسون دقيقة"){
+  
    routineArr.push(55) 
 }
-  if(transcipt == "ستة وخمسون دقيقة"){
-    mins= 56
+  if(transcript == "ستة وخمسون دقيقة"){
+   
    routineArr.push(56) 
 }
-  if(transcipt == "سبعة وخمسون دقيقة"){
-    mins= 57
+  if(transcript == "سبعة وخمسون دقيقة"){
+  
    routineArr.push(57) 
 }
-  if(transcipt == "ثمانية وخمسون دقيقة"){
-    mins= 58
+  if(transcript == "ثمانية وخمسون دقيقة"){
+  
    routineArr.push(58) 
 }
-  if(transcipt == "تسعة وخمسون دقيقة"){
-    mins= 59
+  if(transcript == "تسعة وخمسون دقيقة"){
+   
    routineArr.push(59) 
 }
 }
 if(transcript == "حفظ")
 {
   routineArr.push('save');
+  console.log("sssaaaaavvveee");
   this.routineSpeechValidate();
 
 }
@@ -856,56 +876,351 @@ if(transcript == "حفظ")
 
 
   async routineSpeechValidate(){
-    if (routineArr.length == 5 ){
+    
     if(routineArr[0]==='morning routine')
     {
+      if (routineArr.length == 5 ){
         if(routineArr[1]==='turnOffLight' ||routineArr[1]==='turnOnLight'  )
         {
              if(routineArr[4]==='save'){
-                /// I will call morning routine  
+             this.save_button_action(0);
+
              }
           
         }
+        else{
+           // here alerat with aduio " عذرا، اتبع نفس الطريقة التي بالتعليمات"  
+
+        }
+      }
+      else{
+       // here alerat with aduio " عذرا، اتبع نفس الطريقة التي بالتعليمات" 
+      }
     }
 
     if(routineArr[0]==='night routine')
     {
+      if (routineArr.length == 5 ){
         if(routineArr[1]==='turnOffLight' ||routineArr[1]==='turnOnLight'  )
         {
           if(routineArr[4]==='save'){
-                /// I will call night routine  
+            this.save_button_action(3);
              }
           
         }
+        else{
+          // here alerat with aduio " عذرا، اتبع نفس الطريقة التي بالتعليمات" 
+        }
+    }
+    else{
+      // here alerat with aduio " عذرا، اتبع نفس الطريقة التي بالتعليمات" 
     }
   }
-  if (routineArr.length == 3 ){
+  
+  else
+  
     if(routineArr[0]==='leave routine')
     {
+      if (routineArr.length == 3 ){
+
         if(routineArr[1]==='turnOffLight' ||routineArr[1]==='turnOnLight'  )
         {
              if(routineArr[2]==='0'){
-                /// I will call morning routine  
+              this.save_button_action(1);
              }
           
         }
+        else{
+          // here alerat with aduio " عذرا، اتبع نفس الطريقة التي بالتعليمات" 
+        }
+      }
+      else{
+        // here alerat with aduio " عذرا، اتبع نفس الطريقة التي بالتعليمات" 
+      }
     }
 
     if(routineArr[0]==='back routine')
     {
+      if (routineArr.length == 3 ){
         if(routineArr[1]==='turnOffLight' ||routineArr[1]==='turnOnLight'  )
         {
              if(routineArr[2]==='0'){
-                /// I will call night routine  
+              this.save_button_action(2);
              }
           
         }
+        else{
+                  // here alerat with aduio " عذرا، اتبع نفس الطريقة التي بالتعليمات" 
+
+        }
+      }
+      else {
+                // here alerat with aduio " عذرا، اتبع نفس الطريقة التي بالتعليمات" 
+
+      }
     }
 
-  }
+  
+  
 
 
 }
+
+save_button_action(index) {
+  var lat , lng , i;
+ 
+  var user = firebase.auth().currentUser;
+  console.log(user.uid)
+  var routineName,routineTime , disRoutine
+  var tmp_str = "" ;
+  var actions = [];
+  var i ,j;
+  var flag = false
+  var flagH = false ;
+  firebase.database().ref('mgnUsers/'+firebase.auth().currentUser.uid).once('value',(snap)=>{ 
+  
+   lat= snap.val().latitude;
+   lng= snap.val().longitude;})
+
+  
+
+      //var routineTable =  firebase.database().ref('routine/'); 
+   // this.setActionTable();
+      
+      if(index==0) {
+          flagH = false ;
+          routineName = "morning routine";
+ 
+          disRoutine = "الوضع الصباحي";
+
+          if(routineArr[1]==='turnOffLight'){
+            actions.push("001");
+          }
+          else{
+            actions.push("002");
+          }
+          routineTime = routineArr[2]+":"+routineArr[3];
+  
+   
+  
+      }// end if for morning routine
+       else if(index==1) {
+        
+           
+           if(lat === 0 && lng===0){
+            
+                //here alerat with aduio "عذراً، عليك تفعيل خاصية الموقع حتى يتم انشاء وضع الخروج",
+                
+           }// end if check location
+           else {
+           
+          routineName="leave routine";
+         
+           disRoutine = "وضع الخروج";
+           flag = true
+           routineTime = "empty"
+           // check location
+         
+          
+                  if(routineArr[1]==='turnOffLight'){
+                    actions.push("001");
+                  }
+                  else{
+                    actions.push("002");
+                  }
+      }//end loop
+
+      }// end if for leave routine
+       else if(index==2) {
+          if(lat === 0 && lng===0){
+             
+            
+               //here alerat with aduio "عذراً، عليك تفعيل خاصية الموقع حتى يتم انشاء وضع العودة",
+           }
+           else {
+            
+           
+          routineName="come routine";
+        
+          disRoutine="وضع العودة";
+          routineTime = "empty"
+          flag =true
+          // set If cindition for check location
+          
+                  if(routineArr[1]==='turnOffLight'){
+                    actions.push("001");
+                  }
+                  else{
+                    actions.push("002");
+                  }
+      }//end loop
+  
+      }//end if for come routine
+       else if(index==3) {
+        
+          flagH=false;
+          routineName="night routine";
+         
+          disRoutine="الوضع المسائي";
+
+          if(routineArr[1]==='turnOffLight'){
+            actions.push("001");
+          }
+          else{
+            actions.push("002");
+          }
+
+          routineTime = routineArr[2]+":"+routineArr[3];
+
+  
+    
+      }//end if for night routine
+     
+ 
+       if (( routineName == "morning routine" || routineName == "night routine" )){
+        
+           console.log("in if save")
+           var userRoutineArr = [];
+           var trueSave=false;
+           firebase.database().ref('/routine').once("value",snapshot=>{
+              snapshot.forEach(item => {
+               var temp = item.val();
+               if(temp.userID == user.uid){
+                   console.log("yes have user");
+                  userRoutineArr.push(temp.name);
+                  console.log(temp.name);
+               }//end if 
+              });//end forEach
+      
+          
+        
+          if(userRoutineArr.indexOf(routineName)!=-1){
+              console.log("enter if check")
+              firebase.database().ref('/routine').once("value" , (snapshot)=>{
+                  snapshot.forEach(item => {
+                      
+                   var temp = item.val();
+                   console.log(temp);
+                   if(temp.userID == user.uid && temp.name == routineName){
+                       var theId = item.key;
+              
+                  
+                   firebase.database().ref('routine/'+theId).update(  {
+                      name: routineName,
+                     time: routineTime,
+                      actionsID: actions,
+                      day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                      userID: user.uid,
+                      status: 1,
+        
+                    }); 
+                   
+                 
+                
+                   }//end if 
+                  });//end forEach
+          
+               });//end snapshot..
+               }
+          else {
+              firebase.database().ref('routine/').push(
+                  {
+                    name: routineName,
+                    time: routineTime,
+                    actionsID: actions,
+                    day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                    userID: user.uid,
+                    status: 1,
+      
+                  })//end set routine.
+                  
+                 
+          }
+       
+     });//end snapshot..
+    
+       
+  
+  //here alerat with aduio "تم حفظ  " + disRoutine
+ 
+       
+    
+         
+     
+   }//end set morning or night routine.
+
+
+   //Leave come Firebase
+    else if(routineName == "leave routine" || routineName == "come routine" 
+                  && user.longitude != 0 && user.latitude !=0 ){
+                      var userRoutineArr = [];
+                      firebase.database().ref('/routine').once("value",snapshot=>{
+                         snapshot.forEach(item => {
+                          var temp = item.val();
+                          if(temp.userID == user.uid){
+                              console.log("yes have user");
+                             userRoutineArr.push(temp.name);
+                             console.log(temp.name);
+                          }//end if 
+                         });//end forEach
+                 
+                     
+                   
+                     if(userRoutineArr.indexOf(routineName)!=-1){
+                         console.log("enter if check")
+                         firebase.database().ref('/routine').once("value" , (snapshot)=>{
+                             snapshot.forEach(item => {
+                                 
+                              var temp = item.val();
+                              console.log(temp);
+                              if(temp.userID == user.uid && temp.name == routineName){
+                                  var theId = item.key;
+                         
+                             //Morning and night firebase
+                              firebase.database().ref('routine/'+theId).update(  {
+                                 name: routineName,
+                                time: routineTime,
+                                 actionsID: actions,
+                                 day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                                 userID: user.uid,
+                                 status: 1,
+                   
+                               }); 
+                              
+                            
+                           
+                              }//end if 
+                             });//end forEach
+                     
+                          
+                          
+                          });//end snapshot..
+                          
+          }
+          else{
+          firebase.database().ref('routine/').push(
+              {
+                name: routineName,
+                time: routineTime,
+                actionsID: actions,
+                day: ["Sun","Mon","Tue","Wed","Thurs","Fri","Sat"],
+                userID: user.uid,
+                status: 1,
+  
+              })//end set routine. 
+          
+          }  });//end snapshot..
+        
+         // here alerat with aduio "تم حفظ  " + disRoutine
+         
+    
+      console.log("save routine");
+      
+
+     
+  }
+}
+
 
   startRecording = async () => {
     // console.log(recording)
@@ -972,66 +1287,7 @@ if(transcript == "حفظ")
     const toggleIndexValue = this.props.toggle2;
     this.props.dispatch({type : 'TOGGLE', index : 'toggle2', value: !toggleIndexValue });
 
-    // new Promise((resolve, reject) => {
-    //
-    //   let theId;
-    //   let routineName = routineInfo[toggleIndex].name;
-    //   let user = firebaseInitial.auth().currentUser;
-    //   let  userRoutineArr =[];
-    //   let alertDisplay = false;
-    //   let returnToggleValue = !toggleIndexValue;
-    //   if (returnToggleValue){
-    //     firebaseInitial.database().ref('/routine').on("value",snapshot=>{
-    //       snapshot.forEach(item => {
-    //         let temp = item.val();
-    //         if(temp.userID == user.uid){
-    //
-    //           userRoutineArr.push(temp.name);
-    //         }//end if
-    //         if(userRoutineArr.indexOf(routineName)!= -1){
-    //           theId = item.key;
-    //           firebaseInitial.database().ref('routine/'+theId).update(  {
-    //             status: 1,
-    //
-    //           });
-    //           resolve(returnToggleValue);
-    //         }
-    //
-    //       });//end forEach
-    //       if (userRoutineArr.indexOf(routineName)== -1){
-    //
-    //         if(!alertDisplay)
-    //         {
-    //           Alert.alert("عذراً", routineInfo[toggleIndex].alert);
-    //           alertDisplay = true;
-    //           resolve(!returnToggleValue);
-    //         }
-    //       }
-    //     }); //end snapshot..
-    //
-    //   }
-    //   else {
-    //     firebaseInitial.database().ref('/routine').on("value",snapshot=>{
-    //       snapshot.forEach(item => {
-    //         let temp = item.val();
-    //         if(temp.userID == user.uid){
-    //
-    //           userRoutineArr.push(temp.name);
-    //         }//end if
-    //         if(userRoutineArr.indexOf(routineName)!= -1){
-    //           theId = item.key;
-    //           firebaseInitial.database().ref('routine/'+theId).update(  {
-    //             status: 0,
-    //           });
-    //         }
-    //         resolve(returnToggleValue);
-    //       });//end forEach
-    //     }); //end snapshot..
-    //   }
-    // }).then((response) => {
-    //   console.log(response)
-    //   this.props.dispatch({type : 'TOGGLE', index : 'toggle2', value: response});
-    // });
+    
 
   }
 
