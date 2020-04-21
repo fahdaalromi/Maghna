@@ -28,36 +28,36 @@ export default class reportScreen extends Component {
         console.log(props);
         this.state = {
             show_shape: true,
+            profile_percent:100,
             profile_color: '#ff3126',
             curTime:0,
             // this screen I retrieve the value 
             amount:0,
             show_click:true, 
             read:false,
-            isPlaying: true,
-            volume: 1.0,
-
+           
         }
 
     }
     
     async componentDidMount(){
         // making sure that the speeches are not interleaved
-        this.pause();
+        this.getAudio();
         this.didBlurSubscription = this.props.navigation.addListener(
             'didBlur',
             () => this.pause()
-          )
-          this.didFocusSubscription = this.props.navigation.addListener(
+        )
+        this.didFocusSubscription = this.props.navigation.addListener(
             'didFocus',
             () => this.replay()
-          )
+        )
       
         this._unsubscribe = this.props.navigation.addListener('willFocus',() => {
             this._calcuateConsumptionAndReport();
         });
 
         // await this.wait(900000);
+        // await this.sendSpeechNotification(); 
         const content = await AsyncStorage.getItem('TTSReport');
         // alert("sdfsdf");
         console.log(content);
@@ -177,7 +177,7 @@ export default class reportScreen extends Component {
          
             if (curTime !== null && amount !==  0 ) {
 
-                let workingHours = amount/6 ;
+                let workingHours = curTime*1000000 ;
 
                 let bill = 10
                 let totalConsuming;
@@ -213,6 +213,7 @@ export default class reportScreen extends Component {
 
                 this.setState({profile_color : profileColor,profile_percent:totalConsuming},() => {
                     this.getAudio();
+                    this.setState({show_shape:true});
                 }); 
             }  
             else
