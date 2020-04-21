@@ -53,8 +53,9 @@ export default class reportScreen extends Component {
       
         this._unsubscribe = this.props.navigation.addListener('willFocus',() => {
             this._calcuateConsumptionAndReport();
+     
         });
-
+  
         // await this.wait(900000);
         // await this.sendSpeechNotification(); 
         const content = await AsyncStorage.getItem('TTSReport');
@@ -77,10 +78,10 @@ export default class reportScreen extends Component {
     async pause(){
         await soundObject.pauseAsync()
     }
-    getAudio () {  
+    getAudio (totalConsuming) {  
         // Read report from calculate total consumption so if there is no consumption no reading
         let fileURL = '';    
-        const text =  '  عزيزي المُسْتَخْدِم إجْمَالِي إسْتِهْلاكِكْ هُوَ ' +this.state.profile_percent +
+        const text =  '  عزيزي المُسْتَخْدِم إجْمَالِي إسْتِهْلاكِكْ هُوَ ' +totalConsuming+
         'بِالمِئَة مِن مُجْمَلِ فَاتُورَتِكَ المُدخَلهْ وَتَفْصِيْلْ الْإسْتِهْلاكْ هُوَ  الإنَارَه 100 بِالمِئَة       ';
 
         axios.post(`http://45.32.251.50`,  {text} )
@@ -211,10 +212,10 @@ export default class reportScreen extends Component {
                 }
 
                 this.setState({profile_color : profileColor,profile_percent:totalConsuming},() => {
-              
+                 
                 }); 
 
-                this.getAudio();
+                this.getAudio(totalConsuming);
             }  
             else
             {
