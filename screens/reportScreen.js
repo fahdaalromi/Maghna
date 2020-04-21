@@ -17,7 +17,7 @@ import axios from 'axios'
 import { Audio } from 'expo-av';
 import NavigationService from '../navigation/NavigationService';
 
-
+const soundObject = new Audio.Sound();
 export default class reportScreen extends Component {   
 
     //here only conditional rendering for lamb if amount = 0 and if not 
@@ -33,21 +33,36 @@ export default class reportScreen extends Component {
             curTime:0,
             // this screen I retrieve the value 
             amount:0,
-            show_click:true
-
+            show_click:true, 
+            read:false,
+           
         }
 
     }
     
     async componentDidMount(){
         // making sure that the speeches are not interleaved
-
+        this.getAudio();
+        this.didBlurSubscription = this.props.navigation.addListener(
+            'didBlur',
+            () => this.pause()
+        )
+        this.didFocusSubscription = this.props.navigation.addListener(
+            'didFocus',
+            () => this.replay()
+        )
+      
         this._unsubscribe = this.props.navigation.addListener('willFocus',() => {
             this._calcuateConsumptionAndReport();
         });
 
-        await this.wait(900000);
-        await this.sendSpeechNotification(); 
+        // await this.wait(900000);
+        // await this.sendSpeechNotification(); 
+        const content = await AsyncStorage.getItem('TTSReport');
+        // alert("sdfsdf");
+        console.log(content);
+
+        this.setState({read:content});
     }
 
     async  wait(ms) {  
@@ -56,19 +71,25 @@ export default class reportScreen extends Component {
         });
     } 
  
+    async replay(){
+        await soundObject.replayAsync()
+    }
 
+    async pause(){
+        await soundObject.pauseAsync()
+    }
     getAudio () {  
         // Read report from calculate total consumption so if there is no consumption no reading
         let fileURL = '';    
         const text =  '  عزيزي المُسْتَخْدِم إجْمَالِي إسْتِهْلاكِكْ هُوَ ' +this.state.profile_percent +
-        'بِالمِئَة مِن مُجْمَلِ فَاتُورَتِكَ المُدخَلهْ وَتَفْصِيْلْ الْإسْتِهْلاكْ هُوَ  الإنَارَه 100 بِالمِئَة التِّلْفَازْ صِفْرٌ بِالمِئَة البَّوابَهْ صِفْر  بِالمِئَة';
+        'بِالمِئَة مِن مُجْمَلِ فَاتُورَتِكَ المُدخَلهْ وَتَفْصِيْلْ الْإسْتِهْلاكْ هُوَ  الإنَارَه 100 بِالمِئَة       ';
 
         axios.post(`http://45.32.251.50`,  {text} )
           .then(res => {
-             console.log("----------------------xxxx--------------------------"+res.data);
+            // console.log("----------------------xxxx--------------------------"+res.data);
             fileURL = res.data;
-                console.log(fileURL);
-                this.playAudio(fileURL); 
+            console.log(fileURL);
+            this.playAudio(fileURL); 
 
           })
     }
@@ -84,11 +105,14 @@ export default class reportScreen extends Component {
             playThroughEarpieceAndroid: false,
             staysActiveInBackground: true,
         });
-
-        const playbackObject = await Audio.Sound.createAsync(
-            { uri: fileURL },
-            { shouldPlay: true }
-        );
+      
+        try {
+            await soundObject.loadAsync({uri: fileURL});
+            await soundObject.playAsync();
+             // Your sound is playing!
+        } catch (error) {
+        // An error occurred!
+        }
     
     }
 
@@ -205,15 +229,17 @@ export default class reportScreen extends Component {
     }
 
     open_profile() {
-
         
         NavigationService.navigate('profile');
     
         // this.props.navigation.dispatch(navigateAction);
     }  
 
-    componentWillUnMount(){
+    async componentWillUnMount(){
         this._unsubscribe();
+        this.didBlurSubscription.remove()
+        this.didFocusSubscription.remove()
+        await soundObject.stopAsync();
    
     }
     
@@ -222,7 +248,10 @@ export default class reportScreen extends Component {
         const {
             profile_percent,
             profile_color
-          } = this.state    
+          } = this.state   
+        
+        // if(this.state.read == true)
+        //     this.getAudio();
 
         return (
             <View style={styles.container}>

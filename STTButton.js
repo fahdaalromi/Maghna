@@ -13,13 +13,10 @@ import { Audio } from "expo-av";
 import NavigationService from "./navigation/NavigationService";
 import * as Helper from "./components/Helper";
 import * as firebase from "firebase";
-import {Button} from "react-native-elements";
+import {Button, ThemeConsumer} from "react-native-elements";
 import { connect } from 'react-redux';
 import moment from "moment";
 // Here I use this time, I open the package
-
-
-
 const rnTimer = require("react-native-timer");
 
 
@@ -54,14 +51,14 @@ const styles = StyleSheet.create({
   },
   Indicator: {
     alignSelf: 'center',
-    width: 110,
-    height: 110,
+    width: 150,
+    height: 150,
     marginTop: 110,
   },
   Indicator1: {
     alignSelf: 'center',
-    width: 110,
-    height: 110,
+    width: 150,
+    height: 150,
     marginTop: 110,
   },
 
@@ -84,12 +81,45 @@ class SpeechToTextButton extends Component {
       //this variable here in STTButton I use to store the duration in seconds in
       curTime: 0,
       isOn: true,
+      TTSInstruction: false,
+      TTSConnectedDevices: false,
+      TTSReport: false,
       
       info:"",
 
     };
 
   }
+
+
+
+  TTSInstruction = async () => {
+    try {
+      await AsyncStorage.setItem("TTSInstruction", "" + this.state.TTSInstruction);
+    } catch (error) {
+      // Error saving data
+    }
+  };
+
+
+  TTSConnectedDevices= async () => {
+    try {
+      await AsyncStorage.setItem("TTSConnectedDevices", "" + this.state.TTSConnectedDevices);
+    } catch (error) {
+      // Error saving data
+    }
+  };
+
+
+  TTSReport= async () => {
+    try {
+      await AsyncStorage.setItem("TTSReport", "" + this.state.TTSReport);
+    } catch (error) {
+      // Error saving data
+    }
+  };
+
+
 
   storeData = async () => {
     try {
@@ -436,10 +466,29 @@ class SpeechToTextButton extends Component {
           // console.log(error);
         });
     }
-
+    if (transcript == "قراءت التعليمات") {
+      this.setState({TTSInstruction:true});
+      this.TTSInstruction();
+      NavigationService.navigate("instructions");
+    }
 
     if (transcript == "التعليمات") {
+      this.setState({TTSInstruction:false});
+      this.TTSInstruction();
       NavigationService.navigate("instructions");
+    }
+
+    if (transcript == "قراءت التقارير") {
+      this.setState({TTSReport:true});
+      this.TTSReport();
+      NavigationService.navigate("report");
+    }
+
+
+    if(transcript == "قراءت الاجهزه المتصله"){
+      this.setState({TTSConnectedDevices:true});
+      this.TTSConnectedDevices();
+      NavigationService.navigate("supdevices");
     }
 
   
@@ -457,9 +506,13 @@ class SpeechToTextButton extends Component {
       NavigationService.navigate("Home");
     }
     if (transcript == "التقارير") {
+      this.setState({TTSReport:false});
+      this.TTSReport();
       NavigationService.navigate("report");
     }
     if(transcript == "الاجهزه المتصله"){
+      this.setState({TTSConnectedDevices:true});
+      this.TTSConnectedDevices();
       NavigationService.navigate("supdevices");
     }
     //starting from here all the methods and variables related to homescreen
@@ -1262,6 +1315,7 @@ save_button_action(index) {
 
   click_btn = async () => {
     alert("hi");
+
     let routineInfo = {
       toggle1: {
         name: "come routine",
