@@ -28,7 +28,7 @@ export default class reportScreen extends Component {
         console.log(props);
         this.state = {
             show_shape: true,
-            profile_percent:100,
+            profile_percent:0,
             profile_color: '#ff3126',
             curTime:0,
             // this screen I retrieve the value 
@@ -42,7 +42,6 @@ export default class reportScreen extends Component {
     
     async componentDidMount(){
         // making sure that the speeches are not interleaved
-        this.getAudio();
         this.didBlurSubscription = this.props.navigation.addListener(
             'didBlur',
             () => this.pause()
@@ -177,7 +176,7 @@ export default class reportScreen extends Component {
          
             if (curTime !== null && amount !==  0 ) {
 
-                let workingHours = curTime*1000000 ;
+                let workingHours = amount/6 ;
 
                 let bill = 10
                 let totalConsuming;
@@ -212,9 +211,10 @@ export default class reportScreen extends Component {
                 }
 
                 this.setState({profile_color : profileColor,profile_percent:totalConsuming},() => {
-                    this.getAudio();
-                    this.setState({show_shape:true});
+              
                 }); 
+
+                this.getAudio();
             }  
             else
             {
@@ -227,7 +227,6 @@ export default class reportScreen extends Component {
         } 
         
     }
-
     open_profile() {
         
         NavigationService.navigate('profile');
@@ -251,7 +250,7 @@ export default class reportScreen extends Component {
           } = this.state   
         
         // if(this.state.read == true)
-        //     this.getAudio();
+
 
         return (
             <View style={styles.container}>
