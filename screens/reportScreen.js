@@ -54,7 +54,7 @@ export default class reportScreen extends Component {
         this._unsubscribe = this.props.navigation.addListener('willFocus',() => {
             this._calcuateConsumptionAndReport();
      
-        });
+        }); 
   
         // await this.wait(900000);
         // await this.sendSpeechNotification(); 
@@ -166,9 +166,9 @@ export default class reportScreen extends Component {
     }
 
     _calcuateConsumptionAndReport = async() => {
-  
+    
         try {     
-
+            //Firebase data 
             const curTime = await AsyncStorage.getItem('currentTime');
                         
             const billValue = await AsyncStorage.getItem('amount');
@@ -176,9 +176,8 @@ export default class reportScreen extends Component {
             const amount =  JSON.parse(billValue).value;
          
             if (curTime !== null && amount !==  0 ) {
-
-                let workingHours = amount/6 ;
-
+       // We choose to deal with the seconds as hours but we divide it by 6 for reasonable duration for testing purpose
+                let workingHours =curTime/20 ;
                 let bill = 10
                 let totalConsuming;
                 let watts=40;
@@ -212,10 +211,10 @@ export default class reportScreen extends Component {
                 }
 
                 this.setState({profile_color : profileColor,profile_percent:totalConsuming},() => {
-                 
+                    this.getAudio(totalConsuming);
                 }); 
 
-                this.getAudio(totalConsuming);
+    
             }  
             else
             {

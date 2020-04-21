@@ -194,9 +194,10 @@ export default class profileScreen extends Component {
 
     // if the user wants to change his password
         //make sure the length is suitable
-      if (this.state.changePassword && this.state.password.length < 6 && this.state.password.length > 0) {
+      if (this.state.changePassword && this.state.password.length < 8 && this.state.password.length > 0
+        && this.state.password.length > 20 ) {
         console.log('short password');
-        this.setState({formErrorMsg: 'يجب أن تكون كلمة المرور أكثر من ٦ خانات'})
+        this.setState({formErrorMsg: 'يجب أن تكون كلمة المرور أكثر من ٧ خانات'})
         this.setState({errorMsgVisibilty: 'flex'})
         return;
       }
@@ -260,7 +261,9 @@ export default class profileScreen extends Component {
             .update({name: this.state.name,})
           }*/
 // Here i store it in firebase it is easier to retrieve thaan solving this error what do u thinl ? No. It Please wait a bit. Trying to understand where ialert is from// Bcz we have nto not put any
-          if (this.state.amount != 0){
+         
+
+if (this.state.amount != 0 && this.state.amount <= 9999){
             firebase.database()
             .ref('mgnUsers/'+this.state.uID)
             .update({amount: this.state.amount})
@@ -273,6 +276,7 @@ export default class profileScreen extends Component {
 
 
         }else {
+          alert("يجب ان تكون الفاتوره ضمن النطاق من ٠ الى ٩٩٩٩");
           console.log("user changePassword val "+this.state.changePassword);
           console.log(this.state.password );
           console.log(this.state.confPassword);

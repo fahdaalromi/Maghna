@@ -56,7 +56,7 @@ export default class  supdevicesScreen extends Component {
 
   async componentDidMount(){
 
-    this.getAudio();
+
     this.didBlurSubscription = this.props.navigation.addListener(
       'didBlur',
       () => this.pause()
@@ -77,6 +77,7 @@ export default class  supdevicesScreen extends Component {
           this.getAudio(); 
         }
         else {
+            this.FgetAudio();
             this.setState({lambColor:'#6FA0AF'});
             this.setState({textColor:styles.colseText});
         }
@@ -106,7 +107,7 @@ export default class  supdevicesScreen extends Component {
 
       axios.post(`http://45.32.251.50`,  {text} )
         .then(res => {
-          console.log("----------------------xxxx--------------------------"+res.data);
+          console.log("----------------------Hi--------------------------"+res.data);
           fileURL = res.data;
               console.log(fileURL);
 
@@ -115,6 +116,22 @@ export default class  supdevicesScreen extends Component {
       })
   }
 
+
+  async FgetAudio () {
+     
+    let fileURL = '';
+    const text =  ' الأجهزة المُتَّصِلَه ، الإنَارَهْ ،غَيْرْ مُتَّصِلَه ';
+
+    axios.post(`http://45.32.251.50`,  {text} )
+      .then(res => {
+        console.log("----------------------xxxx--------------------------"+res.data);
+        fileURL = res.data;
+            console.log(fileURL);
+
+            this.playAudio(fileURL);
+
+    })
+}
   async playAudio(fileURL){
 
 
@@ -270,8 +287,6 @@ async componentWillUnMount(){
 
 render() {
 
-    if(this.state.lampStatus == true)
-      this.getAudio();
     return (
 
       // here we need to specify which to read.

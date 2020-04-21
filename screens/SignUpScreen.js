@@ -122,6 +122,8 @@ validateUser = (name) => {
     }
 
   }  else {
+    if(/\d/.test(myString))
+    this.setState({formErrorMsg: 'اسم المستخدم يحتوي على ارقام  '})
     this.setState({nameBorder:'#3E82A7'})
     this.setState({errorMsgVisibilty: 'none'})
   }
@@ -187,7 +189,7 @@ handelSignUp =() =>{
 
 
   if (this.state.password.length < 8) {
-    this.setState({formErrorMsg: ' يجب أن تكون كلمة المرور أكثر من ٨ خانات'})
+    this.setState({formErrorMsg: ' يجب أن تكون كلمة المرور أكثر من ٧ خانات'})
     this.setState({errorMsgVisibilty: 'flex'})
     this.setState({passwordBorder:'red'})
 
