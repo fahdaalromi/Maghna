@@ -17,7 +17,7 @@ import firebase from 'firebase';
 import { Audio } from 'expo-av';
 import * as Helper from "../components/Helper";
 
-
+const soundObject = new Audio.Sound();
 
 export default class  supdevicesScreen extends Component {
 
@@ -47,93 +47,96 @@ export default class  supdevicesScreen extends Component {
       nameBorders:"#3E82A7",
       isLambConnected :'غير متصله',
       isLambOn : 'مغلقه' ,
-   lambColor :'#2cb457',
+      lambColor :'#2cb457',
       textColor: styles.openText,
       read : false,
       playbackInstance: null,
     }
-}
+  }
 
+  async componentDidMount(){
 
+    this.getAudio();
+    this.didBlurSubscription = this.props.navigation.addListener(
+      'didBlur',
+      () => this.pause()
+    )
+    this.didFocusSubscription = this.props.navigation.addListener(
+      'didFocus',
+      () => this.replay()
+    )
 
-    componentDidMount(){
+    this._unsubscribe = this.props.navigation.addListener('willFocus',async() => {
 
-      this._unsubscribe = this.props.navigation.addListener('willFocus',async() => {
+        var lampStatus = await Helper.getLightStatus();
 
- 
+        if(lampStatus==true)
+        {
+          this.setState({lambColor :'#2cb457'});
+          this.setState({textColor :styles.openText});
+          this.getAudio(); 
+        }
+        else {
+            this.setState({lambColor:'#6FA0AF'});
+            this.setState({textColor:styles.colseText});
+        }
 
-          var lampStatus = await Helper.getLightStatus();
+    });
 
-          if(lampStatus==true)
-          {
-            this.getAudio();
-            this.setState({lambColor :'#2cb457'});
-            this.setState({textColor :styles.openText});
-          }
-          else {
-              this.setState({lambColor:'#6FA0AF'});
-              this.setState({textColor:styles.colseText});
-          }
+    this.props.navigation.setParams({
+        headerLeft: (<TouchableOpacity onPress={this.handelSignOut}>
+          <SimpleLineIcons name="logout" size={24} color='white' style={{marginLeft:15}} />
+        </TouchableOpacity>)
+    })
 
-      });
+  }
 
-      this.props.navigation.setParams({
-          headerLeft: (<TouchableOpacity onPress={this.handelSignOut}>
-            <SimpleLineIcons name="logout" size={24} color='white' style={{marginLeft:15}} />
-          </TouchableOpacity>)
-      })
+  async replay(){
+    await soundObject.replayAsync()
+  }
 
-    }
+  async pause(){
+      await soundObject.pauseAsync()
+  }
 
-    async getAudio () {
-      // Read report
-
-
+  async getAudio () {
+     
       let fileURL = '';
       const text =  ' الأجهزة المُتَّصِلَه ، الإنَارَهْ ، مُتَّصِلَه ';
 
+      axios.post(`http://45.32.251.50`,  {text} )
+        .then(res => {
+          console.log("----------------------xxxx--------------------------"+res.data);
+          fileURL = res.data;
+              console.log(fileURL);
 
-             axios.post(`http://45.32.251.50`,  {text} )
-               .then(res => {
-                  console.log("----------------------xxxx--------------------------"+res.data);
-                 fileURL = res.data;
-                     console.log(fileURL);
+              this.playAudio(fileURL);
 
-                     this.playAudio(fileURL);
+      })
+  }
 
-               })
-             }
-             async playAudio(fileURL){
-
-
-               await Audio.setAudioModeAsync({
-                 interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
-                playsInSilentModeIOS: true,
-                playsInSilentLockedModeIOS: true,
-                shouldDuckAndroid: true,
-                interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
-                playThroughEarpieceAndroid: false,
-                staysActiveInBackground: true,
-              });
+  async playAudio(fileURL){
 
 
+    await Audio.setAudioModeAsync({
+      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+      playsInSilentModeIOS: true,
+      playsInSilentLockedModeIOS: true,
+      shouldDuckAndroid: true,
+      interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+      playThroughEarpieceAndroid: false,
+      staysActiveInBackground: true,
+    });
 
-
-
-              // OR
-              const playbackInstance = await Audio.Sound.createAsync(
-                { uri: fileURL },
-                { shouldPlay: true }
-              );
-
-
-
-         //http://localhost/fiels/output-0.6839748394381258.mp3
-           }
-
-
-
-
+      // OR
+      try {
+        await soundObject.loadAsync({uri: fileURL});
+        await soundObject.playAsync();
+          // Your sound is playing!
+      } catch (error) {
+      // An error occurred!
+      }
+    }
 
     // async showLambStatus(){
     //   axios.get('https://192.168.100.17/api/gFkvbAB2-8SKjoqdgiTg5iWEHnpRtpo-gR9WVzoR/lights/3')
@@ -204,7 +207,7 @@ export default class  supdevicesScreen extends Component {
     // }
 
 
-UNSAFE_componentWillMount(){
+  UNSAFE_componentWillMount(){
 
   const firebaseConfig = {
 
@@ -218,26 +221,24 @@ UNSAFE_componentWillMount(){
     appId: "1:244460583192:web:f650fa57532a682962c66d",
 
 
-/*
-apiKey: "AIzaSyBUBKLW6Wrk48NQ_TcgUerucTZFphw6l-c",
-authDomain: "maghna-62c55.firebaseapp.com",
-databaseURL: "https://maghna-62c55.firebaseio.com",
-projectId: "maghna-62c55",
-storageBucket: "maghna-62c55.appspot.com",
-messagingSenderId: "21464439338",
-appId: "1:21464439338:web:8c6bb486fb3673e5d14153",
-measurementId: "G-R3BQPCTCTM"
-  */
+    /*
+    apiKey: "AIzaSyBUBKLW6Wrk48NQ_TcgUerucTZFphw6l-c",
+    authDomain: "maghna-62c55.firebaseapp.com",
+    databaseURL: "https://maghna-62c55.firebaseio.com",
+    projectId: "maghna-62c55",
+    storageBucket: "maghna-62c55.appspot.com",
+    messagingSenderId: "21464439338",
+    appId: "1:21464439338:web:8c6bb486fb3673e5d14153",
+    measurementId: "G-R3BQPCTCTM"
+      */
   };
 
 
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
-}
+  }
 
 }
-
-
 
 handelSignOut =() =>{
   var {navigation}=this.props;
@@ -259,80 +260,75 @@ handelSignOut =() =>{
 
 };
 
-  // async componentWillUnmount(){
-  //   this._unsubscribe();
-  //   const { playbackInstance } = this.state;
-  //   await playbackInstance.pauseAsync();
-  // }
+async componentWillUnMount(){
+  this._unsubscribe();
+  this.didBlurSubscription.remove()
+  this.didFocusSubscription.remove()
+  await soundObject.stopAsync();
 
-  render() {
+}
 
+render() {
 
-
+    if(this.state.lampStatus == true)
+      this.getAudio();
     return (
 
+      // here we need to specify which to read.
+        <View style={{ width:'100%' , height:'100%', flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: '#F7FAFF'}}>
 
-// here we need to specify which to read.
-    <View style={{ width:'100%' , height:'100%', flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: '#F7FAFF'}}>
+          <ImageBackground source={require('./otherhalf.png')} style={{ width:'100%' , height:'120%', flex: 1, justifyContent: "center", alignItems: "center"}}>
 
-    <ImageBackground source={require('./otherhalf.png')} style={{ width:'100%' , height:'120%', flex: 1, justifyContent: "center", alignItems: "center"}}>
+          <ScrollView  style={styles.scrollView}>
 
-    <ScrollView  style={styles.scrollView}>
+          <View style={styles.scontainer}>
 
-    <View style={styles.scontainer}>
+          <Text style={this.state.textColor}>الإنارة</Text>
+          <MaterialCommunityIcons style={{ right:190, bottom: 17}} name="lightbulb-on-outline" size={55} color= {this.state.lambColor} />
 
-    <Text style={this.state.textColor}>الإنارة</Text>
-    <MaterialCommunityIcons style={{ right:190, bottom: 17}} name="lightbulb-on-outline" size={55} color= {this.state.lambColor} />
-
-    </View>
-
-
-    <View style={styles.scontainer}>
-    <Text style={styles.NotConnText}>التلفاز</Text>
-
-    <FontAwesome style={{ right:190, bottom: 17}} name="tv" size={55} color= {'grey'} />
-    </View>
+          </View>
 
 
-    <View style={styles.scontainer}>
-    <Text style={styles.NotConnText}>البوابة</Text>
+          <View style={styles.scontainer}>
+          <Text style={styles.NotConnText}>التلفاز</Text>
 
-    <MaterialCommunityIcons style={{ right:190, bottom: 17}} name="garage" size={55} color= {'grey'} />
-    </View>
-
-
-    <View style={styles.scontainer}>
-    <Text style={styles.NotConnText}>الانترنت</Text>
-
-    <Feather style={{ right:190, bottom: 17}} name="wifi" size={55} color= {'grey'} />
-    </View>
-
-    <View style={styles.scontainer}>
-    <Text style={styles.NotConnText}>التكييف</Text>
-    < Entypo style={{ right:190, bottom: 17}} name="air" size={55} color= {'grey'} />
-    </View>
+          <FontAwesome style={{ right:190, bottom: 17}} name="tv" size={55} color= {'grey'} />
+          </View>
 
 
-    <View style={styles.scontainer}>
-    <Text style={styles.NotConnText}>آلة القهوة</Text>
-    <MaterialCommunityIcons style={{ right:190, bottom: 17}} name="coffee-outline" size={55} color= {'grey'} />
-    </View>
+          <View style={styles.scontainer}>
+          <Text style={styles.NotConnText}>البوابة</Text>
 
-    </ScrollView>
-
-    </ImageBackground>
+          <MaterialCommunityIcons style={{ right:190, bottom: 17}} name="garage" size={55} color= {'grey'} />
+          </View>
 
 
+          <View style={styles.scontainer}>
+          <Text style={styles.NotConnText}>الانترنت</Text>
+
+          <Feather style={{ right:190, bottom: 17}} name="wifi" size={55} color= {'grey'} />
+          </View>
+
+          <View style={styles.scontainer}>
+          <Text style={styles.NotConnText}>التكييف</Text>
+          < Entypo style={{ right:190, bottom: 17}} name="air" size={55} color= {'grey'} />
+          </View>
 
 
-    </View>
+          <View style={styles.scontainer}>
+          <Text style={styles.NotConnText}>آلة القهوة</Text>
+          <MaterialCommunityIcons style={{ right:190, bottom: 17}} name="coffee-outline" size={55} color= {'grey'} />
+          </View>
+
+          </ScrollView>
+
+          </ImageBackground>
+
+      </View>
     );
-}
+  }
 
 }
-
-
-
 
 supdevicesScreen.navigationOptions = ({navigation})=> ({
 
@@ -349,17 +345,12 @@ supdevicesScreen.navigationOptions = ({navigation})=> ({
     backgroundColor: '#8BC4D0',
     color:'white'
 
- }
-,
+ },
  headerTitleStyle: {
   color: '#fff'
-}
-,
+},
 
 });
-
-
-
 
 const styles = StyleSheet.create({
 
@@ -403,8 +394,6 @@ const styles = StyleSheet.create({
    borderWidth:1,
    backgroundColor: "#3E82A7",
    //paddingBottom:10
-
-
   },
 
   scrollView: {
