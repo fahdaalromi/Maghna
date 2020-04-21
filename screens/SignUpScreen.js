@@ -101,9 +101,42 @@ validateEmail = (email) => {
 
 
 validateUser = (name) => {
+  let  format =/[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
 
-  let  format =/^[A-Za-z0-9 ]+$/;
+  if(this.state.name != "")
+  {
+    if (this.state.name.length < 20) {
+      if(format.test(this.state.name)){
 
+        this.setState({nameBorder:'red'})
+        this.setState({formErrorMsg: 'اسم المستخدم يحتوي على خانات غير مقبولة'})
+        this.setState({errorMsgVisibilty: 'flex'})
+      }else{
+        this.setState({nameBorder:'#3E82A7'})
+        this.setState({errorMsgVisibilty: 'none'})
+      }
+    }else{
+      this.setState({formErrorMsg: ' يجب أن يكون اسم المستخدم أقل من ٢٠ خانة'})
+      this.setState({errorMsgVisibilty: 'flex'})
+      this.setState({nameBorder:'red'})
+    }
+
+  }  else {
+    this.setState({nameBorder:'#3E82A7'})
+    this.setState({errorMsgVisibilty: 'none'})
+  }
+  
+/*
+  /////////////
+  if(this.state.name != "")
+  {
+    if (this.state.name.length > 20) {
+      this.setState({formErrorMsg: ' يجب أن يكون اسم المستخدم أقل من ٢٠ خانة'})
+      this.setState({errorMsgVisibilty: 'flex'})
+     // this.setState({nameBorder:'red'})
+    }
+      else{
+        this.setState({errorMsgVisibilty: 'none'})
   if(format.test(this.state.name)==false)
   {
   this.setState({nameBorder:'red'})
@@ -113,15 +146,16 @@ validateUser = (name) => {
   else {
     this.setState({nameBorder:'#3E82A7'})
     this.setState({errorMsgVisibilty: 'none'})
-  }
-
-  if(this.state.name == "")
-  {
+  }}
   this.setState({nameBorder:'red'})
+
     }
   else {
-    this.setState({nameBorder:'#91b804'})
+    this.setState({nameBorder:'#3E82A7'})
+    this.setState({errorMsgVisibilty: 'none'})
   }
+  */
+
 }//end validate phone number
 
 identicalPass = (password) => {
