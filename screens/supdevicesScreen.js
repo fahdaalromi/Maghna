@@ -45,7 +45,7 @@ UNSAFE_componentWillMount(){
 
   const firebaseConfig = {
 
-
+/*
     apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
     authDomain: "maghnaapplication.firebaseapp.com",
     databaseURL: "https://maghnaapplication.firebaseio.com",
@@ -53,7 +53,7 @@ UNSAFE_componentWillMount(){
     storageBucket: "maghnaapplication.appspot.com",
     messagingSenderId: "244460583192",
     appId: "1:244460583192:web:f650fa57532a682962c66d",
-
+*/
 
 /*
 apiKey: "AIzaSyBUBKLW6Wrk48NQ_TcgUerucTZFphw6l-c",

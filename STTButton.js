@@ -149,11 +149,104 @@ export default class SpeechToTextButton extends Component {
         name: Platform.OS === 'ios' ? `${Date.now()}.wav` :`${Date.now()}.m4a`,
       })
 
+<<<<<<< Updated upstream
       const { data } = await axios.post('http://localhost:3004/speech', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       })
+=======
+      //here the start
+      rnTimer.setInterval(
+        "duration",
+        () => {
+          this.setState(
+            (prevState) => {
+              // change here ? it works! but the stopping
+              return { curTime: prevState.curTime + 1 };
+            },
+            function () {
+             // console.log(this.state.curTime);
+            }
+          );
+        },
+        1000
+      );
+
+      firebase
+      .database()
+      .ref("mgnUsers/" + firebase.auth().currentUser.uid)
+      .once("value", (snap) => {
+        if (snap.val().isActive === true) {
+          this.analysis("001");
+        }
+      });
+
+    this.analysis("001");
+      axios
+        .put(
+          "http://192.168.1.23/api/4nLoCmufbQULukYCCycoJGWggxzAHVdaRQlwG-zx/lights/2/state",
+          { on: true }
+        )
+        .then((res) => res.json())
+        .then((res) => {
+          RTCCertificate;
+          // console.log(res)
+        })
+        .catch((error) => {
+          console.log();
+        });
+    }
+
+    if (transcript == "ايقاف النور") {
+      Helper.setLightStatus(false);
+
+      // Here the stopping
+      this.storeData();
+
+      console.log("Hi");
+
+      rnTimer.clearInterval("duration");
+      firebase
+        .database()
+        .ref("mgnUsers/" + firebase.auth().currentUser.uid)
+        .once("value", (snap) => {
+          if (snap.val().isActive === true) {
+            this.analysis("002");
+          }
+        });
+      axios
+        .put(
+          "http://192.168.1.23/api/4nLoCmufbQULukYCCycoJGWggxzAHVdaRQlwG-zx/lights/2/state",
+          { on: false }
+        )
+        .then((res) => res.json())
+        .then((res) => {
+          // console.log(res)
+        })
+        .catch((error) => {
+          // console.log(error);
+        });
+    }
+    if (transcript == "قراءت التعليمات") {
+      this.setState({TTSInstruction:true});
+      this.TTSInstruction();
+      NavigationService.navigate("instructions");
+    }
+
+    if (transcript == "التعليمات") {
+      this.setState({TTSInstruction:false});
+      this.TTSInstruction();
+      NavigationService.navigate("instructions");
+    }
+
+    if (transcript == "قراءت التقارير") {
+      this.setState({TTSReport:true});
+      this.TTSReport();
+      NavigationService.navigate("report");
+    }
+
+>>>>>>> Stashed changes
 
       this.setState({ transcript: data.transcript })
     } catch (error) {

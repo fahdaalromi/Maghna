@@ -41,16 +41,22 @@ export default class SignIn extends Component {
   UNSAFE_componentWillMount(){
 
     const firebaseConfig = {
+      apiKey: "AIzaSyCsKoPxvbEp7rAol5m-v3nvgF9t8gUDdNc",
+      authDomain: "maghnatest.firebaseapp.com",
+      databaseURL: "https://maghnatest.firebaseio.com",
+      projectId: "maghnatest",
+      storageBucket: "maghnatest.appspot.com",
+      messagingSenderId: "769071221745",
+      appId: "1:769071221745:web:1f0708d203330948655250" ,
 
-
-    apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
+/*    apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
     authDomain: "maghnaapplication.firebaseapp.com",
     databaseURL: "https://maghnaapplication.firebaseio.com",
     projectId: "maghnaapplication",
     storageBucket: "maghnaapplication.appspot.com",
     messagingSenderId: "244460583192",
     appId: "1:244460583192:web:f650fa57532a682962c66d",
-
+*/
 /*
 apiKey: "AIzaSyBUBKLW6Wrk48NQ_TcgUerucTZFphw6l-c",
 authDomain: "maghna-62c55.firebaseapp.com",

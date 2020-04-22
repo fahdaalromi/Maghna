@@ -25,6 +25,7 @@
     "@react-navigation/stack": "^5.1.1",
     "@react-navigation/web": "~1.0.0-alpha.9",
     "axios": "^0.19.2",
+    "cors": "^2.8.5",
     "expo": "~36.0.0",
     "expo-asset": "~8.0.0",
     "expo-av": "^8.0.0",
@@ -59,6 +60,14 @@
     "react-navigation": "^4.2.2",
     "react-navigation-stack": "~1.10.3",
     "react-navigation-tabs": "^2.8.2",
+<<<<<<< Updated upstream
+=======
+    "react-redux": "6.0.1",
+    "redux": "4.0.1",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.5",
+    "sync-storage": "^0.4.2",
+>>>>>>> Stashed changes
     "undefined": "github:expo/vector-icons"
   },
   "devDependencies": {
