@@ -940,12 +940,14 @@ if(transcript == "حفظ")
           
         }
         else{
-           // here alerat with aduio " عذرا، اتبع نفس الطريقة التي بالتعليمات"  
+           // here alerat with aduio 
+           alert(" عذرا، اتبع نفس الطريقة التي بالتعليمات" );
 
         }
       }
       else{
-       // here alerat with aduio " عذرا، اتبع نفس الطريقة التي بالتعليمات" 
+       // here alerat with aduio 
+       alert(" عذرا، اتبع نفس الطريقة التي بالتعليمات" );
       }
     }
 
@@ -960,11 +962,13 @@ if(transcript == "حفظ")
           
         }
         else{
-          // here alerat with aduio " عذرا، اتبع نفس الطريقة التي بالتعليمات" 
+          // here alerat with aduio 
+          alert(" عذرا، اتبع نفس الطريقة التي بالتعليمات" );
         }
     }
     else{
-      // here alerat with aduio " عذرا، اتبع نفس الطريقة التي بالتعليمات" 
+      // here alerat with aduio 
+      alert(" عذرا، اتبع نفس الطريقة التي بالتعليمات" );
     }
   }
   
@@ -982,11 +986,13 @@ if(transcript == "حفظ")
           
         }
         else{
-          // here alerat with aduio " عذرا، اتبع نفس الطريقة التي بالتعليمات" 
+          // here alerat with aduio 
+          alert(" عذرا، اتبع نفس الطريقة التي بالتعليمات" );
         }
       }
       else{
-        // here alerat with aduio " عذرا، اتبع نفس الطريقة التي بالتعليمات" 
+        // here alerat with aduio 
+        alert(  " عذرا، اتبع نفس الطريقة التي بالتعليمات" );
       }
     }
 
@@ -1001,12 +1007,14 @@ if(transcript == "حفظ")
           
         }
         else{
-                  // here alerat with aduio " عذرا، اتبع نفس الطريقة التي بالتعليمات" 
+                  // here alerat with aduio 
+                  alert(" عذرا، اتبع نفس الطريقة التي بالتعليمات" );
 
         }
       }
       else {
-                // here alerat with aduio " عذرا، اتبع نفس الطريقة التي بالتعليمات" 
+                // here alerat with aduio 
+                alert(" عذرا، اتبع نفس الطريقة التي بالتعليمات" );
 
       }
     }
@@ -1060,7 +1068,8 @@ save_button_action(index) {
            
            if(lat === 0 && lng===0){
             
-                //here alerat with aduio "عذراً، عليك تفعيل خاصية الموقع حتى يتم انشاء وضع الخروج",
+                //here alerat with aduio 
+                alert(    "عذراً، عليك تفعيل خاصية الموقع حتى يتم انشاء وضع الخروج");
                 
            }// end if check location
            else {
@@ -1086,7 +1095,8 @@ save_button_action(index) {
           if(lat === 0 && lng===0){
              
             
-               //here alerat with aduio "عذراً، عليك تفعيل خاصية الموقع حتى يتم انشاء وضع العودة",
+               //here alerat with aduio
+               alert( "عذراً، عليك تفعيل خاصية الموقع حتى يتم انشاء وضع العودة");
            }
            else {
             
@@ -1192,7 +1202,8 @@ save_button_action(index) {
     
        
   
-  //here alerat with aduio "تم حفظ  " + disRoutine
+  //here alerat with aduio
+  alert( "تم حفظ  " + disRoutine);
  
        
     
@@ -1262,7 +1273,9 @@ save_button_action(index) {
           
           }  });//end snapshot..
         
-         // here alerat with aduio "تم حفظ  " + disRoutine
+         // here alerat with aduio
+         
+         alert("تم حفظ  " + disRoutine);
          
     
       console.log("save routine");
