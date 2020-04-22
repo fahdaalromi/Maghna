@@ -62,9 +62,6 @@ import * as firebase from 'firebase';
     UNSAFE_componentWillMount(){
   
       const firebaseConfig = {
-<<<<<<< Updated upstream
-  
-=======
 
         apiKey: "AIzaSyCsKoPxvbEp7rAol5m-v3nvgF9t8gUDdNc",
         authDomain: "maghnatest.firebaseapp.com",
@@ -73,7 +70,6 @@ import * as firebase from 'firebase';
         storageBucket: "maghnatest.appspot.com",
         messagingSenderId: "769071221745",
         appId: "1:769071221745:web:1f0708d203330948655250" ,
->>>>>>> Stashed changes
 
 /*
     apiKey: "AIzaSyAAM7t0ls6TRpHDDmHZ4-JWaCLaGWZOokI",
@@ -150,10 +146,6 @@ measurementId: "G-R3BQPCTCTM"
                 console.log("else");
                 this.props.navigation.goBack()
                 this.props.navigation.state.params.updateData(lat,long);
-<<<<<<< Updated upstream
-    
-=======
->>>>>>> Stashed changes
               }
 
               console.log("save is pressed")},
