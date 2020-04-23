@@ -42,11 +42,11 @@ import * as firebase from 'firebase';
     .database()
     .ref('mgnUsers/'+userId)
     .on('value', snapshot => {
-      console.log(" "+ snapshot)
+      console.log("sirst snap did "+ snapshot)
       this.setState({
-        uID : this.uID,
+        uID : userId,
       latitude :snapshot.val().latitude,
-      // latitude:snapshot.val().latitude
+      longitude:snapshot.val().longitude
     });
     console.log(JSON.stringify(snapshot)) });
     }
@@ -106,7 +106,9 @@ measurementId: "G-R3BQPCTCTM"
 
             var userId =  this.props.navigation.getParam('id', '');
             var lat= position.coords.latitude;
+            console.log("lat: "+lat);
             var long= position.coords.longitude;
+            console.log("long: "+long);
           //end update
 
         setTimeout(()=>{Alert.alert(
