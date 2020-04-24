@@ -25,13 +25,16 @@ export default class reportScreen extends Component {
     constructor(props) {
 
         super(props);
-        console.log(props);
+        console.log(props+"Hi props");
         this.state = {
             show_shape: true,
+            //This value should be changed in calcuate consumption but it didn't
+            // The initial value is not being change when calling getAudio  dont worry please check
+            // Check what ? 
             profile_percent:0,
             profile_color: '#ff3126',
             curTime:0,
-            // this screen I retrieve the value 
+            // this screen I retrieve the value  
             amount:0,
             show_click:true, 
             read:false,
@@ -48,19 +51,19 @@ export default class reportScreen extends Component {
         )
         this.didFocusSubscription = this.props.navigation.addListener(
             'didFocus',
-            () => this.replay()
+            async() => {
+                this._calcuateConsumptionAndReport();
+                console.log(this.state.profile_percent+"Hi component did mount");
+            }
         )
-      
-        this._unsubscribe = this.props.navigation.addListener('willFocus',() => {
-            this._calcuateConsumptionAndReport();
-     
-        }); 
+      // This method should change the value of profile_percent but it is not 
+            
   
         // await this.wait(900000);
         // await this.sendSpeechNotification(); 
         const content = await AsyncStorage.getItem('TTSReport');
         // alert("sdfsdf");
-        console.log(content);
+        // console.log(content);
 
         this.setState({read:content});
     }
@@ -78,17 +81,20 @@ export default class reportScreen extends Component {
     async pause(){
         await soundObject.pauseAsync()
     }
-    getAudio (totalConsuming) {  
-        // Read report from calculate total consumption so if there is no consumption no reading
+    getAudio () {  
+        // Read report from calculate total consumption so if there is no consumption no reading check it
+
+        console.log(this.state.profile_percent+"Hi getAudio");
         let fileURL = '';    
-        const text =  '  عزيزي المُسْتَخْدِم إجْمَالِي إسْتِهْلاكِكْ هُوَ ' +totalConsuming+
+        const text =  '  عزيزي المُسْتَخْدِم إجْمَالِي إسْتِهْلاكِكْ هُوَ ' +this.state.profile_percent+
         'بِالمِئَة مِن مُجْمَلِ فَاتُورَتِكَ المُدخَلهْ وَتَفْصِيْلْ الْإسْتِهْلاكْ هُوَ  الإنَارَه 100 بِالمِئَة       ';
+        
 
         axios.post(`http://45.32.251.50`,  {text} )
           .then(res => {
-            // console.log("----------------------xxxx--------------------------"+res.data);
+            console.log("----------------------xxxx--------------------------"+res.data);
             fileURL = res.data;
-            console.log(fileURL);
+            // console.log(fileURL);
             this.playAudio(fileURL); 
 
           })
@@ -126,7 +132,7 @@ export default class reportScreen extends Component {
 
             axios.post(`http://45.32.251.50`,  {text} )
               .then(res => {
-                 console.log("----------------------xxxx--------------------------"+res.data);   
+                 console.log("Send Speech Notipication : "+res.data);   
                 fileURL = res.data;
        
                     this.playAudio(fileURL); 
@@ -168,32 +174,29 @@ export default class reportScreen extends Component {
     _calcuateConsumptionAndReport = async() => {
     
         try {     
-            //Firebase data 
             const curTime = await AsyncStorage.getItem('currentTime');
-                        
             const billValue = await AsyncStorage.getItem('amount');
-           
-            const amount =  JSON.parse(billValue).value;
-         
+            const amount =  JSON.parse(billValue).value; //this is amount. how do i calculate using this?
             if (curTime !== null && amount !==  0 ) {
        // We choose to deal with the seconds as hours but we divide it by 6 for reasonable duration for testing purpose
                 let workingHours =curTime/20 ;
-                let bill = 10
+                let bill = amount //i thinsk this is amount right? please check
+                // This is the local amount I want profile percent to be read 
                 let totalConsuming;
                 let watts=40;
 
                 let kwh= watts*workingHours/1000;
         
                 if(kwh > 6000){ 
-                    totalConsuming=kwh*0.3*100; 
+                    totalConsuming=kwh*0.3*100;  
                 }
                 if(kwh <= 6000){     
                     totalConsuming=kwh*0.18*100; 
                 }
-        
 
                 totalConsuming = Math.floor(totalConsuming)
-                totalConsuming = (totalConsuming*100)/bill;
+                totalConsuming = (totalConsuming*100)/parseInt(bill);
+                alert(totalConsuming);
                 let profileColor = this.state.profile_color;
 
                 if(totalConsuming < 50){ 
@@ -209,18 +212,21 @@ export default class reportScreen extends Component {
                 if(totalConsuming  >= 100 ){ 
                     profileColor =  '#ff3126';
                 }
-
                 this.setState({profile_color : profileColor,profile_percent:totalConsuming},() => {
                     this.getAudio(totalConsuming);
+                    this.setState({show_shape:true});
                 }); 
 
-    
+                
             }  
             else
             {
                 this.setState({show_shape:false});
             }
 
+        //    
+        // this.getAudio(profile_percent) ;it is wrong
+        //what is it? what? it is not reading
         } catch (error) { 
             // Error retrieving data
             this.setState({show_shape:false});

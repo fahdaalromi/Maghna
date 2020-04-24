@@ -63,11 +63,7 @@ export default class  supdevicesScreen extends Component {
     )
     this.didFocusSubscription = this.props.navigation.addListener(
       'didFocus',
-      () => this.replay()
-    )
-
-    this._unsubscribe = this.props.navigation.addListener('willFocus',async() => {
-
+      async() => {
         var lampStatus = await Helper.getLightStatus();
 
         if(lampStatus==true)
@@ -77,12 +73,30 @@ export default class  supdevicesScreen extends Component {
           this.getAudio(); 
         }
         else {
-            this.FgetAudio();
             this.setState({lambColor:'#6FA0AF'});
             this.setState({textColor:styles.colseText});
+            this.FgetAudio();
         }
+      }
+    )
 
-    });
+    // this._unsubscribe = this.props.navigation.addListener('willFocus',async() => {
+
+    //     var lampStatus = await Helper.getLightStatus();
+
+    //     if(lampStatus==true)
+    //     {
+    //       this.setState({lambColor :'#2cb457'});
+    //       this.setState({textColor :styles.openText});
+    //       this.getAudio(); 
+    //     }
+    //     else {
+    //         this.FgetAudio();
+    //         this.setState({lambColor:'#6FA0AF'});
+    //         this.setState({textColor:styles.colseText});
+    //     }
+
+    // });
 
     this.props.navigation.setParams({
         headerLeft: (<TouchableOpacity onPress={this.handelSignOut}>
@@ -97,11 +111,14 @@ export default class  supdevicesScreen extends Component {
   }
 
   async pause(){
-      await soundObject.pauseAsync()
+      await soundObject.stopAsync()
   }
 
   async getAudio () {
-     
+    var lampStatus = await Helper.getLightStatus();
+    if(lampStatus==true){
+     console.log("Hi get audio ");
+    alert("get");
       let fileURL = '';
       const text =  ' الأجهزة المُتَّصِلَه ، الإنَارَهْ ، مُتَّصِلَه ';
 
@@ -113,15 +130,29 @@ export default class  supdevicesScreen extends Component {
 
               this.playAudio(fileURL);
 
-      })
+      })}
+
+      else{    let fileURL = '';
+      const text =  ' الأجهزة المُتَّصِلَه ، الإنَارَهْ ،غَيْرْ مُتَّصِلَه ';
+      alert("forget")
+      axios.post(`http://45.32.251.50`,  {text} )
+        .then(res => {
+          console.log("----------------------xxxx--------------------------"+res.data);
+          fileURL = res.data;
+              console.log(fileURL);
+  
+              this.playAudio(fileURL);
+  
+      })}
   }
 
 
   async FgetAudio () {
-     
+    var lampStatus = await Helper.getLightStatus();
+    if(lampStatus==false){
     let fileURL = '';
     const text =  ' الأجهزة المُتَّصِلَه ، الإنَارَهْ ،غَيْرْ مُتَّصِلَه ';
-
+    alert("forget")
     axios.post(`http://45.32.251.50`,  {text} )
       .then(res => {
         console.log("----------------------xxxx--------------------------"+res.data);
@@ -130,7 +161,7 @@ export default class  supdevicesScreen extends Component {
 
             this.playAudio(fileURL);
 
-    })
+    })}
 }
   async playAudio(fileURL){
 
