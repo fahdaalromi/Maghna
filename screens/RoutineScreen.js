@@ -1546,15 +1546,13 @@ let { status} = await Location.requestPermissionsAsync();
 
 
 if(status !=='granted'){
-    console.log("if status is intered");
+
 }
 else {
    // await Location.startLocationUpdatesAsync('locationTask', {
     //    accuracy: Location.Accuracy.Balanced,
     //  });
-    console.log("-----------else status is intered-----------");
     if(!(lat==='0'&& lng==='0')){
-        console.log("else lat=0 lon=0 is intered");
     Location.startGeofencingAsync('locationTask',[
         {
             "identifier": "A",
@@ -3000,14 +2998,14 @@ TaskManager.defineTask('locationTask', async ({ data, error }) => {
               if(child.val().userID===firebase.auth().currentUser.uid )
               if (data.region.state===1){   
                 console.log("data region "+data.region.state);
-                if(child.val().name==='come routine')
+                if(child.val().name==='backHome')
                 {
-                    if(child.val().actionsID==='001'){
+                    if(child.val().actionID==='001'){
 
                         console.log("the light must be turend on user entern")
-                     //   axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
-                     //   {'on':true} )
-                    // .then(res => res.json())
+                       axios.put('http://192.168.100.14/api/1DQ8S2CiZCGaI5WT7A33pyrL19Y47F2PmGiXnv20/lights/3/state',
+                       {'on':true} )
+                    .then(res => res.json())
                       }
                       else {
                         console.log("the light must be turend off user entern")
