@@ -47,7 +47,7 @@ export default class reportScreen extends Component {
         // making sure that the speeches are not interleaved
         this.didBlurSubscription = this.props.navigation.addListener(
             'didBlur',
-            () => this.pause()
+            () => soundObject.unloadAsync()
         )
         this.didFocusSubscription = this.props.navigation.addListener(
             'didFocus',
@@ -121,6 +121,8 @@ export default class reportScreen extends Component {
         }
     
     }
+
+    async componentWillUnmount(){     await soundObject.unloadAsync();}
 
     async sendSpeechNotification(){
  
