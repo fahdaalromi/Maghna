@@ -187,7 +187,6 @@ handelSignUp =() =>{
     return;
   }
 
-
   if (this.state.password.length < 8) {
     this.setState({formErrorMsg: ' يجب أن تكون كلمة المرور أكثر من ٧ خانات'})
     this.setState({errorMsgVisibilty: 'flex'})
@@ -212,15 +211,6 @@ handelSignUp =() =>{
     return;
   }
 
-  /*
-  if (this.state.password!=this.state.confpassword){
-
-    this.setState({formErrorMsg: ' يجب أن تكون كلمة المرور متطابقة'})
-    this.setState({errorMsgVisibilty: 'flex'})
-    this.setState({passwordBorder:'red'})
-    return;
-
-  }*/
   if (this.state.emailBorder == 'red'||this.state.passwordBorder == 'red'||this.state.conPasswordBorder=='red'){
     this.setState({formErrorMsg: 'فضًلا، قم بتصحيح  الأخطاء الحمراء'})
     this.setState({errorMsgVisibilty: 'flex'})

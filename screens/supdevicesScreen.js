@@ -61,42 +61,33 @@ export default class  supdevicesScreen extends Component {
       'didBlur',
       () => this.pause()
     )
+    // 
     this.didFocusSubscription = this.props.navigation.addListener(
       'didFocus',
       async() => {
-        var lampStatus = await Helper.getLightStatus();
 
+        this.getAudio();
+        var lampStatus = await Helper.getLightStatus();
+       // if the lamb is on then the lamb device will be marked with #2cb457 color 
         if(lampStatus==true)
         {
           this.setState({lambColor :'#2cb457'});
           this.setState({textColor :styles.openText});
-          this.getAudio(); 
+
         }
-        else {
+      // if the lamb is off then the lamb device will be marked with #6FA0AF color 
+      if(lampStatus==false) {
             this.setState({lambColor:'#6FA0AF'});
             this.setState({textColor:styles.colseText});
-            this.FgetAudio();
+   
         }
+     // if the lamb is not connected then the lamb device will be marked with grey color 
+        else{            this.setState({lambColor:'grey'});
+        this.setState({textColor:styles.NotConnText});}
       }
     )
 
-    // this._unsubscribe = this.props.navigation.addListener('willFocus',async() => {
 
-    //     var lampStatus = await Helper.getLightStatus();
-
-    //     if(lampStatus==true)
-    //     {
-    //       this.setState({lambColor :'#2cb457'});
-    //       this.setState({textColor :styles.openText});
-    //       this.getAudio(); 
-    //     }
-    //     else {
-    //         this.FgetAudio();
-    //         this.setState({lambColor:'#6FA0AF'});
-    //         this.setState({textColor:styles.colseText});
-    //     }
-
-    // });
 
     this.props.navigation.setParams({
         headerLeft: (<TouchableOpacity onPress={this.handelSignOut}>
@@ -175,15 +166,10 @@ export default class  supdevicesScreen extends Component {
       playThroughEarpieceAndroid: false,
       staysActiveInBackground: true,
     });
-
-      // OR
-      try {
         await soundObject.loadAsync({uri: fileURL});
         await soundObject.playAsync();
           // Your sound is playing!
-      } catch (error) {
-      // An error occurred!
-      }
+
     }
 
     // async showLambStatus(){

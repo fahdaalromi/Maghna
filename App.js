@@ -21,9 +21,9 @@ import NavigationService from "./navigation/NavigationService";
  *  Redux for state management
  */
 import { Provider } from "react-redux";
-import configureStore from "./redux/createStore";
-let store = configureStore();
-
+// import configureStore from "./redux/createStore";
+ 
+import store from './store/index';
 export default function App(props) {
   const [displayMic, setDisplayMic] = useState(false);
   const [buttonDisplay, setButtonDisplay] = useState(false);

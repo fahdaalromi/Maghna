@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   ActivityIndicator, Text, View, Image,
-  Alert, TouchableOpacity
+  Alert, TouchableOpacity, Button
 } from 'react-native';
 import {
   FontAwesome5, AntDesign, Feather
@@ -18,91 +18,66 @@ import { Audio } from 'expo-av';
 import * as firebase from 'firebase';
 import moment from 'moment';
 import NavigationService from "../navigation/NavigationService";
+import { connect } from 'react-redux';
+import { updateToggle } from '../actions/toggle';
+
+class HomeScreen extends Component {
+
+  constructor(props) {
+
+    super(props);
+    this.state = {
+      toggle: false
+    };
+    super(props)
+    this.recording = null
+    this.state = {
+      isFetching: false,
+      isRecording: false,
+      transcript: '',
+      userRoutineArr: [],
+    }
+
+  }
 
 
-export default class HomeScreen extends Component {
+
+
+
+
   async checkRoutine() {
 
+
     let user = firebase.auth().currentUser;
-    let userRoutineArr = [];
-    let routineLeave = 'leave home';
-    let routineCome = 'come routine';
-    let routineMornig = 'morning routine';
-    let routineNight = 'night routine';
     firebase.database().ref('/routine').once("value", snapshot => {
       snapshot.forEach(item => {
         let temp = item.val();
         if (temp.userID == user.uid) {
-          console.log("yes have user1");
-          userRoutineArr.push(temp.name);
-          console.log(temp.name);
-        }//end if
-        let theId;
-        let nameR;
-        let statusR;
-        if (userRoutineArr.indexOf(routineLeave) != -1 || userRoutineArr.indexOf(routineCome) != -1
-          || userRoutineArr.indexOf(routineMornig) != -1 || userRoutineArr.indexOf(routineNight) != -1) {
-          console.log("Trueee");
-          firebase.database().ref('/routine').once("value", (snapshot) => {
-            snapshot.forEach(item => {
+          console.log(temp.name + ": " + temp.status);
+          switch (temp.name) {
+            case 'come routine':
+              if (temp.status == 1)
+                this.props.update(true, 1)
+              break;
 
-              let temp = item.val();
-              console.log(temp);
-              if (temp.userID == user.uid && (temp.name == routineMornig || temp.name == routineNight
-                || temp.name == routineLeave || temp.name == routineCome)) {
-                console.log("in if");
-                theId = item.key;
-                nameR = temp.name;
-              }
-            });
-            console.log('outside if');
-            console.log('the' + theId);
-            firebase.database().ref('/routine').once("value", (snapshot) => {
-              console.log('in snapshot');
-              snapshot.forEach(item => {
-                console.log('in for each');
-                if (item.key == theId) {
-                  console.log("true second");
-                  let temp = item.val();
-                  statusR = temp.status;
-                  console.log('theS' + statusR);
+            case 'morning routine':
+              if (temp.status == 1) this.props.update(true, 2)
+              break;
 
+            case 'leave routine':
+              if (temp.status == 1) this.props.update(true, 3)
+              break;
 
-                }
-
-                console.log('now' + statusR)
-                if (nameR == 'leave routine' && statusR == 1) {
-                  const newState = !this.state.toggle3;
-                  this.setState({ toggle3: newState })
-                }
-                if (nameR == 'come routine' && statusR == 1) {
-                  const newState = !this.state.toggle1;
-                  this.setState({ toggle1: newState })
-
-                }
-                if (nameR == 'morning routine' && statusR == 1) {
-                  const newState = !this.state.toggle2;
-                  this.setState({ toggle2: newState })
-                }
-                if (nameR == 'night routine' && statusR == 1) {
-                  const newState = !this.state.toggle4;
-                  this.setState({ toggle4: newState })
-                }
-
-
-              });
-            });
-
-
-          });//end forEach
+            case 'night routine':
+              if (temp.status == 1) this.props.update(true, 4)
+              break;
+          }
 
         }
-        //end snapshot..
       });
     });
 
   }
-
 
 
   async  wait(ms) {
@@ -475,90 +450,12 @@ export default class HomeScreen extends Component {
       color: '#fff'
     }
   })
-  constructor(props) {
-
-    super(props);
-    this.state = {
-      toggle: false
-    };
-    super(props)
-    this.recording = null
-    this.state = {
-      isFetching: false,
-      isRecording: false,
-      transcript: '',
-    }
-
-  }
-
 
   newMethod() {
     return "before inserRoutine";
   }
 
-  _onPress1() {
-    const newState = !this.state.toggle1;
-    let theId;
-    let routineName = 'come routine';
-    let user = firebase.auth().currentUser;
-    let userRoutineArr = [];
 
-    if (newState) {
-      firebase.database().ref('/routine').once("value", snapshot => {
-        snapshot.forEach(item => {
-          let temp = item.val();
-          if (temp.userID == user.uid) {
-
-            userRoutineArr.push(temp.name);
-            console.log(temp.name);
-          }//end if
-          if (userRoutineArr.indexOf(routineName) != -1) {
-            theId = item.key;
-            firebase.database().ref('routine/' + theId).update({
-              status: 1,
-
-            });
-            this.setState({ toggle1: newState })
-          }
-
-
-        });//end forEach
-        if (userRoutineArr.indexOf(routineName) == -1) {
-
-          Alert.alert("عذراً", " لم تقم بإنشاء وضع العودة إلى المنزل من قبل ، عليك أولاً إنشاؤه");
-          this.setState({ toggle1: !newState })
-
-
-        }
-      }); //end snapshot..
-
-    }
-    else {
-      firebase.database().ref('/routine').once("value", snapshot => {
-        snapshot.forEach(item => {
-          let temp = item.val();
-          if (temp.userID == user.uid) {
-
-            userRoutineArr.push(temp.name);
-            console.log(temp.name);
-          }//end if
-          if (userRoutineArr.indexOf(routineName) != -1) {
-            theId = item.key;
-            firebase.database().ref('routine/' + theId).update({
-              status: 0,
-
-            });
-          }
-
-          this.setState({ toggle1: newState })
-        });//end forEach
-      }); //end snapshot..
-    }
-
-
-    // });
-    // }
-  }
 
 
   _onPress2() {
@@ -763,6 +660,7 @@ export default class HomeScreen extends Component {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: '#F7FAFF' }}>
 
+
         <TouchableOpacity
           onPress={() => NavigationService.navigate("instructions")}
           style={{ fontSize: 20, justifyContent: 'center', width: 130, height: 90, left: 100, borderRadius: 25, marginHorizontal: 1, paddingLeft: 2, paddingRight: 10, paddingTop: -150, bottom: -220, shadowOpacity: 0.3 }}>
@@ -770,33 +668,39 @@ export default class HomeScreen extends Component {
         </TouchableOpacity>
 
         <Text style={{ fontSize: 25, color: '#6FA0AF', bottom: -200, paddingLeft: 180 }}>الأنماط الحياتية</Text>
+        {/* <Text style={{ fontSize: 25, color: '#6FA0AF', bottom: -200, paddingLeft: 180 }}>  {JSON.stringify(this.props.toggle)}  </Text> */}
+
+
+
+
+
 
         <TouchableOpacity
-          onPress={() => this._onPress1()}
-          style={{ fontSize: 25, backgroundColor: toggle1 ? 'white' : '#6FA0AF', color: '#6FA0AF', justifyContent: 'center', width: 150, height: 140, left: 80, borderRadius: 25, marginHorizontal: 25, paddingLeft: 28, paddingRight: 10, paddingTop: 9, bottom: -250, shadowOpacity: 0.3 }}>
-          <Ionicons style={{ left: 17, paddingLeft: -40, paddingRight: 5, paddingTop: 9, bottom: 90, top: -10 }} name="md-home" size={70} color={toggle1 ? '#6FA0AF' : 'white'} />
-          <Text style={{ left: 0, paddingLeft: -40, paddingRight: 5, bottom: 90, top: -10, color: toggle1 ? '#6FA0AF' : 'white', fontWeight: 'bold', fontSize: 13 }}>الرجوع إلى المنزل</Text>
+          onPress={() => this.props.update(!this.props.toggle.toggle1, 1)}
+          style={{ fontSize: 25, backgroundColor: this.props.toggle.toggle1 ? 'white' : '#6FA0AF', color: '#6FA0AF', justifyContent: 'center', width: 150, height: 140, left: 80, borderRadius: 25, marginHorizontal: 25, paddingLeft: 28, paddingRight: 10, paddingTop: 9, bottom: -250, shadowOpacity: 0.3 }}>
+          <Ionicons style={{ left: 17, paddingLeft: -40, paddingRight: 5, paddingTop: 9, bottom: 90, top: -10 }} name="md-home" size={70} color={this.props.toggle.toggle1 ? '#6FA0AF' : 'white'} />
+          <Text style={{ left: 0, paddingLeft: -40, paddingRight: 5, bottom: 90, top: -10, color: this.props.toggle.toggle1 ? '#6FA0AF' : 'white', fontWeight: 'bold', fontSize: 13 }}>الرجوع إلى المنزل</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => this._onPress2()}
-          style={{ fontSize: 25, backgroundColor: toggle2 ? 'white' : '#6FA0AF', color: '#6FA0AF', justifyContent: 'center', width: 150, height: 140, left: 80, borderRadius: 25, marginHorizontal: 25, paddingLeft: 28, paddingRight: 10, paddingTop: 9, bottom: -270, shadowOpacity: 0.3 }}>
-          <Ionicons style={{ left: 17, paddingLeft: -40, paddingRight: 5, paddingTop: 9, bottom: 90, top: -10 }} name="md-sunny" size={70} color={toggle2 ? '#6FA0AF' : 'white'} />
-          <Text style={{ left: 5, paddingLeft: -40, paddingRight: 5, bottom: 90, top: -10, color: toggle2 ? '#6FA0AF' : 'white', fontWeight: 'bold', fontSize: 13 }}>الوضع الصباحي</Text>
+          onPress={() => this.props.update(!this.props.toggle.toggle2, 2)}
+          style={{ fontSize: 25, backgroundColor: this.props.toggle.toggle2 ? 'white' : '#6FA0AF', color: '#6FA0AF', justifyContent: 'center', width: 150, height: 140, left: 80, borderRadius: 25, marginHorizontal: 25, paddingLeft: 28, paddingRight: 10, paddingTop: 9, bottom: -270, shadowOpacity: 0.3 }}>
+          <Ionicons style={{ left: 17, paddingLeft: -40, paddingRight: 5, paddingTop: 9, bottom: 90, top: -10 }} name="md-sunny" size={70} color={this.props.toggle.toggle2 ? '#6FA0AF' : 'white'} />
+          <Text style={{ left: 5, paddingLeft: -40, paddingRight: 5, bottom: 90, top: -10, color: this.props.toggle.toggle2 ? '#6FA0AF' : 'white', fontWeight: 'bold', fontSize: 13 }}>الوضع الصباحي</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => this._onPress3()}
-          style={{ fontSize: 25, backgroundColor: toggle3 ? 'white' : '#6FA0AF', color: '#6FA0AF', justifyContent: 'center', width: 150, height: 140, left: -80, borderRadius: 25, marginHorizontal: 25, paddingLeft: 28, paddingRight: 10, paddingTop: 9, bottom: -130, shadowOpacity: 0.3 }}>
-          <MaterialCommunityIcons style={{ left: 17, paddingLeft: -40, paddingRight: 5, paddingTop: 9, bottom: 90, top: -10 }} name="door-open" size={70} color={toggle3 ? '#6FA0AF' : 'white'} ></MaterialCommunityIcons>
-          <Text style={{ left: 0, paddingLeft: -60, paddingRight: 5, bottom: 90, top: -10, color: toggle3 ? '#6FA0AF' : 'white', fontWeight: 'bold', fontSize: 13 }}>الخروج من المنزل</Text>
+          onPress={() => this.props.update(!this.props.toggle.toggle3, 3)}
+          style={{ fontSize: 25, backgroundColor: this.props.toggle.toggle3 ? 'white' : '#6FA0AF', color: '#6FA0AF', justifyContent: 'center', width: 150, height: 140, left: -80, borderRadius: 25, marginHorizontal: 25, paddingLeft: 28, paddingRight: 10, paddingTop: 9, bottom: -130, shadowOpacity: 0.3 }}>
+          <MaterialCommunityIcons style={{ left: 17, paddingLeft: -40, paddingRight: 5, paddingTop: 9, bottom: 90, top: -10 }} name="door-open" size={70} color={this.props.toggle.toggle3 ? '#6FA0AF' : 'white'} ></MaterialCommunityIcons>
+          <Text style={{ left: 0, paddingLeft: -60, paddingRight: 5, bottom: 90, top: -10, color: this.props.toggle.toggle3 ? '#6FA0AF' : 'white', fontWeight: 'bold', fontSize: 13 }}>الخروج من المنزل</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => this._onPress4()}
-          style={{ fontSize: 25, backgroundColor: toggle4 ? 'white' : '#6FA0AF', color: '#6FA0AF', justifyContent: 'center', width: 150, height: 140, left: -80, borderRadius: 25, marginHorizontal: 25, paddingLeft: 28, paddingRight: 10, paddingTop: 9, bottom: 170, shadowOpacity: 0.3 }}>
-          <MaterialCommunityIcons style={{ left: 17, paddingLeft: -40, paddingRight: 5, paddingTop: 9, bottom: 90, top: -10 }} name="weather-night" size={70} color={toggle4 ? '#6FA0AF' : 'white'} ></MaterialCommunityIcons>
-          <Text style={{ left: 5, paddingLeft: -40, paddingRight: 5, bottom: 90, top: -10, color: toggle4 ? '#6FA0AF' : 'white', fontWeight: 'bold', fontSize: 13 }}>الوضع المسائي</Text>
+          onPress={() => this.props.update(!this.props.toggle.toggle4, 4)}
+          style={{ fontSize: 25, backgroundColor: this.props.toggle.toggle4 ? 'white' : '#6FA0AF', color: '#6FA0AF', justifyContent: 'center', width: 150, height: 140, left: -80, borderRadius: 25, marginHorizontal: 25, paddingLeft: 28, paddingRight: 10, paddingTop: 9, bottom: 170, shadowOpacity: 0.3 }}>
+          <MaterialCommunityIcons style={{ left: 17, paddingLeft: -40, paddingRight: 5, paddingTop: 9, bottom: 90, top: -10 }} name="weather-night" size={70} color={this.props.toggle.toggle4 ? '#6FA0AF' : 'white'} ></MaterialCommunityIcons>
+          <Text style={{ left: 5, paddingLeft: -40, paddingRight: 5, bottom: 90, top: -10, color: this.props.toggle.toggle4 ? '#6FA0AF' : 'white', fontWeight: 'bold', fontSize: 13 }}>الوضع المسائي</Text>
         </TouchableOpacity>
 
         <View style={styles.container}>
@@ -824,6 +728,23 @@ export default class HomeScreen extends Component {
   }
 
 }
+
+
+
+
+const mapStateToProps = (state) => {
+  return {
+    toggle: state.toggle1Reducer,
+  };
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    update: (status, btn) => dispatch(updateToggle(status, btn))
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
+
 
 
 const styles = StyleSheet.create({

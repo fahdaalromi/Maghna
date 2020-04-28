@@ -168,16 +168,11 @@ export default class profileScreen extends Component {
 
         }
     editProfile = () => {
-
-
       console.log(this.state.changePassword);
-
-
       firebase
       .database()
       .ref('mgnUsers/'+ this.state.uID)
        .update({isActive: this.state.isActive})
-      // if the user left empty fields
       if (this.state.name == '' || this.state.email == '') {
         console.log('missing field');
         this.setState({formErrorMsg: ' يرجى تعبأة جميع الحقول '})
@@ -185,15 +180,12 @@ export default class profileScreen extends Component {
         return;
       }
 
-      //fill error
       if (this.state.emailBorder == 'red'||this.state.passwordBorder == 'red'||this.state.conPasswordBorder=='red'){
         this.setState({formErrorMsg: 'فضًلا، قم بتصحيح  الأخطاء الحمراء'})
         this.setState({errorMsgVisibilty: 'flex'})
         return;
       }
 
-    // if the user wants to change his password
-        //make sure the length is suitable
       if (this.state.changePassword && this.state.password.length < 8 && this.state.password.length > 0
         && this.state.password.length > 20 ) {
         console.log('short password');
@@ -201,31 +193,24 @@ export default class profileScreen extends Component {
         this.setState({errorMsgVisibilty: 'flex'})
         return;
       }
-        // make sure there are confirmation password
       if (this.state.changePassword && this.state.confPassword=='') {
         console.log('confirm');
         this.setState({formErrorMsg: 'عفوًا أدخل كلمة مرور تأكيدية'})
         this.setState({errorMsgVisibilty: 'flex'})
         return;
       }
-
-        // change the conformation password without the passwor field
     if (this.state.password=='' && this.state.confPassword!='') {
       console.log('confirm');
       this.setState({formErrorMsg: 'عفوًا، أدخل كلمة مرور'})
       this.setState({errorMsgVisibilty: 'flex'})
       return;
     }
-
       try{
 
-          // store in local
         this._storeData();
 
         var user = firebase.auth().currentUser;
         var uid;
-       // var userId =  this.props.navigation.getParam('id', 'NO-ID');
-
         if (user){
           uid = user.uid;
           if (!this.state.changePassword ) {
@@ -251,37 +236,22 @@ export default class profileScreen extends Component {
               firebase
               .database()
               .ref('mgnUsers/'+ this.state.uID)
-              .update({longitude : this.state.longitude,})
-            }
-
-/*
-          if (this.state.name != ''){
-            firebase.database()
-            .ref('mgnUsers/'+userId)
-            .update({name: this.state.name,})
-          }*/
-// Here i store it in firebase it is easier to retrieve thaan solving this error what do u thinl ? No. It Please wait a bit. Trying to understand where ialert is from// Bcz we have nto not put any
-         
+              .update({longitude : this.state.longitude,})  }
 
 if (this.state.amount != 0 && this.state.amount <= 9999){
             firebase.database()
             .ref('mgnUsers/'+this.state.uID)
-            .update({amount: this.state.amount})
-          }
-
-
+            .update({amount: this.state.amount})}
             firebase.database()
             .ref('mgnUsers/'+this.state.uID)
             .update({isActive: this.state.isActive})
-
-
         }else {
           alert("يجب ان تكون الفاتوره ضمن النطاق من ٠ الى ٩٩٩٩");
           console.log("user changePassword val "+this.state.changePassword);
           console.log(this.state.password );
           console.log(this.state.confPassword);
           console.log(this.state.changePassword &&(this.state.password == this.state.confPassword));
-         // console.log("user updated the password");
+
           if (this.state.changePassword &&(this.state.password == this.state.confPassword))
           {
             console.log("user updated the password");
@@ -291,30 +261,10 @@ if (this.state.amount != 0 && this.state.amount <= 9999){
               this.props.navigation.navigate('WelcomeStackNavigator')},
               (error) => {
             console.log(error);
-            // An error happened.
-          });
-/*
-          firebase.database()
-          .ref('mgnUsers/'+user.uid)
-          .on('value', snapshot => {
-            this.confPassword.clear();
-            this.password.clear();
-
-
-        })*/
-        }
-/*
-          firebase.database()
-          .ref('mgnUsers/'+userId)
-          .updatePassword(this.state.password)
-          */
-
+          });  }
           }}
 
        }catch(e){console.log(e.message)}
-
-
-
         this.setState({emailBorder: '#3E82A7'})
         this.setState({nameBorders: '#3E82A7'})
         this.setState({passwordBorder: '#3E82A7'})
