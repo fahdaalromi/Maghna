@@ -59,8 +59,8 @@ export default class  supdevicesScreen extends Component {
 
     this.didBlurSubscription = this.props.navigation.addListener(
       'didBlur',
-      () => this.pause()
-    )
+      () => soundObject.unloadAsync()
+  )
     // 
     this.didFocusSubscription = this.props.navigation.addListener(
       'didFocus',
@@ -137,23 +137,6 @@ export default class  supdevicesScreen extends Component {
       })}
   }
 
-
-  async FgetAudio () {
-    var lampStatus = await Helper.getLightStatus();
-    if(lampStatus==false){
-    let fileURL = '';
-    const text =  ' الأجهزة المُتَّصِلَه ، الإنَارَهْ ،غَيْرْ مُتَّصِلَه ';
-    alert("forget")
-    axios.post(`http://45.32.251.50`,  {text} )
-      .then(res => {
-        console.log("----------------------xxxx--------------------------"+res.data);
-        fileURL = res.data;
-            console.log(fileURL);
-
-            this.playAudio(fileURL);
-
-    })}
-}
   async playAudio(fileURL){
 
 
@@ -294,13 +277,7 @@ handelSignOut =() =>{
 
 };
 
-async componentWillUnMount(){
-  this._unsubscribe();
-  this.didBlurSubscription.remove()
-  this.didFocusSubscription.remove()
-  await soundObject.stopAsync();
-
-}
+async componentWillUnmount(){     await soundObject.unloadAsync();}
 
 render() {
 

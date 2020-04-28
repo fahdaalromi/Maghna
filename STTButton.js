@@ -52,15 +52,17 @@ const styles = StyleSheet.create({
   },
   Indicator: {
     alignSelf: 'center',
-    width: 150,
-    height: 150,
-    marginTop: 110,
+    width: 110,
+    height: 110,
+    top:90,
+
   },
   Indicator1: {
     alignSelf: 'center',
-    width: 150,
-    height: 150,
-    marginTop: 110,
+    width: 110,  
+    height: 110,
+   top:90,
+
   },
 
   text: {

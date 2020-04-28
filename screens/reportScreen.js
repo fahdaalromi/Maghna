@@ -181,7 +181,7 @@ export default class reportScreen extends Component {
             const curTime = await AsyncStorage.getItem('currentTime');
             const billValue = await AsyncStorage.getItem('amount');
             const amount =  JSON.parse(billValue).value;
-            if (curTime !== null && amount !==  0 ) {
+            if (amount >0  ) {
        // We choose to deal with the seconds as hours but we divide it by 6 for reasonable duration for testing purpose
                 let workingHours =curTime/20 ;
                 let bill = amount 
